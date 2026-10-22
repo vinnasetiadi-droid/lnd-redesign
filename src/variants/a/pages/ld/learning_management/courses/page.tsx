@@ -124,7 +124,7 @@ export default function CoursesPage() {
   return (
     <DashboardLayout>
       <motion.div className="w-full flex flex-col min-w-0 gap-3" variants={revealContainer} initial="hidden" animate="visible">
-        {/* ── Header: one primary action ── */}
+        {/* ── Header: one primary (blue) action ── */}
         <motion.div variants={revealItem} className="flex items-end justify-between gap-4 flex-wrap">
           <div>
             <h1 className="text-[24px] leading-[32px] text-(--oa-text-strong)">Upskill Studio</h1>
@@ -276,8 +276,8 @@ export default function CoursesPage() {
                       aria-current={p === current ? 'page' : undefined}
                       className={cn(
                         'flex size-8 items-center justify-center rounded-full text-[12px] transition-colors cursor-pointer',
-                        // Not black: Create course is the only black button on the page
-                        p === current ? 'bg-(--oa-surface) text-(--oa-text-strong)' : 'text-(--oa-text-secondary) hover:bg-(--oa-surface)',
+                        // Tint, not a solid fill: Create course is the only solid button on the page
+                        p === current ? 'bg-(--oa-primary-50) text-(--oa-primary-strong)' : 'text-(--oa-text-secondary) hover:bg-(--oa-surface)',
                       )}
                     >
                       {p}

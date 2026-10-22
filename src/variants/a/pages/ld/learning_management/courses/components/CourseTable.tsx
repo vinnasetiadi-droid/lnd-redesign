@@ -10,6 +10,7 @@ import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import type { CourseItem, CourseStatus } from '../data/courses.mock';
 import { motion } from 'motion/react';
 import { CreatorDisplay } from './CreatorDisplay';
+import { StatusBadge } from './CourseStatus';
 
 interface CourseTableProps {
   courses: CourseItem[];
@@ -21,17 +22,6 @@ interface CourseTableProps {
 type SortKey = 'title' | 'type' | 'level' | 'learningMode' | 'creator' | 'trainees' | 'duration' | 'status';
 type SortDir = 'asc' | 'desc';
 
-const STATUS_STYLES: Record<
-  CourseStatus,
-  { bg: string; text: string; label: string }
-> = {
-  'on-draft': { bg: 'bg-[#F5F6F8]', text: 'text-[#0A0D12]', label: 'On Draft' },
-  'waiting-approval': { bg: 'bg-[#FEF0C7]', text: 'text-[#B54708]', label: 'Waiting Approval' },
-  'need-revision': { bg: 'bg-[#FEE4E2]', text: 'text-[#B42318]', label: 'Need Revision' },
-  approved: { bg: 'bg-[#D1FADF]', text: 'text-[#027A48]', label: 'Approved' },
-  active: { bg: 'bg-[#D2E3FC]', text: 'text-[#174EA6]', label: 'Active' },
-  inactive: { bg: 'bg-[#F5F6F8]', text: 'text-[#0A0D12]', label: 'Inactive' },
-};
 
 interface ColumnDef {
   key: SortKey | 'thumbnail' | 'action';
@@ -145,7 +135,6 @@ export function CourseTable({ courses, onCourseClick = () => {}, className, page
 
           <tbody>
             {sorted.map((course, idx) => {
-              const status = STATUS_STYLES[course.status];
 
               return (
                 <motion.tr
@@ -222,15 +211,7 @@ export function CourseTable({ courses, onCourseClick = () => {}, className, page
 
                   {/* Status */}
                   <td className="px-4 py-3">
-                    <span
-                      className={cn(
-                        "inline-flex h-[30px] items-center rounded-[10px] px-3.5 text-[12px] leading-none whitespace-nowrap",
-                        status.bg,
-                        status.text,
-                      )}
-                    >
-                      {status.label}
-                    </span>
+                    <StatusBadge status={course.status} />
                   </td>
 
                   {/* Quick Action */}

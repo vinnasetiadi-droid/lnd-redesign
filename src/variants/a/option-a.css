@@ -70,8 +70,8 @@ html.option-a {
   --oa-surface-subtle: #F9FAFB; /* Hover */
   --oa-button-secondary: #F0F1F3;
   --oa-button-secondary-hover: #E6E8EB;
-  --oa-button-primary: #111111;
-  --oa-button-primary-hover: #2A2A2A;
+  --oa-button-primary: var(--oa-primary); /* Primary buttons are solid blue, at most one per view */
+  --oa-button-primary-hover: var(--oa-primary-strong);
   --oa-white: #FFFFFF;
   --oa-attention-text: #B54708; /* Amber, only for things that need attention */
   --oa-attention-surface: #FFFAEB;

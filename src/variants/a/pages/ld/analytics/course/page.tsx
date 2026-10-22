@@ -341,7 +341,7 @@ function ActiveProgramsTable({ programType, programs, noun }: { programType: Pro
                 className={cn(
                   'size-8 rounded-full text-[12px] transition-colors',
                   page === currentPage
-                    ? 'bg-[#111111] text-white'
+                    ? 'bg-(--oa-primary-50) text-(--oa-primary-strong)'
                     : 'text-[#717680] hover:bg-[#F5F6F8] hover:text-[#414651]'
                 )}
               >

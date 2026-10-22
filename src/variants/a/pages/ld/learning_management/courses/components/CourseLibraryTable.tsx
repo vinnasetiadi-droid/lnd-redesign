@@ -13,7 +13,8 @@ import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { EASE_OUT } from '@/variants/a/motion';
 import { formatDate, timeAgo } from '@/variants/a/pages/ld/dashboard/period';
 import { latestVersionOf } from '@/lib/latestVersion';
-import { ADMIN_COURSE_VERSIONS, COURSE_STATUS_META, NOT_LIVE, type CourseItem } from '../data/courses.mock';
+import { ADMIN_COURSE_VERSIONS, NOT_LIVE, type CourseItem } from '../data/courses.mock';
+import { StatusLabel } from './CourseStatus';
 
 /** A course and all of its versions; `shown` is the version the row is about */
 export interface CourseRow {
@@ -51,15 +52,6 @@ const initials = (name?: string) =>
 /** Day and month only: "3 Nov" */
 const shortDate = (iso: string) => formatDate(iso).replace(/ \d{4}$/, '');
 
-export function StatusLabel({ status }: { status: CourseItem['status'] }) {
-  const meta = COURSE_STATUS_META[status];
-  return (
-    <span className="flex items-center gap-2 text-[13px] text-(--oa-text-body)">
-      <span className="size-2 shrink-0 rounded-full" style={{ background: meta.dot }} />
-      {meta.label}
-    </span>
-  );
-}
 
 function Owner({ creator, me }: { creator?: string; me: string }) {
   return (

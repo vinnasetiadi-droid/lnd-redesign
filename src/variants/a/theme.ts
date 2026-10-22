@@ -97,8 +97,8 @@ export const OA_COLORS = {
   surfaceSubtle: '#F9FAFB', // Hover
   buttonSecondary: '#F0F1F3',
   buttonSecondaryHover: '#E6E8EB',
-  buttonPrimary: '#111111',
-  buttonPrimaryHover: '#2A2A2A',
+  buttonPrimary: '#1A73E8', // = primary
+  buttonPrimaryHover: '#1967D2', // = primaryStrong
   white: '#FFFFFF',
   attentionText: '#B54708', // Amber, only for things that need attention
   attentionSurface: '#FFFAEB',

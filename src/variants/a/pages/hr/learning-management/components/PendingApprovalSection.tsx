@@ -252,8 +252,8 @@ export function PendingApprovalSection({
                   </div>
 
                   {/* Review CTA */}
-                  <span className="inline-flex h-9 items-center rounded-full px-4 text-[13px] bg-[#111111] text-white hover:bg-[#2A2A2A] transition-colors shrink-0">
-                    {course.type === 'journey' ? 'Review Journey' : 'Review Course'}
+                  <span className="inline-flex h-9 items-center rounded-full px-4 text-[13px] bg-(--oa-button-secondary) text-(--oa-text-strong) hover:bg-(--oa-button-secondary-hover) transition-colors shrink-0">
+                    {course.type === 'journey' ? 'Review journey' : 'Review course'}
                   </span>
                 </button>
               </div>

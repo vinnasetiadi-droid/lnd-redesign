@@ -5,9 +5,10 @@ import { STATUS_CHIP_CLASS, STATUS_LABEL, type CourseLifecycleStatus } from '@/l
 import { Eye, MoreHorizontal, EyeOff, Eye as EyeOn, Trash2, AlertTriangle, X } from '@/variants/a/icons';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import type { CourseItem, CourseStatus } from '../data/courses.mock';
-import { ADMIN_COURSE_VERSIONS, COURSE_STATUS_META, NOT_LIVE } from '../data/courses.mock';
+import { ADMIN_COURSE_VERSIONS, NOT_LIVE } from '../data/courses.mock';
 import { CreatorDisplay } from './CreatorDisplay';
 import { DeleteVersionDialog } from '@/variants/a/components/common/DeleteVersionDialog';
+import { StatusBadge } from './CourseStatus';
 
 interface CourseCardProps {
   course: CourseItem;
@@ -17,44 +18,8 @@ interface CourseCardProps {
   onClick?: () => void;
 }
 
-const STATUS_STYLES: Record<
-  CourseStatus,
-  { bg: string; text: string; label: string }
-> = {
-  'on-draft': {
-    bg: 'bg-[#F5F6F8]',
-    text: 'text-[#0A0D12]',
-    label: COURSE_STATUS_META['on-draft'].label,
-  },
-  'waiting-approval': {
-    bg: 'bg-[#FEF0C7]',
-    text: 'text-[#B54708]',
-    label: COURSE_STATUS_META['waiting-approval'].label,
-  },
-  'need-revision': {
-    bg: 'bg-[#FEE4E2]',
-    text: 'text-[#B42318]',
-    label: COURSE_STATUS_META['need-revision'].label,
-  },
-  approved: {
-    bg: 'bg-[#D1FADF]',
-    text: 'text-[#027A48]',
-    label: COURSE_STATUS_META.approved.label,
-  },
-  active: {
-    bg: 'bg-[#D2E3FC]',
-    text: 'text-[#174EA6]',
-    label: COURSE_STATUS_META.active.label,
-  },
-  inactive: {
-    bg: 'bg-[#F5F6F8]',
-    text: 'text-[#717680]',
-    label: COURSE_STATUS_META.inactive.label,
-  },
-};
 
 export function CourseCard({ course, latestVersion, className, onClick }: CourseCardProps) {
-  const status = STATUS_STYLES[course.status];
   const [menuOpen, setMenuOpen] = useState(false);
   const [showStatusConfirm, setShowStatusConfirm] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -85,15 +50,7 @@ export function CourseCard({ course, latestVersion, className, onClick }: Course
 
         {/* Status badge */}
         <div className="absolute top-3 right-3">
-          <span
-            className={cn(
-              'inline-flex h-[30px] items-center rounded-[10px] px-3.5 text-[12px] leading-none',
-              status.bg,
-              status.text,
-            )}
-          >
-            {status.label}
-          </span>
+          <StatusBadge status={course.status} onImage />
         </div>
 
         {/* Title + meta on image */}
