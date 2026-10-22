@@ -32,10 +32,10 @@ const FUNNEL: Record<ProgramType, Record<Mode, number[]>> = {
   },
 };
 
-// Same colours as Learning mode analytics on Home
+// One blue: blended is the deep band in the middle, self-paced the pale one around it
 const MODES: { key: Mode; label: string; color: string }[] = [
   { key: 'blended', label: 'Blended',    color: OA_COLORS.primary },
-  { key: 'self',    label: 'Self-paced', color: OA_COLORS.modeSelf },
+  { key: 'self',    label: 'Self-paced', color: OA_COLORS.primary200 },
 ];
 
 // Layout: a label column, then one column per stage. Stage lines sit in the
@@ -130,6 +130,12 @@ export function LearningProgressFunnel({ programType, className }: { programType
 
       {/* ── Flow ─────────────────────────────────────────── */}
       <div ref={ref} className="relative" style={{ height: H + 56 }}>
+        {/* A faint blue glow behind the start of the flow */}
+        <div
+          className="pointer-events-none absolute inset-x-0 top-7"
+          style={{ height: H, background: 'radial-gradient(50% 70% at 24% 50%, rgba(26, 115, 232, 0.08) 0%, rgba(26, 115, 232, 0) 70%)' }}
+          aria-hidden
+        />
         <svg
           viewBox={`0 0 ${W} ${H}`}
           preserveAspectRatio="none"
@@ -142,6 +148,17 @@ export function LearningProgressFunnel({ programType, className }: { programType
             <linearGradient id={`${id}-fade`} x1="0" y1="0" x2="1" y2="0">
               <stop offset="0" stopColor={OA_COLORS.white} stopOpacity="0" />
               <stop offset={String(stageX(0) / 100)} stopColor={OA_COLORS.white} stopOpacity="1" />
+            </linearGradient>
+            {/* Each band deepens a little towards the later stages */}
+            <linearGradient id={`${id}-blended`} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={W} y2="0">
+              <stop offset="0" stopColor={OA_COLORS.primary300} />
+              <stop offset={String(stageX(0) / 100)} stopColor={OA_COLORS.primary400} />
+              <stop offset="1" stopColor={OA_COLORS.primary} />
+            </linearGradient>
+            <linearGradient id={`${id}-self`} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={W} y2="0">
+              <stop offset="0" stopColor={OA_COLORS.primary50} />
+              <stop offset={String(stageX(0) / 100)} stopColor={OA_COLORS.primary100} />
+              <stop offset="1" stopColor={OA_COLORS.primary200} />
             </linearGradient>
             <mask id={`${id}-mask`}>
               <rect width={W} height={H} fill={`url(#${id}-fade)`} />
@@ -158,9 +175,9 @@ export function LearningProgressFunnel({ programType, className }: { programType
             </clipPath>
           </defs>
           <g mask={`url(#${id}-mask)`} clipPath={`url(#${id}-reveal)`}>
-            <motion.path d={paths.selfTop} fill={OA_COLORS.modeSelf} fillOpacity={0.45} animate={{ d: paths.selfTop }} transition={{ duration: 0.5, ease: EASE_OUT }} />
-            <motion.path d={paths.selfBottom} fill={OA_COLORS.modeSelf} fillOpacity={0.45} animate={{ d: paths.selfBottom }} transition={{ duration: 0.5, ease: EASE_OUT }} />
-            <motion.path d={paths.blended} fill={OA_COLORS.primary} fillOpacity={0.85} animate={{ d: paths.blended }} transition={{ duration: 0.5, ease: EASE_OUT }} />
+            <motion.path d={paths.selfTop} fill={`url(#${id}-self)`} animate={{ d: paths.selfTop }} transition={{ duration: 0.5, ease: EASE_OUT }} />
+            <motion.path d={paths.selfBottom} fill={`url(#${id}-self)`} animate={{ d: paths.selfBottom }} transition={{ duration: 0.5, ease: EASE_OUT }} />
+            <motion.path d={paths.blended} fill={`url(#${id}-blended)`} fillOpacity={0.92} animate={{ d: paths.blended }} transition={{ duration: 0.5, ease: EASE_OUT }} />
           </g>
         </svg>
 
