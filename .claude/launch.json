@@ -1,0 +1,25 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "lnd-admin-3-pages",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 32104
+    },
+    {
+      "name": "lnd-admin-3-pages-kit",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "../lnd-admin-3-pages-kit",
+        "run",
+        "dev"
+      ],
+      "port": 32110
+    }
+  ]
+}

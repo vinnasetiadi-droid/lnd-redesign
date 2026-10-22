@@ -1,0 +1,117 @@
+/* ================================================================
+   Design System Tokens — Single Source of Truth from Figma
+   Mode 1 · Inter · Lucide Icons
+   ================================================================ */
+
+:root {
+  /* ── Neutral ── */
+  --ds-neutral-025: #FDFDFD;
+  --ds-neutral-050: #FAFAFA;
+  --ds-neutral-100: #F5F5F5;
+  --ds-neutral-200: #E9EAEB;
+  --ds-neutral-300: #D5D7DA;
+  --ds-neutral-400: #A4A7AE;
+  --ds-neutral-500: #717680;
+  --ds-neutral-600: #535862;
+  --ds-neutral-700: #414651;
+  --ds-neutral-800: #252B37;
+  --ds-neutral-900: #181D27;
+  --ds-neutral-950: #0A0D12;
+
+  /* ── Primary ── */
+  --ds-primary-25: #F5FAFF;
+  --ds-primary-50: #EFF8FF;
+  --ds-primary-100: #D1E9FF;
+  --ds-primary-200: #B2DDFF;
+  --ds-primary-300: #84CAFF;
+  --ds-primary-400: #5381FD;
+  --ds-primary-500: #00A3FF;
+  --ds-primary-600: #1570EF;
+  --ds-primary-700: #175CD3;
+  --ds-primary-800: #1849A9;
+  --ds-primary-900: #194185;
+  --ds-primary-950: #0001FE;
+
+  /* ── Additional Primary ── */
+  --ds-primary-teal: #60D0AC;
+  --ds-primary-green: #7EDB56;
+
+  /* ── Success ── */
+  --ds-success-25: #F6FEF9;
+  --ds-success-color: #ECFDF3;
+  --ds-success-100: #D1FADF;
+  --ds-success-200: #A6F4C5;
+  --ds-success-300: #6CE9A6;
+  --ds-success-400: #32D583;
+  --ds-success-500: #12B76A;
+  --ds-success-600: #039855;
+  --ds-success-700: #027A48;
+  --ds-success-800: #05603A;
+  --ds-success-900: #054F31;
+  --ds-success-950: #053321;
+
+  /* ── Warning ── */
+  --ds-warning-25: #FFFCF5;
+  --ds-warning-50: #FFFAEB;
+  --ds-warning-100: #FEF0C7;
+  --ds-warning-200: #FEDF89;
+  --ds-warning-300: #FEC84B;
+  --ds-warning-400: #FDB022;
+  --ds-warning-500: #F79009;
+  --ds-warning-600: #DC6803;
+  --ds-warning-700: #B54708;
+  --ds-warning-800: #93370D;
+  --ds-warning-900: #7A2E0E;
+  --ds-warning-950: #4E1D09;
+
+  /* ── Error ── */
+  --ds-error-25: #FFFBFA;
+  --ds-error-color: #FEF3F2;
+  --ds-error-100: #FEE4E2;
+  --ds-error-200: #FECDCA;
+  --ds-error-300: #FDA29B;
+  --ds-error-400: #F97066;
+  --ds-error-500: #F04438;
+  --ds-error-600: #D92D20;
+  --ds-error-700: #B42318;
+  --ds-error-800: #912018;
+  --ds-error-900: #7A271A;
+  --ds-error-950: #55160C;
+
+  /* ── Spacing (4px base) ── */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+
+  /* ── Chart Colors ── */
+  --ch-blue-1: #53B1FD;
+  --ch-blue-2: #2E90FA;
+  --ch-blue-3: #1570EF;
+  --ch-teal-1: #5EEAD4;
+  --ch-teal-2: #2DD4BF;
+  --ch-teal-3: #14B8A6;
+  --ch-blue-muted: rgba(83, 177, 253, 0.13);
+  --ch-teal-muted: rgba(45, 212, 191, 0.13);
+  --ch-grid: #F2F4F7;
+  --ch-axis: #9AA0AC;
+
+  /* ── Shadows ── */
+  --ds-shadow-sm: 0 1px 3px rgba(16, 24, 40, 0.06);
+  --ds-shadow-md: 0 4px 6px rgba(16, 24, 40, 0.03), 0 12px 16px rgba(16, 24, 40, 0.08);
+  --ds-shadow-lg: 0 8px 24px rgba(16, 24, 40, 0.10);
+  --ds-shadow-xl: 0 24px 48px -12px rgba(16, 24, 40, 0.18);
+}
+
+/* ── Typography Utility Classes ── */
+.body-l  { font-size: 16px; font-weight: 400; line-height: 24px; }
+.body-m  { font-size: 14px; font-weight: 400; line-height: 20px; }
+.body-s  { font-size: 12px; font-weight: 400; line-height: 16px; }
+.button  { font-size: 14px; font-weight: 600; line-height: 16px; }
+.caption { font-size: 12px; font-weight: 400; line-height: 16px; }
