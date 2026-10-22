@@ -1,8 +1,13 @@
 // ============================================================
 // Mock data — Course Library
+//
+// One entry per course. Its status is the live version's status; newer
+// draft versions sit in `versions` and show up in the Draft tab as
+// "Version N of <course>". Every date is relative to today, every count is
+// derived from this list.
 // ============================================================
 
-import { daysAgo, daysFromNow } from '@/variants/a/pages/ld/dashboard/period';
+import { daysAgo, daysFromNow, formatDate, timeAgo } from '@/variants/a/pages/ld/dashboard/period';
 
 export type CourseStatus =
   | 'on-draft'
@@ -21,9 +26,28 @@ export type CourseCategory =
   | 'Onboarding'
   | 'Upskill';
 
+/** One version of a course; older ones are archived, a newer unpublished one is a draft */
+export interface CourseVersion {
+  version: number;
+  status: CourseStatus | 'archived';
+  owner: string;
+  ownerRole?: 'admin' | 'trainer';
+  /** YYYY-MM-DD */
+  updatedOn: string;
+  /** Drafts: how many sections are ready */
+  sectionsReady?: number;
+  sectionsTotal?: number;
+}
+
+export interface ReviewComment {
+  author: string;
+  text: string;
+}
+
 export interface CourseItem {
   id: string;
   title: string;
+  /** Empty when the course has no cover yet (the card draws a fallback) */
   image: string;
   dateRange: string;
   rating: number;
@@ -34,7 +58,9 @@ export interface CourseItem {
   level: string;
   description: string;
   updatedAt: string;
+  /** Enrolled trainees; always 0 while the course is not live, never above maxCapacity */
   trainees: number;
+  /** Active: average completion in percent */
   avgCompletion: number;
   department?: string;
   division?: string;
@@ -49,18 +75,28 @@ export interface CourseItem {
   /** Admin who signed off the current version, if any. */
   approvedBy?: string;
   approvedDate?: string;
-  /** Why the reviewer sent this back — set when status is 'need-revision'. */
-  rejectionReason?: string;
   /** Mandatory vs Open Program. */
   programType?: 'Mandatory' | 'Open Program';
   /** Seat cap for the course. */
   maxCapacity?: number;
-  /** Last change (YYYY-MM-DD), relative to today so the list never looks stale */
+  /** Last change (YYYY-MM-DD) */
   updatedOn?: string;
-  /** When it was sent for review (in review only) */
+  /** In review: when it was sent for review */
   submittedOn?: string;
-  /** First session, for courses that are approved or in review but not running yet */
+  /** In review and approved: first session, always in the future */
   startsOn?: string;
+  /** Inactive: when it ended, and how many of the enrolled trainees completed */
+  endedOn?: string;
+  completed?: number;
+  /** Needs revision: what the reviewers asked for */
+  reviewComments?: ReviewComment[];
+  /** Draft: section completeness */
+  sectionsReady?: number;
+  sectionsTotal?: number;
+  /** Version history, including the live version */
+  versions?: CourseVersion[];
+  /** Set on a draft version shown as its own list item */
+  draftOf?: { courseId: string; version: number };
 }
 
 /** Status labels and dot colours (CSS tokens), shared by the tabs, table and cards */
@@ -76,252 +112,15 @@ export const COURSE_STATUS_META: Record<CourseStatus, { label: string; dot: stri
 /** Statuses that are not live yet: nobody can be enrolled */
 export const NOT_LIVE: CourseStatus[] = ['on-draft', 'waiting-approval', 'need-revision'];
 
-// A trainer's draft is private to that trainer — it only reaches the admin
-// library once it has been submitted for approval.
-export const COURSES_MOCK: CourseItem[] = [
-  {
-    id: 'course-1',
-    updatedOn: daysAgo(0),
-    title: 'AI Ethics & Responsible AI Implementation',
-    image:
-      'https://images.unsplash.com/photo-1675557009483-e6cf3867976b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxBSSUyMHRlY2hub2xvZ3klMjBtYWNoaW5lJTIwbGVhcm5pbmd8ZW58MXx8fHwxNzcyNjExOTM3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    dateRange: '16 March 2026 – 17 March 2026',
-    rating: 5.0,
-    reviewCount: 8,
-    status: 'on-draft',
-    learningType: 'Blended Learning',
-    category: 'Compliance',
-    level: 'Beginner',
-    description:
-      'Understand the fundamentals of AI ethics and learn practical frameworks for responsible AI deployment in your workplace.',
-    updatedAt: 'Today',
-    trainees: 25,
-    avgCompletion: 80,
-    department: 'Marketing',
-    division: 'Corporate Strategy',
-    duration: '6 Hours',
-    creator: 'Diana Hartwell',
-    creatorRole: 'admin',
-    programType: 'Mandatory',
-    maxCapacity: 40,
-    accessFor: 'All Employee',
-    createdDate: '17-03-2026',
-  },
-  {
-    id: 'course-11',
-    updatedOn: daysAgo(7),
-    title: 'Data Privacy Essentials',
-    image:
-      'https://images.unsplash.com/photo-1675557009483-e6cf3867976b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxBSSUyMHRlY2hub2xvZ3klMjBtYWNoaW5lJTIwbGVhcm5pbmd8ZW58MXx8fHwxNzcyNjExOTM3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    dateRange: '12 February 2026 – 12 March 2026',
-    rating: 4.6,
-    reviewCount: 12,
-    status: 'on-draft',
-    learningType: 'Self Learning',
-    category: 'Compliance',
-    level: 'Beginner',
-    description:
-      'Version 2 of the privacy essentials course is being drafted while Version 1 stays live for enrolled trainees.',
-    updatedAt: 'Today',
-    trainees: 32,
-    avgCompletion: 74,
-    department: 'Legal',
-    division: 'Corporate Strategy',
-    duration: '3 Hours',
-    creator: 'Diana Hartwell',
-    creatorRole: 'admin',
-    programType: 'Mandatory',
-    maxCapacity: 60,
-    accessFor: 'All Employee',
-    createdDate: '12-02-2026',
-  },
-  {
-    id: 'course-2',
-    updatedOn: daysAgo(8),
-    startsOn: daysFromNow(12),
-    title: 'Marketing Fundamentals Bootcamp',
-    image:
-      'https://images.unsplash.com/photo-1759393851741-674ee71fb498?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYXJrZXRpbmclMjBzdHJhdGVneSUyMGRpZ2l0YWwlMjBjYW1wYWlnbnxlbnwxfHx8fDE3NzI2MTQwODZ8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    dateRange: '24 February 2026 – 24 March 2026',
-    rating: 4.8,
-    reviewCount: 12,
-    status: 'approved',
-    learningType: 'Blended Learning',
-    category: 'Upskill',
-    level: 'Intermediate',
-    description:
-      'Master the fundamentals of modern marketing including branding, digital campaigns, customer acquisition, and marketing analytics.',
-    updatedAt: '17 days ago',
-    trainees: 30,
-    avgCompletion: 0,
-    department: 'Marketing',
-    division: 'Commercial',
-    duration: '6 Hours',
-    creator: 'Marcus Webb',
-    creatorRole: 'admin',
-    approvedBy: 'Diana Hartwell',
-    approvedDate: '12 April 2026',
-    programType: 'Open Program',
-    maxCapacity: 25,
-    accessFor: 'Singapore, Turkey, Dubai',
-    createdDate: '24-02-2026',
-  },
-  {
-    id: 'course-3',
-    updatedOn: daysAgo(4),
-    title: 'Cybersecurity Awareness',
-    image:
-      'https://images.unsplash.com/photo-1614064641938-3bbee52942c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjeWJlcnNlY3VyaXR5JTIwZGlnaXRhbCUyMHByb3RlY3Rpb24lMjBzaGllbGR8ZW58MXx8fHwxNzcyNTI5NDk1fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    dateRange: '17 February 2026 – 17 March 2026',
-    rating: 4.9,
-    reviewCount: 15,
-    status: 'active',
-    learningType: 'Self Learning',
-    category: 'Compliance',
-    level: 'Beginner',
-    description:
-      'Learn essential cybersecurity practices to protect company data, recognize threats, and maintain a secure digital workplace.',
-    updatedAt: '1 month ago',
-    trainees: 45,
-    avgCompletion: 0,
-    department: 'IT',
-    division: 'Technology',
-    duration: '4 Hours',
-    creator: 'Diana Hartwell',
-    creatorRole: 'admin',
-    approvedBy: 'Diana Hartwell',
-    approvedDate: '12 April 2026',
-    programType: 'Mandatory',
-    maxCapacity: 60,
-    accessFor: 'Grade 1, Grade 2, Grade 3',
-    createdDate: '17-02-2026',
-  },
-  {
-    id: 'course-4',
-    updatedOn: daysAgo(32),
-    title: 'Excellent Customer Service',
-    image:
-      'https://images.unsplash.com/photo-1772464843208-ec4fa4785431?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjdXN0b21lciUyMHNlcnZpY2UlMjBzdXBwb3J0JTIwdGVhbXxlbnwxfHx8fDE3NzI1NDQ4Mjh8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    dateRange: '17 January 2026 – 17 February 2026',
-    rating: 4.7,
-    reviewCount: 20,
-    status: 'inactive',
-    learningType: 'Blended Learning',
-    category: 'Upskill',
-    level: 'Intermediate',
-    description:
-      'Develop exceptional customer service skills including empathy, problem resolution, and creating memorable customer experiences.',
-    updatedAt: '2 months ago',
-    trainees: 35,
-    avgCompletion: 0,
-    department: 'Customer Experience',
-    division: 'Service',
-    duration: '5 Hours',
-    creator: 'Marcus Webb',
-    creatorRole: 'admin',
-    approvedBy: 'Diana Hartwell',
-    approvedDate: '12 April 2026',
-    programType: 'Open Program',
-    maxCapacity: 30,
-    accessFor: 'Selected People',
-    createdDate: '17-01-2026',
-  },
-  {
-    id: 'course-6',
-    updatedOn: daysAgo(2),
-    submittedOn: daysAgo(2),
-    startsOn: daysFromNow(12),
-    title: 'Digital Marketing Essentials',
-    image:
-      'https://images.unsplash.com/photo-1762341112870-1eb70d45b23e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxidXNpbmVzcyUyMHByb2R1Y3Rpdml0eSUyMGRpZ2l0YWwlMjB3b3Jrc3BhY2V8ZW58MXx8fHwxNzcyNjExOTM3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    dateRange: '17 November 2025 – 17 December 2025',
-    rating: 4.4,
-    reviewCount: 8,
-    status: 'waiting-approval',
-    learningType: 'Self Learning',
-    category: 'Upskill',
-    level: 'Beginner',
-    description:
-      'Learn the essentials of digital marketing including SEO, SEM, social media advertising, and content marketing strategies.',
-    updatedAt: '2 months ago',
-    trainees: 22,
-    avgCompletion: 100,
-    department: 'Marketing',
-    division: 'Commercial',
-    duration: '5 Hours',
-    creator: 'Rina Wijaya',
-    creatorRole: 'trainer',
-    programType: 'Open Program',
-    maxCapacity: 35,
-    accessFor: 'Marketing, Commercial',
-    createdDate: '17-11-2025',
-  },
-  {
-    id: 'course-7',
-    updatedOn: daysAgo(5),
-    title: 'Marketing Analytics & Performance Tracking',
-    image:
-      'https://images.unsplash.com/photo-1739298061740-5ed03045b280?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWFtJTIwY29sbGFib3JhdGlvbiUyMG9mZmljZSUyMG1lZXRpbmd8ZW58MXx8fHwxNzcyNTk4MDMzfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    dateRange: '5 October 2025 – 5 November 2025',
-    rating: 4.6,
-    reviewCount: 14,
-    status: 'need-revision',
-    learningType: 'Blended Learning',
-    category: 'Upskill',
-    level: 'Intermediate',
-    description:
-      'Master marketing analytics tools and techniques to track campaign performance, measure ROI, and optimize marketing strategies.',
-    updatedAt: '4 months ago',
-    trainees: 28,
-    avgCompletion: 36,
-    department: 'Marketing',
-    division: 'Commercial',
-    duration: '6 Hours',
-    creator: 'Kevin Brooks',
-    creatorRole: 'trainer',
-    programType: 'Mandatory',
-    maxCapacity: 40,
-    accessFor: 'Marketing, Commercial, Sales',
-    createdDate: '05-10-2025',
-  },
-  {
-    id: 'course-8',
-    updatedOn: daysAgo(14),
-    startsOn: daysFromNow(19),
-    title: 'Developing Organizational Culture & Leadership',
-    image:
-      'https://images.unsplash.com/photo-1764908912200-a516ab1a9b95?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsZWFkZXJzaGlwJTIwdHJhaW5pbmclMjBwcm9mZXNzaW9uYWwlMjBkZXZlbG9wbWVudHxlbnwxfHx8fDE3NzI2MTE5Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    dateRange: '5 January 2026 – 5 March 2026',
-    rating: 4.7,
-    reviewCount: 18,
-    status: 'approved',
-    learningType: 'Blended Learning',
-    category: 'Upskill',
-    level: 'Intermediate',
-    description:
-      'Develop essential leadership competencies, organizational culture strategies, and professional growth mindset to advance your career.',
-    updatedAt: '2 months ago',
-    trainees: 12,
-    avgCompletion: 80,
-    department: 'HR',
-    division: 'People Development',
-    duration: '6 Hours',
-    creator: 'Maria Gonzalez',
-    creatorRole: 'trainer',
-    approvedBy: 'Marcus Webb',
-    approvedDate: '12 April 2026',
-    programType: 'Open Program',
-    maxCapacity: 25,
-    accessFor: 'All Employee',
-    createdDate: '05-01-2026',
-  },
+const range = (startDaysAgo: number, endDaysFromNow: number) =>
+  `${formatDate(daysAgo(startDaysAgo))} – ${formatDate(daysFromNow(endDaysFromNow))}`;
+
+const COURSES: Omit<CourseItem, 'updatedAt'>[] = [
   {
     id: 'course-9',
-    updatedOn: daysAgo(1),
     title: 'AI Ethics & Responsible AI Implementation',
-    image:
-      'https://images.unsplash.com/photo-1675557009483-e6cf3867976b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxBSSUyMHRlY2hub2xvZ3klMjBtYWNoaW5lJTIwbGVhcm5pbmd8ZW58MXx8fHwxNzcyNjExOTM3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    dateRange: '16 March 2026 – 17 March 2026',
+    image: 'https://images.unsplash.com/photo-1675557009483-e6cf3867976b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxBSSUyMHRlY2hub2xvZ3klMjBtYWNoaW5lJTIwbGVhcm5pbmd8ZW58MXx8fHwxNzcyNjExOTM3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    dateRange: range(60, 30),
     rating: 5.0,
     reviewCount: 8,
     status: 'active',
@@ -330,7 +129,6 @@ export const COURSES_MOCK: CourseItem[] = [
     level: 'Beginner',
     description:
       'Understand the fundamentals of AI ethics and learn practical frameworks for responsible AI deployment in your workplace.',
-    updatedAt: 'Today',
     trainees: 25,
     avgCompletion: 80,
     department: 'Marketing',
@@ -339,19 +137,307 @@ export const COURSES_MOCK: CourseItem[] = [
     creator: 'Michael Torres',
     creatorRole: 'trainer',
     approvedBy: 'Marcus Webb',
-    approvedDate: '12 April 2026',
+    approvedDate: formatDate(daysAgo(62)),
     programType: 'Mandatory',
     maxCapacity: 60,
     accessFor: 'All Employee',
-    createdDate: '17-03-2026',
+    createdDate: formatDate(daysAgo(200)),
+    updatedOn: daysAgo(1),
+    // Live v3 by Michael Torres; Diana is drafting v4
+    versions: [
+      { version: 1, status: 'archived', owner: 'Michael Torres', ownerRole: 'trainer', updatedOn: daysAgo(200) },
+      { version: 2, status: 'archived', owner: 'Michael Torres', ownerRole: 'trainer', updatedOn: daysAgo(140) },
+      { version: 3, status: 'active', owner: 'Michael Torres', ownerRole: 'trainer', updatedOn: daysAgo(1) },
+      { version: 4, status: 'on-draft', owner: 'Diana Hartwell', ownerRole: 'admin', updatedOn: daysAgo(0), sectionsReady: 3, sectionsTotal: 6 },
+    ],
+  },
+  {
+    id: 'course-11',
+    title: 'Data Privacy Essentials',
+    image: 'https://images.unsplash.com/photo-1675557009483-e6cf3867976b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxBSSUyMHRlY2hub2xvZ3klMjBtYWNoaW5lJTIwbGVhcm5pbmd8ZW58MXx8fHwxNzcyNjExOTM3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    dateRange: range(240, 45),
+    rating: 4.6,
+    reviewCount: 12,
+    status: 'active',
+    learningType: 'Self Learning',
+    category: 'Compliance',
+    level: 'Beginner',
+    description:
+      'Version 2 of the privacy essentials course is being drafted while Version 1 stays live for enrolled trainees.',
+    trainees: 32,
+    avgCompletion: 74,
+    department: 'Legal',
+    division: 'Corporate Strategy',
+    duration: '3 Hours',
+    creator: 'Diana Hartwell',
+    creatorRole: 'admin',
+    approvedBy: 'Marcus Webb',
+    approvedDate: formatDate(daysAgo(245)),
+    programType: 'Mandatory',
+    maxCapacity: 60,
+    accessFor: 'All Employee',
+    createdDate: formatDate(daysAgo(250)),
+    updatedOn: daysAgo(7),
+    // Live v1; v2 is a draft
+    versions: [
+      { version: 1, status: 'active', owner: 'Diana Hartwell', ownerRole: 'admin', updatedOn: daysAgo(240) },
+      { version: 2, status: 'on-draft', owner: 'Diana Hartwell', ownerRole: 'admin', updatedOn: daysAgo(7), sectionsReady: 4, sectionsTotal: 5 },
+    ],
+  },
+  {
+    id: 'course-2',
+    title: 'Marketing Fundamentals Bootcamp',
+    image: 'https://images.unsplash.com/photo-1759393851741-674ee71fb498?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYXJrZXRpbmclMjBzdHJhdGVneSUyMGRpZ2l0YWwlMjBjYW1wYWlnbnxlbnwxfHx8fDE3NzI2MTQwODZ8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    dateRange: range(-12, 40),
+    rating: 4.8,
+    reviewCount: 12,
+    status: 'approved',
+    learningType: 'Blended Learning',
+    category: 'Upskill',
+    level: 'Intermediate',
+    description:
+      'Master the fundamentals of modern marketing including branding, digital campaigns, customer acquisition, and marketing analytics.',
+    // Pre-registered seats before the start date
+    trainees: 22,
+    avgCompletion: 0,
+    department: 'Marketing',
+    division: 'Commercial',
+    duration: '6 Hours',
+    creator: 'Marcus Webb',
+    creatorRole: 'admin',
+    approvedBy: 'Diana Hartwell',
+    approvedDate: formatDate(daysAgo(8)),
+    programType: 'Open Program',
+    maxCapacity: 25,
+    accessFor: 'Singapore, Turkey, Dubai',
+    createdDate: formatDate(daysAgo(60)),
+    updatedOn: daysAgo(8),
+    startsOn: daysFromNow(12),
+    versions: [
+      { version: 1, status: 'archived', owner: 'Marcus Webb', ownerRole: 'admin', updatedOn: daysAgo(45) },
+      { version: 2, status: 'approved', owner: 'Marcus Webb', ownerRole: 'admin', updatedOn: daysAgo(8) },
+    ],
+  },
+  {
+    id: 'course-3',
+    title: 'Cybersecurity Awareness',
+    image: 'https://images.unsplash.com/photo-1614064641938-3bbee52942c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjeWJlcnNlY3VyaXR5JTIwZGlnaXRhbCUyMHByb3RlY3Rpb24lMjBzaGllbGR8ZW58MXx8fHwxNzcyNTI5NDk1fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    dateRange: range(30, 60),
+    rating: 4.9,
+    reviewCount: 15,
+    status: 'active',
+    learningType: 'Self Learning',
+    category: 'Compliance',
+    level: 'Beginner',
+    description:
+      'Learn essential cybersecurity practices to protect company data, recognize threats, and maintain a secure digital workplace.',
+    trainees: 45,
+    avgCompletion: 64,
+    department: 'IT',
+    division: 'Technology',
+    duration: '4 Hours',
+    creator: 'Diana Hartwell',
+    creatorRole: 'admin',
+    approvedBy: 'Marcus Webb',
+    approvedDate: formatDate(daysAgo(32)),
+    programType: 'Mandatory',
+    maxCapacity: 60,
+    accessFor: 'Grade 1, Grade 2, Grade 3',
+    createdDate: formatDate(daysAgo(150)),
+    updatedOn: daysAgo(4),
+    versions: [
+      { version: 1, status: 'archived', owner: 'Diana Hartwell', ownerRole: 'admin', updatedOn: daysAgo(150) },
+      { version: 2, status: 'archived', owner: 'Diana Hartwell', ownerRole: 'admin', updatedOn: daysAgo(90) },
+      { version: 3, status: 'active', owner: 'Diana Hartwell', ownerRole: 'admin', updatedOn: daysAgo(4) },
+    ],
+  },
+  {
+    id: 'course-4',
+    title: 'Excellent Customer Service',
+    image: 'https://images.unsplash.com/photo-1772464843208-ec4fa4785431?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjdXN0b21lciUyMHNlcnZpY2UlMjBzdXBwb3J0JTIwdGVhbXxlbnwxfHx8fDE3NzI1NDQ4Mjh8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    dateRange: `${formatDate(daysAgo(100))} – ${formatDate(daysAgo(40))}`,
+    rating: 4.7,
+    reviewCount: 20,
+    status: 'inactive',
+    learningType: 'Blended Learning',
+    category: 'Upskill',
+    level: 'Intermediate',
+    description:
+      'Develop exceptional customer service skills including empathy, problem resolution, and creating memorable customer experiences.',
+    trainees: 35,
+    avgCompletion: 89,
+    department: 'Customer Experience',
+    division: 'Service',
+    duration: '5 Hours',
+    creator: 'Marcus Webb',
+    creatorRole: 'admin',
+    approvedBy: 'Diana Hartwell',
+    approvedDate: formatDate(daysAgo(105)),
+    programType: 'Open Program',
+    maxCapacity: 40,
+    accessFor: 'Selected People',
+    createdDate: formatDate(daysAgo(160)),
+    updatedOn: daysAgo(32),
+    endedOn: daysAgo(40),
+    completed: 31,
+    versions: [
+      { version: 1, status: 'archived', owner: 'Marcus Webb', ownerRole: 'admin', updatedOn: daysAgo(160) },
+      { version: 2, status: 'inactive', owner: 'Marcus Webb', ownerRole: 'admin', updatedOn: daysAgo(32) },
+    ],
+  },
+  {
+    id: 'course-6',
+    title: 'Digital Marketing Essentials',
+    image: 'https://images.unsplash.com/photo-1762341112870-1eb70d45b23e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxidXNpbmVzcyUyMHByb2R1Y3Rpdml0eSUyMGRpZ2l0YWwlMjB3b3Jrc3BhY2V8ZW58MXx8fHwxNzcyNjExOTM3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    dateRange: range(-12, 42),
+    rating: 4.4,
+    reviewCount: 8,
+    status: 'waiting-approval',
+    learningType: 'Self Learning',
+    category: 'Upskill',
+    level: 'Beginner',
+    description:
+      'Learn the essentials of digital marketing including SEO, SEM, social media advertising, and content marketing strategies.',
+    trainees: 0,
+    avgCompletion: 0,
+    department: 'Marketing',
+    division: 'Commercial',
+    duration: '5 Hours',
+    creator: 'Rina Wijaya',
+    creatorRole: 'trainer',
+    programType: 'Open Program',
+    maxCapacity: 35,
+    accessFor: 'Marketing, Commercial',
+    createdDate: formatDate(daysAgo(20)),
+    updatedOn: daysAgo(2),
+    submittedOn: daysAgo(2),
+    startsOn: daysFromNow(12),
+  },
+  {
+    id: 'course-12',
+    title: 'Business Writing for Managers',
+    image: '',
+    dateRange: range(-20, 50),
+    rating: 0,
+    reviewCount: 0,
+    status: 'waiting-approval',
+    learningType: 'Self Learning',
+    category: 'Upskill',
+    level: 'Intermediate',
+    description:
+      'Write clear updates, proposals and feedback that busy stakeholders read and act on.',
+    trainees: 0,
+    avgCompletion: 0,
+    department: 'People Development',
+    division: 'Corporate Strategy',
+    duration: '4 Hours',
+    // Diana's own submission: another admin has to review it
+    creator: 'Diana Hartwell',
+    creatorRole: 'admin',
+    programType: 'Open Program',
+    maxCapacity: 30,
+    accessFor: 'All Employee',
+    createdDate: formatDate(daysAgo(14)),
+    updatedOn: daysAgo(1),
+    submittedOn: daysAgo(1),
+    startsOn: daysFromNow(20),
+  },
+  {
+    id: 'course-7',
+    title: 'Marketing Analytics & Performance Tracking',
+    image: 'https://images.unsplash.com/photo-1739298061740-5ed03045b280?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWFtJTIwY29sbGFib3JhdGlvbiUyMG9mZmljZSUyMG1lZXRpbmd8ZW58MXx8fHwxNzcyNTk4MDMzfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    dateRange: range(-30, 60),
+    rating: 4.6,
+    reviewCount: 14,
+    status: 'need-revision',
+    learningType: 'Blended Learning',
+    category: 'Upskill',
+    level: 'Intermediate',
+    description:
+      'Master marketing analytics tools and techniques to track campaign performance, measure ROI, and optimize marketing strategies.',
+    trainees: 0,
+    avgCompletion: 0,
+    department: 'Marketing',
+    division: 'Commercial',
+    duration: '6 Hours',
+    creator: 'Kevin Brooks',
+    creatorRole: 'trainer',
+    programType: 'Mandatory',
+    maxCapacity: 40,
+    accessFor: 'Marketing, Commercial, Sales',
+    createdDate: formatDate(daysAgo(30)),
+    updatedOn: daysAgo(5),
+    reviewComments: [
+      { author: 'Diana Hartwell', text: 'Module 3 needs a worked ROI example before learners try the exercise.' },
+      { author: 'Marcus Webb', text: 'Add the campaign dashboard screenshots the quiz refers to.' },
+    ],
+  },
+  {
+    id: 'course-13',
+    title: 'Customer Onboarding Playbook',
+    image: '',
+    dateRange: range(-25, 45),
+    rating: 0,
+    reviewCount: 0,
+    status: 'need-revision',
+    learningType: 'Blended Learning',
+    category: 'Onboarding',
+    level: 'Beginner',
+    description:
+      'A step-by-step playbook for welcoming new customers, from the kickoff call to the first business review.',
+    trainees: 0,
+    avgCompletion: 0,
+    department: 'Customer Experience',
+    division: 'Service',
+    duration: '3 Hours',
+    creator: 'Liam Martinez',
+    creatorRole: 'trainer',
+    programType: 'Open Program',
+    maxCapacity: 20,
+    accessFor: 'Customer Experience',
+    createdDate: formatDate(daysAgo(18)),
+    updatedOn: daysAgo(3),
+    reviewComments: [
+      { author: 'Marcus Webb', text: 'The welcome call script is missing; trainees need it before session 2.' },
+    ],
+  },
+  {
+    id: 'course-8',
+    title: 'Developing Organizational Culture & Leadership',
+    image: 'https://images.unsplash.com/photo-1764908912200-a516ab1a9b95?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsZWFkZXJzaGlwJTIwdHJhaW5pbmclMjBwcm9mZXNzaW9uYWwlMjBkZXZlbG9wbWVudHxlbnwxfHx8fDE3NzI2MTE5Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    dateRange: range(-19, 60),
+    rating: 4.7,
+    reviewCount: 18,
+    status: 'approved',
+    learningType: 'Blended Learning',
+    category: 'Upskill',
+    level: 'Intermediate',
+    description:
+      'Develop essential leadership competencies, organizational culture strategies, and professional growth mindset to advance your career.',
+    trainees: 12,
+    avgCompletion: 0,
+    department: 'HR',
+    division: 'People Development',
+    duration: '6 Hours',
+    creator: 'Maria Gonzalez',
+    creatorRole: 'trainer',
+    approvedBy: 'Marcus Webb',
+    approvedDate: formatDate(daysAgo(14)),
+    programType: 'Open Program',
+    maxCapacity: 25,
+    accessFor: 'All Employee',
+    createdDate: formatDate(daysAgo(40)),
+    updatedOn: daysAgo(14),
+    startsOn: daysFromNow(19),
+    versions: [
+      { version: 1, status: 'approved', owner: 'Maria Gonzalez', ownerRole: 'trainer', updatedOn: daysAgo(14) },
+    ],
   },
   {
     id: 'course-10',
-    updatedOn: daysAgo(21),
     title: 'Metabase 101',
-    image:
-      'https://images.unsplash.com/photo-1759752394755-1241472b589d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkYXRhJTIwZGFzaGJvYXJkJTIwYW5hbHl0aWNzJTIwc2NyZWVufGVufDF8fHx8MTc3MjUzODMzNHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    dateRange: '28 February 2026 – 28 March 2026',
+    image: 'https://images.unsplash.com/photo-1759752394755-1241472b589d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkYXRhJTIwZGFzaGJvYXJkJTIwYW5hbHl0aWNzJTIwc2NyZWVufGVufDF8fHx8MTc3MjUzODMzNHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    dateRange: `${formatDate(daysAgo(80))} – ${formatDate(daysAgo(25))}`,
     rating: 4.6,
     reviewCount: 5,
     status: 'inactive',
@@ -360,27 +446,73 @@ export const COURSES_MOCK: CourseItem[] = [
     level: 'Beginner',
     description:
       'Get started with Metabase for data exploration, building dashboards, and sharing insights across your team.',
-    updatedAt: '2 days ago',
     trainees: 16,
-    avgCompletion: 50,
+    avgCompletion: 75,
     department: 'Data & Insight',
     division: 'Data Analytic',
     duration: '3 Hours',
     creator: 'Fatima Al-Rashid',
     creatorRole: 'trainer',
     approvedBy: 'Marcus Webb',
-    approvedDate: '12 April 2026',
+    approvedDate: formatDate(daysAgo(85)),
     programType: 'Open Program',
     maxCapacity: 30,
     accessFor: 'Data & Insight, Product, Engineering',
-    createdDate: '28-02-2026',
+    createdDate: formatDate(daysAgo(120)),
+    updatedOn: daysAgo(21),
+    endedOn: daysAgo(25),
+    completed: 12,
+    versions: [
+      { version: 1, status: 'archived', owner: 'Fatima Al-Rashid', ownerRole: 'trainer', updatedOn: daysAgo(120) },
+      { version: 2, status: 'inactive', owner: 'Fatima Al-Rashid', ownerRole: 'trainer', updatedOn: daysAgo(21) },
+    ],
   },
-
 ];
 
-// Two courses per lifecycle status: one authored by the admin team, one by a
-// trainer. Counted from the list, so they always match it.
-const countStatus = (status: CourseStatus) => COURSES_MOCK.filter((c) => c.status === status).length;
+// Relative "updated" text follows the date, so the two never disagree
+export const COURSES_MOCK: CourseItem[] = COURSES.map((c) => ({ ...c, updatedAt: c.updatedOn ? timeAgo(c.updatedOn) : '' }));
+
+// ── Versions ─────────────────────────────────────────────────
+
+/** The live version's number (the one the course row is about) */
+export function liveVersionOf(c: CourseItem): number {
+  if (c.draftOf) return c.draftOf.version;
+  const versions = c.versions ?? [];
+  const live = versions.filter((v) => v.status !== 'on-draft' && v.status !== 'archived');
+  const pool = live.length ? live : versions;
+  return pool.length ? Math.max(...pool.map((v) => v.version)) : 1;
+}
+
+/** Draft versions newer than the live one */
+export function draftVersionsOf(c: CourseItem): CourseVersion[] {
+  const live = liveVersionOf(c);
+  return (c.versions ?? []).filter((v) => v.status === 'on-draft' && v.version > live);
+}
+
+/** A draft version as its own list item: Draft tab and version rows ("Version N of <course>") */
+export function draftItemsOf(c: CourseItem): CourseItem[] {
+  return draftVersionsOf(c).map((v) => ({
+    ...c,
+    id: `${c.id}-v${v.version}`,
+    status: 'on-draft' as const,
+    creator: v.owner,
+    creatorRole: v.ownerRole ?? c.creatorRole,
+    updatedOn: v.updatedOn,
+    updatedAt: timeAgo(v.updatedOn),
+    trainees: 0,
+    avgCompletion: 0,
+    sectionsReady: v.sectionsReady,
+    sectionsTotal: v.sectionsTotal,
+    draftOf: { courseId: c.id, version: v.version },
+  }));
+}
+
+// Two or more courses (or draft versions) per status, so every tab has content.
+// Counted from the list, so they always match it.
+const countStatus = (status: CourseStatus) =>
+  status === 'on-draft'
+    ? COURSES_MOCK.reduce((n, c) => n + (c.status === 'on-draft' ? 1 : 0) + draftVersionsOf(c).length, 0)
+    : COURSES_MOCK.filter((c) => c.status === status).length;
 export const COURSE_STATS = {
   onDraft: countStatus('on-draft'),
   waitingApproval: countStatus('waiting-approval'),
@@ -398,41 +530,18 @@ export interface AdminCourseVersion {
   status: 'current' | 'latest' | 'archived';
 }
 
-export const ADMIN_COURSE_VERSIONS: Record<string, AdminCourseVersion[]> = {
-  // An admin course with a second version still in draft: Version 1 is live,
-  // Version 2 is the draft — deleting it leaves the course on Version 1.
-  'course-11': [
-    { version: 1, label: 'Version 1', lastUpdated: '12 February 2026', status: 'current' },
-    { version: 2, label: 'Version 2', lastUpdated: 'Today', status: 'latest' },
-  ],
-  // Only courses that have cleared review carry a version history. Drafts and
-  // submissions still under review have nothing to switch between yet.
-  'course-2': [
-    { version: 1, label: 'Version 1', lastUpdated: '28 February 2026', status: 'archived' },
-    { version: 2, label: 'Version 2', lastUpdated: '20 March 2026', status: 'current' },
-  ],
-  'course-3': [
-    { version: 1, label: 'Version 1', lastUpdated: '10 January 2026', status: 'archived' },
-    { version: 2, label: 'Version 2', lastUpdated: '5 February 2026', status: 'archived' },
-    { version: 3, label: 'Version 3', lastUpdated: '1 March 2026', status: 'current' },
-  ],
-  'course-4': [
-    { version: 1, label: 'Version 1', lastUpdated: '12 January 2026', status: 'archived' },
-    { version: 2, label: 'Version 2', lastUpdated: '18 February 2026', status: 'current' },
-  ],
-  'course-8': [
-    { version: 1, label: 'Version 1', lastUpdated: '2 March 2026', status: 'current' },
-  ],
-  'course-9': [
-    { version: 1, label: 'Version 1', lastUpdated: '28 February 2026', status: 'archived' },
-    { version: 2, label: 'Version 2', lastUpdated: '15 March 2026', status: 'current' },
-    { version: 3, label: 'Version 3', lastUpdated: '10 April 2026', status: 'latest' },
-  ],
-  'course-10': [
-    { version: 1, label: 'Version 1', lastUpdated: '20 January 2026', status: 'archived' },
-    { version: 2, label: 'Version 2', lastUpdated: '26 February 2026', status: 'current' },
-  ],
-};
+/** Derived from `versions`: the live version is current, a newer draft is latest */
+export const ADMIN_COURSE_VERSIONS: Record<string, AdminCourseVersion[]> = Object.fromEntries(
+  COURSES_MOCK.filter((c) => c.versions?.length).map((c) => [
+    c.id,
+    c.versions!.map((v) => ({
+      version: v.version,
+      label: `Version ${v.version}`,
+      lastUpdated: formatDate(v.updatedOn),
+      status: v.status === 'archived' ? 'archived' : v.status === 'on-draft' ? 'latest' : 'current',
+    })),
+  ]),
+);
 
 // ── Per-version content overrides (description / skills / objectives / topic count) ─
 export interface CourseVersionOverride {

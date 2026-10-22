@@ -12,8 +12,7 @@ import { cn } from '@/lib/utils';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { EASE_OUT } from '@/variants/a/motion';
 import { formatDate, timeAgo } from '@/variants/a/pages/ld/dashboard/period';
-import { latestVersionOf } from '@/lib/latestVersion';
-import { ADMIN_COURSE_VERSIONS, NOT_LIVE, type CourseItem } from '../data/courses.mock';
+import { NOT_LIVE, liveVersionOf, type CourseItem } from '../data/courses.mock';
 import { StatusLabel } from './CourseStatus';
 
 /** A course and all of its versions; `shown` is the version the row is about */
@@ -36,7 +35,9 @@ const GRID =
 
 export const courseType = (c: CourseItem) => (c.category === 'Compliance' ? 'Compliance' : 'Skill training');
 export const courseMode = (c: CourseItem) => (c.learningType === 'Blended Learning' ? 'Blended' : 'Self-paced');
-export const versionOf = (c: CourseItem) => latestVersionOf(ADMIN_COURSE_VERSIONS, c.id);
+export const versionOf = (c: CourseItem) => liveVersionOf(c);
+/** Draft versions read "Version N of <course>" */
+export const titleOf = (c: CourseItem) => (c.draftOf ? `Version ${c.draftOf.version} of ${c.title}` : c.title);
 
 /** "You", or "M. Torres" */
 export function ownerName(creator: string | undefined, me: string) {
@@ -145,7 +146,7 @@ function CourseRowView({ row, me, onOpen, index }: { row: CourseRow; me: string;
         <div className="flex min-w-0 items-center gap-3">
           <ImageWithFallback src={c.image} alt="" className="h-10 w-14 shrink-0 rounded-[10px] object-cover" />
           <div className="min-w-0">
-            <p className="truncate text-[13px] leading-[20px] text-(--oa-text-strong)" title={c.title}>{c.title}</p>
+            <p className="truncate text-[13px] leading-[20px] text-(--oa-text-strong)" title={titleOf(c)}>{titleOf(c)}</p>
             <p className="flex min-w-0 items-center gap-1 text-[12px] leading-[18px] text-(--oa-text-muted)">
               <span className="truncate">{courseType(c)} · {courseMode(c)} · v{versionOf(c)}{starts}</span>
               {others.length > 0 && (
@@ -162,7 +163,13 @@ function CourseRowView({ row, me, onOpen, index }: { row: CourseRow; me: string;
             </p>
           </div>
         </div>
-        <StatusLabel status={c.status} />
+        <div className="min-w-0">
+          <StatusLabel status={c.status} />
+          {/* Nobody reviews their own course */}
+          {c.status === 'waiting-approval' && c.creator === me && (
+            <p className="truncate pl-4 text-[11px] leading-[14px] text-(--oa-text-subtle)">Waiting for another admin</p>
+          )}
+        </div>
         <Owner creator={c.creator} me={me} />
         <Enrolled course={c} />
         <span className="text-right text-[12px] text-(--oa-text-muted)">{c.updatedOn ? timeAgo(c.updatedOn) : c.updatedAt}</span>

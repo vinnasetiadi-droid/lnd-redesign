@@ -28,8 +28,7 @@ import { DashboardLayout } from '@/variants/a/layouts/DashboardLayout';
 import { useSimulatedLoading } from '@/hooks/useSimulatedLoading';
 import { CourseCard } from './components/CourseCard';
 import { CourseLibraryTable, courseMode, courseType, ownerName, type CourseRow } from './components/CourseLibraryTable';
-import { ADMIN_COURSE_VERSIONS, COURSES_MOCK, COURSE_STATUS_META, NOT_LIVE, type CourseItem, type CourseStatus } from './data/courses.mock';
-import { latestVersionOf } from '@/lib/latestVersion';
+import { COURSES_MOCK, COURSE_STATUS_META, NOT_LIVE, draftItemsOf, liveVersionOf, type CourseItem, type CourseStatus } from './data/courses.mock';
 import { IconCircle, PillButton } from '@/variants/a/components/ui/kit';
 import { ProgramScopeTabs, type ScopeTab } from '@/variants/a/pages/ld/dashboard/components/ProgramScopeTabs';
 import { daysUntil, timeAgo } from '@/variants/a/pages/ld/dashboard/period';
@@ -43,24 +42,10 @@ type ModeFilter = 'all' | 'Blended' | 'Self-paced';
 type SortKey = 'updated' | 'name' | 'enrolled';
 
 const STATUS_ORDER: CourseStatus[] = ['on-draft', 'waiting-approval', 'need-revision', 'approved', 'active', 'inactive'];
-/** Which version a course row is about on the All tab: the most live one */
-const LIVE_FIRST: CourseStatus[] = ['active', 'approved', 'waiting-approval', 'need-revision', 'inactive', 'on-draft'];
 
 /** Pill select, chevron drawn as a background image */
 const SELECT_CLASS =
   "appearance-none h-9 pl-4 pr-9 rounded-full bg-(--oa-surface) text-[13px] text-(--oa-text-strong) outline-none cursor-pointer transition-colors hover:bg-(--oa-border) focus-visible:ring-2 focus-visible:ring-(--oa-primary)/25 bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23717680%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:12px] bg-[right_14px_center] bg-no-repeat";
-
-/** Same title = versions of one course */
-function groupCourses(courses: CourseItem[]) {
-  const groups = new Map<string, CourseItem[]>();
-  for (const c of courses) groups.set(c.title, [...(groups.get(c.title) ?? []), c]);
-  return [...groups.entries()].map(([key, versions]) => ({
-    key,
-    versions: [...versions].sort((a, b) => LIVE_FIRST.indexOf(a.status) - LIVE_FIRST.indexOf(b.status)),
-  }));
-}
-
-const GROUPS = groupCourses(COURSES_MOCK);
 
 export default function CoursesPage() {
   const navigate = useNavigate();
@@ -86,10 +71,18 @@ export default function CoursesPage() {
     (mode === 'all' || courseMode(c) === mode) &&
     (!search.trim() || c.title.toLowerCase().includes(search.trim().toLowerCase()));
 
+  // One row per course (its live version). Draft versions of live courses are
+  // their own rows in the Draft tab, and sit under their course everywhere else.
   const rowsFor = (s: StatusFilter): CourseRow[] =>
-    GROUPS.flatMap((g) => {
-      const hits = g.versions.filter((v) => matches(v) && (s === 'all' || v.status === s));
-      return hits.length ? [{ key: g.key, shown: hits[0], versions: g.versions }] : [];
+    COURSES_MOCK.flatMap((c) => {
+      const drafts = draftItemsOf(c);
+      if (s === 'on-draft') {
+        return [c, ...drafts]
+          .filter((x) => x.status === 'on-draft' && matches(x))
+          .map((x) => ({ key: x.id, shown: x, versions: [x] }));
+      }
+      if ((s !== 'all' && c.status !== s) || !matches(c)) return [];
+      return [{ key: c.id, shown: c, versions: [c, ...drafts] }];
     });
 
   const tabs: ScopeTab<StatusFilter>[] = [
@@ -244,7 +237,7 @@ export default function CoursesPage() {
                 <CourseCard
                   key={row.key}
                   course={row.shown}
-                  latestVersion={latestVersionOf(ADMIN_COURSE_VERSIONS, row.shown.id)}
+                  latestVersion={liveVersionOf(row.shown)}
                   onClick={() => openCourse(row.shown.id)}
                 />
               ))}
