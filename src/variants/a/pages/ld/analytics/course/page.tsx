@@ -317,6 +317,11 @@ function Pagination({ page, total, onPage }: { page: number; total: number; onPa
 
 // ── Active programs table (same rhythm as the Upskill Studio table) ──
 
+// Hidden for now: both are work lists rather than analysis, and Home already has
+// them (Active programs, Programs needing attention). Set to true to bring one back.
+const SHOW_ACTIVE_LIST = false;
+const SHOW_NOT_STARTED = false;
+
 const ACTIVE_PROGRAMS_PER_PAGE = 5;
 const ACTIVE_GRID = 'grid grid-cols-[minmax(0,1fr)_88px_140px_72px] items-center gap-4';
 
@@ -606,7 +611,7 @@ export default function LearningProgramAnalyticsPage() {
           </motion.div>
         </div>
 
-        <ActiveProgramsTable programType={programType} programs={data.table} noun={noun} />
+        {SHOW_ACTIVE_LIST && <ActiveProgramsTable programType={programType} programs={data.table} noun={noun} />}
 
         {/* Top and bottom programs */}
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
@@ -635,34 +640,36 @@ export default function LearningProgramAnalyticsPage() {
         </div>
 
         {/* Assigned but not started: the amber chip is the only warning signal */}
-        <Card>
-          <CardHeader
-            title={<FadeValue k={programType}>{noun.One}s assigned but not started</FadeValue>}
-            subtitle={<FadeValue k={programType}>Assigned {noun.many} with zero progress</FadeValue>}
-            extra={<RoundChip tone="attention"><FadeValue k={programType}>{idleCount} {idleCount === 1 ? noun.one : noun.many} idle</FadeValue></RoundChip>}
-            icon={CalendarClock}
-          />
-          <FadeValue k={programType} className="block w-full">
-            <div>
-              {data.notStarted.map((program) => (
-                <div key={`${programType}-${program.id}`} className="flex items-center gap-4 border-b border-(--oa-border) py-3 last:border-b-0">
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-[13px] leading-[20px] text-(--oa-text-strong)" title={program.name}>{program.name}</p>
-                    <p className="truncate text-[12px] leading-[18px] text-(--oa-text-muted)">
-                      {[typeLabel(program.type), modeLabel(program.mode), programSchedule(program)].join(' · ')}
-                    </p>
+        {SHOW_NOT_STARTED && (
+          <Card>
+            <CardHeader
+              title={<FadeValue k={programType}>{noun.One}s assigned but not started</FadeValue>}
+              subtitle={<FadeValue k={programType}>Assigned {noun.many} with zero progress</FadeValue>}
+              extra={<RoundChip tone="attention"><FadeValue k={programType}>{idleCount} {idleCount === 1 ? noun.one : noun.many} idle</FadeValue></RoundChip>}
+              icon={CalendarClock}
+            />
+            <FadeValue k={programType} className="block w-full">
+              <div>
+                {data.notStarted.map((program) => (
+                  <div key={`${programType}-${program.id}`} className="flex items-center gap-4 border-b border-(--oa-border) py-3 last:border-b-0">
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-[13px] leading-[20px] text-(--oa-text-strong)" title={program.name}>{program.name}</p>
+                      <p className="truncate text-[12px] leading-[18px] text-(--oa-text-muted)">
+                        {[typeLabel(program.type), modeLabel(program.mode), programSchedule(program)].join(' · ')}
+                      </p>
+                    </div>
+                    <span className="shrink-0 text-[13px] tabular-nums text-(--oa-text-strong)">
+                      {program.assignedTo} <span className="text-[12px] text-(--oa-text-muted)">assigned</span>
+                    </span>
+                    <span className={cn('w-16 shrink-0 text-right text-[13px] tabular-nums', program.daysIdle >= 10 ? ATTENTION.text : 'text-(--oa-text-muted)')}>
+                      {program.daysIdle}d idle
+                    </span>
                   </div>
-                  <span className="shrink-0 text-[13px] tabular-nums text-(--oa-text-strong)">
-                    {program.assignedTo} <span className="text-[12px] text-(--oa-text-muted)">assigned</span>
-                  </span>
-                  <span className={cn('w-16 shrink-0 text-right text-[13px] tabular-nums', program.daysIdle >= 10 ? ATTENTION.text : 'text-(--oa-text-muted)')}>
-                    {program.daysIdle}d idle
-                  </span>
-                </div>
-              ))}
-            </div>
-          </FadeValue>
-        </Card>
+                ))}
+              </div>
+            </FadeValue>
+          </Card>
+        )}
 
         {/* Licenses, last updated, expired certifications */}
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
