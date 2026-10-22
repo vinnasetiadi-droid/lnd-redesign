@@ -24,6 +24,8 @@ export interface LDMetricCard {
   value: string;
   trend: string;
   trendPositive: boolean;
+  /** Short hint under the title, e.g. what the number counts */
+  hint?: string;
 }
 
 export interface NisaInsight {

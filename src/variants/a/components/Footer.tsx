@@ -3,7 +3,7 @@ import imgAjari from "figma:asset/55d5af9699221eaa0f62b7e2d772b0b470e2f151.png";
 
 export function Footer() {
   return (
-    <footer className="flex items-center justify-between px-5 py-5 w-full">
+    <footer className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 px-5 py-5 w-full">
       {/* Left: Logo + Copyright */}
       <div className="flex items-center gap-4 shrink-0">
         <img
@@ -17,7 +17,7 @@ export function Footer() {
       </div>
 
       {/* Right: Navigation links */}
-      <div className="flex items-center gap-8 shrink-0">
+      <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
         <Link
           to="/user-guide"
           className="text-[12px] leading-[18px] text-[#535862] hover:text-[#414651] no-underline whitespace-nowrap"

@@ -102,6 +102,7 @@ export function LDDashboardProgramOverview({
   );
 
   const range = periodLabel(data);
+  const prevMonth = data[data.length - 2]?.month ?? '';
   const fullInsight = activeScope === 'course' ? courseInsight ?? insight : activeScope === 'journey' ? journeyInsight ?? insight : insight;
 
   return (
@@ -136,7 +137,8 @@ export function LDDashboardProgramOverview({
                 <span className="text-[24px] leading-[32px] text-(--oa-text-strong)"><FadeValue k={m.total}>{m.total}</FadeValue></span>
                 {m.trend !== 0 && (
                   <Trend positive={positive}>
-                    <FadeValue k={m.trend}>{positive ? '+' : ''}{m.trend}%</FadeValue>
+                    {/* Totals are year to date; the trend compares the last two months */}
+                    <FadeValue k={m.trend}>{positive ? '+' : ''}{m.trend}% vs {prevMonth}</FadeValue>
                   </Trend>
                 )}
               </div>

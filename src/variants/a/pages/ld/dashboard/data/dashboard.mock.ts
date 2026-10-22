@@ -59,7 +59,7 @@ export const MOCK_PROGRAMS: ProgramOverview[] = [
   { kind: 'course', id: '5', name: 'Digital Marketing Foundation',                    participants: 22,  completionRate: 10,  status: 'active', instructorsCount: 1, type: 'Skill Training', mode: 'Self Learning', duration: '15 hours' },
   { kind: 'journey', id: '6', name: 'Generative AI for Marketing Professionals',       participants: 50,  completionRate: 72,  status: 'active', instructorsCount: 2, type: 'Skill Training', mode: 'Blended Learning', ...starts(120), ...ends(55) },
   { kind: 'course', id: '7', name: 'Social Media Marketing Trends',                   participants: 25,  completionRate: 80,  status: 'active', instructorsCount: 1, type: 'Skill Training', mode: 'Self Learning', duration: '8 hours' },
-  { kind: 'course', id: '8', name: 'Becoming Irreplaceable in the Age of AI',         participants: 50,  completionRate: 100, status: 'active', instructorsCount: 2, type: 'Skill Training', mode: 'Blended Learning', ...starts(200), ...ends(16) },
+  { kind: 'course', id: '8', name: 'Becoming Irreplaceable in the Age of AI',         participants: 50,  completionRate: 86, status: 'active', instructorsCount: 2, type: 'Skill Training', mode: 'Blended Learning', ...starts(200), ...ends(16) },
   { kind: 'course', id: '9', name: 'Prompting Bootcamp',                              participants: 50,  completionRate: 65,  status: 'active', instructorsCount: 1, type: 'Skill Training', mode: 'Blended Learning', ...starts(75), ...ends(48) },
   { kind: 'journey', id: '10', name: 'Developing Organizational Culture & Leadership', participants: 12,  completionRate: 80,  status: 'active', instructorsCount: 2, type: 'Skill Training', mode: 'Blended Learning', ...starts(60), ...ends(70) },
   { kind: 'journey', id: '11', name: 'Professional Development & Certifications: Data Analytics for Business Leaders', participants: 38, completionRate: 40, status: 'active', instructorsCount: 1, type: 'Skill Training', mode: 'Blended Learning', duration: '10 hours' },
@@ -111,6 +111,7 @@ export const MOCK_METRIC_CARDS: LDMetricCard[] = [
   {
     key: 'total-participants',
     title: 'Learning participants',
+    hint: 'Unique trainees',
     value: String(enrolledAll[NOW]),
     trend: `${signed(participantsTrend)}% vs last month`,
     trendPositive: participantsTrend >= 0,

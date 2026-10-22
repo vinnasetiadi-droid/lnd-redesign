@@ -1,9 +1,8 @@
-import type { CSSProperties } from 'react';
 import { motion } from 'motion/react';
 import { revealContainer, revealItem } from '@/variants/a/motion';
 import { DashboardLayout } from '@/variants/a/layouts/DashboardLayout';
 import { useDashboard } from './hooks/useDashboard';
-import { LDDashboardHeader, PHOTO_HEADROOM } from './components/LDDashboardHeader';
+import { LDDashboardGreeting, LDDashboardHeader } from './components/LDDashboardHeader';
 import { LDDashboardProgramOverview } from './components/LDDashboardProgramOverview';
 import { LDDashboardActivePrograms }  from './components/LDDashboardActivePrograms';
 import { LDDashboardNissaInsight }     from './components/LDDashboardNissaInsight';
@@ -45,9 +44,12 @@ export default function LDDashboardPage() {
 
   return (
     <DashboardLayout>
-      {/* Pulled up by the photo headroom: Diana's head rises into the empty left of the top bar row,
-          and the profile and NISA cards start one 12px gap below it */}
-      <div className="w-full min-w-0 -mt-7">
+      <div className="w-full min-w-0">
+        {/* Greeting: full width, above both columns */}
+        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <LDDashboardGreeting profile={ldProfile} className="mb-4" />
+        </motion.div>
+
         <motion.div
           className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-3"
           variants={revealContainer}
@@ -57,7 +59,7 @@ export default function LDDashboardPage() {
           {/* ── Left column ── */}
           <div className="flex flex-col gap-3 min-w-0">
             <motion.div variants={revealItem}>
-              <LDDashboardHeader profile={ldProfile} metrics={metricCards} />
+              <LDDashboardHeader metrics={metricCards} />
             </motion.div>
 
             <motion.div variants={revealItem} className="oa-lift">
@@ -85,8 +87,8 @@ export default function LDDashboardPage() {
             </motion.div>
           </div>
 
-          {/* ── Right column: starts level with the profile card, below the photo's headroom ── */}
-          <div className="flex flex-col gap-3 min-w-0 lg:pt-[var(--profile-headroom)]" style={{ '--profile-headroom': `${PHOTO_HEADROOM}px` } as CSSProperties}>
+          {/* ── Right column: starts level with the KPI row ── */}
+          <div className="flex flex-col gap-3 min-w-0">
             <motion.div variants={revealItem} className="oa-lift">
               <LDDashboardNissaInsight insights={nisaInsights} />
             </motion.div>

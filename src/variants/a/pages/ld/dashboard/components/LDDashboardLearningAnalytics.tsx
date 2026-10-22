@@ -105,7 +105,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
       />
 
       {/* ── Two stats, straight on the card ─────────────────── */}
-      <div className="grid grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
         {/* Attendance: blended sessions only */}
         <div className="min-w-0">
           <p className="text-[13px] leading-[18px] text-(--oa-text-secondary)">

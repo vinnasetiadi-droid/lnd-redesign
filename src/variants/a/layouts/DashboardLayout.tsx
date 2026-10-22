@@ -22,7 +22,8 @@ interface DashboardLayoutProps {
 export function DashboardLayout({ children, noFooter = false, fixedContent = false, hideSidebar = false }: DashboardLayoutProps) {
   const user = useAuthStore((s) => s.user);
   const role = (user?.role ?? 'ld_team') as SidebarRole;
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  // Phones start with the sidebar collapsed so the content keeps its width
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
 
   const toggleSidebar = () => setIsSidebarCollapsed((prev) => !prev);
 

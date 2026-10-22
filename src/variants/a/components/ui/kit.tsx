@@ -30,7 +30,8 @@ interface CardHeaderProps {
 /** Title (and subtitle) on the left, extras and the icon circle on the right */
 export function CardHeader({ title, subtitle, icon, extra, className }: CardHeaderProps) {
   return (
-    <div className={cn('flex items-start justify-between gap-3', className)}>
+    // Wraps on narrow screens so tabs in `extra` drop below the title instead of overflowing
+    <div className={cn('flex flex-wrap items-start justify-between gap-3', className)}>
       <div className="min-w-0">
         <h3 className="text-[16px] leading-[24px] text-(--oa-text-strong)">{title}</h3>
         {subtitle && <p className="mt-0.5 text-[13px] leading-[18px] text-(--oa-text-muted)">{subtitle}</p>}
