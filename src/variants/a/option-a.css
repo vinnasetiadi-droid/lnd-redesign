@@ -98,6 +98,19 @@ html.option-a {
   --oa-avatar-lilac: #E9D7FE;
   --oa-avatar-pink: #FCE7F6;
   --oa-avatar-cyan: #CFF9FE;
+  /* Course status chips: a tint and a stronger bar of the same hue */
+  --oa-status-draft-bg: #F2F4F7;
+  --oa-status-draft: #98A2B3;
+  --oa-status-review-bg: #F4EBFF;
+  --oa-status-review: #9E77ED;
+  --oa-status-revision-bg: #FEE4E2;
+  --oa-status-revision: #F97066;
+  --oa-status-approved-bg: #DCFAE6;
+  --oa-status-approved: #17B26A;
+  --oa-status-active-bg: #DCE8FC;
+  --oa-status-active: #1A73E8;
+  --oa-status-inactive-bg: #F2F4F7;
+  --oa-status-inactive: #D0D5DD;
 }
 
 /* Regular by default, including elements the base styles make heavier */

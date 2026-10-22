@@ -182,7 +182,7 @@ function CourseRowView({ row, me, onOpen, index }: { row: CourseRow; me: string;
         <div className="min-w-0">
           <StatusLabel status={c.status} />
           {/* Nobody reviews their own course */}
-          {ownReview && <p className="truncate pl-4 text-[11px] leading-[14px] text-(--oa-text-subtle)">Waiting for another admin</p>}
+          {ownReview && <p className="mt-1 truncate text-[11px] leading-[14px] text-(--oa-text-subtle)">Waiting for another admin</p>}
         </div>
         <Owner creator={c.creator} me={me} />
         <Enrolled course={c} />

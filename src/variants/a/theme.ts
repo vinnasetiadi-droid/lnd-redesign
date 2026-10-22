@@ -125,6 +125,19 @@ export const OA_COLORS = {
   avatarLilac: '#E9D7FE',
   avatarPink: '#FCE7F6',
   avatarCyan: '#CFF9FE',
+  // Course status chips: a tint and a stronger bar of the same hue
+  statusDraftBg: '#F2F4F7',
+  statusDraft: '#98A2B3',
+  statusReviewBg: '#F4EBFF',
+  statusReview: '#9E77ED',
+  statusRevisionBg: '#FEE4E2',
+  statusRevision: '#F97066',
+  statusApprovedBg: '#DCFAE6',
+  statusApproved: '#17B26A',
+  statusActiveBg: '#DCE8FC',
+  statusActive: '#1A73E8',
+  statusInactiveBg: '#F2F4F7',
+  statusInactive: '#D0D5DD',
 } as const;
 
 export type OAColor = keyof typeof OA_COLORS;
