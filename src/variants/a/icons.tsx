@@ -5,7 +5,7 @@ import {
   ArrowDown02Icon, ArrowDownRight01Icon, ArrowLeft01Icon, ArrowRight01Icon, ArrowRight02Icon,
   ArrowUp01Icon, ArrowUp02Icon, ArrowUpDownIcon, ArrowUpRight01Icon, Award01Icon, Book02Icon,
   BookOpen01Icon, Building03Icon, Calendar03Icon, Calendar04Icon, Call02Icon, Cancel01Icon,
-  ChartDecreaseIcon, ChartIncreaseIcon, CheckListIcon, CheckmarkCircle02Icon, Tick02Icon, Clock01Icon,
+  ChartDecreaseIcon, ChartIncreaseIcon, CheckListIcon, CheckmarkCircle02Icon, Tick02Icon, ShieldCheckIcon, Clock01Icon,
   Comment01Icon, ComputerIcon, CrownIcon, DashboardSquare01Icon, Delete02Icon, File01Icon,
   FileNotFoundIcon, FlashIcon, Folder01Icon, Home01Icon, Key01Icon, Layers01Icon, ListViewIcon,
   Loading03Icon, Location01Icon, Logout01Icon, Mail01Icon, MapsIcon, Message01Icon,
@@ -62,6 +62,7 @@ export const CalendarClock = icon(Calendar04Icon, 'CalendarClock');
 export const CalendarDays = Calendar;
 export const CheckCircle2 = icon(CheckmarkCircle02Icon, 'CheckCircle2');
 export const Check = icon(Tick02Icon, 'Check');
+export const ShieldCheck = icon(ShieldCheckIcon, 'ShieldCheck');
 export const ChevronDown = icon(ArrowDown01Icon, 'ChevronDown');
 export const ChevronLeft = icon(ArrowLeft01Icon, 'ChevronLeft');
 export const ChevronRight = icon(ArrowRight01Icon, 'ChevronRight');

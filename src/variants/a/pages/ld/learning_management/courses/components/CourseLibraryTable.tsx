@@ -1,37 +1,42 @@
 // ============================================================
 // Upskill Studio — course list (the default view)
-// One row per course: small thumbnail, name with a type · mode · version
-// subline, status, owner, enrolled, last update. Versions of the same course
-// sit under one row and expand.
+// Course | Status | Owner | Enrolled | Updated | actions. One row per course
+// (its live version); a newer draft version opens as an indented row.
+// Rows are split by hairlines, about 56px tall.
 // ============================================================
 
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ChevronDown, MoreHorizontal } from '@/variants/a/icons';
+import { ArrowDown, ChevronDown, MoreHorizontal } from '@/variants/a/icons';
 import { cn } from '@/lib/utils';
-import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { EASE_OUT } from '@/variants/a/motion';
-import { formatDate, timeAgo } from '@/variants/a/pages/ld/dashboard/period';
-import { NOT_LIVE, liveVersionOf, type CourseItem } from '../data/courses.mock';
+import { timeAgo } from '@/variants/a/pages/ld/dashboard/period';
+import { NOT_LIVE, draftItemsOf, liveVersionOf, type CourseItem } from '../data/courses.mock';
 import { StatusLabel } from './CourseStatus';
+import { CourseCover } from './CourseCover';
 
-/** A course and all of its versions; `shown` is the version the row is about */
+/** A course and its draft versions; `shown` is the item the row is about */
 export interface CourseRow {
   key: string;
   shown: CourseItem;
   versions: CourseItem[];
 }
 
+export type TableSort = 'updated' | 'name' | 'enrolled';
+
 interface CourseLibraryTableProps {
   rows: CourseRow[];
   /** Signed-in admin, shown as "You" */
   me: string;
   onOpen: (courseId: string) => void;
+  /** Same value as the Sort chip; the headers set it too */
+  sort: TableSort;
+  onSort: (sort: TableSort) => void;
 }
 
 // Narrow screens: owner shows as initials only, so the course name keeps its room
 const GRID =
-  'grid grid-cols-[minmax(0,1fr)_112px_36px_68px_60px_32px] xl:grid-cols-[minmax(0,1fr)_132px_150px_84px_84px_32px] items-center gap-3 xl:gap-4';
+  'grid grid-cols-[minmax(0,1fr)_112px_36px_76px_60px_32px] xl:grid-cols-[minmax(0,1fr)_132px_150px_84px_84px_32px] items-center gap-3 xl:gap-4';
 
 export const courseType = (c: CourseItem) => (c.category === 'Compliance' ? 'Compliance' : 'Skill training');
 export const courseMode = (c: CourseItem) => (c.learningType === 'Blended Learning' ? 'Blended' : 'Self-paced');
@@ -50,10 +55,6 @@ export function ownerName(creator: string | undefined, me: string) {
 const initials = (name?: string) =>
   (name ?? '?').split(' ').map((p) => p[0]).slice(0, 2).join('').toUpperCase();
 
-/** Day and month only: "3 Nov" */
-const shortDate = (iso: string) => formatDate(iso).replace(/ \d{4}$/, '');
-
-
 function Owner({ creator, me }: { creator?: string; me: string }) {
   return (
     <span className="flex min-w-0 items-center gap-2" title={ownerName(creator, me)}>
@@ -65,27 +66,40 @@ function Owner({ creator, me }: { creator?: string; me: string }) {
   );
 }
 
+/** Active and Inactive: a number (Inactive muted). Approved: seats taken of capacity. Otherwise not live. */
+export function enrolledText(c: CourseItem) {
+  if (NOT_LIVE.includes(c.status)) return null;
+  if (c.status === 'approved') return c.maxCapacity ? `${c.trainees} / ${c.maxCapacity}` : `${c.trainees}`;
+  return `${c.trainees}`;
+}
+
 function Enrolled({ course }: { course: CourseItem }) {
-  // Drafts and courses in review cannot have trainees yet
-  return NOT_LIVE.includes(course.status) ? (
-    <span className="text-right text-[12px] text-(--oa-text-subtle)">Not live</span>
-  ) : (
-    <span className="text-right text-[13px] tabular-nums text-(--oa-text-strong)">{course.trainees}</span>
+  const text = enrolledText(course);
+  if (!text) return <span className="text-right text-[12px] text-(--oa-text-subtle)">Not live</span>;
+  return (
+    <span className={cn('text-right text-[13px] tabular-nums', course.status === 'inactive' ? 'text-(--oa-text-muted)' : 'text-(--oa-text-strong)')}>
+      {text}
+    </span>
   );
 }
 
-function RowMenu({ course, onOpen }: { course: CourseItem; onOpen: () => void }) {
+const updatedText = (c: CourseItem) => (c.updatedOn ? timeAgo(c.updatedOn) : c.updatedAt);
+
+export function RowMenu({ course, onOpen, className }: { course: CourseItem; onOpen: () => void; className?: string }) {
   const [open, setOpen] = useState(false);
   const canToggle = course.status === 'active' || course.status === 'inactive';
   const canDelete = course.status === 'on-draft' || course.status === 'need-revision';
-  const item = 'w-full rounded-[10px] px-3 py-2 text-left text-[13px] transition-colors';
+  const item = 'w-full rounded-[10px] px-3 py-2 text-left text-[13px] transition-colors focus-visible:outline-none focus-visible:bg-(--oa-surface)';
   return (
-    <div className="relative justify-self-end" onClick={(e) => e.stopPropagation()}>
+    // The menu never triggers the row click
+    <div className={cn('relative justify-self-end', className)} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
       <button
         type="button"
         aria-label="More actions"
+        aria-haspopup="menu"
+        aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
-        className="flex size-8 items-center justify-center rounded-full text-(--oa-text-muted) transition-colors hover:bg-(--oa-surface) hover:text-(--oa-text-strong) cursor-pointer"
+        className="flex size-8 items-center justify-center rounded-full text-(--oa-text-muted) transition-colors hover:bg-(--oa-surface) hover:text-(--oa-text-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oa-primary)/25 cursor-pointer"
       >
         <MoreHorizontal size={18} />
       </button>
@@ -94,22 +108,23 @@ function RowMenu({ course, onOpen }: { course: CourseItem; onOpen: () => void })
           <>
             <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
             <motion.div
+              role="menu"
               initial={{ opacity: 0, y: -4, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -4, scale: 0.98 }}
               transition={{ duration: 0.15, ease: EASE_OUT }}
               className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-[14px] bg-(--oa-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]"
             >
-              <button type="button" className={cn(item, 'text-(--oa-text-body) hover:bg-(--oa-surface) cursor-pointer')} onClick={() => { setOpen(false); onOpen(); }}>
+              <button type="button" role="menuitem" className={cn(item, 'text-(--oa-text-body) hover:bg-(--oa-surface) cursor-pointer')} onClick={() => { setOpen(false); onOpen(); }}>
                 View details
               </button>
               {canToggle && (
-                <button type="button" className={cn(item, 'text-(--oa-text-body) hover:bg-(--oa-surface) cursor-pointer')} onClick={() => setOpen(false)}>
-                  {course.status === 'active' ? 'Deactivate' : 'Activate'}
+                <button type="button" role="menuitem" className={cn(item, 'text-(--oa-text-body) hover:bg-(--oa-surface) cursor-pointer')} onClick={() => setOpen(false)}>
+                  {course.status === 'active' ? 'Hide from trainees' : 'Show to trainees'}
                 </button>
               )}
               {canDelete && (
-                <button type="button" className={cn(item, 'text-(--oa-danger) hover:bg-(--oa-danger-surface) cursor-pointer')} onClick={() => setOpen(false)}>
+                <button type="button" role="menuitem" className={cn(item, 'text-(--oa-danger) hover:bg-(--oa-danger-surface) cursor-pointer')} onClick={() => setOpen(false)}>
                   Delete
                 </button>
               )}
@@ -124,8 +139,8 @@ function RowMenu({ course, onOpen }: { course: CourseItem; onOpen: () => void })
 function CourseRowView({ row, me, onOpen, index }: { row: CourseRow; me: string; onOpen: (id: string) => void; index: number }) {
   const [expanded, setExpanded] = useState(false);
   const c = row.shown;
-  const others = row.versions.filter((v) => v.id !== c.id);
-  const starts = c.status === 'approved' && c.startsOn ? ` · starts ${shortDate(c.startsOn)}` : '';
+  const drafts = c.draftOf ? [] : draftItemsOf(c);
+  const ownReview = c.status === 'waiting-approval' && c.creator === me;
 
   return (
     <motion.div
@@ -141,22 +156,23 @@ function CourseRowView({ row, me, onOpen, index }: { row: CourseRow; me: string;
         tabIndex={0}
         onClick={() => onOpen(c.id)}
         onKeyDown={(e) => e.key === 'Enter' && onOpen(c.id)}
-        className={cn(GRID, 'rounded-[12px] px-3 py-3 transition-colors hover:bg-(--oa-surface-subtle) cursor-pointer')}
+        className={cn(GRID, 'min-h-14 px-3 py-[9px] transition-colors hover:bg-(--oa-surface-subtle) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--oa-primary)/25 cursor-pointer')}
       >
         <div className="flex min-w-0 items-center gap-3">
-          <ImageWithFallback src={c.image} alt="" className="h-10 w-14 shrink-0 rounded-[10px] object-cover" />
+          <CourseCover course={c} size="sm" className="h-[30px] w-11 shrink-0 rounded-[8px]" />
           <div className="min-w-0">
             <p className="truncate text-[13px] leading-[20px] text-(--oa-text-strong)" title={titleOf(c)}>{titleOf(c)}</p>
             <p className="flex min-w-0 items-center gap-1 text-[12px] leading-[18px] text-(--oa-text-muted)">
-              <span className="truncate">{courseType(c)} · {courseMode(c)} · v{versionOf(c)}{starts}</span>
-              {others.length > 0 && (
+              <span className="truncate">{courseType(c)} · {courseMode(c)} · v{versionOf(c)}</span>
+              {drafts.length > 0 && (
                 <button
                   type="button"
                   aria-expanded={expanded}
                   onClick={(e) => { e.stopPropagation(); setExpanded((x) => !x); }}
-                  className="inline-flex shrink-0 items-center gap-0.5 text-(--oa-primary) transition-colors hover:text-(--oa-primary-strong) cursor-pointer"
+                  onKeyDown={(e) => e.stopPropagation()}
+                  className="inline-flex shrink-0 items-center gap-0.5 rounded-full text-(--oa-primary) transition-colors hover:text-(--oa-primary-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oa-primary)/25 cursor-pointer"
                 >
-                  · {row.versions.length} versions
+                  · {drafts.length} draft
                   <ChevronDown size={14} className={cn('transition-transform duration-200', expanded && 'rotate-180')} />
                 </button>
               )}
@@ -166,17 +182,15 @@ function CourseRowView({ row, me, onOpen, index }: { row: CourseRow; me: string;
         <div className="min-w-0">
           <StatusLabel status={c.status} />
           {/* Nobody reviews their own course */}
-          {c.status === 'waiting-approval' && c.creator === me && (
-            <p className="truncate pl-4 text-[11px] leading-[14px] text-(--oa-text-subtle)">Waiting for another admin</p>
-          )}
+          {ownReview && <p className="truncate pl-4 text-[11px] leading-[14px] text-(--oa-text-subtle)">Waiting for another admin</p>}
         </div>
         <Owner creator={c.creator} me={me} />
         <Enrolled course={c} />
-        <span className="text-right text-[12px] text-(--oa-text-muted)">{c.updatedOn ? timeAgo(c.updatedOn) : c.updatedAt}</span>
+        <span className="text-right text-[12px] text-(--oa-text-muted)">{updatedText(c)}</span>
         <RowMenu course={c} onOpen={() => onOpen(c.id)} />
       </div>
 
-      {/* Other versions of the same course */}
+      {/* Draft version under its course */}
       <AnimatePresence initial={false}>
         {expanded && (
           <motion.div
@@ -186,22 +200,20 @@ function CourseRowView({ row, me, onOpen, index }: { row: CourseRow; me: string;
             transition={{ duration: 0.25, ease: EASE_OUT }}
             className="overflow-hidden"
           >
-            {others.map((v) => (
+            {drafts.map((v) => (
               <div
                 key={v.id}
                 role="button"
                 tabIndex={0}
                 onClick={() => onOpen(v.id)}
                 onKeyDown={(e) => e.key === 'Enter' && onOpen(v.id)}
-                className={cn(GRID, 'mb-1 rounded-[12px] bg-(--oa-surface-muted) px-3 py-2.5 transition-colors hover:bg-(--oa-surface) cursor-pointer')}
+                className={cn(GRID, 'border-t border-dashed border-(--oa-border) px-3 py-2 transition-colors hover:bg-(--oa-surface-subtle) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--oa-primary)/25 cursor-pointer')}
               >
-                <p className="truncate pl-[68px] text-[12px] text-(--oa-text-muted)">
-                  Version {versionOf(v)} · {courseMode(v)}
-                </p>
-                <StatusLabel status={v.status} />
+                <p className="truncate pl-14 text-[12px] text-(--oa-text-body)">Version {v.draftOf?.version} (draft)</p>
+                <StatusLabel status="on-draft" />
                 <Owner creator={v.creator} me={me} />
-                <Enrolled course={v} />
-                <span className="text-right text-[12px] text-(--oa-text-muted)">{v.updatedOn ? timeAgo(v.updatedOn) : v.updatedAt}</span>
+                <span className="text-right text-[12px] text-(--oa-text-subtle)">Not live</span>
+                <span className="text-right text-[12px] text-(--oa-text-muted)">{updatedText(v)}</span>
                 <RowMenu course={v} onOpen={() => onOpen(v.id)} />
               </div>
             ))}
@@ -212,15 +224,40 @@ function CourseRowView({ row, me, onOpen, index }: { row: CourseRow; me: string;
   );
 }
 
-export function CourseLibraryTable({ rows, me, onOpen }: CourseLibraryTableProps) {
+function SortHeader({ label, value, sort, onSort, align = 'left' }: {
+  label: string;
+  value: TableSort;
+  sort: TableSort;
+  onSort: (s: TableSort) => void;
+  align?: 'left' | 'right';
+}) {
+  const active = sort === value;
+  return (
+    <button
+      type="button"
+      onClick={() => onSort(value)}
+      aria-pressed={active}
+      className={cn(
+        'inline-flex items-center gap-1 rounded-full transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oa-primary)/25',
+        align === 'right' && 'justify-self-end',
+        active ? 'text-(--oa-text-strong)' : 'hover:text-(--oa-text-body)',
+      )}
+    >
+      {label}
+      <ArrowDown size={12} className={cn('transition-opacity', active ? 'opacity-100' : 'opacity-0')} />
+    </button>
+  );
+}
+
+export function CourseLibraryTable({ rows, me, onOpen, sort, onSort }: CourseLibraryTableProps) {
   return (
     <div className="min-w-0">
       <div className={cn(GRID, 'border-b border-(--oa-border) px-3 pb-2.5 text-[12px] text-(--oa-text-muted)')}>
-        <span>Course</span>
+        <SortHeader label="Course" value="name" sort={sort} onSort={onSort} />
         <span>Status</span>
-        <span>Owner</span>
-        <span className="text-right">Enrolled</span>
-        <span className="text-right">Updated</span>
+        <span className="whitespace-nowrap">Owner</span>
+        <SortHeader label="Enrolled" value="enrolled" sort={sort} onSort={onSort} align="right" />
+        <SortHeader label="Updated" value="updated" sort={sort} onSort={onSort} align="right" />
         <span />
       </div>
       <AnimatePresence mode="popLayout" initial={false}>

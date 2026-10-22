@@ -472,6 +472,18 @@ const COURSES: Omit<CourseItem, 'updatedAt'>[] = [
 // Relative "updated" text follows the date, so the two never disagree
 export const COURSES_MOCK: CourseItem[] = COURSES.map((c) => ({ ...c, updatedAt: c.updatedOn ? timeAgo(c.updatedOn) : '' }));
 
+// ── Covers ───────────────────────────────────────────────────
+
+const imageUses = COURSES_MOCK.reduce(
+  (uses, c) => (c.image ? uses.set(c.image, (uses.get(c.image) ?? 0) + 1) : uses),
+  new Map<string, number>(),
+);
+
+/** The course's own photo, or '' when it has none or shares it with another course (the UI draws a tinted cover) */
+export function coverImageOf(c: CourseItem): string {
+  return c.image && imageUses.get(c.image) === 1 ? c.image : '';
+}
+
 // ── Versions ─────────────────────────────────────────────────
 
 /** The live version's number (the one the course row is about) */

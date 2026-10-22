@@ -303,7 +303,7 @@ export default function CoursesPage() {
               {filtersActive && <PillButton onClick={clearFilters}>Clear filters</PillButton>}
             </div>
           ) : viewMode === 'list' ? (
-            <CourseLibraryTable rows={paginated} me={me} onOpen={openCourse} />
+            <CourseLibraryTable rows={paginated} me={me} onOpen={openCourse} sort={sort} onSort={reset(setSort)} />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
               {paginated.map((row) => (
