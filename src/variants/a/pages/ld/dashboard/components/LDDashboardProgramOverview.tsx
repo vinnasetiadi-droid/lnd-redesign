@@ -106,7 +106,7 @@ export function LDDashboardProgramOverview({
   const fullInsight = activeScope === 'course' ? courseInsight ?? insight : activeScope === 'journey' ? journeyInsight ?? insight : insight;
 
   return (
-    <div className={cn('relative flex flex-col gap-5 bg-white rounded-[18px] p-5', className)}>
+    <div className={cn('relative flex flex-col gap-4 bg-white rounded-[18px] p-5', className)}>
       {/* ── Header: title + period, scope tabs on the right ── */}
       <CardHeader
         title="Program overview"
@@ -148,8 +148,8 @@ export function LDDashboardProgramOverview({
       </div>
 
       {/* ── Chart: one metric, one highlighted month ────────── */}
-      <div className="w-full min-w-0" style={{ height: '252px' }}>
-        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={252}>
+      <div className="w-full min-w-0" style={{ height: '200px' }}>
+        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={200}>
           <BarChart data={series} margin={{ top: 52, right: 8, left: -16, bottom: 0 }} barCategoryGap={0}>
             <defs>{foldBarDefs(ids)}</defs>
             <XAxis

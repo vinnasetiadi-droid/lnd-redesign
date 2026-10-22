@@ -16,19 +16,22 @@ interface LDDashboardNissaInsightProps {
 
 function InsightRow({ item }: { item: NisaInsight }) {
   return (
-    <div className="group py-3.5 first:pt-0 last:pb-0">
-      <p className="text-[16px] leading-[24px] text-(--oa-text-ai)">{item.title}</p>
+    <div className="group py-3 first:pt-0 last:pb-0">
+      {/* Title and its action on one row */}
+      <div className="flex items-baseline justify-between gap-3">
+        <p className="min-w-0 truncate text-[15px] leading-[22px] text-(--oa-text-ai)">{item.title}</p>
+        <button
+          type="button"
+          className="inline-flex shrink-0 items-center gap-1 text-[13px] text-(--oa-primary) transition-colors hover:text-(--oa-primary-strong)"
+        >
+          {item.cta}
+          <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+        </button>
+      </div>
       {/* Two lines at most; the full text is in the title tooltip */}
       <p className="mt-1 line-clamp-2 text-[13px] leading-[20px] text-(--oa-text-ai)/70" title={item.description}>
         {item.description}
       </p>
-      <button
-        type="button"
-        className="mt-2 inline-flex items-center gap-1 text-[13px] text-(--oa-primary) transition-colors hover:text-(--oa-primary-strong)"
-      >
-        {item.cta}
-        <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
-      </button>
     </div>
   );
 }
@@ -44,7 +47,7 @@ export function LDDashboardNissaInsight({ insights, className }: LDDashboardNiss
       className={cn('relative w-full overflow-hidden rounded-[18px] p-5', className)}
       style={{ background: OA_AI_SOFT }}
     >
-      <div className="relative flex flex-col gap-5">
+      <div className="relative flex flex-col gap-4">
         {/* ── Header ─────────────────────────────────────────── */}
         <div className="flex items-center gap-3">
           <NisaOrb size={40} />
@@ -64,7 +67,7 @@ export function LDDashboardNissaInsight({ insights, className }: LDDashboardNiss
         {/* ── Footer CTA ─────────────────────────────────────── */}
         <button
           type="button"
-          className="group flex items-center justify-between rounded-full bg-white/80 ring-1 ring-(--oa-primary)/15 px-5 h-10 text-[14px] text-(--oa-primary) transition-colors hover:bg-white"
+          className="group flex items-center justify-between rounded-full bg-white/80 ring-1 ring-(--oa-primary)/15 px-5 h-9 text-[13px] text-(--oa-primary) transition-colors hover:bg-white"
         >
           More insights? Just ask NISA
           <ChevronRight className="size-4 transition-transform group-hover:translate-x-0.5" />

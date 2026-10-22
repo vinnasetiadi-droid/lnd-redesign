@@ -97,7 +97,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
   );
 
   return (
-    <div className={cn('relative flex flex-col gap-5 bg-white rounded-[18px] p-5', className)}>
+    <div className={cn('relative flex flex-col gap-3 bg-white rounded-[18px] p-5', className)}>
       <CardHeader
         title="Learning mode analytics"
         subtitle={`Blended vs self-paced · ${periodLabel(data)}`}
@@ -111,7 +111,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
           <p className="text-[13px] leading-[18px] text-(--oa-text-secondary)">
             Attendance rate <span className="text-(--oa-text-subtle)">· blended sessions</span>
           </p>
-          <div className="mt-1.5 flex items-baseline gap-2">
+          <div className="mt-1 flex items-baseline gap-2">
             <span className="text-[24px] leading-[32px] text-(--oa-text-strong)">
               <FadeValue k={`${scope}-rate`}>{attendance.rate}</FadeValue>
               <span className="text-[13px] text-(--oa-text-muted)">%</span>
@@ -122,8 +122,8 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
               </Trend>
             )}
           </div>
-          <GradientProgress value={attendance.rate} className="mt-3 h-2" />
-          <p className="mt-2 text-[12px] text-(--oa-text-muted)">
+          <GradientProgress value={attendance.rate} className="mt-1.5 h-2" />
+          <p className="mt-1 text-[12px] leading-[16px] text-(--oa-text-muted)">
             <FadeValue k={`${scope}-att`}>{attendance.attending} of {attendance.enrolled} enrolled attending</FadeValue>
           </p>
         </div>
@@ -131,20 +131,20 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
         {/* Hours: one bar split by mode */}
         <div className="min-w-0">
           <p className="text-[13px] leading-[18px] text-(--oa-text-secondary)">Total learning hours</p>
-          <div className="mt-1.5 flex items-baseline gap-2">
+          <div className="mt-1 flex items-baseline gap-2">
             <span className="text-[24px] leading-[32px] text-(--oa-text-strong)">
               <FadeValue k={`${scope}-hours`}>{totalHours.toLocaleString('en-US')}</FadeValue>
               <span className="text-[13px] text-(--oa-text-muted)">h</span>
             </span>
           </div>
-          <div className="mt-3 flex h-2 w-full gap-1">
+          <div className="mt-1.5 flex h-2 w-full gap-1">
             <div
               className="h-full rounded-full transition-[width] duration-500 ease-out"
               style={{ width: `${blendedShare}%`, background: MODES[0].color }}
             />
             <div className="h-full flex-1 rounded-full" style={{ background: MODES[1].color }} />
           </div>
-          <div className="mt-2 flex items-center justify-between gap-3 text-[12px] text-(--oa-text-muted)">
+          <div className="mt-1 flex items-center justify-between gap-3 text-[12px] leading-[16px] text-(--oa-text-muted)">
             {MODES.map((m) => (
               <span key={m.key} className="flex items-center gap-1.5 whitespace-nowrap">
                 <span className="size-2 shrink-0 rounded-full" style={{ background: m.color }} />
@@ -157,10 +157,10 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
       </div>
 
       {/* ── Completion over time ──────────────────────────────── */}
-      <div className="border-t border-(--oa-border) pt-5">
-        <h4 className="text-[14px] leading-[20px] text-(--oa-text-strong)">Completion over time</h4>
-        <ChartOnView height={220} className="mt-3">
-          <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={220}>
+      <div className="border-t border-(--oa-border) pt-3">
+        <h4 className="text-[14px] leading-[18px] text-(--oa-text-strong)">Completion over time</h4>
+        <ChartOnView height={180} className="mt-1">
+          <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={180}>
             <AreaChart data={data} margin={{ top: 8, right: 100, bottom: 0, left: -16 }}>
               <defs>
                 {MODES.map((m) => <Fragment key={m.key}>{areaGradient(`${ids.area}-${m.key}`, m.color, 0.14)}</Fragment>)}
@@ -199,7 +199,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
       </div>
 
       {/* ── AI insight: one line ─────────────────────────────── */}
-      <AIInsightLine text={completionInsight(data)} />
+      <AIInsightLine text={completionInsight(data)} className="py-2.5" />
     </div>
   );
 }

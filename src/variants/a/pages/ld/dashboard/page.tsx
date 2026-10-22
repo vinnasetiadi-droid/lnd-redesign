@@ -47,7 +47,7 @@ export default function LDDashboardPage() {
       <div className="w-full min-w-0">
         {/* Greeting: full width, above both columns */}
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <LDDashboardGreeting profile={ldProfile} className="mb-4" />
+          <LDDashboardGreeting profile={ldProfile} className="mb-3" />
         </motion.div>
 
         <motion.div

@@ -38,6 +38,12 @@ type Group = 'average' | 'top' | 'support';
 /** Each bar starts a little after the one above it */
 const STAGGER = 0.07;
 
+/** Name column and value column widths; the bar, benchmark line and axis share what is left */
+const NAME_COL = 150;
+const VALUE_COL = 40;
+/** Insets that line the benchmark line and the axis up with the bar column */
+const BAR_INSET = { left: NAME_COL + 12, right: VALUE_COL + 12 };
+
 function DivisionBar({ name, score, index, highlighted, start }: {
   name: string;
   score: number;
@@ -47,15 +53,14 @@ function DivisionBar({ name, score, index, highlighted, start }: {
 }) {
   const delay = index * STAGGER;
   return (
-    <div>
-      <div className="mb-1.5 flex items-baseline gap-2">
-        <span className={cn('whitespace-nowrap text-[12px] transition-colors duration-300', highlighted ? 'text-(--oa-text-body)' : 'text-(--oa-text-subtle)')}>
-          {name}
-        </span>
-        <span className="text-[12px] tabular-nums text-(--oa-text-subtle)">
-          <CountUp value={score} start={start} delay={delay} />%
-        </span>
-      </div>
+    // Static class: Tailwind cannot see column widths built at runtime (NAME_COL, VALUE_COL)
+    <div className="grid grid-cols-[150px_minmax(0,1fr)_40px] items-center gap-3">
+      <span
+        className={cn('truncate text-[12px] leading-[18px] transition-colors duration-300', highlighted ? 'text-(--oa-text-body)' : 'text-(--oa-text-subtle)')}
+        title={name}
+      >
+        {name}
+      </span>
       <div className="h-2.5 w-full overflow-hidden rounded-full" style={HATCHED_TRACK}>
         <motion.div
           className="relative h-full overflow-hidden rounded-full bg-(--oa-border-strong)"
@@ -70,6 +75,9 @@ function DivisionBar({ name, score, index, highlighted, start }: {
           />
         </motion.div>
       </div>
+      <span className="text-right text-[12px] leading-[18px] tabular-nums text-(--oa-text-muted)">
+        <CountUp value={score} start={start} delay={delay} />%
+      </span>
     </div>
   );
 }
@@ -106,7 +114,7 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
     `${shortInsight} ${support.map((d) => d.name).join(', ')} are the three divisions below ${Math.max(...support.map((d) => d.score)) + 1}%; a review with each division lead could show where learners drop off.`;
 
   return (
-    <div className={cn('relative flex flex-col gap-5 bg-white rounded-[18px] p-5', className)}>
+    <div className={cn('relative flex flex-col gap-4 bg-white rounded-[18px] p-5', className)}>
       {/* ── Header ─────────────────────────────────────────── */}
       <CardHeader
         title="Division completion"
@@ -148,16 +156,16 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
 
       {/* ── Chart: one bar per division, org average as a dashed line ── */}
       <div ref={chartRef}>
-        <div className="relative pt-5">
-          <div
-            className="pointer-events-none absolute top-0 bottom-0 z-[1] border-l border-dashed border-(--oa-text-subtle)"
-            style={{ left: `${benchmark}%` }}
-          >
-            <span className="absolute -top-0.5 left-1.5 whitespace-nowrap text-[11px] leading-none text-(--oa-text-muted)">
-              Org average {benchmark}%
-            </span>
+        <div className="relative pt-4">
+          {/* Org average: dashed line over the bar column only */}
+          <div className="pointer-events-none absolute top-0 bottom-0 z-[1]" style={BAR_INSET}>
+            <div className="absolute top-0 bottom-0 border-l border-dashed border-(--oa-text-subtle)" style={{ left: `${benchmark}%` }}>
+              <span className="absolute -top-0.5 left-1.5 whitespace-nowrap text-[11px] leading-none text-(--oa-text-muted)">
+                Org average {benchmark}%
+              </span>
+            </div>
           </div>
-          <div className="space-y-3.5">
+          <div className="space-y-2">
             {rows.map((d, i) => (
               <DivisionBar
                 key={d.name}
@@ -171,8 +179,8 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
           </div>
         </div>
 
-        {/* X axis: each label sits at its own value */}
-        <div className="relative mt-3 h-4">
+        {/* X axis under the bar column: each label sits at its own value */}
+        <div className="relative mt-2 h-4" style={{ marginLeft: BAR_INSET.left, marginRight: BAR_INSET.right }}>
           {AXIS.map((v, i) => (
             <span
               key={v}

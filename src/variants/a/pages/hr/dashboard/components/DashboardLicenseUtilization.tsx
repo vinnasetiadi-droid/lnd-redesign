@@ -57,7 +57,7 @@ function SegmentGauge({ pct, start }: { pct: number; start: boolean }) {
   const outer = 110;
   const inner = 82;
   return (
-    <svg viewBox="0 0 240 126" className="w-full max-w-[240px]" aria-hidden>
+    <svg viewBox="0 0 240 126" className="w-full max-w-[200px]" aria-hidden>
       {Array.from({ length: SEGMENTS }, (_, i) => {
         // From the left end (180°) to the right end (0°)
         const angle = Math.PI - (i * Math.PI) / (SEGMENTS - 1);
@@ -113,7 +113,7 @@ export function DashboardLicenseUtilization({ className }: { className?: string 
     : `${idle} seats are idle across ${rows.length} licenses. Assign them before the next renewal.`;
 
   return (
-    <div className={cn('relative flex flex-col gap-5 bg-white rounded-[18px] p-5', className)}>
+    <div className={cn('relative flex flex-col gap-3 bg-white rounded-[18px] p-5', className)}>
       <CardHeader
         title="License utilization"
         subtitle="Purchased seats actively used by trainees"
@@ -124,12 +124,12 @@ export function DashboardLicenseUtilization({ className }: { className?: string 
       <div ref={ref} className="flex flex-col items-center">
         <div className="relative flex w-full justify-center">
           <SegmentGauge pct={pct} start={inView} />
-          <p className="absolute bottom-0 text-[28px] leading-[32px] text-(--oa-text-strong)">
+          <p className="absolute bottom-0 text-[24px] leading-[28px] text-(--oa-text-strong)">
             <CountUp value={pct} start={inView} />
             <span className="text-[13px] text-(--oa-text-muted)">%</span>
           </p>
         </div>
-        <p className="mt-2 text-[12px] text-(--oa-text-muted)">
+        <p className="mt-1 text-[12px] text-(--oa-text-muted)">
           {used} of {total} seats used · <span className={ATTENTION.text}>{idle} idle</span>
         </p>
       </div>
@@ -137,7 +137,7 @@ export function DashboardLicenseUtilization({ className }: { className?: string 
       {/* ── One row per license ────────────────────────────── */}
       <div className="divide-y divide-(--oa-border) border-t border-(--oa-border)">
         {rows.map((l, i) => (
-          <div key={l.name} className="flex gap-3 py-3.5">
+          <div key={l.name} className="flex gap-3 py-2.5">
             <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-(--oa-surface) text-[11px] text-(--oa-text-body)">
               {l.initials}
             </span>
@@ -154,7 +154,7 @@ export function DashboardLicenseUtilization({ className }: { className?: string 
                   {l.renewsOn ? `Renews ${shortDate(l.renewsOn)}` : 'No renewal'}
                 </span>
               </div>
-              <div className={cn('mt-2 h-1.5 w-full overflow-hidden rounded-full', l.needsAction ? ATTENTION.track : 'bg-(--oa-border-strong)')}>
+              <div className={cn('mt-1 h-1.5 w-full overflow-hidden rounded-full', l.needsAction ? ATTENTION.track : 'bg-(--oa-border-strong)')}>
                 <motion.div
                   className="h-full rounded-full"
                   style={{ background: l.needsAction ? ATTENTION.bar : CHART_BLUE }}
@@ -169,7 +169,7 @@ export function DashboardLicenseUtilization({ className }: { className?: string 
       </div>
 
       {/* ── AI insight: points at the decision ────────────────── */}
-      <AIInsightLine text={insight} lines={2} className="-mt-1" />
+      <AIInsightLine text={insight} lines={2} />
     </div>
   );
 }
