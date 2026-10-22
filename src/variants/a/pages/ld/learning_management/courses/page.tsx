@@ -28,7 +28,7 @@ import { DashboardLayout } from '@/variants/a/layouts/DashboardLayout';
 import { useSimulatedLoading } from '@/hooks/useSimulatedLoading';
 import { CourseCard } from './components/CourseCard';
 import { CourseLibraryTable, courseMode, courseType, ownerName, type CourseRow } from './components/CourseLibraryTable';
-import { COURSES_MOCK, COURSE_STATUS_META, NOT_LIVE, draftItemsOf, liveVersionOf, type CourseItem, type CourseStatus } from './data/courses.mock';
+import { COURSES_MOCK, COURSE_STATUS_META, NOT_LIVE, draftItemsOf, type CourseItem, type CourseStatus } from './data/courses.mock';
 import { CardHeader, IconCircle, PillButton } from '@/variants/a/components/ui/kit';
 import { FilterChip } from './components/FilterChip';
 import { ProgramScopeTabs, type ScopeTab } from '@/variants/a/pages/ld/dashboard/components/ProgramScopeTabs';
@@ -305,14 +305,9 @@ export default function CoursesPage() {
           ) : viewMode === 'list' ? (
             <CourseLibraryTable rows={paginated} me={me} onOpen={openCourse} sort={sort} onSort={reset(setSort)} />
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {paginated.map((row) => (
-                <CourseCard
-                  key={row.key}
-                  course={row.shown}
-                  latestVersion={liveVersionOf(row.shown)}
-                  onClick={() => openCourse(row.shown.id)}
-                />
+                <CourseCard key={row.key} course={row.shown} me={me} onClick={() => openCourse(row.shown.id)} />
               ))}
             </div>
           )}
