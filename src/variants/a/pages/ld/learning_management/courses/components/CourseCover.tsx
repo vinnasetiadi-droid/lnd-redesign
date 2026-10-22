@@ -7,7 +7,8 @@ import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 import { CategoryIcon } from '@/variants/a/components/ui/category-icon';
 import { coverImageOf, type CourseCategory, type CourseItem } from '../data/courses.mock';
 
-const CATEGORY_ICON: Record<CourseCategory, LucideIcon> = {
+/** Icon per course category, shared by covers and the cards */
+export const CATEGORY_ICON: Record<CourseCategory, LucideIcon> = {
   Compliance: ShieldCheck,
   Onboarding: Rocket,
   Upskill: GraduationCap,
