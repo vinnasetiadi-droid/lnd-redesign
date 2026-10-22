@@ -355,3 +355,176 @@ Pages: Upskill Studio (and Home for the build check). Rows: U6-01 to U6-05.
 5. Write docs/upskill-studio/CHANGELOG.md: per prompt (H1, U0 to U6) what
    changed, files touched, and open questions for product.
 ```
+
+
+---
+
+# Analytics: visual pass (A1 to A5)
+
+Page: Analytics > Learning program, src/variants/a/pages/ld/analytics/course/
+(page.tsx and components/LearningProgressFunnel.tsx). Run after U0 so the
+button colours are already set. The A series is independent of the Upskill
+prompts.
+
+**This series is visual only.** Every card stays, every number stays. Data
+contradictions on this page (totals, completion figures, licenses vs Home) are
+a separate, later task.
+
+## A1: Foundations (tokens, type, labels, KPIs)
+
+```
+[Shared rules]
+
+Page: Analytics > Learning program (route /ld/analytics/course). Rows: A1-01
+to A1-07. Visual only: do not remove any card and do not change any data
+value. Data keys stay as they are; only what is displayed changes.
+
+1. Copy src/variants/a/ to backup/variant-a-<timestamp>-analytics/.
+2. Tokens: replace every hardcoded hex in page.tsx and
+   components/LearningProgressFunnel.tsx with the --oa-* variables from
+   src/variants/a/option-a.css (add a token only if one is truly missing,
+   and document it in theme.ts). Remove the off-palette colours: the purple
+   #4E5BA6 and the extra blues (#4285F4, #669DF6, #8AB4F8, #185ABC,
+   #1967D2) that are used to tell categories apart. Blue means "the thing
+   that matters"; categories get grey or the Home mode colours.
+3. Sentence case for every heading, tab, chip and label, for example
+   "Total courses", "Avg. enrollment", "Courses by mode", "Learning progress
+   funnel", "Top courses", "Highest enrollment", "Courses assigned but not
+   started". The noun follows the Courses / Journeys tab as today.
+4. Display labels: show "Self Learning" as "Self-paced" and "Blended
+   Learning" as "Blended", like Home. Keep the data values unchanged; map
+   them at render time.
+5. Type scale: content text at least 12px. 11px only for chart axis ticks
+   and tiny captions. Metadata lines ("Skill training · Blended · 12 hours")
+   in --oa-text-muted at 12px.
+6. KPI cards: match the Home KPI card exactly (padding, icon circle, 24px
+   value, units in 13px muted: "88 per course", "81 / 100", equal heights).
+   Trend labels say what they compare to: "+10% vs last quarter". The rating
+   trend shows points ("+0.1"), not a percentage. Keep all five cards.
+7. Active pagination page: primary tint (background --oa-primary-50, text
+   --oa-primary-strong). Skip if U0 already changed it.
+```
+
+## A2: Courses by mode and the funnel
+
+```
+[Shared rules]
+
+Page: Analytics > Learning program. Rows: A2-01 to A2-06. Visual only.
+
+Courses by mode:
+1. Donut colours: Blended = --oa-primary, Self-paced = --oa-mode-self (the
+   same colours as Learning mode analytics on Home). Keep the total in the
+   centre and the legend underneath.
+2. Breakdown under the donut: plain rows split by hairlines instead of the
+   tinted boxes. One stacked bar per mode: Active in the mode colour, Done
+   in a lighter tint of the mode colour, Inactive in grey. Every percentage
+   gets a label ("64% active").
+
+Funnel (LearningProgressFunnel.tsx):
+3. Replace the three SVG trapezoids with a flow ribbon:
+   - Three stages left to right: Enrolled, Started, Completed. The ribbon's
+     thickness is proportional to the count at each stage, with a short flat
+     section at each stage and smooth cubic curves between stages, so it
+     narrows from left to right.
+   - One blue fill (--oa-primary). A very soft blue radial glow behind the
+     ribbon is allowed (like the page background). No drop shadows.
+   - At each stage: a thin white vertical line through the ribbon, a white
+     pill above it with the stage count, a white pill below it with the
+     conversion ("83% started", "72% completed"), and the stage name above
+     the top pill. Pills use the card border token.
+   - When the Courses / Journeys tab changes, the ribbon morphs to the new
+     counts (reuse the existing FadeValue / motion helpers).
+4. If the mock already has counts per learning mode for each stage, split
+   the ribbon into two layers (Blended blue on top, Self-paced green below)
+   and add a small legend. If it doesn't, keep one blue layer and say so in
+   the row's Notes. Don't invent new data.
+5. Keep the stage cards on the right and the summary at the bottom, but
+   restyle them: plain rows with hairlines, no coloured icon circles,
+   numbers at 14 to 16px, labels at 12px, drop-off text in attention amber
+   (--oa-attention-text) instead of red.
+6. Below 768px wide, render the funnel as three horizontal bars (one per
+   stage, one blue, count on the right, conversion as a caption between
+   bars) instead of the ribbon.
+```
+
+## A3: Course lists (Active, Top, Bottom, Not started)
+
+```
+[Shared rules]
+
+Page: Analytics > Learning program. Rows: A3-01 to A3-04. Visual only.
+
+1. Active courses table: hairline rows (no row backgrounds), the same row
+   rhythm as the Upskill Studio table. Completion as a thin single-blue bar
+   with the percentage next to it. Rating as a small grey star plus the
+   number. Metadata line in muted 12px. Keep columns, sorting and
+   pagination.
+2. Top courses and Bottom courses: remove the crown icon and the coloured
+   rank badges. Ranks become numbers in small grey circles. The first row
+   is no longer blue. Rows are hairline list rows, with no bordered boxes
+   and no hover shadow. Keep both cards and their metric tabs.
+3. In both cards, the value on the right of each row is the selected metric:
+   enrolled count for enrollment, a thin bar plus percentage for
+   completion, star plus number for rating. Today the rows always show
+   enrolled and rating, whatever tab is selected.
+4. Courses assigned but not started: keep the amber "N courses idle" chip
+   in the header as the only warning signal. Remove the warning icon circle
+   in the header and the warning icon on every row. Rows idle 10 days or
+   more show the idle days in attention amber; others in grey. Remove the
+   blue row tint. Hairline rows like the lists above.
+```
+
+## A4: Licenses, insight, updates, certifications, feedback
+
+```
+[Shared rules]
+
+Page: Analytics > Learning program, plus
+src/variants/a/pages/hr/dashboard/components/DashboardLicenseUtilization.tsx.
+Rows: A4-01 to A4-05. Visual only.
+
+1. Source mapping: give it the same visual as the License utilization card
+   on Home (segmented half gauge with the percentage in the middle, "x of y
+   seats used · z idle", one row per license with initials circle, thin bar
+   and attention amber for low usage). Do this by making the Home component
+   accept a `licenses` prop (keeping its current data as the default, so
+   Home looks the same) and rendering it here with this page's
+   SOURCE_MAPPING data. Title: "License utilization".
+2. Replace the "AI Insight Analysis" paragraph blocks with the shared
+   one-line AIInsightLine (full text on hover, "Ask NISA" link), as on Home.
+3. Last updated: hairline rows; the change type (Content, Structure,
+   Assessment) as neutral chips; one date format, e.g. "4 Mar 2026, 14:32".
+4. Expired certifications: hairline rows with an initials avatar for the
+   holder; days expired on the right in attention amber from 30 days, grey
+   below. No other warning colours.
+5. Recent learner feedback table:
+   - Replace the three star columns (rating, relevancy, duration) with
+     compact numeric scores ("5.0") in a neutral pill; keep the columns
+     sortable.
+   - Feedback text gets the widest column and wraps to 2 lines (full text
+     on hover).
+   - Trainee as initials avatar plus name; course name as a muted subline
+     under the trainee, so the row reads "who, about what, said what".
+   - Search keeps working; hairline rows.
+```
+
+## A5: QA
+
+```
+[Shared rules]
+
+Page: Analytics > Learning program (plus Home for the shared license card).
+Rows: A5-01 to A5-05.
+
+1. Compare with the A1 backup: no card removed, no data array changed (diff
+   the mock data blocks in page.tsx and LearningProgressFunnel.tsx).
+2. Only --oa-* tokens in the touched files (grep for hex); sentence case
+   everywhere.
+3. Keyboard: tabs, sortable headers, search, pagination and the funnel's
+   Courses / Journeys switch show a visible focus ring.
+4. Check 1440, 1024 and 375 px wide: no horizontal page scroll (tables may
+   scroll inside their own card). Home's License card still looks the same.
+5. /b/ld/analytics/course is unchanged and npm run build passes. Add an
+   "Analytics (A1 to A5)" section to docs/upskill-studio/CHANGELOG.md.
+```

@@ -106,6 +106,44 @@ Files: the dashboard components above, `pages/hr/dashboard/components/DashboardD
   tsconfig but no TypeScript compiler installed, and installing one was out of
   scope.
 
+## Analytics (A1 to A5)
+
+Visual pass on `/a/ld/analytics/course`. Every card and every number stays;
+only colour fields in the mock data changed (to tokens).
+
+- A1, foundation: backup in `backup/variant-a-20261022-171101-analytics/`. No
+  hex left in the page, the funnel or the license card; the purple and the
+  extra blues are gone. Sentence case everywhere, and nouns follow the
+  Courses/Journeys tab. Data values show as Self-paced, Blended and Skill
+  training (mapped at render, data keys unchanged). KPI cards in the Home card
+  style with units (per course, / 5, / 100) and "vs last quarter" trends; the
+  rating trend is in points.
+- A2, charts: the donut uses Blended = primary and Self-paced = primary-200
+  (blue, not the green mode token, at the user's request). Mode rows are plain
+  hairline rows with a stacked bar. The learning funnel keeps the flow ribbon
+  built earlier at the user's request (4 stages, split by mode, stage table
+  underneath); below 768px it turns into one bar per stage. The old side stage
+  cards and bottom summary were not brought back (A2-05 blocked).
+- A3, tables: Active courses and Top/Bottom courses use hairline rows, thin
+  single-blue bars, a grey star with the rating and grey rank numbers; the
+  right-hand value follows the selected metric. "Assigned but not started" warns
+  only with the amber "N courses idle" chip and amber idle days from 10.
+- A4, bottom cards: `DashboardLicenseUtilization` takes a `licenses` prop (Home
+  unchanged) and shows the four license sources here, replacing the pie and the
+  AI paragraph. Last updated and Expired certifications are hairline rows with
+  round chips and "4 Mar 2026, 14:32" dates. Feedback shows the scores as
+  sortable numeric pills, the feedback text clamped to 2 lines, and the trainee
+  with an avatar and the course underneath.
+- A5, QA: diff against the backup shows only colour fields and the moved
+  license totals. Focus rings on tabs, sort headers, search and pagination. 1440,
+  1024 and 375 have no horizontal page scroll. Home's license card and
+  `/b/ld/analytics/course` are unchanged. `npm run build` passes; TypeScript
+  check still not run (no compiler installed).
+
+Files: `pages/ld/analytics/course/page.tsx`,
+`pages/ld/analytics/course/components/LearningProgressFunnel.tsx`,
+`pages/hr/dashboard/components/DashboardLicenseUtilization.tsx`.
+
 ## Open questions for product
 
 1. Can an admin approve a course they created? Built as no.
@@ -115,5 +153,8 @@ Files: the dashboard components above, `pages/hr/dashboard/components/DashboardD
 4. AI Ethics' live version belongs to a trainer while Diana drafts v4: can
    someone other than the owner draft a new version?
 5. Data labels on the Analytics page ("Skill Training", "Blended Learning")
-   are still title case; they are data values, not labels.
+   are title case in the data; since A1 they show in sentence case.
 6. Updated times are day-precise ("Today"), so there is no "3h ago".
+7. Analytics figures still disagree in places (for example "Becoming
+   Irreplaceable" at 100% completion, and totals that differ from Home). The
+   A pass was visual only, so the data was left as is.

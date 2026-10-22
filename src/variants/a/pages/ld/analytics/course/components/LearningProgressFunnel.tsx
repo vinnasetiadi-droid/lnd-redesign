@@ -129,7 +129,27 @@ export function LearningProgressFunnel({ programType, className }: { programType
       />
 
       {/* ── Flow ─────────────────────────────────────────── */}
-      <div ref={ref} className="relative" style={{ height: H + 56 }}>
+      {/* Phones: one bar per stage instead of the flow */}
+      <div className="flex flex-col gap-1 md:hidden">
+        {STAGES.map((stage, i) => (
+          <div key={stage}>
+            {i > 0 && (
+              <p className="py-1 text-center text-[12px] text-(--oa-text-muted)">
+                {Math.round((totals[i] / totals[i - 1]) * 100)}% kept
+              </p>
+            )}
+            <div className="flex items-center justify-between text-[12px] text-(--oa-text-body)">
+              <span>{stage}</span>
+              <span className="tabular-nums text-(--oa-text-strong)">{totals[i]}</span>
+            </div>
+            <div className="mt-1 h-2.5 w-full overflow-hidden rounded-full bg-(--oa-surface)">
+              <div className="h-full rounded-full bg-(--oa-primary)" style={{ width: `${(totals[i] / totals[0]) * 100}%` }} />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div ref={ref} className="relative hidden md:block" style={{ height: H + 56 }}>
         {/* A faint blue glow behind the start of the flow */}
         <div
           className="pointer-events-none absolute inset-x-0 top-7"
