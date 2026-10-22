@@ -10,7 +10,7 @@ import { useState, type ReactNode } from 'react';
 import { DashboardLayout } from '@/variants/a/layouts/DashboardLayout';
 import { cn } from '@/lib/utils';
 import { ProgramScopeTabs, PROGRAM_TYPE_TABS, FadeValue, type ScopeTab } from '@/variants/a/pages/ld/dashboard/components/ProgramScopeTabs';
-import { ATTENTION, CardHeader, IconCircle, Trend } from '@/variants/a/components/ui/kit';
+import { ATTENTION, CardHeader, IconCircle, TABLE, Trend } from '@/variants/a/components/ui/kit';
 import { ChartTooltipCard, LegendMark } from '@/variants/a/components/ui/chart';
 import { LearningProgressFunnel } from './components/LearningProgressFunnel';
 import { DashboardLicenseUtilization, type License } from '@/variants/a/pages/hr/dashboard/components/DashboardLicenseUtilization';
@@ -507,7 +507,7 @@ export default function LearningProgramAnalyticsPage() {
   );
 
   const idleCount = data.notStarted.length;
-  const FEEDBACK_GRID = 'grid grid-cols-[88px_minmax(180px,1fr)_minmax(240px,2fr)_64px_72px_64px] items-start gap-4';
+  const FEEDBACK_GRID = 'grid grid-cols-[minmax(190px,1.1fr)_104px_minmax(240px,2fr)_76px_88px_80px] items-center gap-4';
 
   return (
     <DashboardLayout>
@@ -723,54 +723,59 @@ export default function LearningProgramAnalyticsPage() {
         <Card>
           <CardHeader
             title="Recent learner feedback"
-            subtitle={<FadeValue k={programType}>Recent feedback from {noun.one} participants</FadeValue>}
-            extra={<RoundChip><FadeValue k={programType}>{filteredFeedback.length} of {data.feedback.length}</FadeValue></RoundChip>}
+            subtitle={<FadeValue k={programType}>{filteredFeedback.length} of {data.feedback.length} from {noun.one} participants</FadeValue>}
             icon={MessageSquareText}
+            extra={
+              <div className="relative w-64 sm:w-72">
+                <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-(--oa-text-muted)" />
+                <input
+                  type="text"
+                  placeholder={`Search ${noun.one} or trainee`}
+                  value={fbSearch}
+                  onChange={(e) => setFbSearch(e.target.value)}
+                  className="h-10 w-full rounded-full bg-(--oa-surface) pl-11 pr-10 text-[13px] text-(--oa-text-strong) outline-none transition-colors placeholder:text-(--oa-text-subtle) focus:bg-white focus:ring-2 focus:ring-(--oa-primary)/25"
+                />
+                {fbIsSearching && <Loader2 className="absolute right-4 top-1/2 size-4 -translate-y-1/2 animate-spin text-(--oa-primary)" />}
+              </div>
+            }
           />
-          <div className="relative max-w-sm">
-            <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-(--oa-text-muted)" />
-            <input
-              type="text"
-              placeholder={`Search ${noun.one} or trainee`}
-              value={fbSearch}
-              onChange={(e) => setFbSearch(e.target.value)}
-              className="h-9 w-full rounded-full bg-(--oa-surface) pl-10 pr-9 text-[13px] text-(--oa-text-strong) outline-none transition-colors placeholder:text-(--oa-text-subtle) focus:bg-white focus:ring-2 focus:ring-(--oa-primary)/25"
-            />
-            {fbIsSearching && <Loader2 className="absolute right-3.5 top-1/2 size-4 -translate-y-1/2 animate-spin text-(--oa-primary)" />}
-          </div>
           <FadeValue k={programType} className="block w-full">
-            <div className="overflow-x-auto">
-              <div className="min-w-[820px]">
-                <div className={cn(FEEDBACK_GRID, 'border-b border-(--oa-border) px-3 pb-2.5 text-[12px] text-(--oa-text-muted)')}>
-                  <span>Date</span>
-                  <span>Trainee</span>
-                  <span>Feedback</span>
-                  <span className="justify-self-center">{sortHeader('rating', 'Rating')}</span>
-                  <span className="justify-self-center">{sortHeader('relevancy', 'Relevancy')}</span>
-                  <span className="justify-self-center">{sortHeader('duration', 'Duration')}</span>
-                </div>
-                {filteredFeedback.length === 0 ? (
-                  <p className="py-8 text-center text-[13px] text-(--oa-text-muted)">No feedback matches this search.</p>
-                ) : (
-                  filteredFeedback.map((fb) => (
-                    <div key={`${programType}-${fb.id}`} className={cn(FEEDBACK_GRID, 'border-b border-(--oa-border) px-3 py-3 transition-colors last:border-b-0 hover:bg-(--oa-surface-subtle)')}>
-                      <span className="whitespace-nowrap pt-1 text-[12px] text-(--oa-text-muted)">{stamp(fb.submittedDate)}</span>
-                      <div className="flex min-w-0 items-start gap-2.5">
-                        <Avatar name={fb.name} />
-                        <div className="min-w-0">
-                          <p className="truncate text-[13px] leading-[20px] text-(--oa-text-strong)">{fb.name}</p>
-                          <p className="truncate text-[12px] leading-[18px] text-(--oa-text-muted)" title={fb.program}>{fb.program}</p>
+            <div className={TABLE.frame}>
+              <div className="overflow-x-auto">
+                <div className="min-w-[860px]">
+                  <div className={cn(FEEDBACK_GRID, TABLE.head, 'px-4')}>
+                    <span>Trainee</span>
+                    <span>Date</span>
+                    <span>Feedback</span>
+                    <span className="justify-self-center">{sortHeader('rating', 'Rating')}</span>
+                    <span className="justify-self-center">{sortHeader('relevancy', 'Relevancy')}</span>
+                    <span className="justify-self-center">{sortHeader('duration', 'Duration')}</span>
+                  </div>
+                  {filteredFeedback.length === 0 ? (
+                    <p className="border-t border-(--oa-border) py-8 text-center text-[13px] text-(--oa-text-muted)">No feedback matches this search.</p>
+                  ) : (
+                    filteredFeedback.map((fb) => (
+                      <div key={`${programType}-${fb.id}`} className={cn(FEEDBACK_GRID, TABLE.row, 'min-h-16 px-4 py-3')}>
+                        <div className="flex min-w-0 items-center gap-3">
+                          <span className="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-(--oa-surface) text-[12px] text-(--oa-text-body)">
+                            {initials(fb.name)}
+                          </span>
+                          <div className="min-w-0">
+                            <p className="truncate text-[13px] leading-[20px] text-(--oa-text-strong)">{fb.name}</p>
+                            <p className="truncate text-[12px] leading-[18px] text-(--oa-text-muted)" title={fb.program}>{fb.program}</p>
+                          </div>
                         </div>
+                        <span className="whitespace-nowrap text-[13px] text-(--oa-text-body)">{stamp(fb.submittedDate)}</span>
+                        <p className="line-clamp-2 text-[13px] leading-[20px] text-(--oa-text-body)" title={fb.feedback}>{fb.feedback}</p>
+                        {[fb.rating, fb.relevancy, fb.duration].map((score, i) => (
+                          <span key={i} className="flex h-[30px] min-w-12 items-center justify-center justify-self-center rounded-full bg-(--oa-surface) px-3 text-[13px] tabular-nums text-(--oa-text-strong)">
+                            {score.toFixed(1)}
+                          </span>
+                        ))}
                       </div>
-                      <p className="line-clamp-2 pt-0.5 text-[13px] leading-[20px] text-(--oa-text-body)" title={fb.feedback}>{fb.feedback}</p>
-                      {[fb.rating, fb.relevancy, fb.duration].map((score, i) => (
-                        <span key={i} className="justify-self-center rounded-full bg-(--oa-surface) px-2.5 py-1 text-[12px] tabular-nums text-(--oa-text-strong)">
-                          {score.toFixed(1)}
-                        </span>
-                      ))}
-                    </div>
-                  ))
-                )}
+                    ))
+                  )}
+                </div>
               </div>
             </div>
           </FadeValue>

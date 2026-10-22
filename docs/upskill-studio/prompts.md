@@ -359,6 +359,49 @@ Pages: Upskill Studio (and Home for the build check). Rows: U6-01 to U6-05.
 
 ---
 
+## U7: Card polish
+
+```
+[Shared rules]
+
+Page: Upskill Studio, components/CourseCard.tsx (grid view). Rows: U7-01 to
+U7-09. Keep the cover photo size exactly as it is now. Keep the kebab (three
+dots) menu. Don't use coloured status dots anywhere on the card.
+
+1. Equal heights: make the card a flex column and pin the footer to the
+   bottom with a fixed height, so every card in a row ends on the same line.
+   Every status reserves the same rows: the status line slot is always
+   there, even when a status has nothing to say.
+2. Title: fixed height for 2 lines with line clamp. Description: clamp to
+   1 line.
+3. Footer numbers ("80%", "20d", "12d") go from ~44px down to 20 to 24px, so
+   the course title stays the strongest text on the card. The Active footer
+   shows "80% completed" and the enrolled count with a thin blue progress
+   bar under them. Other statuses keep their footer content (for example
+   "20 days to start"), just at the smaller size.
+4. Remove the "View" button from every card; the whole card already opens
+   the course. Keep the kebab menu, and make sure clicking it never opens
+   the card.
+5. "Review" is the only button in the footer, shown only on in-review
+   courses owned by someone else. Style: primary tint pill (background
+   --oa-primary-50, text --oa-primary-strong). It opens the course review.
+6. Waiting lines: "Waiting for another admin" in --oa-text-muted, and
+   "Waiting for your review" in --oa-text-strong. Neither is blue or styled
+   as a link (they aren't clickable).
+7. Status badge on the photo: white pill, no dot, label text coloured by
+   status through --oa-* tokens: Active blue, In review amber, Needs
+   revision red, Approved green, Draft and Inactive grey. In review and
+   Needs revision must be clearly different at a glance.
+8. Photos: same size as today. Give all covers one shared treatment so they
+   read as a set (a slight desaturation, or a very light blue overlay, pick
+   one and apply it everywhere). Replace the cover that shows a ChatGPT /
+   OpenAI screenshot with a neutral photo that has no product branding.
+9. Verify at 1440, 1024 and 375 px wide, /b/ld/learning-management/courses
+   unchanged, npm run build passes.
+```
+
+---
+
 # Analytics: visual pass (A1 to A5)
 
 Page: Analytics > Learning program, src/variants/a/pages/ld/analytics/course/

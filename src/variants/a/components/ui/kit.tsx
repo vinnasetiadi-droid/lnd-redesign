@@ -46,6 +46,13 @@ export function CardHeader({ title, subtitle, icon, extra, className }: CardHead
   );
 }
 
+/** Framed table: a grey header row, then hairline rows (list tables share it) */
+export const TABLE = {
+  frame: 'overflow-hidden rounded-[14px] border border-(--oa-border)',
+  head: 'min-h-11 bg-(--oa-surface-muted) text-[13px] text-(--oa-text-secondary)',
+  row: 'border-t border-(--oa-border) transition-colors hover:bg-(--oa-surface-subtle)',
+} as const;
+
 /** Soft amber for anything that needs attention (at-risk programs, licenses about to renew unused) */
 export const ATTENTION = { text: 'text-(--oa-attention-text)', frame: 'bg-(--oa-attention-surface)', bar: OA_COLORS.attentionBar, track: 'bg-(--oa-attention-track)' } as const;
 
