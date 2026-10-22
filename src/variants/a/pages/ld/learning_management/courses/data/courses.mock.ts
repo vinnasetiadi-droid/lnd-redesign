@@ -103,14 +103,14 @@ export interface CourseItem {
   draftOf?: { courseId: string; version: number };
 }
 
-/** Status labels and chip colours (CSS tokens: a tint and a bar), shared by the tabs, table and cards */
-export const COURSE_STATUS_META: Record<CourseStatus, { label: string; bg: string; bar: string }> = {
-  'on-draft':         { label: 'Draft',          bg: 'var(--oa-status-draft-bg)',    bar: 'var(--oa-status-draft)' },
-  'waiting-approval': { label: 'In review',      bg: 'var(--oa-status-review-bg)',   bar: 'var(--oa-status-review)' },
-  'need-revision':    { label: 'Needs revision', bg: 'var(--oa-status-revision-bg)', bar: 'var(--oa-status-revision)' },
-  approved:           { label: 'Approved',       bg: 'var(--oa-status-approved-bg)', bar: 'var(--oa-status-approved)' },
-  active:             { label: 'Active',         bg: 'var(--oa-status-active-bg)',   bar: 'var(--oa-status-active)' },
-  inactive:           { label: 'Inactive',       bg: 'var(--oa-status-inactive-bg)', bar: 'var(--oa-status-inactive)' },
+/** Status labels and chip tints (CSS tokens), shared by the tabs, table and cards */
+export const COURSE_STATUS_META: Record<CourseStatus, { label: string; bg: string }> = {
+  'on-draft':         { label: 'Draft',          bg: 'var(--oa-status-draft-bg)' },
+  'waiting-approval': { label: 'In review',      bg: 'var(--oa-status-review-bg)' },
+  'need-revision':    { label: 'Needs revision', bg: 'var(--oa-status-revision-bg)' },
+  approved:           { label: 'Approved',       bg: 'var(--oa-status-approved-bg)' },
+  active:             { label: 'Active',         bg: 'var(--oa-status-active-bg)' },
+  inactive:           { label: 'Inactive',       bg: 'var(--oa-status-inactive-bg)' },
 };
 
 /** Statuses that are not live yet: nobody can be enrolled */

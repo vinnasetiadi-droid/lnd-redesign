@@ -175,9 +175,7 @@ export default function CoursesPage() {
         {/* ── Review queue: one line, only when there is something to review ── */}
         {reviewQueue.length > 0 && (
           <motion.div variants={revealItem} className="flex items-center gap-4 rounded-[18px] bg-(--oa-primary)/[0.07] px-5 py-4">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-(--oa-white) text-(--oa-primary)">
-              <Clock size={18} />
-            </span>
+            <IconCircle icon={Clock} className="bg-(--oa-white)" />
             <div className="min-w-0 flex-1">
               <p className="text-[14px] leading-[20px] text-(--oa-text-strong)">
                 {reviewQueue.length} {reviewQueue.length === 1 ? 'course' : 'courses'} waiting for your review
@@ -309,8 +307,8 @@ export default function CoursesPage() {
           ) : viewMode === 'list' ? (
             <CourseLibraryTable rows={paginated} me={me} onOpen={openCourse} sort={sort} onSort={reset(setSort)} />
           ) : (
-            /* Cards keep a fixed width (3:4); the number of columns follows the space */
-            <div className="grid justify-start gap-4 [grid-template-columns:repeat(auto-fill,minmax(256px,280px))]">
+            /* Columns of at least 256px share the full width, so a row is never left half empty; each card stays 3:4 */
+            <div className="grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(256px,1fr))]">
               {paginated.map((row) => (
                 <CourseCard key={row.key} course={row.shown} me={me} onClick={() => openCourse(row.shown.id)} />
               ))}

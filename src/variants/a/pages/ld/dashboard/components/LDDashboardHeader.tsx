@@ -3,6 +3,8 @@ import { BarChart2, BookOpen, CheckCircle2, Users, type LucideIcon } from '@/var
 import type { LDProfile, LDMetricCard } from '../types/dashboard.types';
 import { IconCircle, Trend } from '@/variants/a/components/ui/kit';
 import { CountUpText } from '@/variants/a/components/ui/count-up';
+// Background removed from the original profile photo (figma:asset/a28eddf0…png)
+import profileCutout from '@/variants/a/assets/profile-cutout.png';
 
 /** Icon per metric card, by its key in the mock data */
 const METRIC_ICON: Record<string, LucideIcon> = {
@@ -20,21 +22,27 @@ function greetingFor(hour: number) {
 }
 
 /**
- * Compact greeting above both columns. The avatar in the top bar is the only
- * identity element, so this is just a name, today's date and the org.
+ * Compact greeting above both columns: a small photo, the name, today's date
+ * and the org.
  */
 export function LDDashboardGreeting({ profile, className }: { profile: LDProfile; className?: string }) {
   const now = new Date();
   const firstName = profile.name.split(' ')[0];
   const date = now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   return (
-    <div className={cn('flex min-h-0 flex-col justify-center', className)}>
-      <h1 className="text-[24px] leading-[32px] text-(--oa-text-strong)">
-        {greetingFor(now.getHours())}, {firstName}
-      </h1>
-      <p className="mt-0.5 text-[13px] leading-[20px] text-(--oa-text-muted)">
-        {[date.replace(/^(\w+) /, '$1, '), profile.company].filter(Boolean).join(' · ')}
-      </p>
+    <div className={cn('flex min-h-0 items-center gap-3', className)}>
+      {/* Small photo, as tall as the two lines beside it */}
+      <span className="size-[54px] shrink-0 overflow-hidden rounded-full bg-(--oa-primary-50)">
+        <img src={profileCutout} alt="" className="size-full object-cover object-top" />
+      </span>
+      <div className="min-w-0">
+        <h1 className="text-[24px] leading-[32px] text-(--oa-text-strong)">
+          {greetingFor(now.getHours())}, {firstName}
+        </h1>
+        <p className="mt-0.5 text-[13px] leading-[20px] text-(--oa-text-muted)">
+          {[date.replace(/^(\w+) /, '$1, '), profile.company].filter(Boolean).join(' · ')}
+        </p>
+      </div>
     </div>
   );
 }

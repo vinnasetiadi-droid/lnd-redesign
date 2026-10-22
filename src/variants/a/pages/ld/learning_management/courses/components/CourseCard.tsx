@@ -84,14 +84,14 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
       onKeyDown={(e) => e.key === 'Enter' && e.target === e.currentTarget && onClick?.()}
       className={cn(
         // Portrait 3:4; grows only if its content needs more room
-        'group flex aspect-[3/4] flex-col rounded-[18px] bg-(--oa-white) p-3 ring-1 ring-(--oa-border) transition-shadow duration-200 cursor-pointer',
+        'group flex aspect-[3/4] flex-col rounded-[14px] bg-(--oa-white) p-3 ring-1 ring-(--oa-border) transition-shadow duration-200 cursor-pointer',
         'hover:shadow-[0_12px_32px_-16px_rgba(16,24,40,0.18)]',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oa-primary)/25',
         className,
       )}
     >
       {/* Photo, inset and rounded; status badge top right */}
-      <div className="relative aspect-[16/10] shrink-0 overflow-hidden rounded-[14px] bg-(--oa-surface)">
+      <div className="relative aspect-[16/10] shrink-0 overflow-hidden rounded-[10px] bg-(--oa-surface)">
         <CourseCover
           course={course}
           size="lg"
@@ -121,7 +121,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
         </p>
 
         {/* Meta: version, duration, mode */}
-        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] text-(--oa-text-muted)">
+        <div className="mt-3 flex min-w-0 items-center gap-x-3 overflow-hidden whitespace-nowrap text-[12px] text-(--oa-text-muted)">
           <span className="inline-flex items-center gap-1.5">
             <Layers size={14} />
             v{version}
@@ -133,9 +133,9 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
               {course.duration.toLowerCase()}
             </span>
           )}
-          <span className="inline-flex items-center gap-1.5">
-            <BookOpen size={14} />
-            {courseMode(course)}
+          <span className="inline-flex min-w-0 items-center gap-1.5">
+            <BookOpen size={14} className="shrink-0" />
+            <span className="truncate">{courseMode(course)}</span>
           </span>
         </div>
 

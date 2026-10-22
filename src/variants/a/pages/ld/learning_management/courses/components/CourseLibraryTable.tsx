@@ -163,7 +163,11 @@ function CourseRowView({ row, me, onOpen, index }: { row: CourseRow; me: string;
           <div className="min-w-0">
             <p className="truncate text-[13px] leading-[20px] text-(--oa-text-strong)" title={titleOf(c)}>{titleOf(c)}</p>
             <p className="flex min-w-0 items-center gap-1 text-[12px] leading-[18px] text-(--oa-text-muted)">
-              <span className="truncate">{courseType(c)} · {courseMode(c)} · v{versionOf(c)}</span>
+              <span className="truncate">
+                {courseType(c)} · {courseMode(c)} · v{versionOf(c)}
+                {/* Nobody reviews their own course */}
+                {ownReview && <span className="text-(--oa-primary-strong)"> · waiting for another admin</span>}
+              </span>
               {drafts.length > 0 && (
                 <button
                   type="button"
@@ -179,11 +183,7 @@ function CourseRowView({ row, me, onOpen, index }: { row: CourseRow; me: string;
             </p>
           </div>
         </div>
-        <div className="min-w-0">
-          <StatusLabel status={c.status} />
-          {/* Nobody reviews their own course */}
-          {ownReview && <p className="mt-1 truncate text-[11px] leading-[14px] text-(--oa-text-subtle)">Waiting for another admin</p>}
-        </div>
+        <StatusLabel status={c.status} />
         <Owner creator={c.creator} me={me} />
         <Enrolled course={c} />
         <span className="text-right text-[12px] text-(--oa-text-muted)">{updatedText(c)}</span>

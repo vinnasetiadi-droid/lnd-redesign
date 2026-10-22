@@ -1,5 +1,5 @@
-// Course status chip, drawn from the one source (COURSE_STATUS_META): a tint of
-// the status colour with a short bar in the stronger shade, and dark text.
+// Course status chip, drawn from the one source (COURSE_STATUS_META): a round
+// pill in a tint of the status colour, with dark text.
 
 import { cn } from '@/lib/utils';
 import { COURSE_STATUS_META, type CourseStatus } from '../data/courses.mock';
@@ -9,13 +9,13 @@ function StatusChip({ status, className }: { status: CourseStatus; className?: s
   return (
     <span
       className={cn(
-        'inline-flex h-6 w-fit items-center gap-1.5 whitespace-nowrap rounded-[6px] pl-1.5 pr-2 text-[12px] leading-none',
+        // Same size as Home's chips (30px tall, 14px sides), but round
+        'inline-flex h-[30px] w-fit items-center whitespace-nowrap rounded-full px-3.5 text-[12px] leading-none',
         status === 'inactive' ? 'text-(--oa-text-muted)' : 'text-(--oa-text-strong)',
         className,
       )}
       style={{ background: meta.bg }}
     >
-      <span className="h-3 w-[3px] shrink-0 rounded-full" style={{ background: meta.bar }} aria-hidden />
       {meta.label}
     </span>
   );
