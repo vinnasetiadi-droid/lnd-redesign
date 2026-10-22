@@ -8,6 +8,10 @@
 // ============================================================
 
 import { daysAgo, daysFromNow, formatDate, timeAgo } from '@/variants/a/pages/ld/dashboard/period';
+// Covers from the project's own images (resized copies), so no two courses share a photo
+import coverComplianceManual from '@/variants/a/assets/courses/compliance-manual.jpg';
+import coverPlanningDesk from '@/variants/a/assets/courses/planning-desk.jpg';
+import coverTeamWhiteboard from '@/variants/a/assets/courses/team-whiteboard.jpg';
 
 export type CourseStatus =
   | 'on-draft'
@@ -154,7 +158,7 @@ const COURSES: Omit<CourseItem, 'updatedAt'>[] = [
   {
     id: 'course-11',
     title: 'Data Privacy Essentials',
-    image: 'https://images.unsplash.com/photo-1675557009483-e6cf3867976b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxBSSUyMHRlY2hub2xvZ3klMjBtYWNoaW5lJTIwbGVhcm5pbmd8ZW58MXx8fHwxNzcyNjExOTM3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    image: coverComplianceManual,
     dateRange: range(240, 45),
     rating: 4.6,
     reviewCount: 12,
@@ -316,7 +320,7 @@ const COURSES: Omit<CourseItem, 'updatedAt'>[] = [
   {
     id: 'course-12',
     title: 'Business Writing for Managers',
-    image: '',
+    image: coverPlanningDesk,
     dateRange: range(-20, 50),
     rating: 0,
     reviewCount: 0,
@@ -375,7 +379,7 @@ const COURSES: Omit<CourseItem, 'updatedAt'>[] = [
   {
     id: 'course-13',
     title: 'Customer Onboarding Playbook',
-    image: '',
+    image: coverTeamWhiteboard,
     dateRange: range(-25, 45),
     rating: 0,
     reviewCount: 0,

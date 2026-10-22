@@ -97,7 +97,7 @@ export function PillButton({ children, icon: Icon, variant = 'secondary', classN
     <button
       type="button"
       className={cn(
-        'inline-flex h-9 items-center justify-center gap-2 rounded-full px-4 text-[13px] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oa-primary)/25 focus-visible:ring-offset-1',
+        'inline-flex h-10 items-center justify-center gap-2 rounded-full px-5 text-[13px] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oa-primary)/25 focus-visible:ring-offset-1',
         variant === 'primary'
           ? 'bg-(--oa-button-primary) text-white hover:bg-(--oa-button-primary-hover)'
           : 'bg-(--oa-button-secondary) text-(--oa-text-strong) hover:bg-(--oa-button-secondary-hover)',

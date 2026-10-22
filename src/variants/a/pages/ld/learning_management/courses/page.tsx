@@ -29,7 +29,7 @@ import { useSimulatedLoading } from '@/hooks/useSimulatedLoading';
 import { CourseCard } from './components/CourseCard';
 import { CourseLibraryTable, courseMode, courseType, ownerName, type CourseRow } from './components/CourseLibraryTable';
 import { COURSES_MOCK, COURSE_STATUS_META, NOT_LIVE, draftItemsOf, type CourseItem, type CourseStatus } from './data/courses.mock';
-import { CardHeader, IconCircle, PillButton } from '@/variants/a/components/ui/kit';
+import { IconCircle, PillButton } from '@/variants/a/components/ui/kit';
 import { FilterChip } from './components/FilterChip';
 import { ProgramScopeTabs, type ScopeTab } from '@/variants/a/pages/ld/dashboard/components/ProgramScopeTabs';
 import { daysUntil, timeAgo } from '@/variants/a/pages/ld/dashboard/period';
@@ -174,8 +174,8 @@ export default function CoursesPage() {
 
         {/* ── Review queue: one line, only when there is something to review ── */}
         {reviewQueue.length > 0 && (
-          <motion.div variants={revealItem} className="oa-lift flex items-center gap-4 rounded-[18px] bg-(--oa-white) px-5 py-4">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-(--oa-attention-surface) text-(--oa-attention-text)">
+          <motion.div variants={revealItem} className="flex items-center gap-4 rounded-[18px] bg-(--oa-primary)/[0.07] px-5 py-4">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-(--oa-white) text-(--oa-primary)">
               <Clock size={18} />
             </span>
             <div className="min-w-0 flex-1">
@@ -195,20 +195,24 @@ export default function CoursesPage() {
             </div>
             {/* One course: open it. Several: show them all in the In review tab */}
             {reviewQueue.length === 1 ? (
-              <PillButton onClick={() => openCourse(reviewQueue[0].id)}>Review</PillButton>
+              <PillButton className="bg-(--oa-white) hover:bg-(--oa-white)/80" onClick={() => openCourse(reviewQueue[0].id)}>Review</PillButton>
             ) : (
-              <PillButton onClick={openReviewTab}>Review all</PillButton>
+              <PillButton className="bg-(--oa-white) hover:bg-(--oa-white)/80" onClick={openReviewTab}>Review all</PillButton>
             )}
           </motion.div>
         )}
 
         {/* ── Library ── */}
         <motion.div ref={libraryRef} variants={revealItem} className="flex flex-col gap-4 rounded-[18px] bg-(--oa-white) p-5 scroll-mt-3">
-          <CardHeader title="Course library" subtitle={`${rows.length} ${rows.length === 1 ? 'course' : 'courses'}`} />
-
-          {/* Status tabs: the counts are the filter; they scroll sideways on narrow screens */}
-          <div className="-mx-1 overflow-x-auto px-1 [scrollbar-width:none]">
-            <ProgramScopeTabs id="course-status" value={status} onChange={reset(setStatus)} tabs={tabs} />
+          {/* Title on the left, status tabs beside it (the counts are the filter); tabs scroll sideways when narrow */}
+          <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+            <div className="min-w-0">
+              <h3 className="text-[16px] leading-[24px] text-(--oa-text-strong)">Course library</h3>
+              <p className="mt-0.5 text-[13px] leading-[18px] text-(--oa-text-muted)">{rows.length} {rows.length === 1 ? 'course' : 'courses'}</p>
+            </div>
+            <div className="-mx-1 min-w-0 max-w-full overflow-x-auto px-1 [scrollbar-width:none]">
+              <ProgramScopeTabs id="course-status" value={status} onChange={reset(setStatus)} tabs={tabs} />
+            </div>
           </div>
 
           {/* One row of filters */}
@@ -305,7 +309,8 @@ export default function CoursesPage() {
           ) : viewMode === 'list' ? (
             <CourseLibraryTable rows={paginated} me={me} onOpen={openCourse} sort={sort} onSort={reset(setSort)} />
           ) : (
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            /* Cards keep a fixed width (3:4); the number of columns follows the space */
+            <div className="grid justify-start gap-4 [grid-template-columns:repeat(auto-fill,minmax(256px,280px))]">
               {paginated.map((row) => (
                 <CourseCard key={row.key} course={row.shown} me={me} onClick={() => openCourse(row.shown.id)} />
               ))}
