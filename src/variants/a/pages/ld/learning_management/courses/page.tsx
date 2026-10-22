@@ -108,6 +108,13 @@ export default function CoursesPage() {
 
   // Only other people's submissions: nobody approves their own course
   const reviewQueue = COURSES_MOCK.filter((c) => c.status === 'waiting-approval' && c.creator !== me);
+  // With several, the strip points at the one that starts soonest
+  const soonest = [...reviewQueue].sort((a, b) => (a.startsOn ?? '9').localeCompare(b.startsOn ?? '9'))[0];
+  const startsIn = (c: CourseItem) => {
+    if (!c.startsOn) return '';
+    const d = daysUntil(c.startsOn);
+    return d <= 0 ? 'starts today' : `starts in ${d} ${d === 1 ? 'day' : 'days'}`;
+  };
   const openReviewTab = () => {
     setStatus('waiting-approval');
     setPage(1);
@@ -144,12 +151,17 @@ export default function CoursesPage() {
                       reviewQueue[0].title,
                       `by ${reviewQueue[0].creator}`,
                       reviewQueue[0].submittedOn && `submitted ${timeAgo(reviewQueue[0].submittedOn).toLowerCase()}`,
-                      reviewQueue[0].startsOn && `starts in ${daysUntil(reviewQueue[0].startsOn)} days`,
+                      startsIn(reviewQueue[0]),
                     ].filter(Boolean).join(' · ')
-                  : `Oldest: ${reviewQueue[0].title} by ${ownerName(reviewQueue[0].creator, me)}`}
+                  : [`${soonest.title} by ${ownerName(soonest.creator, me)}`, startsIn(soonest)].filter(Boolean).join(' · ')}
               </p>
             </div>
-            <PillButton onClick={openReviewTab}>Review</PillButton>
+            {/* One course: open it. Several: show them all in the In review tab */}
+            {reviewQueue.length === 1 ? (
+              <PillButton onClick={() => openCourse(reviewQueue[0].id)}>Review</PillButton>
+            ) : (
+              <PillButton onClick={openReviewTab}>Review all</PillButton>
+            )}
           </motion.div>
         )}
 
