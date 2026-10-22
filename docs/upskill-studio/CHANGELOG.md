@@ -106,6 +106,26 @@ Files: the dashboard components above, `pages/hr/dashboard/components/DashboardD
   tsconfig but no TypeScript compiler installed, and installing one was out of
   scope.
 
+## U7: Card polish
+
+- `components/CourseCard.tsx`: the card is a flex column with a fixed 80px
+  footer pinned to the bottom (status line, figure, progress slot), so cards in
+  a row end on the same line. Title fixed at two lines, description one line.
+- Footer figures at 20px with their words ("80% completed", "20 days to
+  start"); Active adds the enrolled count and a thin blue bar.
+- Buttons: View, Comments, Continue and Run again removed. Review (new tint
+  PillButton) only on someone else's in-review course. Kebab kept; it and the
+  deactivate dialog no longer open the card.
+- Waiting lines are plain text: "Waiting for another admin" muted, "Waiting
+  for your review" strong.
+- `components/CourseStatus.tsx`: badge on the photo is a white pill with the
+  label in the status colour (`COURSE_STATUS_META.text`), no dot.
+- `components/CourseCover.tsx`: photos slightly desaturated (80%) everywhere.
+  The AI Ethics cover (a ChatGPT screenshot) is now
+  `assets/courses/abstract-shapes.jpg`, cropped from a project image.
+- The demo has no course page, so opening a course (card or Review) still lands
+  on Home.
+
 ## Analytics (A1 to A5)
 
 Visual pass on `/a/ld/analytics/course`. Every card and every number stays;

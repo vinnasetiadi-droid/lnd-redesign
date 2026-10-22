@@ -26,7 +26,22 @@ export function StatusLabel({ status, className }: { status: CourseStatus; class
   return <StatusChip status={status} className={className} />;
 }
 
-/** For badges on covers: the same chip with a soft shadow so it holds on a photo */
+/**
+ * For badges. On a photo: a white pill with the label in the status colour
+ * (no dot), so it holds on any image; elsewhere the tinted chip.
+ */
 export function StatusBadge({ status, onImage, className }: { status: CourseStatus; onImage?: boolean; className?: string }) {
-  return <StatusChip status={status} className={cn(onImage && 'shadow-[0_1px_3px_rgba(16,24,40,0.16)]', className)} />;
+  if (!onImage) return <StatusChip status={status} className={className} />;
+  const meta = COURSE_STATUS_META[status];
+  return (
+    <span
+      className={cn(
+        'inline-flex h-[30px] w-fit items-center whitespace-nowrap rounded-full bg-(--oa-white) px-3.5 text-[12px] leading-none shadow-[0_1px_3px_rgba(16,24,40,0.16)]',
+        className,
+      )}
+      style={{ color: meta.text }}
+    >
+      {meta.label}
+    </span>
+  );
 }

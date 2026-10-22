@@ -12,6 +12,7 @@ import { daysAgo, daysFromNow, formatDate, timeAgo } from '@/variants/a/pages/ld
 import coverComplianceManual from '@/variants/a/assets/courses/compliance-manual.jpg';
 import coverPlanningDesk from '@/variants/a/assets/courses/planning-desk.jpg';
 import coverTeamWhiteboard from '@/variants/a/assets/courses/team-whiteboard.jpg';
+import coverAbstractShapes from '@/variants/a/assets/courses/abstract-shapes.jpg';
 
 export type CourseStatus =
   | 'on-draft'
@@ -104,13 +105,14 @@ export interface CourseItem {
 }
 
 /** Status labels and chip tints (CSS tokens), shared by the tabs, table and cards */
-export const COURSE_STATUS_META: Record<CourseStatus, { label: string; bg: string }> = {
-  'on-draft':         { label: 'Draft',          bg: 'var(--oa-status-draft-bg)' },
-  'waiting-approval': { label: 'In review',      bg: 'var(--oa-status-review-bg)' },
-  'need-revision':    { label: 'Needs revision', bg: 'var(--oa-status-revision-bg)' },
-  approved:           { label: 'Approved',       bg: 'var(--oa-status-approved-bg)' },
-  active:             { label: 'Active',         bg: 'var(--oa-status-active-bg)' },
-  inactive:           { label: 'Inactive',       bg: 'var(--oa-status-inactive-bg)' },
+/** bg: the chip tint in tables; text: the label colour on the white badge over a photo */
+export const COURSE_STATUS_META: Record<CourseStatus, { label: string; bg: string; text: string }> = {
+  'on-draft':         { label: 'Draft',          bg: 'var(--oa-status-draft-bg)',    text: 'var(--oa-text-secondary)' },
+  'waiting-approval': { label: 'In review',      bg: 'var(--oa-status-review-bg)',   text: 'var(--oa-attention-text)' },
+  'need-revision':    { label: 'Needs revision', bg: 'var(--oa-status-revision-bg)', text: 'var(--oa-danger)' },
+  approved:           { label: 'Approved',       bg: 'var(--oa-status-approved-bg)', text: 'var(--oa-success-strong)' },
+  active:             { label: 'Active',         bg: 'var(--oa-status-active-bg)',   text: 'var(--oa-primary-strong)' },
+  inactive:           { label: 'Inactive',       bg: 'var(--oa-status-inactive-bg)', text: 'var(--oa-text-muted)' },
 };
 
 /** Statuses that are not live yet: nobody can be enrolled */
@@ -123,7 +125,8 @@ const COURSES: Omit<CourseItem, 'updatedAt'>[] = [
   {
     id: 'course-9',
     title: 'AI Ethics & Responsible AI Implementation',
-    image: 'https://images.unsplash.com/photo-1675557009483-e6cf3867976b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxBSSUyMHRlY2hub2xvZ3klMjBtYWNoaW5lJTIwbGVhcm5pbmd8ZW58MXx8fHwxNzcyNjExOTM3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    // Abstract shapes instead of a product screenshot: no third-party branding
+    image: coverAbstractShapes,
     dateRange: range(60, 30),
     rating: 5.0,
     reviewCount: 8,

@@ -18,7 +18,8 @@ export const CATEGORY_ICON: Record<CourseCategory, LucideIcon> = {
 export function CourseCover({ course, size, className }: { course: CourseItem; size: 'sm' | 'lg'; className?: string }) {
   const src = coverImageOf(course);
   const Icon = CATEGORY_ICON[course.category] ?? BookOpen;
-  if (src) return <ImageWithFallback src={src} alt="" className={cn('object-cover', className)} />;
+  // One shared treatment so the photos read as a set: slightly desaturated
+  if (src) return <ImageWithFallback src={src} alt="" className={cn('object-cover saturate-[.8]', className)} />;
   return (
     <div className={cn('flex items-center justify-center bg-(--oa-surface-subtle)', className)} aria-hidden>
       {size === 'lg' ? <CategoryIcon icon={Icon} size="md" /> : <Icon size={14} className="text-(--oa-primary)" />}
