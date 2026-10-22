@@ -65,7 +65,7 @@ export function FilterChip<V extends string>({
         aria-controls={menuId}
         onClick={() => setOpen((o) => !o)}
         className={cn(
-          'inline-flex h-9 items-center gap-1.5 rounded-full px-4 text-[13px] transition-colors cursor-pointer',
+          'inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-[13px] transition-colors cursor-pointer',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oa-primary)/25',
           active && !showValueOnly
             ? 'bg-(--oa-primary-50) text-(--oa-primary-strong)'

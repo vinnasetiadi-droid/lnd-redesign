@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
-import { ArrowDownRight, ArrowUpRight, type LucideIcon } from '@/variants/a/icons';
+import { ArrowDownRight, ArrowUpRight, Loader2, Search, type LucideIcon } from '@/variants/a/icons';
 import { OA_COLORS } from '@/variants/a/theme';
 
 /**
@@ -42,6 +42,31 @@ export function CardHeader({ title, subtitle, icon, extra, className }: CardHead
           {icon && <IconCircle icon={icon} />}
         </div>
       )}
+    </div>
+  );
+}
+
+/** The one search pill for tables and card lists: 40px tall like the pill buttons */
+export function SearchField({ value, onChange, placeholder, loading, className }: {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder: string;
+  /** Shows a spinner while results update */
+  loading?: boolean;
+  className?: string;
+}) {
+  return (
+    <div className={cn('relative', className)}>
+      <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-(--oa-text-muted)" />
+      <input
+        type="text"
+        aria-label={placeholder}
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="h-10 w-full rounded-full bg-(--oa-surface) pl-11 pr-10 text-[13px] text-(--oa-text-strong) outline-none transition-colors placeholder:text-(--oa-text-subtle) focus:bg-(--oa-white) focus:ring-2 focus:ring-(--oa-primary)/25"
+      />
+      {loading && <Loader2 className="absolute right-4 top-1/2 size-4 -translate-y-1/2 animate-spin text-(--oa-primary)" />}
     </div>
   );
 }
@@ -98,7 +123,8 @@ export function Trend({ children, positive = true, className }: { children: Reac
 export function PillButton({ children, icon: Icon, variant = 'secondary', className, ...rest }: {
   children: ReactNode;
   icon?: LucideIcon;
-  variant?: 'primary' | 'secondary';
+  /** tint: a blue-tinted pill for the one action a card asks for (e.g. Review) */
+  variant?: 'primary' | 'secondary' | 'tint';
 } & ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
@@ -107,7 +133,9 @@ export function PillButton({ children, icon: Icon, variant = 'secondary', classN
         'inline-flex h-10 items-center justify-center gap-2 rounded-full px-5 text-[13px] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oa-primary)/25 focus-visible:ring-offset-1',
         variant === 'primary'
           ? 'bg-(--oa-button-primary) text-white hover:bg-(--oa-button-primary-hover)'
-          : 'bg-(--oa-button-secondary) text-(--oa-text-strong) hover:bg-(--oa-button-secondary-hover)',
+          : variant === 'tint'
+            ? 'bg-(--oa-primary-50) text-(--oa-primary-strong) hover:bg-(--oa-primary-100)'
+            : 'bg-(--oa-button-secondary) text-(--oa-text-strong) hover:bg-(--oa-button-secondary-hover)',
         className,
       )}
       {...rest}

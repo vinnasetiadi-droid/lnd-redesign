@@ -10,16 +10,16 @@ import { useState, type ReactNode } from 'react';
 import { DashboardLayout } from '@/variants/a/layouts/DashboardLayout';
 import { cn } from '@/lib/utils';
 import { ProgramScopeTabs, PROGRAM_TYPE_TABS, FadeValue, type ScopeTab } from '@/variants/a/pages/ld/dashboard/components/ProgramScopeTabs';
-import { ATTENTION, CardHeader, IconCircle, TABLE, Trend } from '@/variants/a/components/ui/kit';
+import { ATTENTION, CardHeader, IconCircle, SearchField, TABLE, Trend } from '@/variants/a/components/ui/kit';
 import { ChartTooltipCard, LegendMark } from '@/variants/a/components/ui/chart';
 import { LearningProgressFunnel } from './components/LearningProgressFunnel';
 import { DashboardLicenseUtilization, type License } from '@/variants/a/pages/hr/dashboard/components/DashboardLicenseUtilization';
 import { revealContainer, revealItem } from '@/variants/a/motion';
 import { OA_COLORS } from '@/variants/a/theme';
 import {
-  BookOpen, CheckCircle2, Star, Search, Users, Trophy, TrendingDown, CalendarClock,
+  BookOpen, CheckCircle2, Star, Users, Trophy, TrendingDown, CalendarClock,
   ShieldAlert, RefreshCw, GraduationCap, MessageSquareText, ChevronDown, ArrowUpDown, ChevronUp,
-  Layers, Zap, ChevronLeft, ChevronRight, Loader2, Route,
+  Layers, Zap, ChevronLeft, ChevronRight, Route,
 } from '@/variants/a/icons';
 import { useSimulatedLoading } from '@/hooks/useSimulatedLoading';
 import { PieChart, Pie, Cell, Tooltip } from 'recharts';
@@ -317,10 +317,12 @@ function Pagination({ page, total, onPage }: { page: number; total: number; onPa
 
 // ── Active programs table (same rhythm as the Upskill Studio table) ──
 
-// Hidden for now: both are work lists rather than analysis, and Home already has
-// them (Active programs, Programs needing attention). Set to true to bring one back.
+// Hidden for now: these are work lists rather than analysis (Home already has
+// Active programs and Programs needing attention). Set to true to bring one back.
 const SHOW_ACTIVE_LIST = false;
 const SHOW_NOT_STARTED = false;
+const SHOW_LAST_UPDATED = false;
+const SHOW_EXPIRED_CERTS = false;
 
 const ACTIVE_PROGRAMS_PER_PAGE = 5;
 const ACTIVE_GRID = 'grid grid-cols-[minmax(0,1fr)_88px_140px_72px] items-center gap-4';
@@ -433,15 +435,12 @@ function RankedList({ programType, rows, metric }: { programType: ProgramType; r
 }
 
 const TOP_TABS: ScopeTab<RankMetric>[] = [
-  { key: 'enrollment', label: 'Highest enrollment' },
-  { key: 'completion', label: 'Highest completion' },
-  { key: 'rating',     label: 'Highest rating' },
+  { key: 'enrollment', label: 'Enrollment' },
+  { key: 'completion', label: 'Completion' },
+  { key: 'rating',     label: 'Rating' },
 ];
-const BOTTOM_TABS: ScopeTab<RankMetric>[] = [
-  { key: 'enrollment', label: 'Lowest enrollment' },
-  { key: 'completion', label: 'Lowest completion' },
-  { key: 'rating',     label: 'Lowest rating' },
-];
+// Same metrics; the card title says it is the bottom of the list
+const BOTTOM_TABS = TOP_TABS;
 
 // ── Page ────────────────────────────────────────────────────
 
@@ -613,8 +612,8 @@ export default function LearningProgramAnalyticsPage() {
 
         {SHOW_ACTIVE_LIST && <ActiveProgramsTable programType={programType} programs={data.table} noun={noun} />}
 
-        {/* Top and bottom programs */}
-        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+        {/* Top and bottom programs, then licenses */}
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-3">
           <Card>
             <CardHeader
               title={<FadeValue k={programType}>Top {noun.many}</FadeValue>}
@@ -637,6 +636,10 @@ export default function LearningProgramAnalyticsPage() {
             </div>
             <RankedList programType={programType} rows={bottomSorted} metric={bottomFilter} />
           </Card>
+          <motion.div variants={revealItem} className="oa-lift rounded-[18px] lg:col-span-2 xl:col-span-1">
+            {/* Same card as Home, with this page's licenses */}
+            <DashboardLicenseUtilization licenses={SOURCE_LICENSES} className="h-full" />
+          </motion.div>
         </div>
 
         {/* Assigned but not started: the amber chip is the only warning signal */}
@@ -671,53 +674,54 @@ export default function LearningProgramAnalyticsPage() {
           </Card>
         )}
 
-        {/* Licenses, last updated, expired certifications */}
-        <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
-          <motion.div variants={revealItem} className="oa-lift rounded-[18px]">
-            {/* Same card as Home, with this page's licenses */}
-            <DashboardLicenseUtilization licenses={SOURCE_LICENSES} className="h-full" />
-          </motion.div>
+        {/* Last updated and expired certifications (hidden for now) */}
+        {(SHOW_LAST_UPDATED || SHOW_EXPIRED_CERTS) && (
+          <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+            {SHOW_LAST_UPDATED && (
+              <Card>
+                <CardHeader title="Last updated" subtitle="Recent content changes" icon={RefreshCw} />
+                <FadeValue k={programType} className="block w-full">
+                  <div>
+                    {data.lastUpdated.map((item) => (
+                      <div key={`${programType}-${item.name}`} className="flex items-center gap-3 border-b border-(--oa-border) py-3 last:border-b-0">
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-[13px] leading-[20px] text-(--oa-text-strong)" title={item.name}>{item.name}</p>
+                          <p className="text-[12px] leading-[18px] text-(--oa-text-muted)">{stamp(item.date, item.time)}</p>
+                        </div>
+                        <RoundChip>{item.type}</RoundChip>
+                      </div>
+                    ))}
+                  </div>
+                </FadeValue>
+              </Card>
+            )}
 
-          <Card>
-            <CardHeader title="Last updated" subtitle="Recent content changes" icon={RefreshCw} />
-            <FadeValue k={programType} className="block w-full">
-              <div>
-                {data.lastUpdated.map((item) => (
-                  <div key={`${programType}-${item.name}`} className="flex items-center gap-3 border-b border-(--oa-border) py-3 last:border-b-0">
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-[13px] leading-[20px] text-(--oa-text-strong)" title={item.name}>{item.name}</p>
-                      <p className="text-[12px] leading-[18px] text-(--oa-text-muted)">{stamp(item.date, item.time)}</p>
+            {SHOW_EXPIRED_CERTS && (
+              <Card>
+                <CardHeader
+                  title="Expired certifications"
+                  subtitle="Certifications past their validity date"
+                  extra={<RoundChip>{EXPIRED_CERTIFICATIONS.length} expired</RoundChip>}
+                  icon={ShieldAlert}
+                />
+                <div>
+                  {EXPIRED_CERTIFICATIONS.map((cert) => (
+                    <div key={cert.id} className="flex items-center gap-3 border-b border-(--oa-border) py-3 last:border-b-0">
+                      <Avatar name={cert.holder} />
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-[13px] leading-[20px] text-(--oa-text-strong)" title={cert.name}>{cert.name}</p>
+                        <p className="truncate text-[12px] leading-[18px] text-(--oa-text-muted)">{cert.holder} · expired {stamp(cert.expiredDate)}</p>
+                      </div>
+                      <span className={cn('shrink-0 text-[13px] tabular-nums', cert.daysExpired >= 30 ? ATTENTION.text : 'text-(--oa-text-muted)')}>
+                        {cert.daysExpired}d
+                      </span>
                     </div>
-                    <RoundChip>{item.type}</RoundChip>
-                  </div>
-                ))}
-              </div>
-            </FadeValue>
-          </Card>
-
-          <Card>
-            <CardHeader
-              title="Expired certifications"
-              subtitle="Certifications past their validity date"
-              extra={<RoundChip>{EXPIRED_CERTIFICATIONS.length} expired</RoundChip>}
-              icon={ShieldAlert}
-            />
-            <div>
-              {EXPIRED_CERTIFICATIONS.map((cert) => (
-                <div key={cert.id} className="flex items-center gap-3 border-b border-(--oa-border) py-3 last:border-b-0">
-                  <Avatar name={cert.holder} />
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-[13px] leading-[20px] text-(--oa-text-strong)" title={cert.name}>{cert.name}</p>
-                    <p className="truncate text-[12px] leading-[18px] text-(--oa-text-muted)">{cert.holder} · expired {stamp(cert.expiredDate)}</p>
-                  </div>
-                  <span className={cn('shrink-0 text-[13px] tabular-nums', cert.daysExpired >= 30 ? ATTENTION.text : 'text-(--oa-text-muted)')}>
-                    {cert.daysExpired}d
-                  </span>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </Card>
-        </div>
+              </Card>
+            )}
+          </div>
+        )}
 
         {/* Learner feedback: who, about what, said what */}
         <Card>
@@ -726,17 +730,7 @@ export default function LearningProgramAnalyticsPage() {
             subtitle={<FadeValue k={programType}>{filteredFeedback.length} of {data.feedback.length} from {noun.one} participants</FadeValue>}
             icon={MessageSquareText}
             extra={
-              <div className="relative w-64 sm:w-72">
-                <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-(--oa-text-muted)" />
-                <input
-                  type="text"
-                  placeholder={`Search ${noun.one} or trainee`}
-                  value={fbSearch}
-                  onChange={(e) => setFbSearch(e.target.value)}
-                  className="h-10 w-full rounded-full bg-(--oa-surface) pl-11 pr-10 text-[13px] text-(--oa-text-strong) outline-none transition-colors placeholder:text-(--oa-text-subtle) focus:bg-white focus:ring-2 focus:ring-(--oa-primary)/25"
-                />
-                {fbIsSearching && <Loader2 className="absolute right-4 top-1/2 size-4 -translate-y-1/2 animate-spin text-(--oa-primary)" />}
-              </div>
+              <SearchField value={fbSearch} onChange={setFbSearch} placeholder={`Search ${noun.one} or trainee`} loading={fbIsSearching} className="w-64 sm:w-72" />
             }
           />
           <FadeValue k={programType} className="block w-full">

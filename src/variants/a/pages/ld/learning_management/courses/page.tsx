@@ -18,9 +18,7 @@ import {
   GraduationCap,
   LayoutGrid,
   List,
-  Loader2,
   Plus,
-  Search,
 } from '@/variants/a/icons';
 import { cn } from '@/lib/utils';
 import { matchesOwnership, useCurrentUserName, type OwnershipFilter } from '../components/OwnershipTabs';
@@ -29,7 +27,7 @@ import { useSimulatedLoading } from '@/hooks/useSimulatedLoading';
 import { CourseCard } from './components/CourseCard';
 import { CourseLibraryTable, courseMode, courseType, ownerName, type CourseRow } from './components/CourseLibraryTable';
 import { COURSES_MOCK, COURSE_STATUS_META, NOT_LIVE, draftItemsOf, type CourseItem, type CourseStatus } from './data/courses.mock';
-import { IconCircle, PillButton } from '@/variants/a/components/ui/kit';
+import { IconCircle, PillButton, SearchField } from '@/variants/a/components/ui/kit';
 import { FilterChip } from './components/FilterChip';
 import { ProgramScopeTabs, type ScopeTab } from '@/variants/a/pages/ld/dashboard/components/ProgramScopeTabs';
 import { daysUntil, timeAgo } from '@/variants/a/pages/ld/dashboard/period';
@@ -215,19 +213,13 @@ export default function CoursesPage() {
 
           {/* One row of filters */}
           <div className="flex flex-wrap items-center gap-2">
-            <div className="relative min-w-[200px] flex-1 max-w-[320px]">
-              <Search className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-(--oa-text-muted)" />
-              <input
-                type="text"
-                placeholder="Search courses"
-                value={search}
-                onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                className="w-full h-9 rounded-full bg-(--oa-surface) pl-10 pr-9 text-[13px] text-(--oa-text-strong) placeholder:text-(--oa-text-subtle) outline-none transition-colors focus:bg-(--oa-white) focus:ring-2 focus:ring-(--oa-primary)/25"
-              />
-              {isSearching && (
-                <Loader2 className="absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-(--oa-primary) animate-spin" />
-              )}
-            </div>
+            <SearchField
+              value={search}
+              onChange={(v) => { setSearch(v); setPage(1); }}
+              placeholder="Search courses"
+              loading={isSearching}
+              className="min-w-[200px] max-w-[320px] flex-1"
+            />
 
             <FilterChip
               name="Owner"
@@ -283,7 +275,7 @@ export default function CoursesPage() {
                   aria-pressed={viewMode === m}
                   onClick={() => setViewMode(m)}
                   className={cn(
-                    'flex size-7 items-center justify-center rounded-full transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oa-primary)/25',
+                    'flex size-8 items-center justify-center rounded-full transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oa-primary)/25',
                     viewMode === m
                       ? 'bg-(--oa-white) text-(--oa-text-strong) shadow-[0_1px_2px_rgba(16,24,40,0.08),0_1px_3px_rgba(16,24,40,0.06)]'
                       : 'text-(--oa-text-muted) hover:text-(--oa-text-body)',
