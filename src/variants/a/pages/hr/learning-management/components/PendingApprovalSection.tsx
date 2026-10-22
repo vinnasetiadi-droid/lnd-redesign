@@ -144,7 +144,7 @@ export function PendingApprovalSection({
     >
       {/* Header */}
       <CardHeader
-        title="Pending Approval"
+        title="Pending approval"
         subtitle={`${visibleCourses.length} course${visibleCourses.length !== 1 ? 's' : ''} awaiting your review · sorted by closest deadline`}
         icon={Clock}
         extra={actionedCourses.length > 0 ? <Chip>{actionedCourses.length} processed</Chip> : undefined}

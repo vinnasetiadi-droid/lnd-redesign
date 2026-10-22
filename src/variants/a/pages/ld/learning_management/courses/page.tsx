@@ -281,7 +281,7 @@ export default function CoursesPage() {
                   aria-pressed={viewMode === m}
                   onClick={() => setViewMode(m)}
                   className={cn(
-                    'flex size-7 items-center justify-center rounded-full transition-colors cursor-pointer',
+                    'flex size-7 items-center justify-center rounded-full transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oa-primary)/25',
                     viewMode === m
                       ? 'bg-(--oa-white) text-(--oa-text-strong) shadow-[0_1px_2px_rgba(16,24,40,0.08),0_1px_3px_rgba(16,24,40,0.06)]'
                       : 'text-(--oa-text-muted) hover:text-(--oa-text-body)',
@@ -325,7 +325,7 @@ export default function CoursesPage() {
                     aria-label="Previous page"
                     onClick={() => setPage(Math.max(1, current - 1))}
                     disabled={current === 1}
-                    className="flex size-8 items-center justify-center rounded-full text-(--oa-text-body) transition-colors hover:bg-(--oa-surface) disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                    className="flex size-8 items-center justify-center rounded-full text-(--oa-text-body) transition-colors hover:bg-(--oa-surface) disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oa-primary)/25"
                   >
                     <ChevronLeft className="size-4" />
                   </button>
@@ -336,7 +336,7 @@ export default function CoursesPage() {
                       onClick={() => setPage(p)}
                       aria-current={p === current ? 'page' : undefined}
                       className={cn(
-                        'flex size-8 items-center justify-center rounded-full text-[12px] transition-colors cursor-pointer',
+                        'flex size-8 items-center justify-center rounded-full text-[12px] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oa-primary)/25',
                         // Tint, not a solid fill: Create course is the only solid button on the page
                         p === current ? 'bg-(--oa-primary-50) text-(--oa-primary-strong)' : 'text-(--oa-text-secondary) hover:bg-(--oa-surface)',
                       )}
@@ -349,7 +349,7 @@ export default function CoursesPage() {
                     aria-label="Next page"
                     onClick={() => setPage(Math.min(totalPages, current + 1))}
                     disabled={current === totalPages}
-                    className="flex size-8 items-center justify-center rounded-full text-(--oa-text-body) transition-colors hover:bg-(--oa-surface) disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                    className="flex size-8 items-center justify-center rounded-full text-(--oa-text-body) transition-colors hover:bg-(--oa-surface) disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oa-primary)/25"
                   >
                     <ChevronRight className="size-4" />
                   </button>

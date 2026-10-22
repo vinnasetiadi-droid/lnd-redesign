@@ -251,7 +251,9 @@ function SortHeader({ label, value, sort, onSort, align = 'left' }: {
 
 export function CourseLibraryTable({ rows, me, onOpen, sort, onSort }: CourseLibraryTableProps) {
   return (
-    <div className="min-w-0">
+    // Phones: the table scrolls sideways inside its card instead of widening the page
+    <div className="min-w-0 max-md:-mx-1 max-md:overflow-x-auto max-md:px-1">
+    <div className="max-md:min-w-[600px]">
       <div className={cn(GRID, 'border-b border-(--oa-border) px-3 pb-2.5 text-[12px] text-(--oa-text-muted)')}>
         <SortHeader label="Course" value="name" sort={sort} onSort={onSort} />
         <span>Status</span>
@@ -265,6 +267,7 @@ export function CourseLibraryTable({ rows, me, onOpen, sort, onSort }: CourseLib
           <CourseRowView key={row.key} row={row} me={me} onOpen={onOpen} index={i} />
         ))}
       </AnimatePresence>
+    </div>
     </div>
   );
 }

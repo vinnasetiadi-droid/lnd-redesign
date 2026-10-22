@@ -446,7 +446,7 @@ export default function LearningProgramAnalyticsPage() {
         {/* Page Header; the Courses / Journeys tab on the right drives every card below */}
         <motion.div variants={itemVariants} className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h1 className="text-[24px] leading-[32px] text-[#181D27]">Learning Program Analytics</h1>
+            <h1 className="text-[24px] leading-[32px] text-[#181D27]">Learning program analytics</h1>
             <p className="text-[13px] text-[#717680] mt-0.5">
               <FadeValue k={programType}>Track {noun.one} performance, enrollment trends, and completion metrics</FadeValue>
             </p>
@@ -478,7 +478,7 @@ export default function LearningProgramAnalyticsPage() {
           {/* Average Score */}
           <div className="rounded-[18px] bg-white p-4">
             <div className="flex items-start justify-between gap-2 mb-2">
-              <p className="text-[13px] leading-[18px] text-[#535862]">Average Score</p>
+              <p className="text-[13px] leading-[18px] text-[#535862]">Average score</p>
               <IconCircle icon={GraduationCap} />
             </div>
             <p className="text-[24px] leading-[32px] text-[#181D27]">
@@ -497,7 +497,7 @@ export default function LearningProgramAnalyticsPage() {
             <div className="flex items-start justify-between gap-3 mb-5">
               <div className="space-y-0.5 min-w-0">
                 <h3 className="text-[#181D27]"><FadeValue k={programType}>{noun.Many} by Mode</FadeValue></h3>
-                <p className="text-[13px] text-[#717680] truncate">Self Learning vs Blended</p>
+                <p className="text-[13px] text-[#717680] truncate">Self-paced vs blended</p>
               </div>
               <IconCircle icon={Layers} />
             </div>
@@ -726,7 +726,7 @@ export default function LearningProgramAnalyticsPage() {
             <div className="flex items-start justify-between mb-6">
               <div className="flex items-center gap-3">
                 <div>
-                  <h3 className="text-[16px] text-[#181D27] leading-[24px]">Source Mapping</h3>
+                  <h3 className="text-[16px] text-[#181D27] leading-[24px]">Source mapping</h3>
                   <p className="text-[13px] text-[#717680] leading-[18px] mt-0.5">Percentage of purchased licenses actively used by trainees</p>
                 </div>
               </div>
@@ -797,7 +797,7 @@ export default function LearningProgramAnalyticsPage() {
           <motion.div variants={itemVariants} className="rounded-[18px] bg-white p-5 overflow-hidden">
             <div className="flex items-start justify-between gap-3 mb-5">
               <div className="space-y-1">
-                <h3 className="text-[16px] text-[#181D27]">Last Updated</h3>
+                <h3 className="text-[16px] text-[#181D27]">Last updated</h3>
                 <p className="text-[13px] text-[#717680]">Recent content modifications</p>
               </div>
               <IconCircle icon={RefreshCw} />
@@ -828,7 +828,7 @@ export default function LearningProgramAnalyticsPage() {
           <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-4">
               <div className="space-y-1">
-                <h3 className="text-[16px] text-[#181D27]">Expired Certifications</h3>
+                <h3 className="text-[16px] text-[#181D27]">Expired certifications</h3>
                 <p className="text-[13px] text-[#717680]">Certifications past their validity date</p>
               </div>
             </div>
@@ -863,7 +863,7 @@ export default function LearningProgramAnalyticsPage() {
           <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-4">
               <div className="space-y-1">
-                <h3 className="text-[16px] text-[#181D27]">Recent Learner Feedback</h3>
+                <h3 className="text-[16px] text-[#181D27]">Recent learner feedback</h3>
                 <p className="text-[13px] text-[#717680]"><FadeValue k={programType}>Recent feedback from {noun.one} participants</FadeValue></p>
               </div>
             </div>

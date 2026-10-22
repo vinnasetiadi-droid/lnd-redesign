@@ -1,0 +1,119 @@
+# Option A kit trial: Home cleanup + Upskill Studio
+
+Branch `kit-trial` (worktree `../lnd-admin-3-pages-kit`, preview on port 32110).
+`main` holds the version before the kit. One commit per prompt, so any step can
+be reverted on its own. Only `src/variants/a/` and this folder changed.
+
+## H1: Home cleanup
+
+- Profile card (photo, name, role, contacts) removed; a greeting row spans both
+  columns: "Good afternoon, Diana" / "Thursday, 22 October 2026 · Presight".
+- Photo headroom layout removed; KPI row and NISA card share the same top edge.
+- Program overview tile trends name the month they compare with ("+20% vs Sep").
+- "Becoming Irreplaceable in the Age of AI" set from 100% to 86%; the insight
+  still derives from the data.
+- "Learning participants" KPI gets a "Unique trainees" hint.
+- Phones: the sidebar starts collapsed below 768px, card headers wrap, Learning
+  mode stats stack, footer links wrap.
+- The KPI sparkline was not restored (it was removed on request before the kit).
+
+Files: `pages/ld/dashboard/page.tsx`, `components/LDDashboardHeader.tsx`,
+`components/LDDashboardProgramOverview.tsx`, `components/LDDashboardLearningAnalytics.tsx`,
+`data/dashboard.mock.ts`, `types/dashboard.types.ts`, `components/ui/kit.tsx`,
+`layouts/DashboardLayout.tsx`, `components/Footer.tsx`.
+
+## H2: Fit Home into two screens
+
+At 1440x900: greeting 54, KPI 131, Program overview 466, Learning mode 467,
+Division 480, NISA 404, Active programs 634, License 516; page 1,793px; the
+columns end 1px apart.
+
+- Program overview chart 252 to 200px.
+- Learning mode: chart 180px, tighter stats and divider spacing.
+- Division completion: one line per division (name, bar, value), 26px rows;
+  benchmark line and axis aligned to the bar column.
+- NISA: title and CTA on one row, description clamped to 2 lines.
+- License: gauge max 200px, tighter rows.
+
+Files: the dashboard components above, `pages/hr/dashboard/components/DashboardDivisionsPerformance.tsx`,
+`DashboardLicenseUtilization.tsx`, `LDDashboardNissaInsight.tsx`.
+
+## U0: Foundations
+
+- `--oa-button-primary` now points at `--oa-primary` (hover `--oa-primary-strong`):
+  primary buttons are solid blue. No black buttons left (Analytics and Upskill
+  pagination use the primary tint; the Pending approval CTA is secondary).
+- One status source: `components/CourseStatus.tsx` (`StatusLabel`, `StatusBadge`)
+  reads `COURSE_STATUS_META`; the `STATUS_STYLES` copies in CourseTable and
+  CourseCard are gone. Badges are a dot plus label on a neutral pill.
+- Items are always "course(s)".
+
+## U1: Data model
+
+- One entry per course with `versions[]`. AI Ethics is v3 Active (M. Torres) +
+  v4 Draft (Diana); Data Privacy is v1 Active + v2 Draft. Drafts appear in the
+  Draft tab as "Version N of <course>". `ADMIN_COURSE_VERSIONS` is derived.
+- Review queue from `COURSES_MOCK`; nobody reviews their own course (Diana's
+  "Business Writing for Managers" reads "Waiting for another admin").
+- Not-live courses have 0 enrolled; enrolled never exceeds capacity.
+- Lifecycle fields per status (sections, submittedOn/startsOn, reviewComments,
+  endedOn/completed). Two new courses keep two per status.
+- All dates relative to today; all counts derived.
+
+## U2: Header and review strip
+
+- Header with one blue "Create course".
+- Review strip: hidden when empty; one course opens it with "Review"; several
+  read "N courses waiting", name the soonest start and offer "Review all"
+  (switches to In review). All three states tested by editing the mock.
+
+## U3: Library toolbar
+
+- "Course library" header with the filtered count.
+- Filter chips with menus (`components/FilterChip.tsx`): Owner, Type, Mode, Sort.
+  A chip off its default reads "Owner: Trainers".
+- List is the default; the choice is kept in localStorage (guarded).
+- Every change resets to page 1; empty states per tab with "Clear filters".
+
+## U4: Table
+
+- `components/CourseLibraryTable.tsx` (the list the page renders; the older
+  `CourseTable.tsx` is kept): 44x30 cover, one-line name, "type · mode · vN" and
+  a "· 1 draft" toggle that opens "Version N (draft)".
+- Enrolled: number (Inactive muted), "22 / 25" for Approved, "Not live" otherwise.
+- Course, Enrolled and Updated headers share the Sort chip's state.
+- Rows 56px, hairlines; the table scrolls inside its card on phones.
+
+## U5: Cards
+
+- `components/CourseCard.tsx` rebuilt: 84px cover with status badge and menu,
+  2-line name, status footer per status (Active, In review, Needs revision,
+  Draft, Approved, Inactive), then owner and last update.
+- `components/CourseCover.tsx`: tinted cover with the category icon when a
+  course has no photo or shares it with another course.
+- Grid 4 / 3 / 2 / 1 columns at 1280 / 1024 / 768 / below.
+
+## U6: Polish and QA
+
+- No new hex values in touched files (diff against `main`).
+- Sentence case on the touched Analytics page headings and Pending approval.
+- Focus rings on pills, chips, menus, rows, toggles, kebabs, view toggle and
+  pagination.
+- 1440, 1024 and 375: no horizontal page scroll; tabs scroll sideways; the
+  header button stays visible.
+- Options B and C: no files changed; both pages render.
+- `npm run build` passes. A TypeScript check was not run: the project has a
+  tsconfig but no TypeScript compiler installed, and installing one was out of
+  scope.
+
+## Open questions for product
+
+1. Can an admin approve a course they created? Built as no.
+2. Approved vs Active: built as Approved = signed off, starts in the future.
+3. Do drafts track section completeness, reviewer comments and seat capacity
+   in the real platform? The card footers rely on them.
+4. AI Ethics' live version belongs to a trainer while Diana drafts v4: can
+   someone other than the owner draft a new version?
+5. Data labels on the Analytics page ("Skill Training", "Blended Learning")
+   are still title case; they are data values, not labels.
+6. Updated times are day-precise ("Today"), so there is no "3h ago".
