@@ -203,7 +203,7 @@ export function Trend({ children, positive = true, className }: { children: Reac
   );
 }
 
-/** Pill button, reference style: 3D blue primary, white secondary, or a blue tint */
+/** Button, reference style: 3D blue primary, white secondary, or a blue tint; square with big, almost round corners */
 export function PillButton({ children, icon: Icon, variant = 'secondary', className, ...rest }: {
   children: ReactNode;
   icon?: LucideIcon;
@@ -215,7 +215,7 @@ export function PillButton({ children, icon: Icon, variant = 'secondary', classN
       type="button"
       className={cn(
         // The 3D look (gradient, white lip, hairline, shadow) lives in option-b.css
-        'inline-flex h-10 items-center justify-center gap-2 rounded-full px-5 text-[13px] font-medium transition-[background,box-shadow] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25 focus-visible:ring-offset-1',
+        'inline-flex h-10 items-center justify-center gap-2 rounded-(--ob-radius-button) px-5 text-[13px] font-medium transition-[background,box-shadow] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25 focus-visible:ring-offset-1',
         variant === 'primary' ? 'ob-btn-primary' : variant === 'tint' ? 'ob-btn-tint' : 'ob-btn-secondary',
         className,
       )}
