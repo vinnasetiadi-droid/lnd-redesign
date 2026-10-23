@@ -112,7 +112,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
             Attendance rate <span className="text-(--ob-text-subtle)">· blended sessions</span>
           </p>
           <div className="mt-1 flex items-center gap-2">
-            <span className="text-[24px] leading-[32px] text-(--ob-text-strong)">
+            <span className="font-semibold text-[24px] leading-[32px] text-(--ob-text-strong)">
               <FadeValue k={`${scope}-rate`}>{attendance.rate}</FadeValue>
               <span className="text-[13px] text-(--ob-text-muted)">%</span>
             </span>
@@ -132,7 +132,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
         <div className="min-w-0">
           <p className="text-[13px] leading-[18px] text-(--ob-text-secondary)">Total learning hours</p>
           <div className="mt-1 flex items-baseline gap-2">
-            <span className="text-[24px] leading-[32px] text-(--ob-text-strong)">
+            <span className="font-semibold text-[24px] leading-[32px] text-(--ob-text-strong)">
               <FadeValue k={`${scope}-hours`}>{totalHours.toLocaleString('en-US')}</FadeValue>
               <span className="text-[13px] text-(--ob-text-muted)">h</span>
             </span>

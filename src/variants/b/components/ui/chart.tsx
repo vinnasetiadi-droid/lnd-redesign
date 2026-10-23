@@ -130,12 +130,12 @@ export const FOLD_BAR_SHARE = 1;
 
 type FoldIds = Pick<ReturnType<typeof useChartIds>, 'barGradient' | 'barSelected' | 'fold' | 'column' | 'stripes'>;
 
-/** <defs> for the pill bars; call inside <defs> */
-export function foldBarDefs(ids: FoldIds) {
+/** <defs> for the pill bars; call inside <defs>. `color` is the selected bar's */
+export function foldBarDefs(ids: FoldIds, color: string = CHART_BLUE) {
   return (
     <linearGradient id={ids.barSelected} x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stopColor={OB_COLORS.primary400} />
-      <stop offset="100%" stopColor={CHART_BLUE} />
+      <stop offset="0%" stopColor={color} />
+      <stop offset="100%" stopColor={color} stopOpacity={0.6} />
     </linearGradient>
   );
 }

@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { AIInsightLine } from '@/variants/b/components/ui/ai-insight-banner';
 import type { DivisionPerformance } from '../types/dashboard.types';
 import { CARD, CardHeader, DeltaChip, MetricTile } from '@/variants/b/components/ui/kit';
-import { CHART_BLUE, HATCHED_TRACK } from '@/variants/b/components/ui/chart';
+import { HATCHED_TRACK } from '@/variants/b/components/ui/chart';
 import { OB_COLORS } from '@/variants/b/theme';
 import { CountUp, GROW } from '@/variants/b/components/ui/count-up';
 
@@ -32,6 +32,13 @@ const AXIS = [0, 25, 50, 75, 100];
  */
 type Group = 'average' | 'top' | 'support';
 
+/** Each tile's colour, also used for the bars it highlights */
+const GROUP_COLOR: Record<Group, string> = {
+  average: OB_COLORS.primary,
+  top: OB_COLORS.modeSelf,
+  support: OB_COLORS.orange,
+};
+
 // ── Animation ────────────────────────────────────────────────
 
 /** Each bar starts a little after the one above it */
@@ -43,11 +50,12 @@ const VALUE_COL = 40;
 /** Insets that line the benchmark line and the axis up with the bar column */
 const BAR_INSET = { left: NAME_COL + 12, right: VALUE_COL + 12 };
 
-function DivisionBar({ name, score, index, highlighted, start }: {
+function DivisionBar({ name, score, index, highlighted, color, start }: {
   name: string;
   score: number;
   index: number;
   highlighted: boolean;
+  color: string;
   start: boolean;
 }) {
   const delay = index * STAGGER;
@@ -67,10 +75,10 @@ function DivisionBar({ name, score, index, highlighted, start }: {
           animate={{ width: start ? `${score}%` : 0 }}
           transition={{ ...GROW, delay }}
         >
-          {/* Blue fill fades out to plain grey when this division is not highlighted */}
+          {/* The tile's colour fades out to plain grey when this division is not highlighted */}
           <span
-            className={cn('absolute inset-0 transition-opacity duration-300', highlighted ? 'opacity-100' : 'opacity-0')}
-            style={{ backgroundImage: `linear-gradient(90deg, ${CHART_BLUE}, ${OB_COLORS.primary200})` }}
+            className={cn('absolute inset-0 transition-[opacity,background-image] duration-300', highlighted ? 'opacity-100' : 'opacity-0')}
+            style={{ backgroundImage: `linear-gradient(90deg, color-mix(in srgb, ${color} 55%, white), ${color})` }}
           />
         </motion.div>
       </div>
@@ -99,10 +107,11 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
   const isHighlighted = (index: number) =>
     group === 'top' ? index < GROUP_SIZE : group === 'support' ? index >= rows.length - GROUP_SIZE : true;
 
-  const tiles: { key: Group; label: string; value: string; note?: string }[] = [
-    { key: 'average', label: 'Org average',   value: `${benchmark}%` },
-    { key: 'top',     label: 'Top divisions', value: `${top.length}`,     note: `${Math.min(...top.map((d) => d.score))}% and up` },
-    { key: 'support', label: 'Needs support', value: `${support.length}`, note: `${Math.max(...support.map((d) => d.score))}% and below` },
+  // `share` fills the tile's bar: the org rate, or the group's share of the divisions
+  const tiles: { key: Group; label: string; value: string; note?: string; share: number }[] = [
+    { key: 'average', label: 'Org average',   value: `${benchmark}%`, share: benchmark },
+    { key: 'top',     label: 'Top divisions', value: `${top.length}`,     note: `${Math.min(...top.map((d) => d.score))}% and up`, share: (top.length / rows.length) * 100 },
+    { key: 'support', label: 'Needs support', value: `${support.length}`, note: `${Math.max(...support.map((d) => d.score))}% and below`, share: (support.length / rows.length) * 100 },
   ];
 
   // Names the divisions on the chart: the leader and the two lowest
@@ -123,8 +132,8 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
       {/* ── Summary tiles: also pick what the chart highlights ── */}
       <div className="grid grid-cols-3 gap-2" role="tablist" aria-label="Chart highlight">
         {tiles.map((tile) => (
-          <MetricTile key={tile.key} selected={tile.key === group} onClick={() => setGroup(tile.key)} label={tile.label}>
-            <span className="text-[24px] leading-[32px] tabular-nums text-(--ob-text-strong)">{tile.value}</span>
+          <MetricTile key={tile.key} selected={tile.key === group} onClick={() => setGroup(tile.key)} label={tile.label} color={GROUP_COLOR[tile.key]} share={tile.share}>
+            <span className="font-semibold text-[24px] leading-[32px] tabular-nums text-(--ob-text-strong)">{tile.value}</span>
             {tile.key === 'average' ? (
               benchmarkTrend !== undefined && benchmarkTrend !== 0 && (
                 <DeltaChip positive={benchmarkTrend > 0}>{Math.abs(benchmarkTrend)} pts</DeltaChip>
@@ -155,6 +164,7 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
                 score={d.score}
                 index={i}
                 highlighted={isHighlighted(i)}
+                color={GROUP_COLOR[group]}
                 start={inView}
               />
             ))}

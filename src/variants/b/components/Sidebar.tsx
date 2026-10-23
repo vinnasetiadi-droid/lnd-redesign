@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router";
 import { AnimatePresence, motion, type Variants } from "motion/react";
 import { cn } from "@/lib/utils";
 import { EASE_OUT } from "@/variants/b/motion";
-import { LogOut, Minus, PanelLeftClose, PanelLeftOpen, Plus } from "@/variants/b/icons";
+import { ChevronDown, LogOut, PanelLeftClose, PanelLeftOpen } from "@/variants/b/icons";
 import { IMAGES } from "@/assets/images";
 import {
   type SidebarRole,
@@ -126,22 +126,13 @@ function SidebarItem({
             {badge}
           </span>
         )}
-        {/* Minus while open, plus while closed; they swap with a quarter turn */}
+        {/* Chevron: points up while the submenu is open, turning smoothly */}
         {!collapsed && hasSubmenu && (
-          <span className="relative flex size-[14px] shrink-0 items-center justify-center text-(--ob-text-muted)">
-            <AnimatePresence initial={false} mode="popLayout">
-              <motion.span
-                key={isOpen ? "open" : "closed"}
-                className="flex"
-                initial={{ rotate: -90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: 90, opacity: 0 }}
-                transition={{ duration: 0.2, ease: EASE_OUT }}
-              >
-                {isOpen ? <Minus size={14} strokeWidth={1.75} /> : <Plus size={14} strokeWidth={1.75} />}
-              </motion.span>
-            </AnimatePresence>
-          </span>
+          <ChevronDown
+            size={14}
+            strokeWidth={1.75}
+            className={cn("shrink-0 text-(--ob-text-muted) transition-transform duration-300 ease-out", isOpen && "rotate-180")}
+          />
         )}
       </button>
 
@@ -325,7 +316,8 @@ export function Sidebar({ className, role = "ld_team", isCollapsed = false, onTo
       {/* Logo + collapse */}
       <div
         className={cn(
-          "flex items-center h-16 shrink-0",
+          // Same height as the top bar, so their hairlines meet in one line
+          "flex items-center h-16 shrink-0 border-b border-(--ob-border)",
           isCollapsed ? "justify-center px-3" : "justify-between pl-5 pr-3",
         )}
       >
@@ -341,7 +333,7 @@ export function Sidebar({ className, role = "ld_team", isCollapsed = false, onTo
       </div>
 
       {/* Main menu, groups split by dividers */}
-      <nav className={cn("flex-1 overflow-y-auto no-scrollbar overflow-x-hidden pt-1", isCollapsed ? "px-3" : "px-3")}>
+      <nav className={cn("flex-1 overflow-y-auto no-scrollbar overflow-x-hidden pt-3", isCollapsed ? "px-3" : "px-3")}>
         {groups.map((group, i) => (
           <div key={i}>
             {i > 0 && <Divider collapsed={isCollapsed} />}

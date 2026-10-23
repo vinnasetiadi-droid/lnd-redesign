@@ -31,10 +31,10 @@ type Metric = 'participants' | 'launched' | 'completed';
  * programs (tens) are on different scales, so the chart shows one at a time.
  * "New participants" keeps this apart from the total in the KPI row above.
  */
-const METRICS: { key: Metric; label: string; unit: string }[] = [
-  { key: 'participants', label: 'New participants',   unit: 'participants' },
-  { key: 'launched',     label: 'Programs launched',  unit: 'launched' },
-  { key: 'completed',    label: 'Programs completed', unit: 'completed' },
+const METRICS: { key: Metric; label: string; unit: string; color: string }[] = [
+  { key: 'participants', label: 'New participants',   unit: 'participants', color: OB_COLORS.primary },
+  { key: 'launched',     label: 'Programs launched',  unit: 'launched',     color: OB_COLORS.modeSelf },
+  { key: 'completed',    label: 'Programs completed', unit: 'completed',    color: OB_COLORS.orange },
 ];
 
 /* ── helpers ─────────────────────────────────────────────────── */
@@ -119,8 +119,8 @@ export function LDDashboardProgramOverview({
         {totals.map((m) => {
           const positive = m.trend >= 0;
           return (
-            <MetricTile key={m.key} selected={m.key === metric} onClick={() => setMetric(m.key)} label={m.label}>
-              <span className="text-[24px] leading-[32px] tabular-nums text-(--ob-text-strong)"><FadeValue k={m.total}>{m.total}</FadeValue></span>
+            <MetricTile key={m.key} selected={m.key === metric} onClick={() => setMetric(m.key)} label={m.label} color={m.color}>
+              <span className="font-semibold text-[24px] leading-[32px] tabular-nums text-(--ob-text-strong)"><FadeValue k={m.total}>{m.total}</FadeValue></span>
               {m.trend !== 0 && (
                 // Totals are year to date; the change compares the last two months
                 <span className="flex items-center gap-1.5">
@@ -137,7 +137,7 @@ export function LDDashboardProgramOverview({
       <div className="w-full min-w-0" style={{ height: '200px' }}>
         <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={200}>
           <BarChart data={series} margin={{ top: 28, right: 8, left: -16, bottom: 0 }} barCategoryGap={0}>
-            <defs>{foldBarDefs(ids)}</defs>
+            <defs>{foldBarDefs(ids, metricInfo.color)}</defs>
             <XAxis
               dataKey="month"
               axisLine={false}
@@ -149,7 +149,7 @@ export function LDDashboardProgramOverview({
                   dy={14}
                   textAnchor="middle"
                   fontSize={AXIS_TICK.fontSize}
-                  fill={props.index === selected ? OB_COLORS.textStrong : AXIS_TICK.fill}
+                  fill={props.index === selected ? metricInfo.color : AXIS_TICK.fill}
                 >
                   {props.payload.value}
                 </text>

@@ -33,8 +33,8 @@ export function CardHeader({ title, subtitle, icon, extra, className }: CardHead
     // Wraps on narrow screens so tabs in `extra` drop below the title instead of overflowing
     <div className={cn('flex flex-wrap items-start justify-between gap-3', className)}>
       <div className="min-w-0">
-        <h3 className="text-[16px] leading-[24px] text-(--ob-text-strong)">{title}</h3>
-        {subtitle && <p className="mt-0.5 text-[13px] leading-[18px] text-(--ob-text-muted)">{subtitle}</p>}
+        <h3 className="text-[15px] leading-[22px] text-(--ob-text-strong)">{title}</h3>
+        {subtitle && <p className="mt-0.5 text-[12px] leading-[16px] text-(--ob-text-muted)">{subtitle}</p>}
       </div>
       {(extra || icon) && (
         <div className="flex shrink-0 items-center gap-2">
@@ -131,15 +131,19 @@ export function DeltaChip({ children, positive = true, className }: { children: 
 
 /**
  * Summary tile that also picks what a chart shows, drawn like the
- * reference's segments: a thin line down the left, a bar along the bottom
- * and a soft wash of blue when selected.
+ * reference's segments: a thin line down the left and a bar along the
+ * bottom in the tile's colour, and a soft wash of it when selected.
  */
-export function MetricTile({ selected, onClick, label, children, className }: {
+export function MetricTile({ selected, onClick, label, children, color = OB_COLORS.primary, share, className }: {
   selected: boolean;
   onClick: () => void;
   label: ReactNode;
   /** The value row */
   children: ReactNode;
+  /** The tile's own colour for its line, bar and wash */
+  color?: string;
+  /** 0-100: fills that much of the bottom bar on a grey track, like the reference's segments; full when left out */
+  share?: number;
   className?: string;
 }) {
   return (
@@ -153,13 +157,22 @@ export function MetricTile({ selected, onClick, label, children, className }: {
       <span
         aria-hidden
         className={cn('pointer-events-none absolute inset-0 transition-opacity duration-300', selected ? 'opacity-100' : 'opacity-0 group-hover:opacity-40')}
-        style={{ background: `linear-gradient(to top, color-mix(in srgb, ${OB_COLORS.primary} 10%, transparent), transparent 80%)` }}
+        style={{ background: `linear-gradient(to top, color-mix(in srgb, ${color} 12%, transparent), transparent 80%)` }}
       />
-      <div className={cn('relative border-l-2 px-3.5 pb-3 pt-2.5 transition-colors duration-300', selected ? 'border-(--ob-primary)' : 'border-(--ob-border-strong)')}>
+      {/* Unselected tiles keep their colour, a little quieter */}
+      <div
+        className="relative border-l-2 px-3.5 pb-3 pt-2.5 transition-colors duration-300"
+        style={{ borderColor: selected ? color : `color-mix(in srgb, ${color} 45%, transparent)` }}
+      >
         <p className="truncate text-[13px] leading-[18px] text-(--ob-text-secondary)">{label}</p>
         <div className="mt-1 flex flex-wrap items-center gap-2">{children}</div>
       </div>
-      <span className={cn('relative block h-1 rounded-full transition-colors duration-300', selected ? 'bg-(--ob-primary)' : 'bg-(--ob-border-strong)')} />
+      <span className="relative block h-1 overflow-hidden rounded-full bg-(--ob-surface)">
+        <span
+          className="block h-full rounded-full transition-[width,background-color] duration-500"
+          style={{ width: `${Math.max(0, Math.min(100, share ?? 100))}%`, background: selected ? color : `color-mix(in srgb, ${color} 45%, transparent)` }}
+        />
+      </span>
     </button>
   );
 }

@@ -18,7 +18,7 @@ function InsightRow({ item }: { item: NisaInsight }) {
     <div className="group py-3 first:pt-0 last:pb-0">
       {/* Title and its action on one row */}
       <div className="flex items-baseline justify-between gap-3">
-        <p className="min-w-0 truncate text-[15px] leading-[22px] text-white">{item.title}</p>
+        <p className="min-w-0 truncate text-[14px] leading-[20px] font-medium text-white">{item.title}</p>
         <button
           type="button"
           className="inline-flex shrink-0 items-center gap-1 text-[13px] text-white transition-colors hover:text-white/75 cursor-pointer"

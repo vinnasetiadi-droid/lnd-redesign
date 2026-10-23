@@ -89,8 +89,10 @@ function SegmentGauge({ pct, start }: { pct: number; start: boolean }) {
 }
 
 /**
- * Home's reference-style gauge: thin ticks along a 240° arc, blue up to the
- * share in use, grey for the rest; they light up one after another.
+ * Home's reference-style gauge: thin ticks along a 240° arc, green up to the
+ * share in use (pale at the start, deepening towards the rate) and grey for
+ * the rest, fading out towards the end, inside a faint outer ring. The ticks
+ * light up one after another.
  */
 const TICKS = 44;
 const TICK_SWEEP = 240;
@@ -101,6 +103,13 @@ function TickGauge({ pct, start }: { pct: number; start: boolean }) {
   const from = 90 + (360 - TICK_SWEEP) / 2;
   return (
     <svg viewBox={`0 0 ${size} ${size * 0.86}`} className="w-full max-w-[200px]" aria-hidden>
+      {/* Faint outer ring along the same arc */}
+      <path
+        d={`M ${c + 97 * Math.cos((from * Math.PI) / 180)} ${c + 97 * Math.sin((from * Math.PI) / 180)} A 97 97 0 1 1 ${c + 97 * Math.cos(((from + TICK_SWEEP) * Math.PI) / 180)} ${c + 97 * Math.sin(((from + TICK_SWEEP) * Math.PI) / 180)}`}
+        fill="none"
+        stroke={OB_COLORS.border}
+        strokeWidth={1}
+      />
       {Array.from({ length: TICKS }, (_, i) => {
         const angle = ((from + (i / (TICKS - 1)) * TICK_SWEEP) * Math.PI) / 180;
         const on = i < filled;
@@ -115,8 +124,10 @@ function TickGauge({ pct, start }: { pct: number; start: boolean }) {
             y2={c + outer * Math.sin(angle)}
             strokeWidth={4}
             strokeLinecap="round"
+            // Filled ticks deepen towards the rate; the grey ones fade towards the end
+            strokeOpacity={on ? 0.3 + 0.7 * (i / Math.max(1, filled - 1)) : 1 - 0.6 * ((i - filled) / Math.max(1, TICKS - filled - 1))}
             initial={{ stroke: OB_COLORS.borderStrong }}
-            animate={{ stroke: start && on ? CHART_BLUE : OB_COLORS.borderStrong }}
+            animate={{ stroke: start && on ? OB_COLORS.modeSelf : OB_COLORS.borderStrong }}
             transition={{ duration: 0.25, ease: 'easeOut', delay: start && on ? 0.15 + i * 0.03 : 0 }}
           />
         );
@@ -172,7 +183,7 @@ export function DashboardLicenseUtilization({ licenses = LICENSES, variant = 'de
       <div ref={ref} className="flex flex-col items-center">
         <div className="relative flex w-full justify-center">
           {reference ? <TickGauge pct={pct} start={inView} /> : <SegmentGauge pct={pct} start={inView} />}
-          <p className={cn('absolute text-(--ob-text-strong)', reference ? 'top-[38%] text-[30px] leading-[36px]' : 'bottom-0 text-[24px] leading-[28px]')}>
+          <p className={cn('absolute text-(--ob-text-strong)', reference ? 'top-[38%] text-[30px] leading-[36px] font-semibold' : 'bottom-0 text-[24px] leading-[28px]')}>
             <CountUp value={pct} start={inView} />
             <span className="text-[13px] text-(--ob-text-muted)">%</span>
           </p>

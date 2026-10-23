@@ -1,12 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
 /*
  * Option B typography. Scoped to <html class="option-b">, which AppRoutes sets
  * while Option B is open, so options A and C keep their own setup.
  *
  * - Font: Inter
- * - Weights: mostly Regular 400. Medium 500 only for headings (h1-h4, which
- *   also hold the big KPI numbers) and the `font-medium` class. Nothing bolder.
+ * - Weights: mostly Regular 400. Semibold 600 for page and card titles and
+ *   big numbers (h1-h3 and `font-semibold`), Medium 500 for h4-h6 and
+ *   `font-medium`. Nothing bolder.
  * - Letter spacing: -2% on every element
  *
  * Rules are unlayered and start with `html.option-b`, so they win over Tailwind
@@ -118,8 +119,14 @@ html.option-b :where(button, b, strong, th, label) {
   font-weight: 400;
 }
 
-html.option-b :where(.font-medium, h1, h2, h3, h4, h5, h6):not(.font-normal, .font-light) {
+/* After the reference: page and card titles and big numbers in semibold,
+   smaller headings in medium, everything else regular */
+html.option-b :where(.font-medium, h4, h5, h6):not(.font-normal, .font-light) {
   font-weight: 500;
+}
+
+html.option-b :where(.font-semibold, h1, h2, h3):not(.font-normal, .font-light, .font-medium) {
+  font-weight: 600;
 }
 
 /* ── Motion ─────────────────────────────────────────────────── */
