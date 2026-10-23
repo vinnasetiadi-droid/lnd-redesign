@@ -51,9 +51,9 @@ export default function LDDashboardPage() {
   } = useDashboard();
 
   return (
-    <DashboardLayout plainBackground>
-      {/* Pulled up by the photo headroom: Diana's head rises into the empty left of the top bar row */}
-      <div className="w-full min-w-0 -mt-7">
+    <DashboardLayout>
+      {/* The photo's head rises into the space above the profile card */}
+      <div className="w-full min-w-0 -mt-2">
         <motion.div
           className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-3"
           variants={revealContainer}

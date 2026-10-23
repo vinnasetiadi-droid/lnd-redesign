@@ -13,9 +13,10 @@ import {
 import { useAuthStore } from "@/store/useAuthStore";
 
 /**
- * Option B sidebar, shaped like ref 1 (Finora): transparent over the page
- * background, menu split into groups by thin dividers, a bottom group pinned
- * to the bottom, regular-weight labels and a white pill for the active page.
+ * Option B sidebar, after the reference dashboard: a white panel from the top
+ * of the window to the bottom with a hairline on its right, menu groups split
+ * by thin dividers, a bottom group pinned to the bottom, and the active page
+ * in a light blue tint with blue text and a short blue bar on the left edge.
  */
 
 /** Menu groups, top to bottom, by item key. Items not listed join the last group. */
@@ -26,8 +27,8 @@ const MENU_GROUPS: string[][] = [
 /** Pinned to the bottom of the sidebar */
 const BOTTOM_KEYS = new Set(["settings"]);
 
-/** Active page: a light blue tint, no white frame */
-const ACTIVE_PILL = "bg-[#1A73E8]/[0.07]";
+/** Active page: a light blue tint behind blue text */
+const ACTIVE_PILL = "bg-(--ob-primary-50) text-(--ob-primary)";
 
 // ============================================================
 // SUB-COMPONENTS
@@ -96,21 +97,23 @@ function SidebarItem({
   const pill = active || (collapsed && childActive);
 
   return (
-    <div className="w-full">
+    <div className="relative w-full">
+      {/* Blue bar on the sidebar's left edge, level with the active page */}
+      {pill && <span aria-hidden className="absolute -left-3 top-[18px] h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-(--ob-primary)" />}
       <button
         type="button"
         title={collapsed ? label : undefined}
         className={cn(
-          "group flex items-center h-8 gap-2 rounded-[8px] cursor-pointer select-none transition-colors text-left",
-          collapsed ? "justify-center w-8 mx-auto" : "w-full pl-2.5 pr-2",
-          pill ? cn(ACTIVE_PILL, "text-[#181D27]") : danger ? "text-[#535862] hover:bg-[#1A73E8]/[0.04] hover:text-[#D92D20]" : "text-[#535862] hover:bg-[#1A73E8]/[0.04] hover:text-[#181D27]",
+          "group flex items-center h-9 gap-2.5 rounded-[10px] cursor-pointer select-none transition-colors text-left",
+          collapsed ? "justify-center w-9 mx-auto" : "w-full pl-2.5 pr-2",
+          pill ? ACTIVE_PILL : danger ? "text-(--ob-text-body) hover:bg-(--ob-surface-subtle) hover:text-(--ob-danger)" : "text-(--ob-text-body) hover:bg-(--ob-surface-subtle) hover:text-(--ob-text-strong)",
         )}
         onClick={handleClick}
       >
         <span
           className={cn(
             "shrink-0 flex items-center justify-center transition-[color,translate] duration-200 group-hover:translate-x-[2px]",
-            active || childActive ? "text-[#181D27]" : danger ? "text-[#717680] group-hover:text-[#D92D20]" : "text-[#717680] group-hover:text-[#414651]",
+            pill ? "text-(--ob-primary)" : childActive ? "text-(--ob-text-strong)" : danger ? "text-(--ob-text-muted) group-hover:text-(--ob-danger)" : "text-(--ob-text-muted) group-hover:text-(--ob-text-body)",
           )}
         >
           {icon}
@@ -119,7 +122,7 @@ function SidebarItem({
           <span className="flex-1 text-[13px] leading-[20px] truncate">{label}</span>
         )}
         {!collapsed && badge !== undefined && (
-          <span className="bg-[#1A73E8] text-white text-[11px] rounded-full h-[18px] min-w-[18px] px-1.5 flex items-center justify-center">
+          <span className="flex h-5 min-w-6 items-center justify-center rounded-full bg-(--ob-success-surface) px-1.5 text-[11px] text-(--ob-success-strong)">
             {badge}
           </span>
         )}
@@ -190,25 +193,25 @@ const SUBMENU_ITEM: Variants = {
   show: { opacity: 1, x: 0, transition: { duration: 0.25, ease: EASE_OUT } },
 };
 
-// The tree line sits under the parent icon's centre (10px padding + half of 16px)
-const TREE_X = "left-[17px]";
+// The tree line sits under the parent icon's centre (10px padding + half of 18px)
+const TREE_X = "left-[18px]";
 const TREE_LINE = "pointer-events-none absolute border-(--ob-border-control)";
 
 function SubmenuItem({ label, active, first, last, onClick }: SubmenuItemProps) {
   return (
-    <motion.div variants={SUBMENU_ITEM} className="pointer-events-auto relative pl-[30px]">
+    <motion.div variants={SUBMENU_ITEM} className="pointer-events-auto relative pl-[32px]">
       {/* Straight line on to the next page */}
       {!last && <span aria-hidden className={cn(TREE_LINE, TREE_X, "bottom-0 border-l", first ? "-top-[6px]" : "-top-[2px]")} />}
       {/* Rounded branch into this page */}
       <span
         aria-hidden
-        className={cn(TREE_LINE, TREE_X, "w-[9px] rounded-bl-[8px] border-b border-l", first ? "-top-[6px] h-[22px]" : "-top-[2px] h-[18px]")}
+        className={cn(TREE_LINE, TREE_X, "w-[10px] rounded-bl-[8px] border-b border-l", first ? "-top-[6px] h-[22px]" : "-top-[2px] h-[18px]")}
       />
       <button
         type="button"
         className={cn(
           "flex h-8 w-full items-center rounded-[8px] px-2.5 text-left text-[13px] leading-[20px] transition-colors cursor-pointer",
-          active ? cn(ACTIVE_PILL, "text-(--ob-text-strong)") : "text-(--ob-text-secondary) hover:bg-[#1A73E8]/[0.04] hover:text-(--ob-text-strong)",
+          active ? ACTIVE_PILL : "text-(--ob-text-secondary) hover:bg-(--ob-surface-subtle) hover:text-(--ob-text-strong)",
         )}
         onClick={onClick}
       >
@@ -219,7 +222,7 @@ function SubmenuItem({ label, active, first, last, onClick }: SubmenuItemProps) 
 }
 
 function Divider({ collapsed }: { collapsed?: boolean }) {
-  return <div className={cn("h-px bg-[#EDEEF1] my-3", collapsed ? "mx-3" : "mx-1")} />;
+  return <div className={cn("h-px bg-(--ob-border) my-3", collapsed ? "mx-3" : "mx-1")} />;
 }
 
 // ============================================================
@@ -281,7 +284,7 @@ export function Sidebar({ className, role = "ld_team", isCollapsed = false, onTo
     return (
       <SidebarItem
         key={item.key}
-        icon={<Icon size={16} strokeWidth={1.5} />}
+        icon={<Icon size={18} strokeWidth={1.5} />}
         label={item.label}
         active={active}
         childActive={!!subPath}
@@ -314,15 +317,15 @@ export function Sidebar({ className, role = "ld_team", isCollapsed = false, onTo
   return (
     <aside
       className={cn(
-        "h-full flex flex-col font-sans transition-[width] duration-300 ease-in-out",
-        isCollapsed ? "w-[56px]" : "w-[clamp(184px,14vw,208px)]",
+        "h-full flex flex-col border-r border-(--ob-border) bg-(--ob-white) font-sans transition-[width] duration-300 ease-in-out",
+        isCollapsed ? "w-[64px]" : "w-[clamp(200px,15vw,224px)]",
         className,
       )}
     >
       {/* Logo + collapse */}
       <div
         className={cn(
-          "flex items-center h-[56px] shrink-0",
+          "flex items-center h-16 shrink-0",
           isCollapsed ? "justify-center px-3" : "justify-between pl-5 pr-3",
         )}
       >
@@ -331,7 +334,7 @@ export function Sidebar({ className, role = "ld_team", isCollapsed = false, onTo
           type="button"
           onClick={onToggle}
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className="flex items-center justify-center size-7 rounded-[8px] text-[#717680] hover:text-[#181D27] transition-colors"
+          className="flex items-center justify-center size-8 rounded-[8px] text-(--ob-text-muted) hover:bg-(--ob-surface-subtle) hover:text-(--ob-text-strong) transition-colors"
         >
           {isCollapsed ? <PanelLeftOpen size={16} strokeWidth={1.5} /> : <PanelLeftClose size={16} strokeWidth={1.5} />}
         </button>
@@ -351,7 +354,7 @@ export function Sidebar({ className, role = "ld_team", isCollapsed = false, onTo
       <div className={cn("shrink-0 flex flex-col gap-1 pt-3 pb-4", isCollapsed ? "px-3" : "px-3")}>
         {bottomItems.map(renderItem)}
         <SidebarItem
-          icon={<LogOut size={16} strokeWidth={1.5} />}
+          icon={<LogOut size={18} strokeWidth={1.5} />}
           label="Logout"
           collapsed={isCollapsed}
           danger
