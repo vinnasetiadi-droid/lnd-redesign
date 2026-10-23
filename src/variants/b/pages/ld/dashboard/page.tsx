@@ -3,7 +3,7 @@ import { revealContainer, revealItem } from '@/variants/b/motion';
 import { DashboardLayout } from '@/variants/b/layouts/DashboardLayout';
 import { useDashboard } from './hooks/useDashboard';
 import { LDDashboardHeader } from './components/LDDashboardHeader';
-import { ProfileHeroCard, PROFILE_HEADROOM } from '@/variants/b/concepts/ProfileHeroCard';
+import { LDDashboardProfile } from './components/LDDashboardProfile';
 import { LDDashboardProgramOverview } from './components/LDDashboardProgramOverview';
 import { LDDashboardActivePrograms }  from './components/LDDashboardActivePrograms';
 import { LDDashboardNissaInsight }     from './components/LDDashboardNissaInsight';
@@ -22,11 +22,12 @@ import { DashboardLicenseUtilization }   from '@/variants/b/pages/hr/dashboard/c
  * frames, its sections split by hairlines (only NISA keeps a card), KPI and
  * summary columns split by vertical hairlines, green/red change chips and
  * rounded bars. The cards and their content are the same as Option A's Home.
- * The profile with the cut-out photo sits top left.
+ * The profile sits top left: a small square photo as tall as its details.
  *
- * Not rendered here any more (files kept): LDDashboardGreeting (the profile
- * card is back in its place), LDDashboardCoursesAttention (folded
- * into Active programs' "Needs attention" tab), LDDashboardTraineesGrowth (its
+ * Not rendered here any more (files kept): concepts/ProfileHeroCard (the
+ * "head pops out" card, replaced by LDDashboardProfile), LDDashboardGreeting,
+ * LDDashboardCoursesAttention (folded into Active programs' "Needs
+ * attention" tab), LDDashboardTraineesGrowth (its
  * figures now come from the core data) and LDDashboardRecentCourses
  * (may move to Upskill Studio).
  *
@@ -56,7 +57,7 @@ export default function LDDashboardPage() {
           (reference style); only NISA keeps a card. Pulled out to the page
           edges so the sections' own padding lines up with the top bar. */}
       <motion.div
-        className="ob-flat relative -mx-6 -mt-6 min-w-0 pt-6"
+        className="ob-flat relative -mx-6 -mt-6 min-w-0"
         variants={revealContainer}
         initial="hidden"
         animate="visible"
@@ -64,8 +65,8 @@ export default function LDDashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
           {/* ── Left column ── */}
           <div className="min-w-0">
-            <motion.div variants={revealItem}>
-              <ProfileHeroCard person={ldProfile} className="px-8" />
+            <motion.div variants={revealItem} className={SECTION}>
+              <LDDashboardProfile person={ldProfile} />
             </motion.div>
 
             <Rule />
@@ -105,8 +106,8 @@ export default function LDDashboardPage() {
 
           {/* ── Right column, split from the left by a hairline ── */}
           <div className="min-w-0 border-t border-(--ob-border) lg:border-l lg:border-t-0">
-            {/* Level with the profile, below the photo's headroom */}
-            <motion.div variants={revealItem} className="px-6 pb-6" style={{ paddingTop: PROFILE_HEADROOM }}>
+            {/* Level with the profile: the same 40px top as the sections */}
+            <motion.div variants={revealItem} className="px-6 pb-6 pt-10">
               <LDDashboardNissaInsight insights={nisaInsights} />
             </motion.div>
 

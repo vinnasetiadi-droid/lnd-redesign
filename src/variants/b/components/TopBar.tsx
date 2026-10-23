@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { Bell, Mail, Search } from "@/variants/b/icons";
 import { useAuthStore } from "@/store/useAuthStore";
-import profileCutout from "@/variants/b/assets/profile-cutout.png";
+import profilePhoto from "@/variants/b/assets/profile-photo.jpg";
 import { getSidebarMenu, type SidebarRole } from "./config-sidebar";
 
 /** Mock unread state for the bell's red dot */
@@ -149,7 +149,7 @@ export function TopBar() {
           title={name}
           className="size-10 overflow-hidden rounded-full bg-(--ob-primary-50) ring-1 ring-(--ob-border) transition-shadow hover:ring-2 hover:ring-(--ob-primary)/30"
         >
-          <img src={profileCutout} alt="" className="size-full object-cover object-top" />
+          <img src={profilePhoto} alt="" className="size-full object-cover" />
         </button>
       </div>
     </header>
