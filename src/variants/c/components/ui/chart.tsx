@@ -4,10 +4,10 @@ import { cn } from '@/lib/utils';
 import { OC_COLORS } from '@/variants/c/theme';
 
 /**
- * Option C chart styling, after the user's references (Daily consumption,
- * Monthly recurring revenue): slim bars in a pale blue with one solid blue
- * highlight and a black value pill above it, thin lines over a soft blue area
- * fill, faint solid horizontal grid lines, white tooltip cards, and plain
+ * Option C chart styling, after the user's references (AI Search Visibility,
+ * Monthly recurring revenue): stepped columns that touch, each a 2px blue top
+ * line over a fill fading downwards, the picked one stronger with a black value
+ * pill above it; stepped areas for lines; faint solid horizontal grid lines, white tooltip cards, and plain
  * progress bars with 3px corners.
  *
  * Recharts only renders plain SVG children (like <defs>) inside a chart, so the
@@ -123,42 +123,48 @@ export function GradientProgress({ value, className, from = CHART_BLUE, to = OC_
   );
 }
 
-/** The slim bars sit in the middle of their column, so labels centre on the whole column */
+/** The columns fill their whole category, so labels centre on the whole column */
 export const FOLD_BAR_SHARE = 1;
 
 type FoldIds = Pick<ReturnType<typeof useChartIds>, 'barGradient' | 'barSelected' | 'fold' | 'column' | 'stripes'>;
 
-/** <defs> for the slim bars; call inside <defs> */
+/** <defs> for the stepped columns: a blue fill that fades out downwards, stronger on the picked month */
 export function foldBarDefs(ids: FoldIds) {
   return (
-    <linearGradient id={ids.barSelected} x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stopColor={CHART_BLUE} />
-      <stop offset="100%" stopColor={OC_COLORS.primary400} />
-    </linearGradient>
+    <>
+      <linearGradient id={ids.barGradient} x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor={CHART_BLUE} stopOpacity={0.3} />
+        <stop offset="100%" stopColor={CHART_BLUE} stopOpacity={0} />
+      </linearGradient>
+      <linearGradient id={ids.barSelected} x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor={CHART_BLUE} stopOpacity={0.6} />
+        <stop offset="100%" stopColor={CHART_BLUE} stopOpacity={0.04} />
+      </linearGradient>
+    </>
   );
 }
 
 /**
- * Bar `shape` for a chart with barCategoryGap={0}, after the Daily consumption
- * reference: a slim bar in the middle of each column with 4px top corners and
- * a square base, pale blue, and solid blue for the selected one. The whole
- * column is clickable.
+ * Bar `shape` for a chart with barCategoryGap={0}, after the AI Search
+ * Visibility reference: columns that touch, each a flat 2px blue line on top
+ * with a fill fading out downwards. The right side slopes out a little over
+ * the next column (not on the last one, so it stays inside the chart). The
+ * picked month has the stronger fill. The whole column is clickable.
  */
-export function foldBar(ids: FoldIds, isSelected: (index: number) => boolean) {
-  return function SlimBar(props: { x?: number; y?: number; width?: number; height?: number; index?: number }) {
+export function foldBar(ids: FoldIds, isSelected: (index: number) => boolean, count = 0) {
+  return function StepColumn(props: { x?: number; y?: number; width?: number; height?: number; index?: number }) {
     const { x = 0, y = 0, width = 0, height = 0, index = -1 } = props;
     if (width <= 0) return <g />;
     const on = isSelected(index);
-    const barW = Math.min(22, Math.max(6, width * 0.42));
-    const h = Math.max(height, 4);
-    const left = x + (width - barW) / 2;
-    const top = y + height - h;
-    const r = Math.min(4, barW / 2, h);
-    const d = `M${left},${top + h} V${top + r} Q${left},${top} ${left + r},${top} H${left + barW - r} Q${left + barW},${top} ${left + barW},${top + r} V${top + h} Z`;
+    const bottom = y + height;
+    const top = Math.min(y, bottom - 1);
+    const slant = index === count - 1 ? 0 : width * 0.22;
+    const d = `M${x},${bottom} V${top} H${x + width} L${x + width + slant},${bottom} Z`;
     return (
       <g style={{ cursor: 'pointer' }}>
-        <rect x={x} y={top} width={width} height={h} fill="transparent" />
-        <path d={d} fill={on ? `url(#${ids.barSelected})` : OC_COLORS.primary100} style={{ transition: 'fill 300ms ease' }} />
+        <rect x={x} y={top} width={width} height={bottom - top} fill="transparent" />
+        <path d={d} fill={`url(#${on ? ids.barSelected : ids.barGradient})`} />
+        <path d={`M${x + 1},${top} H${x + width - 1}`} stroke={on ? OC_COLORS.primaryStrong : CHART_BLUE} strokeWidth={2} strokeLinecap="round" />
       </g>
     );
   };
@@ -173,7 +179,7 @@ export function pillLabel(
   selected: number,
   count: number,
   format: (value: number | string) => string,
-  /** Share of the column to centre on (the slim bars sit in the middle, so 1) */
+  /** Share of the column to centre on (the columns fill it, so 1) */
   barShare = 1,
 ) {
   return function PillLabel(props: { x?: number | string; y?: number | string; width?: number | string; value?: number | string; index?: number }) {

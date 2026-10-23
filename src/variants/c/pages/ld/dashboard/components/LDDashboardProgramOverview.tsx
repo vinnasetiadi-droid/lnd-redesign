@@ -90,7 +90,7 @@ export function LDDashboardProgramOverview({
   const selected = picked ?? series.length - 1;
 
   const ids = useChartIds('program-overview');
-  const BarShape = useMemo(() => foldBar(ids, (i) => i === selected), [ids, selected]);
+  const BarShape = useMemo(() => foldBar(ids, (i) => i === selected, series.length), [ids, selected, series.length]);
   const PillLabel = useMemo(
     () => pillLabel(selected, series.length, (v) => `${v} ${metricInfo.unit}`, FOLD_BAR_SHARE),
     [selected, metricInfo.unit, series.length],
