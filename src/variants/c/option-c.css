@@ -95,9 +95,10 @@ html.option-c {
   --oc-button-primary: var(--oc-text-ink); /* Primary buttons are black, at most one per view */
   --oc-button-primary-hover: #1B2C47;
   --oc-white: #FFFFFF;
-  /* NISA priority card only: black into blue, a soft glow on the right */
-  --oc-ai-gradient: radial-gradient(55% 140% at 100% 50%, color-mix(in srgb, var(--oc-primary-300) 55%, transparent) 0%, transparent 70%), linear-gradient(100deg, var(--oc-text-ink) 0%, #0F1D36 38%, #163A68 72%, var(--oc-primary) 100%);
-  --oc-ai-gradient-tall: radial-gradient(90% 60% at 100% 0%, color-mix(in srgb, var(--oc-primary-300) 45%, transparent) 0%, transparent 70%), linear-gradient(160deg, var(--oc-text-ink) 0%, #0F1D36 42%, #163A68 78%, var(--oc-primary) 100%);
+  /* NISA priority card only, after the "Kresna" card: deep navy at the top
+     (only a thin dark band), into blue, lighter towards the bottom right */
+  --oc-ai-gradient: radial-gradient(60% 140% at 100% 100%, color-mix(in srgb, var(--oc-primary-300) 50%, transparent) 0%, transparent 70%), linear-gradient(100deg, #05215C 0%, #0D3A8C 28%, #2366C2 62%, #4F93DD 100%);
+  --oc-ai-gradient-tall: radial-gradient(80% 55% at 90% 100%, color-mix(in srgb, var(--oc-primary-300) 50%, transparent) 0%, transparent 70%), linear-gradient(168deg, #05215C 0%, #0D3A8C 28%, #2366C2 62%, #4F93DD 100%);
   --oc-attention-text: #B54708; /* Amber, only for things that need attention */
   --oc-attention-surface: #FFFAEB;
   --oc-attention-bar: #FEC84B;

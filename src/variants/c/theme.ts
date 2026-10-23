@@ -38,10 +38,10 @@ export const OC_BACKGROUND = [
 /** Kept for the background component: no sheen in Option C */
 export const OC_SHEEN = 'none';
 
-/** NISA (AI), wide: black into blue from left to right (the "recovering" banner) */
+/** NISA (AI), wide: deep navy into blue from left to right */
 export const OC_AI_GRADIENT = 'var(--oc-ai-gradient)';
 
-/** NISA priority card: black at the top left into blue at the bottom right */
+/** NISA priority card: deep navy at the top into blue, lighter at the bottom right (the "Kresna" card) */
 export const OC_AI_SOLID = 'var(--oc-ai-gradient-tall)';
 
 /** Same as OC_AI_SOLID; kept for the old call sites */
