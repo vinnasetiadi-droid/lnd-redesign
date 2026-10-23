@@ -308,11 +308,21 @@ export default function CoursesPage() {
           ) : viewMode === 'list' ? (
             <CourseLibraryTable rows={paginated} me={me} onOpen={openCourse} sort={sort} onSort={reset(setSort)} />
           ) : (
-            /* Columns of at least 256px share the full width, so a row is never left half empty; each card stays 3:4 */
-            <div className="grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(256px,1fr))]">
-              {paginated.map((row) => (
-                <CourseCard key={row.key} course={row.shown} me={me} onClick={() => openCourse(row.shown.id)} />
-              ))}
+            /* A hairline grid: every cell has a line on its right and bottom; the wrapper clips the
+               outer ones, so only lines between cells show. Pulled out by the cell padding, so
+               the photos line up with the section's content edge. */
+            <div className="-mx-5 overflow-hidden border-t border-(--ob-border-subtle)">
+              <div className="-mb-px -mr-px grid [grid-template-columns:repeat(auto-fill,minmax(256px,1fr))]">
+                {paginated.map((row) => (
+                  <CourseCard
+                    key={row.key}
+                    course={row.shown}
+                    me={me}
+                    onClick={() => openCourse(row.shown.id)}
+                    className="border-b border-r border-(--ob-border-subtle)"
+                  />
+                ))}
+              </div>
             </div>
           )}
 

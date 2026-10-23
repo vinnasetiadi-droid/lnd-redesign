@@ -1,9 +1,10 @@
 // ============================================================
 // Upskill Studio — course card (grid view)
-// Inset rounded photo with the status badge, a two-line name with "by owner",
-// a one-line description, one meta row (version, duration, mode), then a
-// fixed-height footer: who acts next, the figure for the status and Review
-// (only when someone else's course waits for you). Status and menu sit on the photo.
+// Option B: a frameless cell in a hairline grid. A photo with small corners, then the
+// status as a coloured word with the menu beside it, a two-line name with
+// "by owner", a one-line description, one meta row (version, duration, mode),
+// then a fixed-height footer: who acts next, the figure for the status and
+// Review (only when someone else's course waits for you).
 // ============================================================
 
 import { useState } from 'react';
@@ -13,9 +14,8 @@ import { type CourseLifecycleStatus } from '@/lib/courseActions';
 import { AlertTriangle, BookOpen, Clock, EyeOff, Eye as EyeOn, Layers, MoreHorizontal, Trash2, X } from '@/variants/b/icons';
 import { daysUntil, timeAgo } from '@/variants/b/pages/ld/dashboard/period';
 import { PillButton } from '@/variants/b/components/ui/kit';
-import { draftItemsOf, liveVersionOf, type CourseItem } from '../data/courses.mock';
+import { COURSE_STATUS_META, draftItemsOf, liveVersionOf, type CourseItem } from '../data/courses.mock';
 import { DeleteVersionDialog } from '@/variants/b/components/common/DeleteVersionDialog';
-import { GLASS, StatusBadge } from './CourseStatus';
 import { CourseCover } from './CourseCover';
 import { courseMode, ownerName, titleOf } from './CourseLibraryTable';
 
@@ -96,72 +96,72 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
       onClick={onClick}
       onKeyDown={(e) => e.key === 'Enter' && e.target === e.currentTarget && onClick?.()}
       className={cn(
-        // Portrait 3:4; grows only if its content needs more room
-        'group flex aspect-[3/4] flex-col rounded-[14px] bg-(--ob-white) p-3 ring-1 ring-(--ob-border) transition-shadow duration-200 cursor-pointer',
-        'hover:shadow-[0_12px_32px_-16px_rgba(16,24,40,0.18)]',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25',
+        // Option B: no frame. A cell in the library's hairline grid (the page draws the
+        // lines); it tints a little on hover. Rows share one height, footers line up.
+        'group relative flex flex-col p-5 transition-colors duration-200 hover:bg-(--ob-surface-subtle) cursor-pointer',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ob-primary)/25',
         className,
       )}
     >
-      {/* Photo, inset and rounded; glass status badge top left, menu top right.
-          The overlays sit outside the clipped photo so the menu can open below it. */}
-      <div className="relative shrink-0">
-        <div className="relative aspect-[16/10] overflow-hidden rounded-[10px] bg-(--ob-surface)">
-          <CourseCover
-            course={course}
-            size="lg"
-            className={cn('absolute inset-0 size-full transition-transform duration-500 group-hover:scale-[1.03]', isInactive && 'grayscale-[60%]')}
-          />
-        </div>
-        <div className="absolute left-3 top-3">
-          <StatusBadge status={course.status} onImage />
-        </div>
-        {/* Clicks here never open the card */}
-        <div className="absolute right-3 top-3" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setMenuOpen((o) => !o)}
-              aria-label="More actions"
-              aria-haspopup="menu"
-              aria-expanded={menuOpen}
-              className={cn(GLASS, "flex size-[30px] items-center justify-center text-(--ob-text-strong) transition-colors hover:bg-(--ob-white)/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/40 cursor-pointer")}
-            >
-              <MoreHorizontal size={16} />
-            </button>
-            {menuOpen && (
-              <>
-                <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-                <div role="menu" className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-[14px] bg-(--ob-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]">
-                  <button
-                    type="button"
-                    role="menuitem"
-                    disabled={!canToggleStatus}
-                    className={cn(menuItem, canToggleStatus ? 'text-(--ob-text-body) hover:bg-(--ob-surface) cursor-pointer' : 'text-(--ob-border-control) cursor-not-allowed')}
-                    onClick={() => { if (canToggleStatus) { setMenuOpen(false); setShowStatusConfirm(true); } }}
-                  >
-                    {isInactive ? <EyeOn className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-                    {isInactive ? 'Activate' : 'Deactivate'}
-                  </button>
-                  <button
-                    type="button"
-                    role="menuitem"
-                    disabled={!canDelete}
-                    title={canDelete ? undefined : 'Only a draft or a version sent back for revision can be deleted.'}
-                    className={cn(menuItem, canDelete ? 'text-(--ob-danger) hover:bg-(--ob-danger-surface) cursor-pointer' : 'text-(--ob-border-control) cursor-not-allowed')}
-                    onClick={() => { if (canDelete) { setMenuOpen(false); setShowDeleteConfirm(true); } }}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                    Delete
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
+      {/* Photo with nearly square corners, nothing on top of it */}
+      <div className="relative aspect-[16/10] shrink-0 overflow-hidden rounded-[6px] bg-(--ob-surface)">
+        <CourseCover
+          course={course}
+          size="lg"
+          className={cn('absolute inset-0 size-full transition-transform duration-500 group-hover:scale-[1.03]', isInactive && 'grayscale-[60%]')}
+        />
+      </div>
+
+      {/* Status as a small coloured word, the menu on the same row (clicks here never open the card) */}
+      <div className="mt-4 flex h-8 items-center justify-between gap-2">
+        <span className="text-[12px] leading-[16px] font-medium" style={{ color: COURSE_STATUS_META[course.status].text }}>
+          {COURSE_STATUS_META[course.status].label}
+        </span>
+        <div onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setMenuOpen((o) => !o)}
+                aria-label="More actions"
+                aria-haspopup="menu"
+                aria-expanded={menuOpen}
+                className="-mr-1.5 flex size-8 items-center justify-center rounded-full text-(--ob-text-muted) transition-colors hover:bg-(--ob-surface) hover:text-(--ob-text-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/30 cursor-pointer"
+              >
+                <MoreHorizontal size={16} />
+              </button>
+              {menuOpen && (
+                <>
+                  <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
+                  <div role="menu" className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-[14px] bg-(--ob-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]">
+                    <button
+                      type="button"
+                      role="menuitem"
+                      disabled={!canToggleStatus}
+                      className={cn(menuItem, canToggleStatus ? 'text-(--ob-text-body) hover:bg-(--ob-surface) cursor-pointer' : 'text-(--ob-border-control) cursor-not-allowed')}
+                      onClick={() => { if (canToggleStatus) { setMenuOpen(false); setShowStatusConfirm(true); } }}
+                    >
+                      {isInactive ? <EyeOn className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                      {isInactive ? 'Activate' : 'Deactivate'}
+                    </button>
+                    <button
+                      type="button"
+                      role="menuitem"
+                      disabled={!canDelete}
+                      title={canDelete ? undefined : 'Only a draft or a version sent back for revision can be deleted.'}
+                      className={cn(menuItem, canDelete ? 'text-(--ob-danger) hover:bg-(--ob-danger-surface) cursor-pointer' : 'text-(--ob-border-control) cursor-not-allowed')}
+                      onClick={() => { if (canDelete) { setMenuOpen(false); setShowDeleteConfirm(true); } }}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Delete
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col px-2 pb-1 pt-3">
+      <div className="flex flex-1 flex-col pt-1">
         {/* Name: always two lines tall, so the rows below line up across cards */}
         <h3
           className={cn('line-clamp-2 h-[44px] text-[16px] leading-[22px]', isInactive ? 'text-(--ob-text-secondary)' : 'text-(--ob-text-strong)')}
@@ -206,7 +206,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
           </p>
           <div className="mt-1 flex h-10 items-center justify-between gap-2">
             <p className="min-w-0 truncate">
-              <span className="text-[20px] leading-[24px] tabular-nums text-(--ob-text-body)">{f.value}</span>
+              <span className="text-[20px] leading-[24px] font-semibold tabular-nums text-(--ob-text-strong)">{f.value}</span>
               <span className="ml-1 text-[12px] text-(--ob-text-muted)">{f.unit}</span>
             </p>
             <div className="flex shrink-0 items-center gap-1" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
@@ -215,9 +215,9 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
             </div>
           </div>
           {/* Progress slot: the thin blue bar on active courses, empty otherwise */}
-          <div className="mt-1 h-1">
+          <div className="mt-1 h-1.5">
             {f.progress !== undefined && (
-              <div className="h-full overflow-hidden rounded-full bg-(--ob-border-strong)">
+              <div className="h-full overflow-hidden rounded-full bg-(--ob-surface)">
                 <div className="h-full rounded-full bg-(--ob-primary)" style={{ width: `${Math.min(100, f.progress)}%` }} />
               </div>
             )}
