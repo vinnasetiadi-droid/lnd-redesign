@@ -1064,3 +1064,180 @@ hairlines, underline tabs, outlined tags, Geist Mono numbers, 6px controls,
    exactly as before and npm run build passes. Reply with the files you
    touched.
 ```
+
+
+---
+
+# Option B: pixel audit fixes (B10 to B12) and round badges (X1)
+
+
+## B10: Lines, radius, colour and type (audit sections 1 to 4)
+
+```
+Project: Vite + React + Tailwind demo of three L&D admin pages. This prompt
+only touches Option B (src/variants/b/). Everything else under src/ must stay unchanged. Pages:
+/b/ld/dashboard, /b/ld/analytics/course, /b/ld/learning-management/courses
+
+First read docs/upskill-studio/option-b-audit.md: section 0 is the Option B
+standard, the numbered findings are what this prompt fixes.
+
+Checklist: docs/upskill-studio/checklist.csv, rows B10-01 to B10-05. Work through them
+in order. When a row is finished set Status to "Done", Done on to today's
+date (YYYY-MM-DD) and a one-line Notes entry; if a row can't be done set
+"Blocked" and say why. Keep the CSV valid.
+
+Style only: do not change any content, label, number or section. Colours
+only through --ob-* variables in src/variants/b/option-b.css (mirrored in
+src/variants/b/theme.ts). Add a token rather than a hardcoded value.
+
+1. Lines (audit 1): keep exactly two line levels. Section rules and the
+   column divider: 1px --ob-border. Inner lines: 1px --ob-border-subtle,
+   horizontal only. In Recent learner feedback remove the vertical lines
+   between cells. The Division benchmark becomes an SVG or CSS line with a
+   4 4 dash in --ob-text-subtle (same pattern as chart grid lines). On Home,
+   make sure the vertical column divider is drawn once.
+2. Radius (audit 2): set --ob-radius-button to 8px and use it for every 3D
+   button (Create course, Review, top bar icon buttons, the NISA button).
+   Legend marks: 8px squares with 2px corners on every chart. Profile photo:
+   12px corners.
+3. Neutral fills (audit 3.1, 3.2, 3.4): add --ob-track and use it for every
+   progress track and empty or unselected bar (Program overview grey bars,
+   Division tracks, license rows, MetricTile tracks, attendance and hours).
+   Remove HATCHED_TRACK from Division. Replace the pastel avatar colours in
+   the Active programs stack with --ob-surface avatars and --ob-text-body
+   initials.
+4. NISA button (audit 3.5, 7.1): on the blue NISA section use a white button
+   (or white at 14% with a 1px white 30% ring) with --ob-primary-strong or
+   white text, 8px corners, 40px tall.
+5. Typography (audit 4, except 4.5):
+   - Stat labels everywhere: Inter 13px/18px --ob-text-muted (a picked
+     MetricTile label --ob-text-strong).
+   - Units next to values always small: Inter 13px 600 --ob-text-muted
+     (KPI "68%" and Analytics "76%" included).
+   - Geist Mono values 20px and up: letter-spacing -0.02em; below 20px
+     normal. Donut centre 30px.
+   - Initials 11px everywhere. 12px text: line-height 16px for captions,
+     20px for list text. Footer copyright 12px.
+```
+
+
+## B11: Charts (audit section 6 and 3.3, 3.6)
+
+```
+Project: Vite + React + Tailwind demo of three L&D admin pages. This prompt
+only touches Option B (src/variants/b/). Everything else under src/ must stay unchanged. Pages:
+/b/ld/dashboard, /b/ld/analytics/course, /b/ld/learning-management/courses
+
+First read docs/upskill-studio/option-b-audit.md: section 0 is the Option B
+standard, the numbered findings are what this prompt fixes.
+
+Checklist: docs/upskill-studio/checklist.csv, rows B11-01 to B11-04. Work through them
+in order. When a row is finished set Status to "Done", Done on to today's
+date (YYYY-MM-DD) and a one-line Notes entry; if a row can't be done set
+"Blocked" and say why. Keep the CSV valid.
+
+Style only: do not change any content, label, number or section. Colours
+only through --ob-* variables in src/variants/b/option-b.css (mirrored in
+src/variants/b/theme.ts). Add a token rather than a hardcoded value.
+
+Shared helpers live in src/variants/b/components/ui/chart.tsx; put new
+rules there so every chart uses them.
+
+1. Grid: bar and line charts show horizontal dashed grid lines (GRID_PROPS:
+   4 4, --ob-border) at their axis ticks. Add them to the Program overview
+   bar chart.
+2. Fills: data marks are solid --ob-primary (or --ob-mode-self for
+   Self-paced). A gradient is allowed only on the one highlighted mark of a
+   chart (the selected Program overview bar). Remove the other gradients:
+   Division bars, MetricTile bars, attendance bar (GradientProgress), donut
+   segments (solid mode colours) and the funnel bands (solid layers; the
+   left fade-in can stay). Add one helper for the highlight gradient so its
+   direction is always the same.
+3. Tooltips: show ChartTooltipCard on hover for Program overview bars, the
+   Division bars, the funnel stages and the gauge, with the same look as the
+   Completion over time tooltip.
+4. Labels and legends:
+   - Data labels are plain 12px text, no box and no shadow. The funnel count
+     and conversion pills keep their white box but swap the drop shadow for
+     a 1px --ob-border ring.
+   - One legend mark component (8px square, 2px corners) on Home and
+     Analytics.
+   - Division value labels use --ob-text-body (axis ticks stay
+     --ob-text-subtle).
+   - Self-paced line in Completion over time: --ob-primary-300; the pale
+     tint stays for its area fill only.
+```
+
+
+## B12: Icons, table headers and final check (audit sections 5, 4.5)
+
+```
+Project: Vite + React + Tailwind demo of three L&D admin pages. This prompt
+only touches Option B (src/variants/b/). Everything else under src/ must stay unchanged. Pages:
+/b/ld/dashboard, /b/ld/analytics/course, /b/ld/learning-management/courses
+
+First read docs/upskill-studio/option-b-audit.md: section 0 is the Option B
+standard, the numbered findings are what this prompt fixes.
+
+Checklist: docs/upskill-studio/checklist.csv, rows B12-01 to B12-03. Work through them
+in order. When a row is finished set Status to "Done", Done on to today's
+date (YYYY-MM-DD) and a one-line Notes entry; if a row can't be done set
+"Blocked" and say why. Keep the CSV valid.
+
+Style only: do not change any content, label, number or section. Colours
+only through --ob-* variables in src/variants/b/option-b.css (mirrored in
+src/variants/b/theme.ts). Add a token rather than a hardcoded value.
+
+1. Icons (audit 5):
+   - Rule: filled icons for objects and navigation (sidebar, top bar,
+     profile contacts, tile icons, card meta), outline 1.5 icons for actions
+     and direction (chevrons, arrows, kebab, search, sort, view toggle, Ask
+     NISA arrow). Fix every icon that breaks the rule.
+   - Sizes: 14px inline meta, 16px controls and kebabs (list and grid
+     kebabs both 16px), 18px navigation and top bar. The 12 and 13px
+     chevrons and arrows become 14px. The 8px trend triangle stays.
+   - Colours: --ob-text-muted for inline icons, --ob-text-strong for the top
+     bar, --ob-primary for active or picked states. No #A4A7AE or #414651
+     icon greys left.
+2. Table headers (audit 4.5): one style on every column of the Upskill
+   table, the Recent learner feedback table and the funnel table: Inter
+   11px/16px, --ob-text-muted, letter-spacing 0.04em. Sort icons 14px outline.
+3. Verify all three pages at 1440 and 1280 px. Re-measure with a small
+   console script (computed styles of borders, radii, fonts, icons) and list
+   any remaining exception in the Notes. Options A, C and D look exactly as
+   before; npm run build passes.
+```
+
+
+## X1: Round profile badges (Options B and D)
+
+```
+Project: Vite + React + Tailwind demo of three L&D admin pages. This prompt
+only touches Options B and D (src/variants/b/ and src/variants/d/). Everything else under src/ must stay unchanged. Pages:
+/b/ld/dashboard, /b/ld/analytics/course, /b/ld/learning-management/courses
+
+First read docs/upskill-studio/option-b-audit.md: section 0 is the Option B
+standard, the numbered findings are what this prompt fixes.
+
+Checklist: docs/upskill-studio/checklist.csv, rows X1-01 to X1-02. Work through them
+in order. When a row is finished set Status to "Done", Done on to today's
+date (YYYY-MM-DD) and a one-line Notes entry; if a row can't be done set
+"Blocked" and say why. Keep the CSV valid.
+
+Style only: do not change any content, label, number or section. Colours
+only through --ob-* variables in src/variants/b/option-b.css (mirrored in
+src/variants/b/theme.ts). Add a token rather than a hardcoded value.
+
+The achievement badges in the profile (components/ui/profile-badges.tsx in
+Option B and Option D) are hexagons. Make them circles in both options.
+
+1. Replace the hexagon path with a circle in the same drawing space, so each
+   badge keeps its size, vertical gradient fill, white radial glow, white
+   edge highlight (now a circle stroke) and drop shadow. The medal, star and
+   trophy icons stay centred inside.
+2. The "5+" stack becomes three overlapping circles with the same offsets.
+3. Option B only: map the badge tones in OB_BADGES to Option B's blue scale
+   (--ob-primary family), no purple or cyan. Option D keeps its own colours.
+4. Check Home in Option B and Option D at 1440 px: round badges, same size and
+   position as before. Options A and C unchanged; npm run build passes.
+```
