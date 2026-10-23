@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap');
+
+/*
+ * Option B typography. Scoped to <html class="option-b">, which AppRoutes sets
+ * while Option B is open, so options B and C keep the original Poppins setup.
+ *
+ * - Font: DM Sans
+ * - Weights: mostly Regular 400. Medium 500 only for headings (h1-h4, which
+ *   also hold the big KPI numbers) and the `font-medium` class. Nothing bolder.
+ * - Letter spacing: -2% on every element
+ *
+ * Rules are unlayered and start with `html.option-b`, so they win over Tailwind
+ * utilities and over src/styles/theme.css (which sets Poppins on :root, makes
+ * buttons 600 and font-medium 600).
+ */
+html.option-b {
+  --font-sans: 'DM Sans', sans-serif;
+}
+
+html.option-b :where(body, .font-sans, button, input, textarea, select) {
+  font-family: 'DM Sans', sans-serif;
+}
+
+html.option-b,
+html.option-b * {
+  letter-spacing: -0.02em;
+}
+
+/*
+ * Compact type scale. In the base layer, so text-[..] classes still win:
+ * these only change headings and body text that have no size class.
+ */
+@layer base {
+  html.option-b body { font-size: 13px; line-height: 20px; }
+  html.option-b h1 { font-size: 24px; line-height: 32px; }
+  html.option-b h2 { font-size: 20px; line-height: 28px; }
+  html.option-b h3 { font-size: 16px; line-height: 24px; }
+  html.option-b h4 { font-size: 14px; line-height: 20px; }
+  html.option-b button, html.option-b label, html.option-b input { font-size: 13px; }
+}
+
+/*
+ * Design tokens. Defined once here, scoped to Option B; theme.ts (OB_COLORS)
+ * mirrors these values for code that needs a plain string (SVG, recharts).
+ */
+html.option-b {
+  --ob-primary: #1A73E8; /* The one accent: buttons, selected states, chart highlight */
+  --ob-primary-strong: #1967D2; /* Blue text on a blue tint, link hover */
+  --ob-primary-50: #E8F0FE; /* Lightest blue tint (pills, chips) */
+  --ob-primary-100: #D2E3FC;
+  --ob-primary-200: #AECBFA;
+  --ob-primary-300: #8AB4F8;
+  --ob-primary-400: #669DF6;
+  --ob-primary-900: #174EA6;
+  --ob-primary-tint: #F5F9FE; /* AI insight row background */
+  --ob-text-strong: #181D27; /* Titles and values */
+  --ob-text-heading: #252B37;
+  --ob-text-ink: #0A0D12; /* Tooltip background */
+  --ob-text-body: #414651; /* Body text */
+  --ob-text-secondary: #535862; /* Labels */
+  --ob-text-muted: #717680; /* Secondary text */
+  --ob-text-subtle: #A4A7AE; /* Axis ticks, hints */
+  --ob-text-ai: #282828; /* Text on the NISA card */
+  --ob-border: #EDEEF1; /* Card dividers, tile outlines */
+  --ob-border-strong: #E4E6EA; /* Progress tracks */
+  --ob-border-control: #D0D5DD;
+  --ob-line: #D5D7DA; /* Chart cursor */
+  --ob-surface: #F5F6F8; /* Segmented controls, icon circles */
+  --ob-surface-muted: #F7F8FA; /* Row frames */
+  --ob-surface-subtle: #F9FAFB; /* Hover */
+  --ob-button-secondary: #F0F1F3;
+  --ob-button-secondary-hover: #E6E8EB;
+  --ob-button-primary: var(--ob-primary); /* Primary buttons are solid blue, at most one per view */
+  --ob-button-primary-hover: var(--ob-primary-strong);
+  --ob-white: #FFFFFF;
+  --ob-attention-text: #B54708; /* Amber, only for things that need attention */
+  --ob-attention-surface: #FFFAEB;
+  --ob-attention-bar: #FEC84B;
+  --ob-attention-track: #FEF0C7;
+  --ob-warning: #FDB022;
+  --ob-orange: #FB6514;
+  --ob-orange-strong: #C4320A;
+  --ob-orange-surface: #FFEAD5;
+  --ob-success: #039855; /* Positive trends */
+  --ob-success-strong: #027A48;
+  --ob-success-surface: #ECFDF3;
+  --ob-success-100: #D1FADF;
+  --ob-success-bright: #32D583;
+  --ob-mode-self: #34A853; /* Self-paced series */
+  --ob-danger: #D92D20; /* Negative trends */
+  --ob-danger-strong: #B42318;
+  --ob-danger-surface: #FEF3F2;
+  --ob-danger-100: #FEE4E2;
+  --ob-danger-bright: #F97066;
+  --ob-yellow: #FFE07A;
+  --ob-yellow-text: #6B4F00;
+  --ob-avatar-peach: #FFE4D5; /* Avatar pastels */
+  --ob-avatar-lilac: #E9D7FE;
+  --ob-avatar-pink: #FCE7F6;
+  --ob-avatar-cyan: #CFF9FE;
+  /* Course status chips: a tint and a stronger bar of the same hue */
+  --ob-status-draft-bg: #F2F4F7;
+  --ob-status-draft: #98A2B3;
+  --ob-status-review-bg: #F4EBFF;
+  --ob-status-review: #9E77ED;
+  --ob-status-revision-bg: #FEE4E2;
+  --ob-status-revision: #F97066;
+  --ob-status-approved-bg: #DCFAE6;
+  --ob-status-approved: #17B26A;
+  --ob-status-active-bg: #DCE8FC;
+  --ob-status-active: #1A73E8;
+  --ob-status-inactive-bg: #F2F4F7;
+  --ob-status-inactive: #D0D5DD;
+}
+
+/* Regular by default, including elements the base styles make heavier */
+html.option-b :where(button, b, strong, th, label) {
+  font-weight: 400;
+}
+
+html.option-b :where(.font-medium, h1, h2, h3, h4, h5, h6):not(.font-normal, .font-light) {
+  font-weight: 500;
+}
+
+/* ── Motion ─────────────────────────────────────────────────── */
+
+/* Cards: a 1px lift and a faint blue glow on hover */
+html.option-b .ob-lift {
+  border-radius: 18px;
+  /* translate, not transform: motion leaves an inline transform after the reveal */
+  transition: translate 300ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+html.option-b .ob-lift:hover {
+  translate: 0 -1px;
+  box-shadow: 0 14px 32px -18px rgba(26, 115, 232, 0.28);
+}
+
+/* Buttons give a little under the finger. In the base layer, so a button's own
+   transition classes still decide what animates. */
+@layer base {
+  html.option-b button {
+    transition: transform 150ms ease, background-color 200ms ease, color 200ms ease, box-shadow 200ms ease;
+  }
+  html.option-b button:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+}
+
+/* One light sweep across a NISA insight once it scrolls into view */
+html.option-b .ob-sweep {
+  position: relative;
+  overflow: hidden;
+}
+html.option-b .ob-sweep::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.85) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: ob-sweep 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.5s 1 forwards;
+}
+@keyframes ob-sweep {
+  to { transform: translateX(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.option-b .ob-lift,
+  html.option-b .ob-lift:hover { transition: none; translate: none; }
+  html.option-b .ob-sweep::after { animation: none; display: none; }
+}

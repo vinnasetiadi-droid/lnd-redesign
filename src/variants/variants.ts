@@ -6,6 +6,9 @@ import LDCoursesPage from '@/pages/ld/learning_management/courses/page';
 import OptionAHomePage from '@/variants/a/pages/ld/dashboard/page';
 import OptionAAnalyticsPage from '@/variants/a/pages/ld/analytics/course/page';
 import OptionAUpskillPage from '@/variants/a/pages/ld/learning_management/courses/page';
+import OptionBHomePage from '@/variants/b/pages/ld/dashboard/page';
+import OptionBAnalyticsPage from '@/variants/b/pages/ld/analytics/course/page';
+import OptionBUpskillPage from '@/variants/b/pages/ld/learning_management/courses/page';
 
 export type PageKey = 'home' | 'analytics' | 'upskill';
 
@@ -49,7 +52,13 @@ export const VARIANTS: Variant[] = [
     // Own copy of the pages, layout and sidebar: src/variants/a/
     pages: { home: OptionAHomePage, analytics: OptionAAnalyticsPage, upskill: OptionAUpskillPage },
   },
-  { key: 'b', name: 'Option B', description: 'Not styled yet. Shows the current design.', pages: CURRENT_PAGES },
+  {
+    key: 'b',
+    name: 'Option B',
+    description: 'Starts from a copy of Option A.',
+    // Own copy, made from Option A (tokens renamed to --ob-*): src/variants/b/
+    pages: { home: OptionBHomePage, analytics: OptionBAnalyticsPage, upskill: OptionBUpskillPage },
+  },
   { key: 'c', name: 'Option C', description: 'Not styled yet. Shows the current design.', pages: CURRENT_PAGES },
 ];
 
