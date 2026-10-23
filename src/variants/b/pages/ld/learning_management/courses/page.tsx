@@ -70,6 +70,11 @@ const EMPTY_TEXT: Record<StatusFilter, string> = {
 const STATUS_ORDER: CourseStatus[] = ['on-draft', 'waiting-approval', 'need-revision', 'approved', 'active', 'inactive'];
 
 
+/** Section rule: edge to edge, like Home. Lines inside a section use --ob-border-subtle */
+function Rule() {
+  return <div className="h-px bg-(--ob-border)" aria-hidden />;
+}
+
 export default function CoursesPage() {
   const navigate = useNavigate();
   const me = useCurrentUserName();
@@ -157,10 +162,11 @@ export default function CoursesPage() {
   };
 
   return (
-    <DashboardLayout>
-      <motion.div className="w-full flex flex-col min-w-0 gap-3" variants={revealContainer} initial="hidden" animate="visible">
+    <DashboardLayout whitePage>
+      {/* Home's style: sections on the white page, split by hairlines, no frames */}
+      <motion.div className="ob-flat relative -mx-6 -mt-6 flex min-w-0 flex-col" variants={revealContainer} initial="hidden" animate="visible">
         {/* ── Header: one primary (blue) action ── */}
-        <motion.div variants={revealItem} className="flex items-end justify-between gap-4 flex-wrap">
+        <motion.div variants={revealItem} className="flex flex-wrap items-center justify-between gap-4 px-8 pt-10 pb-8">
           <div>
             <h1 className="text-[24px] leading-[32px] text-(--ob-text-strong)">Upskill Studio</h1>
             <p className="mt-0.5 text-[13px] text-(--ob-text-muted)">Create, review and assign courses for your teams</p>
@@ -170,9 +176,11 @@ export default function CoursesPage() {
           </PillButton>
         </motion.div>
 
-        {/* ── Review queue: one line, only when there is something to review ── */}
+        <Rule />
+
+        {/* ── Review queue: a light blue band between two rules, only when there is something to review ── */}
         {reviewQueue.length > 0 && (
-          <motion.div variants={revealItem} className="flex items-center gap-4 rounded-[18px] bg-(--ob-primary)/[0.07] px-5 py-4">
+          <motion.div variants={revealItem} className="flex items-center gap-4 bg-(--ob-primary-tint) px-8 py-5">
             <IconCircle icon={Clock} className="bg-(--ob-white)" />
             <div className="min-w-0 flex-1">
               <p className="text-[14px] leading-[20px] text-(--ob-text-strong)">
@@ -191,19 +199,20 @@ export default function CoursesPage() {
             </div>
             {/* One course: open it. Several: show them all in the In review tab */}
             {reviewQueue.length === 1 ? (
-              <PillButton className="bg-(--ob-white) hover:bg-(--ob-white)/80" onClick={() => openCourse(reviewQueue[0].id)}>Review</PillButton>
+              <PillButton onClick={() => openCourse(reviewQueue[0].id)}>Review</PillButton>
             ) : (
-              <PillButton className="bg-(--ob-white) hover:bg-(--ob-white)/80" onClick={openReviewTab}>Review all</PillButton>
+              <PillButton onClick={openReviewTab}>Review all</PillButton>
             )}
           </motion.div>
         )}
+        {reviewQueue.length > 0 && <Rule />}
 
         {/* ── Library ── */}
-        <motion.div ref={libraryRef} variants={revealItem} className="flex flex-col gap-4 rounded-[18px] bg-(--ob-white) p-5 scroll-mt-3">
+        <motion.div ref={libraryRef} variants={revealItem} className="flex scroll-mt-3 flex-col gap-5 px-8 pt-10 pb-8">
           {/* Title on the left, status tabs beside it (the counts are the filter); tabs scroll sideways when narrow */}
           <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
             <div className="min-w-0">
-              <h3 className="text-[16px] leading-[24px] text-(--ob-text-strong)">Course library</h3>
+              <h3 className="text-[18px] leading-[26px] text-(--ob-text-strong)">Course library</h3>
               <p className="mt-0.5 text-[13px] leading-[18px] text-(--ob-text-muted)">{rows.length} {rows.length === 1 ? 'course' : 'courses'}</p>
             </div>
             <div className="-mx-1 min-w-0 max-w-full overflow-x-auto px-1 [scrollbar-width:none]">
@@ -309,7 +318,7 @@ export default function CoursesPage() {
 
           {/* Pagination */}
           {rows.length > 0 && (
-            <div className="flex items-center justify-between pt-1">
+            <div className="flex items-center justify-between border-t border-(--ob-border-subtle) pt-4">
               <p className="text-[12px] text-(--ob-text-muted)">
                 Showing {(current - 1) * PAGE_SIZE + 1} to {Math.min(current * PAGE_SIZE, rows.length)} of {rows.length} courses
               </p>

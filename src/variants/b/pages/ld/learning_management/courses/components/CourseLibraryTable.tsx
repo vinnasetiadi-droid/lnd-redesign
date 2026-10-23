@@ -149,7 +149,7 @@ function CourseRowView({ row, me, onOpen, index }: { row: CourseRow; me: string;
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.28, ease: EASE_OUT, delay: index * 0.03 }}
-      className="border-b border-(--ob-border) last:border-b-0"
+      className="border-b border-(--ob-border-subtle) last:border-b-0"
     >
       <div
         role="button"
@@ -207,7 +207,7 @@ function CourseRowView({ row, me, onOpen, index }: { row: CourseRow; me: string;
                 tabIndex={0}
                 onClick={() => onOpen(v.id)}
                 onKeyDown={(e) => e.key === 'Enter' && onOpen(v.id)}
-                className={cn(GRID, 'border-t border-dashed border-(--ob-border) px-3 py-2 transition-colors hover:bg-(--ob-surface-subtle) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ob-primary)/25 cursor-pointer')}
+                className={cn(GRID, 'border-t border-dashed border-(--ob-border-subtle) px-3 py-2 transition-colors hover:bg-(--ob-surface-subtle) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ob-primary)/25 cursor-pointer')}
               >
                 <p className="truncate pl-14 text-[12px] text-(--ob-text-body)">Version {v.draftOf?.version} (draft)</p>
                 <StatusLabel status="on-draft" />
@@ -254,7 +254,7 @@ export function CourseLibraryTable({ rows, me, onOpen, sort, onSort }: CourseLib
     // Phones: the table scrolls sideways inside its card instead of widening the page
     <div className="min-w-0 max-md:-mx-1 max-md:overflow-x-auto max-md:px-1">
     <div className="max-md:min-w-[600px]">
-      <div className={cn(GRID, 'border-b border-(--ob-border) px-3 pb-2.5 text-[12px] text-(--ob-text-muted)')}>
+      <div className={cn(GRID, 'border-b border-(--ob-border-subtle) px-3 pb-3 text-[12px] text-(--ob-text-muted)')}>
         <SortHeader label="Course" value="name" sort={sort} onSort={onSort} />
         <span>Status</span>
         <span className="whitespace-nowrap">Owner</span>
