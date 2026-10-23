@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
+
+/*
+ * Landing page type: Inter Regular and Medium, slightly tight, instead of the
+ * global Poppins (which src/styles/theme.css makes heavier on headings and
+ * buttons). Unlayered and scoped to .landing, so it wins over the base styles
+ * and touches nothing inside the options.
+ */
+.landing,
+.landing :where(h1, h2, h3, p, a, span, button) {
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.01em;
+}
+.landing :where(h1, h2, h3) {
+  font-weight: 500;
+}

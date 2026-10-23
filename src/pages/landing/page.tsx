@@ -1,119 +1,95 @@
 import { motion } from 'motion/react';
-import { ArrowRight, ChevronRight } from 'lucide-react';
-import { ResponsiveBackground } from '@/components/ResponsiveBackground';
+import { ArrowUpRight, ChevronRight } from 'lucide-react';
 import { PAGES, VARIANTS, variantHref } from '@/variants/variants';
+import './landing.css';
 
-// The option headers share one gradient (the sidebar's), each showing its own slice of it
-const BRAND_GRADIENT = 'linear-gradient(90deg, #000066 0%, #0001FE 35%, #00A3FF 70%, #33E5C9 100%)';
-
-const containerVariants = {
-  hidden:  { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
+/** What sets each option apart (layout and font; the dot shows its accent colour) */
+const OPTION_INFO: Record<string, { accent: string; traits: string[] }> = {
+  a: { accent: '#1A73E8', traits: ['Sidebar', 'DM Sans'] },
+  b: { accent: '#1A73E8', traits: ['Sidebar', '3D buttons', 'Inter'] },
+  c: { accent: '#2C87E8', traits: ['Floating sidebar', 'General Sans'] },
+  d: { accent: '#0E85B4', traits: ['Top navigation', 'Outfit'] },
 };
 
-const itemVariants = {
-  hidden:  { y: 16, opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { type: 'spring', stiffness: 120, damping: 18 } },
+const EASE_OUT = [0.22, 1, 0.36, 1] as const;
+const list = { hidden: {}, visible: { transition: { staggerChildren: 0.06, delayChildren: 0.05 } } };
+const item = {
+  hidden: { opacity: 0, y: 8 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE_OUT } },
 };
 
 /**
- * Landing page — pick one of the design options, or jump straight to one of
- * its pages. Options are separate routers (see AppRoutes), so links are plain <a>.
+ * Landing page: pick one of the design options, or jump straight to one of
+ * its pages. Plain and quiet like the pages inside: a flat background, white
+ * cards with a hairline, the option's accent as a dot, its traits in one line
+ * and the pages as text rows. Options are separate routers (see AppRoutes),
+ * so links are plain <a>.
  *
  * Route: /  (registered in src/routes/AppRoutes.tsx)
  */
 export default function LandingPage() {
   return (
-    <div className="relative min-h-screen w-full font-sans overflow-x-hidden">
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <ResponsiveBackground />
-      </div>
-
+    <div className="landing min-h-screen w-full bg-[#F7F8FA] text-[#181D27]">
       <motion.main
-        className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1120px] flex-col justify-center px-4 py-12 sm:px-8"
-        variants={containerVariants}
+        className="mx-auto flex min-h-screen w-full max-w-[1120px] flex-col justify-center px-4 py-16 sm:px-8"
+        variants={list}
         initial="hidden"
         animate="visible"
       >
-        <motion.header variants={itemVariants} className="mb-10 max-w-[640px]">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#E9EAEB] bg-white/80 py-1 pl-1 pr-3 shadow-[0_1px_3px_rgba(16,24,40,0.06)] backdrop-blur">
-            <span
-              className="flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-semibold text-white"
-              style={{ background: BRAND_GRADIENT }}
-            >
-              LX
-            </span>
-            <span className="text-[12px] font-medium text-[#414651]">LearnXpert · Admin (L&amp;D)</span>
-          </div>
-
-          <h1 className="text-[32px] font-semibold leading-[40px] tracking-tight text-[#181D27] sm:text-[40px] sm:leading-[48px]">
-            Redesign mockups
-          </h1>
-          <p className="mt-3 text-[16px] leading-[24px] text-[#535862]">
-            Four style options for the same three pages. Pick an option to explore it.
+        <motion.header variants={item} className="mb-10">
+          <p className="text-[13px] leading-[20px] text-[#717680]">LearnXpert · Admin (L&amp;D)</p>
+          <h1 className="mt-2 text-[28px] font-medium leading-[36px]">Redesign mockups</h1>
+          <p className="mt-1.5 max-w-[560px] text-[14px] leading-[22px] text-[#535862]">
+            Four style options for the same three pages. Each has a light and a dark version, switched from the Options pill inside.
           </p>
         </motion.header>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {VARIANTS.map((variant, i) => (
-            <motion.section
-              key={variant.key}
-              variants={itemVariants}
-              aria-labelledby={`option-${variant.key}`}
-              className="flex min-w-0 flex-col overflow-hidden rounded-[20px] border border-[#E9EAEB] bg-white shadow-[0_1px_3px_rgba(16,24,40,0.06)] transition-shadow duration-300 hover:shadow-[0_24px_48px_-12px_rgba(16,24,40,0.18)]"
-            >
-              {/* Header */}
-              <div
-                className="flex h-[128px] items-end justify-between p-5 text-white"
-                style={{
-                  backgroundImage: BRAND_GRADIENT,
-                  backgroundSize: `${VARIANTS.length * 100}% 100%`,
-                  backgroundPosition: `${(i / Math.max(1, VARIANTS.length - 1)) * 100}% 50%`,
-                }}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {VARIANTS.map((variant) => {
+            const info = OPTION_INFO[variant.key];
+            return (
+              <motion.section
+                key={variant.key}
+                variants={item}
+                aria-labelledby={`option-${variant.key}`}
+                className="group flex min-w-0 flex-col rounded-[16px] border border-[#ECEDF0] bg-white p-5 transition-[border-color,box-shadow] duration-300 hover:border-[#DCDFE4] hover:shadow-[0_12px_32px_-20px_rgba(16,24,40,0.25)]"
               >
-                <span className="text-[64px] font-semibold uppercase leading-[0.8] tracking-tight">{variant.key}</span>
-                <span className="text-[13px] font-medium tabular-nums text-white/70">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-              </div>
-
-              {/* Body */}
-              <div className="flex flex-1 flex-col p-5">
-                <h2 id={`option-${variant.key}`} className="text-[18px] font-semibold leading-[28px] text-[#181D27]">
-                  {variant.name}
-                </h2>
-                <p className="mt-1 text-[14px] leading-[20px] text-[#717680]">{variant.description}</p>
-
-                <ul className="mt-4 flex flex-1 flex-col gap-1">
-                  {PAGES.map((page) => {
-                    const Icon = page.icon;
-                    return (
-                      <li key={page.key}>
-                        <a
-                          href={variantHref(variant, page.path)}
-                          className="group/row flex items-center gap-3 rounded-[10px] px-2 py-2 transition-colors hover:bg-[#F5F5F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1570EF]/40"
-                        >
-                          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[#E9EAEB] bg-white text-[#1570EF]">
-                            <Icon className="h-4 w-4" strokeWidth={2} />
-                          </span>
-                          <span className="min-w-0 flex-1 truncate text-[14px] font-medium text-[#414651]">{page.title}</span>
-                          <ChevronRight className="h-4 w-4 shrink-0 text-[#A4A7AE] transition-transform group-hover/row:translate-x-0.5" />
-                        </a>
-                      </li>
-                    );
-                  })}
-                </ul>
-
+                {/* Name and the open arrow */}
                 <a
                   href={variantHref(variant)}
-                  className="group/cta mt-4 flex h-10 items-center justify-center gap-2 rounded-[12px] bg-[#0001FE] text-[14px] font-semibold text-white transition-colors hover:bg-[#1849A9] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#1570EF]/30"
+                  className="flex items-center gap-2.5 rounded-[8px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A73E8]/30"
                 >
-                  Open {variant.name}
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-1" />
+                  <span aria-hidden className="size-2.5 shrink-0 rounded-full" style={{ background: info?.accent }} />
+                  <h2 id={`option-${variant.key}`} className="flex-1 text-[15px] font-medium leading-[22px]">
+                    {variant.name}
+                  </h2>
+                  <ArrowUpRight
+                    className="h-4 w-4 text-[#A4A7AE] transition-[color,translate] duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#181D27]"
+                    strokeWidth={1.75}
+                  />
                 </a>
-              </div>
-            </motion.section>
-          ))}
+                {info && <p className="mt-1 truncate text-[13px] leading-[20px] text-[#717680]" title={info.traits.join(' · ')}>{info.traits.join(' · ')}</p>}
+
+                {/* The three pages */}
+                <ul className="mt-5 border-t border-[#F0F1F3]">
+                  {PAGES.map((page) => (
+                    <li key={page.key} className="border-b border-[#F0F1F3] last:border-b-0">
+                      <a
+                        href={variantHref(variant, page.path)}
+                        className="group/row -mx-2 flex items-center gap-2 rounded-[8px] px-2 py-2.5 text-[13px] text-[#414651] transition-colors hover:text-[#181D27] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1A73E8]/30"
+                      >
+                        <span className="min-w-0 flex-1 truncate">{page.title}</span>
+                        <ChevronRight
+                          className="h-3.5 w-3.5 shrink-0 text-[#C4C8CF] transition-[color,translate] duration-200 group-hover/row:translate-x-0.5 group-hover/row:text-[#717680]"
+                          strokeWidth={1.75}
+                        />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </motion.section>
+            );
+          })}
         </div>
       </motion.main>
     </div>
