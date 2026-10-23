@@ -221,14 +221,15 @@ export default function CoursesPage() {
             </div>
           </div>
 
-          {/* One row of filters */}
-          <div className="flex flex-wrap items-center gap-2">
+          {/* One row of filters: a flat bar between two hairlines, its parts split by hairlines */}
+          <div className="flex flex-wrap items-stretch border-y border-(--ob-border-subtle)">
             <SearchField
               value={search}
               onChange={(v) => { setSearch(v); setPage(1); }}
               placeholder="Search courses"
               loading={isSearching}
-              className="min-w-[200px] max-w-[320px] flex-1"
+              variant="bar"
+              className="min-w-[200px] flex-1 max-md:basis-full max-md:border-b max-md:border-(--ob-border-subtle)"
             />
 
             <FilterChip
@@ -275,8 +276,8 @@ export default function CoursesPage() {
               ]}
             />
 
-            {/* View: list by default, grid to browse */}
-            <div className="ml-auto flex items-center gap-0.5 rounded-full bg-(--ob-surface) p-1">
+            {/* View: list by default, grid to browse; the picked one in blue */}
+            <div className="ml-auto flex items-center gap-0.5 border-l border-(--ob-border-subtle) pl-2">
               {([['list', List, 'List view'], ['grid', LayoutGrid, 'Grid view']] as const).map(([m, Icon, label]) => (
                 <button
                   key={m}
@@ -285,13 +286,11 @@ export default function CoursesPage() {
                   aria-pressed={viewMode === m}
                   onClick={() => setViewMode(m)}
                   className={cn(
-                    'flex size-8 items-center justify-center rounded-full transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25',
-                    viewMode === m
-                      ? 'bg-(--ob-white) text-(--ob-primary) shadow-[0_1px_2px_rgba(16,24,40,0.08),0_1px_3px_rgba(16,24,40,0.06)]'
-                      : 'text-(--ob-text-muted) hover:text-(--ob-text-body)',
+                    'flex size-9 items-center justify-center rounded-[8px] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25',
+                    viewMode === m ? 'text-(--ob-primary)' : 'text-(--ob-text-subtle) hover:bg-(--ob-surface-subtle) hover:text-(--ob-text-body)',
                   )}
                 >
-                  <Icon size={16} />
+                  <Icon size={18} />
                 </button>
               ))}
             </div>
@@ -311,8 +310,9 @@ export default function CoursesPage() {
           ) : (
             /* A hairline grid: every cell has a line on its right and bottom; the wrapper clips the
                outer ones, so only lines between cells show. Pulled out by the cell padding, so
-               the photos line up with the section's content edge. */
-            <div className="-mx-5 overflow-hidden border-t border-(--ob-border-subtle)">
+               the photos line up with the section's content edge, and up to the toolbar's
+               bottom line, so the lines between cells meet it. */
+            <div className="-mx-5 -mt-5 overflow-hidden">
               <div className="-mb-px -mr-px grid [grid-template-columns:repeat(auto-fill,minmax(256px,1fr))]">
                 {paginated.map((row) => (
                   <CourseCard

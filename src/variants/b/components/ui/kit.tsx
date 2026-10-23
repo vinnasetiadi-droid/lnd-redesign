@@ -48,24 +48,32 @@ export function CardHeader({ title, subtitle, icon, extra, className }: CardHead
 }
 
 /** The one search pill for tables and card lists: 40px tall like the pill buttons */
-export function SearchField({ value, onChange, placeholder, loading, className }: {
+export function SearchField({ value, onChange, placeholder, loading, variant = 'pill', className }: {
   value: string;
   onChange: (value: string) => void;
   placeholder: string;
   /** Shows a spinner while results update */
   loading?: boolean;
+  /** `bar`: a flat segment of a hairline toolbar (no fill, no rounding), 48px tall */
+  variant?: 'pill' | 'bar';
   className?: string;
 }) {
+  const bar = variant === 'bar';
   return (
     <div className={cn('relative', className)}>
-      <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-(--ob-text-muted)" />
+      <Search className={cn('pointer-events-none absolute top-1/2 size-4 -translate-y-1/2 text-(--ob-text-muted)', bar ? 'left-0' : 'left-4')} />
       <input
         type="text"
         aria-label={placeholder}
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-10 w-full rounded-full bg-(--ob-surface) pl-11 pr-10 text-[13px] text-(--ob-text-strong) outline-none transition-colors placeholder:text-(--ob-text-subtle) focus:bg-(--ob-white) focus:ring-2 focus:ring-(--ob-primary)/25"
+        className={cn(
+          'w-full text-[13px] text-(--ob-text-strong) outline-none transition-colors placeholder:text-(--ob-text-subtle)',
+          bar
+            ? 'h-12 bg-transparent pl-7 pr-10'
+            : 'h-10 rounded-full bg-(--ob-surface) pl-11 pr-10 focus:bg-(--ob-white) focus:ring-2 focus:ring-(--ob-primary)/25',
+        )}
       />
       {loading && <Loader2 className="absolute right-4 top-1/2 size-4 -translate-y-1/2 animate-spin text-(--ob-primary)" />}
     </div>

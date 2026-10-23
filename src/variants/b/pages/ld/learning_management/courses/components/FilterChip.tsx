@@ -1,5 +1,6 @@
-// A pill that opens a small menu of options. Shows only its name while on the
-// default option, and "Name: Value" otherwise (e.g. "Owner: You").
+// A segment of the library's hairline toolbar that opens a small menu of
+// options. Shows only its name while on the default option, and "Name: Value"
+// otherwise (e.g. "Owner: You"), then in blue.
 
 import { useEffect, useId, useRef, useState, type ElementType } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
@@ -57,7 +58,7 @@ export function FilterChip<V extends string>({
   }, [open]);
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative flex border-l border-(--ob-border-subtle)">
       <button
         type="button"
         aria-haspopup="menu"
@@ -65,11 +66,9 @@ export function FilterChip<V extends string>({
         aria-controls={menuId}
         onClick={() => setOpen((o) => !o)}
         className={cn(
-          'inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-[13px] transition-colors cursor-pointer',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25',
-          active && !showValueOnly
-            ? 'bg-(--ob-primary-50) text-(--ob-primary-strong)'
-            : 'bg-(--ob-surface) text-(--ob-text-strong) hover:bg-(--ob-border)',
+          'inline-flex h-12 items-center gap-1.5 px-4 text-[13px] transition-colors hover:bg-(--ob-surface-subtle) cursor-pointer',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ob-primary)/25',
+          active && !showValueOnly ? 'text-(--ob-primary-strong)' : 'text-(--ob-text-strong)',
         )}
       >
         {Icon && <Icon size={14} className="text-(--ob-text-muted)" />}
