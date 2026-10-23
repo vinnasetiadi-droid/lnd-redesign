@@ -521,7 +521,8 @@ export default function LearningProgramAnalyticsPage() {
   );
 
   const idleCount = data.notStarted.length;
-  const FEEDBACK_GRID = 'grid grid-cols-[minmax(190px,1.1fr)_104px_minmax(240px,2fr)_76px_88px_80px] items-center gap-4';
+  // A data grid: no gaps, every cell padded, a light line between columns (the lines meet from row to row)
+  const FEEDBACK_GRID = 'grid grid-cols-[minmax(190px,1.1fr)_112px_minmax(240px,2fr)_88px_100px_92px] items-stretch [&>*]:flex [&>*]:items-center [&>*]:px-4 [&>*:first-child]:pl-0 [&>*:last-child]:pr-0 [&>*:not(:first-child)]:border-l [&>*]:border-(--ob-border-subtle)';
 
   return (
     <DashboardLayout whitePage>
@@ -572,7 +573,7 @@ export default function LearningProgramAnalyticsPage() {
           <div className="min-w-0 lg:col-span-1">
             <div ref={leftSticky.ref} className="lg:sticky" style={{ top: leftSticky.top }}>
               <motion.div variants={revealItem}>
-                <DashboardLicenseUtilization licenses={SOURCE_LICENSES} variant="reference" className={SECTION} />
+                <DashboardLicenseUtilization licenses={SOURCE_LICENSES} variant="reference" showInsight={false} className={SECTION} />
               </motion.div>
               <Rule />
               <Card>
@@ -773,19 +774,19 @@ export default function LearningProgramAnalyticsPage() {
             <div>
               <div className="overflow-x-auto">
                 <div className="min-w-[860px]">
-                  <div className={cn(FEEDBACK_GRID, 'border-b border-(--ob-border-subtle) pb-3 text-[12px] text-(--ob-text-muted)')}>
+                  <div className={cn(FEEDBACK_GRID, 'border-b border-(--ob-border-subtle) text-[12px] text-(--ob-text-muted) [&>*]:pb-3')}>
                     <span>Trainee</span>
                     <span>Date</span>
                     <span>Feedback</span>
-                    <span className="justify-self-center">{sortHeader('rating', 'Rating')}</span>
-                    <span className="justify-self-center">{sortHeader('relevancy', 'Relevancy')}</span>
-                    <span className="justify-self-center">{sortHeader('duration', 'Duration')}</span>
+                    <span className="justify-center">{sortHeader('rating', 'Rating')}</span>
+                    <span className="justify-center">{sortHeader('relevancy', 'Relevancy')}</span>
+                    <span className="justify-center">{sortHeader('duration', 'Duration')}</span>
                   </div>
                   {filteredFeedback.length === 0 ? (
                     <p className="py-8 text-center text-[13px] text-(--ob-text-muted)">No feedback matches this search.</p>
                   ) : (
                     filteredFeedback.map((fb) => (
-                      <div key={`${programType}-${fb.id}`} className={cn(FEEDBACK_GRID, 'min-h-16 border-b border-(--ob-border-subtle) py-3 transition-colors last:border-b-0 hover:bg-(--ob-surface-subtle)')}>
+                      <div key={`${programType}-${fb.id}`} className={cn(FEEDBACK_GRID, 'min-h-16 border-b border-(--ob-border-subtle) transition-colors last:border-b-0 hover:bg-(--ob-surface-subtle) [&>*]:py-3')}>
                         <div className="flex min-w-0 items-center gap-3">
                           <span className="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-(--ob-surface) text-[12px] text-(--ob-text-body)">
                             {initials(fb.name)}
@@ -796,9 +797,13 @@ export default function LearningProgramAnalyticsPage() {
                           </div>
                         </div>
                         <span className="whitespace-nowrap text-[13px] text-(--ob-text-body)">{stamp(fb.submittedDate)}</span>
-                        <p className="line-clamp-2 text-[13px] leading-[20px] text-(--ob-text-body)" title={fb.feedback}>{fb.feedback}</p>
+                        {/* Wrapped, so the cell can be a flex box while the text keeps its 2-line clamp */}
+                        <div className="min-w-0">
+                          <p className="line-clamp-2 text-[13px] leading-[20px] text-(--ob-text-body)" title={fb.feedback}>{fb.feedback}</p>
+                        </div>
+                        {/* Plain numbers; 3.0 and below in the attention orange */}
                         {[fb.rating, fb.relevancy, fb.duration].map((score, i) => (
-                          <span key={i} className="flex h-[30px] min-w-12 items-center justify-center justify-self-center rounded-full bg-(--ob-surface) px-3 text-[13px] tabular-nums text-(--ob-text-strong)">
+                          <span key={i} className={cn('justify-center text-[14px] tabular-nums', score <= 3 ? ATTENTION.text : 'text-(--ob-text-strong)')}>
                             {score.toFixed(1)}
                           </span>
                         ))}

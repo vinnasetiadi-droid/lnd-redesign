@@ -138,12 +138,14 @@ function TickGauge({ pct, start }: { pct: number; start: boolean }) {
 
 // ── Main component ─────────────────────────────────────────────
 
-export function DashboardLicenseUtilization({ licenses = LICENSES, variant = 'default', wide = false, className }: {
+export function DashboardLicenseUtilization({ licenses = LICENSES, variant = 'default', wide = false, showInsight = true, className }: {
   licenses?: License[];
   /** `reference`: Home's look (hairline frame, no icon, tick gauge); other pages keep the default */
   variant?: 'default' | 'reference';
   /** Full-width slot: gauge on the left, the license rows on the right (lg and up), so the section stays short */
   wide?: boolean;
+  /** The one-line NISA insight under the licenses (on by default) */
+  showInsight?: boolean;
   className?: string;
 }) {
   const reference = variant === 'reference';
@@ -233,7 +235,7 @@ export function DashboardLicenseUtilization({ licenses = LICENSES, variant = 'de
       </div>
 
       {/* ── AI insight: points at the decision ────────────────── */}
-      <AIInsightLine text={insight} lines={wide ? 1 : 2} />
+      {showInsight && <AIInsightLine text={insight} lines={wide ? 1 : 2} />}
     </div>
   );
 }
