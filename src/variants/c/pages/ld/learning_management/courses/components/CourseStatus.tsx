@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { COURSE_STATUS_META, type CourseStatus } from '../data/courses.mock';
 
 /** Frosted white over the photo, shared by the status badge and the menu button */
-export const GLASS = 'rounded-(--oc-radius-chip) bg-(--oc-white)/70 ring-1 ring-(--oc-white)/60 backdrop-blur-md shadow-[0_1px_3px_rgba(16,24,40,0.12)]';
+export const GLASS = 'rounded-(--oc-radius-chip) bg-(--oc-white)/70 ring-1 ring-(--oc-white)/60 backdrop-blur-md shadow-[0_1px_3px_rgba(10,25,41,0.12)]';
 
 /** The stronger shade of each status, for the dot */
 const STATUS_DOT: Record<CourseStatus, string> = {

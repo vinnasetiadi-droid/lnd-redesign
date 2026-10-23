@@ -98,7 +98,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
       className={cn(
         // Portrait 3:4; grows only if its content needs more room
         'group flex aspect-[3/4] flex-col rounded-(--oc-radius-card) bg-(--oc-white) p-3 ring-1 ring-(--oc-border) transition-shadow duration-200 cursor-pointer',
-        'hover:shadow-[0_12px_32px_-16px_rgba(16,24,40,0.18)]',
+        'hover:shadow-[0_12px_32px_-16px_rgba(10,25,41,0.18)]',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25',
         className,
       )}
@@ -132,7 +132,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
             {menuOpen && (
               <>
                 <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-                <div role="menu" className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-(--oc-radius-card) bg-(--oc-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]">
+                <div role="menu" className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-(--oc-radius-card) bg-(--oc-white) p-1 shadow-[0_8px_24px_-6px_rgba(10,25,41,0.18),0_2px_4px_rgba(10,25,41,0.04)]">
                   <button
                     type="button"
                     role="menuitem"
@@ -241,8 +241,8 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
 
       {/* Status toggle confirmation, portaled to body */}
       {showStatusConfirm && createPortal(
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(16,24,40,0.5)' }} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
-          <div className="relative w-[460px] rounded-(--oc-radius-card) bg-(--oc-white) p-8 flex flex-col items-center text-center shadow-[0_24px_48px_-12px_rgba(16,24,40,0.18)]" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(10,25,41,0.5)' }} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
+          <div className="relative w-[460px] rounded-(--oc-radius-card) bg-(--oc-white) p-8 flex flex-col items-center text-center shadow-[0_24px_48px_-12px_rgba(10,25,41,0.18)]" onClick={(e) => e.stopPropagation()}>
             <button onClick={() => setShowStatusConfirm(false)} aria-label="Close" className="absolute top-4 right-4 flex size-8 items-center justify-center rounded-(--oc-radius-chip) text-(--oc-text-muted) transition-colors hover:bg-(--oc-surface) cursor-pointer">
               <X className="size-5" />
             </button>

@@ -30,7 +30,7 @@ const MENU_GROUPS: string[][] = [
 const BOTTOM_KEYS = new Set(["settings"]);
 
 /** Active page: a white box with a hairline, on the glass */
-const ACTIVE_PILL = "bg-(--oc-white)/80 shadow-[0_0_0_1px_var(--oc-border),0_1px_2px_rgba(14,19,28,0.05)]";
+const ACTIVE_PILL = "bg-(--oc-white)/80 shadow-[0_0_0_1px_var(--oc-border),0_1px_2px_rgba(10,25,41,0.05)]";
 /** Hover on the other items */
 const HOVER = "hover:bg-(--oc-white)/60";
 
@@ -322,7 +322,7 @@ export function Sidebar({ className, role = "ld_team", isCollapsed = false, onTo
         // Floating glass panel, kept light: half-transparent white, a medium
         // blur (12px), a white edge and a soft shadow, half-round corners
         "h-full flex flex-col font-sans transition-[width] duration-300 ease-in-out",
-        "rounded-(--oc-radius-card) bg-(--oc-white)/55 backdrop-blur-md shadow-[inset_0_0_0_1px_rgba(255,255,255,0.7),0_0_0_1px_color-mix(in_srgb,var(--oc-border)_70%,transparent),0_12px_32px_-18px_rgba(14,19,28,0.16)]",
+        "rounded-(--oc-radius-card) bg-(--oc-white)/55 backdrop-blur-md shadow-[inset_0_0_0_1px_rgba(255,255,255,0.7),0_0_0_1px_color-mix(in_srgb,var(--oc-border)_70%,transparent),0_12px_32px_-18px_rgba(10,25,41,0.16)]",
         isCollapsed ? "w-[60px]" : "w-[clamp(196px,15vw,220px)]",
         className,
       )}

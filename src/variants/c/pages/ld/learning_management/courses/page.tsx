@@ -282,7 +282,7 @@ export default function CoursesPage() {
                   className={cn(
                     'flex size-8 items-center justify-center rounded-(--oc-radius-chip) transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25',
                     viewMode === m
-                      ? 'bg-(--oc-white) text-(--oc-text-strong) shadow-[0_1px_2px_rgba(16,24,40,0.08),0_1px_3px_rgba(16,24,40,0.06)]'
+                      ? 'bg-(--oc-white) text-(--oc-text-strong) shadow-[0_1px_2px_rgba(10,25,41,0.08),0_1px_3px_rgba(10,25,41,0.06)]'
                       : 'text-(--oc-text-muted) hover:text-(--oc-text-body)',
                   )}
                 >

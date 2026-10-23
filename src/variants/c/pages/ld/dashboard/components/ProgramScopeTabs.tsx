@@ -90,7 +90,7 @@ export function ProgramScopeTabs<K extends string = ProgramScope>({ id, value, o
             {isActive && (
               <motion.span
                 layoutId={id}
-                className="absolute inset-0 z-[1] rounded-(--oc-radius-chip) bg-(--oc-white) shadow-[0_0_0_1px_var(--oc-border),0_1px_2px_rgba(14,19,28,0.08)]"
+                className="absolute inset-0 z-[1] rounded-(--oc-radius-chip) bg-(--oc-white) shadow-[0_0_0_1px_var(--oc-border),0_1px_2px_rgba(10,25,41,0.08)]"
                 transition={{ type: 'spring', stiffness: 500, damping: 40, mass: 0.8 }}
               />
             )}

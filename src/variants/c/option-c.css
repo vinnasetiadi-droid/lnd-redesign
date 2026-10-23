@@ -64,41 +64,43 @@ html.option-c * {
  * dots and the orb stay circles).
  */
 html.option-c {
-  --oc-primary: #2D86E8; /* Sky blue: selected states, chart highlight, links */
-  --oc-primary-strong: #1F6CC4; /* Blue text on a tint, link hover */
-  --oc-primary-50: #EDF5FE; /* Lightest tint (chips, selected rows) */
-  --oc-primary-100: #DAEBFD;
-  --oc-primary-200: #B7D6FA;
-  --oc-primary-300: #88BBF5;
-  --oc-primary-400: #5BA1EF;
-  --oc-primary-900: #123E73;
-  --oc-primary-tint: #F4F9FE;
-  --oc-sky: #C2DCF6; /* The light sky blue at the top of the page */
+  /* One family: every blue, grey and navy below shares the primary's hue
+     (211°); only saturation and lightness change */
+  --oc-primary: #2C87E8; /* Sky blue: selected states, chart highlight, links */
+  --oc-primary-strong: #1D6DC3; /* Blue text on a tint, link hover */
+  --oc-primary-50: #F0F7FE; /* Lightest tint (chips, selected rows) */
+  --oc-primary-100: #DDEDFD;
+  --oc-primary-200: #BCDAFB;
+  --oc-primary-300: #8EC0F6;
+  --oc-primary-400: #5DA3EF;
+  --oc-primary-900: #113C69;
+  --oc-primary-tint: #F8FBFF;
+  --oc-sky: #A5D0FD; /* The light sky blue at the top of the page */
   /* Text in dark blues, not black, so every colour on the page belongs together */
-  --oc-text-strong: #13223A; /* Titles and values: dark navy */
-  --oc-text-heading: #1A2B45;
-  --oc-text-ink: #0C1729; /* Near-black navy: primary buttons, tooltips, the value pill */
-  --oc-text-body: #34455F; /* Body text */
-  --oc-text-secondary: #4A5B75; /* Labels */
-  --oc-text-muted: #66778F; /* Secondary text */
-  --oc-text-subtle: #9AA8BC; /* Axis ticks, hints */
-  --oc-text-ai: #1A2B45;
-  --oc-border: #E6E9EF; /* Card outlines, dividers */
-  --oc-border-strong: #DDE2E9; /* Progress tracks */
-  --oc-border-control: #CDD3DC;
-  --oc-line: #D3D9E1; /* Chart cursor */
-  --oc-surface: #F1F3F7; /* Segmented controls, icon boxes, card header bands */
-  --oc-surface-muted: #F5F7FA; /* Row frames */
-  --oc-surface-subtle: #F8F9FB; /* Hover */
+  --oc-text-strong: #12263A; /* Titles and values: dark navy */
+  --oc-text-heading: #1B3046;
+  --oc-text-ink: #0A1929; /* Near-black navy: primary buttons, tooltips, the value pill */
+  --oc-text-body: #374C62; /* Body text */
+  --oc-text-secondary: #4E6074; /* Labels */
+  --oc-text-muted: #6B7C8E; /* Secondary text */
+  --oc-text-subtle: #9DAAB8; /* Axis ticks, hints */
+  --oc-text-ai: #1B3046;
+  --oc-border: #E2E9F0; /* Card outlines, dividers */
+  --oc-border-strong: #D8E0E9; /* Progress tracks */
+  --oc-border-control: #C7D1DB;
+  --oc-line: #CDD6DF; /* Chart cursor */
+  --oc-surface: #EFF3F8; /* Segmented controls, icon boxes, card header bands */
+  --oc-surface-muted: #F4F7FA; /* Row frames */
+  --oc-surface-subtle: #F8FAFC; /* Hover */
   --oc-button-secondary: #FFFFFF; /* Secondary buttons: white with a hairline */
-  --oc-button-secondary-hover: #F5F7FA;
+  --oc-button-secondary-hover: #F4F7FA;
   --oc-button-primary: var(--oc-text-ink); /* Primary buttons are black, at most one per view */
-  --oc-button-primary-hover: #1B2C47;
+  --oc-button-primary-hover: #172D45;
   --oc-white: #FFFFFF;
   /* NISA priority card only, after the "Kresna" card: deep navy at the top
      (only a thin dark band), into blue, lighter towards the bottom right */
-  --oc-ai-gradient: radial-gradient(60% 140% at 100% 100%, color-mix(in srgb, var(--oc-primary-300) 50%, transparent) 0%, transparent 70%), linear-gradient(100deg, #05215C 0%, #0D3A8C 28%, #2366C2 62%, #4F93DD 100%);
-  --oc-ai-gradient-tall: radial-gradient(80% 55% at 90% 100%, color-mix(in srgb, var(--oc-primary-300) 50%, transparent) 0%, transparent 70%), linear-gradient(168deg, #05215C 0%, #0D3A8C 28%, #2366C2 62%, #4F93DD 100%);
+  --oc-ai-gradient: radial-gradient(60% 140% at 100% 100%, color-mix(in srgb, var(--oc-primary-300) 50%, transparent) 0%, transparent 70%), linear-gradient(100deg, #052F5C 0%, #0E4A8B 28%, #2070C5 62%, #5499E3 100%);
+  --oc-ai-gradient-tall: radial-gradient(80% 55% at 90% 100%, color-mix(in srgb, var(--oc-primary-300) 50%, transparent) 0%, transparent 70%), linear-gradient(168deg, #052F5C 0%, #0E4A8B 28%, #2070C5 62%, #5499E3 100%);
   --oc-attention-text: #B54708; /* Amber, only for things that need attention */
   --oc-attention-surface: #FFFAEB;
   --oc-attention-bar: #FEC84B;
@@ -126,18 +128,18 @@ html.option-c {
   --oc-avatar-pink: #FCE7F6;
   --oc-avatar-cyan: #CFF9FE;
   /* Course status chips: a tint and a stronger bar of the same hue */
-  --oc-status-draft-bg: #F2F4F7;
-  --oc-status-draft: #98A2B3;
+  --oc-status-draft-bg: #EFF3F8;
+  --oc-status-draft: #95A3B2;
   --oc-status-review-bg: #F4EBFF;
   --oc-status-review: #9E77ED;
   --oc-status-revision-bg: #FEE4E2;
   --oc-status-revision: #F97066;
   --oc-status-approved-bg: #DCFAE6;
   --oc-status-approved: #17B26A;
-  --oc-status-active-bg: #DAEBFD;
-  --oc-status-active: #2D86E8;
-  --oc-status-inactive-bg: #F2F4F7;
-  --oc-status-inactive: #D0D5DD;
+  --oc-status-active-bg: #DDEDFD;
+  --oc-status-active: #2C87E8;
+  --oc-status-inactive-bg: #EFF3F8;
+  --oc-status-inactive: #C7D1DB;
   /* Corners: half square, half round */
   --oc-radius-card: 14px; /* Cards, the sidebar, dialogs, the NISA card */
   --oc-radius-control: 10px; /* Buttons, inputs, segmented tabs, menus */
@@ -169,7 +171,7 @@ html.option-c .oc-btn-primary:hover {
 html.option-c .oc-btn-secondary {
   background: var(--oc-button-secondary);
   color: var(--oc-text-strong);
-  box-shadow: 0 0 0 1px var(--oc-border), 0 1px 2px rgba(14, 19, 28, 0.05);
+  box-shadow: 0 0 0 1px var(--oc-border), 0 1px 2px rgba(10,25,41, 0.05);
 }
 html.option-c .oc-btn-secondary:hover {
   background: var(--oc-button-secondary-hover);

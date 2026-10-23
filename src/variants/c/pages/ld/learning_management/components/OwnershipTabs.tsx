@@ -55,7 +55,7 @@ export function OwnershipTabs({ items, value, onChange, me, allLabel }: Ownershi
             className={cn(
               'flex items-center gap-1.5 rounded-(--oc-radius-chip) px-3.5 py-1.5 text-[13px] transition-colors cursor-pointer',
               active
-                ? 'bg-white text-(--oc-text-strong) shadow-[0_1px_2px_rgba(16,24,40,0.08),0_1px_3px_rgba(16,24,40,0.06)]'
+                ? 'bg-white text-(--oc-text-strong) shadow-[0_1px_2px_rgba(10,25,41,0.08),0_1px_3px_rgba(10,25,41,0.06)]'
                 : 'text-(--oc-text-muted) hover:text-(--oc-text-body)',
             )}
           >

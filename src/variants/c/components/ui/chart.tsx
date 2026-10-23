@@ -57,7 +57,7 @@ export interface TooltipRow {
 /** Tooltip card used by every chart: black with white text, like the value pill on the bars */
 export function ChartTooltipCard({ title, rows }: { title?: ReactNode; rows: TooltipRow[] }) {
   return (
-    <div className="min-w-[168px] rounded-(--oc-radius-control) bg-(--oc-text-ink) px-3.5 py-3 shadow-[0_8px_24px_-6px_rgba(14,19,28,0.35)]">
+    <div className="min-w-[168px] rounded-(--oc-radius-control) bg-(--oc-text-ink) px-3.5 py-3 shadow-[0_8px_24px_-6px_rgba(10,25,41,0.35)]">
       {title && <p className="mb-2 text-[12px] text-(--oc-white)/60">{title}</p>}
       <div className="space-y-1.5">
         {rows.map((row) => (

@@ -47,11 +47,11 @@ export function DeleteVersionDialog({
   return createPortal(
     <div
       className="fixed inset-0 z-[60] flex items-center justify-center px-4"
-      style={{ backgroundColor: 'rgba(16,24,40,0.5)', fontFamily: FONT }}
+      style={{ backgroundColor: 'rgba(10,25,41,0.5)', fontFamily: FONT }}
       onClick={onCancel}
     >
       <div
-        className="relative w-full max-w-[640px] bg-(--oc-white) rounded-(--oc-radius-card) shadow-[0_24px_48px_-12px_rgba(16,24,40,0.18)] p-8 flex flex-col items-center text-center"
+        className="relative w-full max-w-[640px] bg-(--oc-white) rounded-(--oc-radius-card) shadow-[0_24px_48px_-12px_rgba(10,25,41,0.18)] p-8 flex flex-col items-center text-center"
         onClick={(e) => e.stopPropagation()}
       >
         <button

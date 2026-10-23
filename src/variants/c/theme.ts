@@ -1,5 +1,5 @@
 /**
- * Option C palette: sky blue (#2D86E8, as bright as the NISA blob) as the one
+ * Option C palette: sky blue (#2C87E8, as bright as the NISA blob) as the one
  * accent on cool greys, black buttons and a black-to-blue gradient for the
  * NISA priority card. The design tokens live in
  * option-c.css as CSS variables; OC_COLORS below is their documented mirror,
@@ -7,22 +7,22 @@
  */
 export const OC = {
   primary: {
-    50: '#EDF5FE',
-    100: '#DAEBFD',
-    200: '#B7D6FA',
-    300: '#88BBF5',
-    400: '#5BA1EF',
-    500: '#2D86E8', // main
-    700: '#1F6CC4',
-    900: '#123E73',
+    50: '#F0F7FE',
+    100: '#DDEDFD',
+    200: '#BCDAFB',
+    300: '#8EC0F6',
+    400: '#5DA3EF',
+    500: '#2C87E8', // main
+    700: '#1D6DC3',
+    900: '#113C69',
   },
   neutral: {
-    surface: '#F1F3F7',
+    surface: '#EFF3F8',
     subtle: '#F8F9FB',
-    border: '#E6E9EF',
-    borderStrong: '#DDE2E9',
+    border: '#E2E9F0',
+    borderStrong: '#D8E0E9',
   },
-  text: { strong: '#13223A', body: '#34455F', muted: '#66778F' },
+  text: { strong: '#12263A', body: '#374C62', muted: '#6B7C8E' },
 } as const;
 
 /**
@@ -54,35 +54,35 @@ export const OC_AI_SOFT = OC_AI_SOLID;
  * Keep both lists in step.
  */
 export const OC_COLORS = {
-  primary: '#2D86E8', // Sky blue: selected states, chart highlight, links
-  primaryStrong: '#1F6CC4', // Blue text on a tint, link hover
-  primary50: '#EDF5FE', // Lightest tint (chips, selected rows)
-  primary100: '#DAEBFD',
-  primary200: '#B7D6FA',
-  primary300: '#88BBF5',
-  primary400: '#5BA1EF',
-  primary900: '#123E73',
-  primaryTint: '#F4F9FE',
-  sky: '#C2DCF6', // The light sky blue at the top of the page
-  textStrong: '#13223A', // Titles and values: dark navy
-  textHeading: '#1A2B45',
-  textInk: '#0C1729', // Near-black navy: primary buttons, tooltips, the value pill
-  textBody: '#34455F', // Body text
-  textSecondary: '#4A5B75', // Labels
-  textMuted: '#66778F', // Secondary text
-  textSubtle: '#9AA8BC', // Axis ticks, hints
-  textAi: '#1A2B45',
-  border: '#E6E9EF', // Card outlines, dividers
-  borderStrong: '#DDE2E9', // Progress tracks
-  borderControl: '#CDD3DC',
-  line: '#D3D9E1', // Chart cursor
-  surface: '#F1F3F7', // Segmented controls, icon boxes, card header bands
-  surfaceMuted: '#F5F7FA', // Row frames
-  surfaceSubtle: '#F8F9FB', // Hover
+  primary: '#2C87E8', // Sky blue: selected states, chart highlight, links
+  primaryStrong: '#1D6DC3', // Blue text on a tint, link hover
+  primary50: '#F0F7FE', // Lightest tint (chips, selected rows)
+  primary100: '#DDEDFD',
+  primary200: '#BCDAFB',
+  primary300: '#8EC0F6',
+  primary400: '#5DA3EF',
+  primary900: '#113C69',
+  primaryTint: '#F8FBFF',
+  sky: '#A5D0FD', // The light sky blue at the top of the page
+  textStrong: '#12263A', // Titles and values: dark navy
+  textHeading: '#1B3046',
+  textInk: '#0A1929', // Near-black navy: primary buttons, tooltips, the value pill
+  textBody: '#374C62', // Body text
+  textSecondary: '#4E6074', // Labels
+  textMuted: '#6B7C8E', // Secondary text
+  textSubtle: '#9DAAB8', // Axis ticks, hints
+  textAi: '#1B3046',
+  border: '#E2E9F0', // Card outlines, dividers
+  borderStrong: '#D8E0E9', // Progress tracks
+  borderControl: '#C7D1DB',
+  line: '#CDD6DF', // Chart cursor
+  surface: '#EFF3F8', // Segmented controls, icon boxes, card header bands
+  surfaceMuted: '#F4F7FA', // Row frames
+  surfaceSubtle: '#F8FAFC', // Hover
   buttonSecondary: '#FFFFFF', // White with a hairline
-  buttonSecondaryHover: '#F5F7FA',
-  buttonPrimary: '#0C1729', // = textInk: primary buttons are near-black navy
-  buttonPrimaryHover: '#1B2C47',
+  buttonSecondaryHover: '#F4F7FA',
+  buttonPrimary: '#0A1929', // = textInk: primary buttons are near-black navy
+  buttonPrimaryHover: '#172D45',
   white: '#FFFFFF',
   attentionText: '#B54708', // Amber, only for things that need attention
   attentionSurface: '#FFFAEB',
@@ -97,7 +97,7 @@ export const OC_COLORS = {
   successSurface: '#ECFDF3',
   success100: '#D1FADF',
   successBright: '#32D583',
-  modeSelf: '#88BBF5', // Self-paced series: = primary300, the light blue
+  modeSelf: '#8EC0F6', // Self-paced series: = primary300, the light blue
   danger: '#D92D20', // Negative trends
   dangerStrong: '#B42318',
   dangerSurface: '#FEF3F2',
@@ -111,18 +111,18 @@ export const OC_COLORS = {
   avatarPink: '#FCE7F6',
   avatarCyan: '#CFF9FE',
   // Course status chips: a tint and a stronger bar of the same hue
-  statusDraftBg: '#F2F4F7',
-  statusDraft: '#98A2B3',
+  statusDraftBg: '#EFF3F8',
+  statusDraft: '#95A3B2',
   statusReviewBg: '#F4EBFF',
   statusReview: '#9E77ED',
   statusRevisionBg: '#FEE4E2',
   statusRevision: '#F97066',
   statusApprovedBg: '#DCFAE6',
   statusApproved: '#17B26A',
-  statusActiveBg: '#DAEBFD',
-  statusActive: '#2D86E8',
-  statusInactiveBg: '#F2F4F7',
-  statusInactive: '#D0D5DD',
+  statusActiveBg: '#DDEDFD',
+  statusActive: '#2C87E8',
+  statusInactiveBg: '#EFF3F8',
+  statusInactive: '#C7D1DB',
 } as const;
 
 export type OCColor = keyof typeof OC_COLORS;
