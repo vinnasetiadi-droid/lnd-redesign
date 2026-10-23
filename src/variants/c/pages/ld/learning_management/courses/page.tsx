@@ -281,9 +281,10 @@ export default function CoursesPage() {
                   onClick={() => setViewMode(m)}
                   className={cn(
                     'flex size-8 items-center justify-center rounded-(--oc-radius-chip) transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25',
+                    // The segmented spec: white box on the grey track
                     viewMode === m
-                      ? 'bg-(--oc-white) text-(--oc-text-strong) shadow-[0_1px_2px_rgba(10,25,41,0.08),0_1px_3px_rgba(10,25,41,0.06)]'
-                      : 'text-(--oc-text-muted) hover:text-(--oc-text-body)',
+                      ? 'bg-(--oc-white) text-(--oc-text-strong) shadow-[0_1px_2px_rgba(10,25,41,0.08)]'
+                      : 'text-(--oc-text-secondary) hover:text-(--oc-text-body)',
                   )}
                 >
                   <Icon size={16} />

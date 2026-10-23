@@ -84,13 +84,14 @@ export function ProgramScopeTabs<K extends string = ProgramScope>({ id, value, o
               'relative flex items-center gap-1.5 py-1.5 rounded-(--oc-radius-chip) text-[13px] whitespace-nowrap transition-colors duration-200 cursor-pointer',
               stretch ? 'flex-1 justify-center px-2' : 'px-3.5',
               'focus:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/40 focus-visible:ring-offset-1',
-              isActive ? 'text-(--oc-text-strong)' : 'text-(--oc-text-muted) hover:text-(--oc-text-body)',
+              // Active: strong text, medium; inactive: secondary text, regular
+              isActive ? 'font-medium text-(--oc-text-strong)' : 'font-normal text-(--oc-text-secondary) hover:text-(--oc-text-body)',
             )}
           >
             {isActive && (
               <motion.span
                 layoutId={id}
-                className="absolute inset-0 z-[1] rounded-(--oc-radius-chip) bg-(--oc-white) shadow-[0_0_0_1px_var(--oc-border),0_1px_2px_rgba(10,25,41,0.08)]"
+                className="absolute inset-0 z-[1] rounded-(--oc-radius-chip) bg-(--oc-white) shadow-[0_1px_2px_rgba(10,25,41,0.08)]"
                 transition={{ type: 'spring', stiffness: 500, damping: 40, mass: 0.8 }}
               />
             )}

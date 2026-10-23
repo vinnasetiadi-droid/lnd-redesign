@@ -22,14 +22,15 @@ function InsightRow({ item }: { item: NisaInsight }) {
         <p className="min-w-0 truncate text-[15px] leading-[22px] font-medium text-(--oc-white)">{item.title}</p>
         <button
           type="button"
-          className="inline-flex shrink-0 items-center gap-1 text-[13px] text-(--oc-white)/80 transition-colors hover:text-(--oc-white)"
+          className="inline-flex shrink-0 items-center gap-1 text-[13px] text-(--oc-white) transition-opacity hover:opacity-80"
         >
           {item.cta}
           <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
         </button>
       </div>
       {/* Two lines at most; the full text is in the title tooltip */}
-      <p className="mt-1 line-clamp-2 text-[13px] leading-[20px] text-(--oc-white)/65" title={item.description}>
+      {/* Pure white: at least 5:1 on the gradient's lightest point */}
+      <p className="mt-1 line-clamp-2 text-[13px] leading-[20px] text-(--oc-white)" title={item.description}>
         {item.description}
       </p>
     </div>
@@ -53,7 +54,7 @@ export function LDDashboardNissaInsight({ insights, className }: LDDashboardNiss
           <NisaOrb size={40} />
           <div>
             <p className="text-[20px] leading-[28px] font-medium text-(--oc-white)">NISA priority insights</p>
-            <p className="text-[14px] leading-[20px] text-(--oc-white)/65">Smart insights tailored to you</p>
+            <p className="text-[14px] leading-[20px] text-(--oc-white)">Smart insights tailored to you</p>
           </div>
         </div>
 
@@ -67,7 +68,8 @@ export function LDDashboardNissaInsight({ insights, className }: LDDashboardNiss
         {/* ── Footer CTA ─────────────────────────────────────── */}
         <button
           type="button"
-          className="group flex h-10 items-center justify-between rounded-(--oc-radius-control) bg-(--oc-white)/10 px-4 text-[13px] text-(--oc-white) ring-1 ring-inset ring-(--oc-white)/20 backdrop-blur-sm transition-colors hover:bg-(--oc-white)/16"
+          // The page's one translucent control, as it sits on the coloured card: an even white fill and edge, no blur
+          className="group flex h-10 items-center justify-between rounded-(--oc-radius-control) bg-(--oc-white)/12 px-4 text-[13px] text-(--oc-white) ring-1 ring-inset ring-(--oc-white)/28 transition-colors hover:bg-(--oc-white)/18"
         >
           More insights? Just ask NISA
           <ChevronRight className="size-4 transition-transform group-hover:translate-x-0.5" />

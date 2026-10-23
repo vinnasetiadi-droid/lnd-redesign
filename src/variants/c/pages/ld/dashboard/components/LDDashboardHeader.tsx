@@ -60,11 +60,11 @@ export function LDDashboardHeader({ metrics, className }: LDDashboardHeaderProps
     <div className={cn('grid grid-cols-1 md:grid-cols-3 gap-3', className)}>
       {metrics.map((card) => (
         // After the references' metric cards: the title in a light grey band, then the number and its change chip
-        <div key={card.key} className="oc-lift overflow-hidden rounded-(--oc-radius-card) bg-(--oc-white) ring-1 ring-(--oc-border)">
+        <div key={card.key} className="oc-lift overflow-hidden rounded-(--oc-radius-card) oc-surface">
           <div className="flex items-center justify-between gap-2 border-b border-(--oc-border) bg-(--oc-surface-muted) px-4 py-2.5">
             {/* Title only, so the three bands stay the same height; the hint sits under the number */}
             <p className="min-w-0 truncate text-[13px] leading-[18px] text-(--oc-text-strong)" title={card.hint}>{card.title}</p>
-            <IconCircle icon={METRIC_ICON[card.key] ?? BarChart2} className="size-7 bg-(--oc-white) ring-1 ring-(--oc-border)" />
+            <IconCircle icon={METRIC_ICON[card.key] ?? BarChart2} className="size-7 oc-surface" />
           </div>
           <div className="px-4 pb-4 pt-3">
             <h3 className="text-[24px] leading-[32px] text-(--oc-text-strong)"><CountUpText value={String(card.value)} /></h3>

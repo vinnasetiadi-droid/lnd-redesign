@@ -118,7 +118,7 @@ export function DashboardLicenseUtilization({ licenses = LICENSES, className }: 
     : `${idle} seats are idle across ${rows.length} licenses. Assign them before the next renewal.`;
 
   return (
-    <div className={cn('relative flex flex-col gap-3 rounded-(--oc-radius-card) bg-(--oc-white) ring-1 ring-(--oc-border) p-5', className)}>
+    <div className={cn('relative flex flex-col gap-3 rounded-(--oc-radius-card) oc-surface p-5', className)}>
       <CardHeader
         title="License utilization"
         subtitle="Purchased seats actively used by trainees"

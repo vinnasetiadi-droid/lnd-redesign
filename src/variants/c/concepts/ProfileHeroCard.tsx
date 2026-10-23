@@ -44,7 +44,7 @@ export function ProfileHeroCard({ person, photo = profileCutout, className }: Pr
   return (
     // The padding is the headroom the head rises into
     <div className={className} style={{ paddingTop: PROFILE_HEADROOM }}>
-      <div className="relative min-h-[176px] rounded-(--oc-radius-card) bg-(--oc-white) ring-1 ring-(--oc-border)">
+      <div className="relative min-h-[176px] rounded-(--oc-radius-card) oc-surface">
         {/* Photo: as tall as the card plus the headroom, sitting on the card's bottom edge */}
         <div
           className="absolute left-0 bottom-0"

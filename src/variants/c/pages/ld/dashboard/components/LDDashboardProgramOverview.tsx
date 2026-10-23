@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { Bar, BarChart, CartesianGrid, LabelList, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import type { ChartDataPoint } from '../types/dashboard.types';
 import { ProgramScopeTabs, FadeValue, type ProgramScope } from './ProgramScopeTabs';
-import { CardHeader, Trend } from '@/variants/c/components/ui/kit';
+import { CardHeader, Trend, tileClass } from '@/variants/c/components/ui/kit';
 import { AIInsightLine } from '@/variants/c/components/ui/ai-insight-banner';
 import { AXIS_TICK, FOLD_BAR_SHARE, GRID_PROPS, foldBar, foldBarDefs, pillLabel, useChartIds } from '@/variants/c/components/ui/chart';
 import { currentMonthIndex, periodLabel } from '../period';
@@ -106,7 +106,7 @@ export function LDDashboardProgramOverview({
   const fullInsight = activeScope === 'course' ? courseInsight ?? insight : activeScope === 'journey' ? journeyInsight ?? insight : insight;
 
   return (
-    <div className={cn('relative flex flex-col gap-4 rounded-(--oc-radius-card) bg-(--oc-white) ring-1 ring-(--oc-border) p-5', className)}>
+    <div className={cn('relative flex flex-col gap-4 rounded-(--oc-radius-card) oc-surface p-5', className)}>
       {/* ── Header: title + period, scope tabs on the right ── */}
       <CardHeader
         title="Program overview"
@@ -126,11 +126,7 @@ export function LDDashboardProgramOverview({
               role="tab"
               aria-selected={isSelected}
               onClick={() => setMetric(m.key)}
-              className={cn(
-                'rounded-(--oc-radius-control) border p-4 text-left transition-colors cursor-pointer',
-                // Selected: a light blue box with a blue hairline
-                isSelected ? 'border-(--oc-primary-200) bg-(--oc-primary-50)' : 'border-(--oc-border) hover:bg-(--oc-surface-subtle)',
-              )}
+              className={tileClass(isSelected)}
             >
               <p className="text-[13px] leading-[18px] text-(--oc-text-secondary)">{m.label}</p>
               <div className="mt-1.5 flex items-baseline gap-2">

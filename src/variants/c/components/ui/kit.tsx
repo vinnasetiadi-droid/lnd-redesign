@@ -72,6 +72,20 @@ export function SearchField({ value, onChange, placeholder, loading, className }
   );
 }
 
+/**
+ * Selectable summary tile (Program overview, Division completion): white with
+ * the cards' hairline and shadow; selected = light blue tint with a blue
+ * hairline. The one "selected tile" style; segmented controls use white on grey.
+ */
+export function tileClass(selected: boolean) {
+  return cn(
+    'rounded-(--oc-radius-control) border p-4 text-left transition-colors cursor-pointer',
+    selected
+      ? 'border-(--oc-selected-border) bg-(--oc-selected-surface)'
+      : 'border-(--oc-border) bg-(--oc-white) shadow-(--oc-shadow-card) hover:bg-(--oc-surface-subtle)',
+  );
+}
+
 /** Framed table: a grey header row, then hairline rows (list tables share it) */
 export const TABLE = {
   frame: 'overflow-hidden rounded-(--oc-radius-card) border border-(--oc-border)',

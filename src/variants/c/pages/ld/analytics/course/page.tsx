@@ -243,7 +243,7 @@ const FOCUS = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:rin
 
 function Card({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <motion.div variants={revealItem} className={cn('oc-lift relative flex flex-col gap-4 rounded-(--oc-radius-card) bg-(--oc-white) ring-1 ring-(--oc-border) p-5', className)}>
+    <motion.div variants={revealItem} className={cn('oc-lift relative flex flex-col gap-4 rounded-(--oc-radius-card) oc-surface p-5', className)}>
       {children}
     </motion.div>
   );
@@ -543,10 +543,10 @@ export default function LearningProgramAnalyticsPage() {
         <motion.div variants={revealItem} className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {kpiCards.map((kpi) => (
             // Home's metric cards: the title in a light grey band, then the number and its change chip
-            <div key={kpi.key} className="oc-lift overflow-hidden rounded-(--oc-radius-card) bg-(--oc-white) ring-1 ring-(--oc-border)">
+            <div key={kpi.key} className="oc-lift overflow-hidden rounded-(--oc-radius-card) oc-surface">
               <div className="flex items-center justify-between gap-2 border-b border-(--oc-border) bg-(--oc-surface-muted) px-4 py-2.5">
                 <p className="min-w-0 truncate text-[13px] leading-[18px] text-(--oc-text-strong)"><FadeValue k={kpi.label}>{kpi.label}</FadeValue></p>
-                <IconCircle icon={kpi.icon} className="size-7 bg-(--oc-white) ring-1 ring-(--oc-border)" />
+                <IconCircle icon={kpi.icon} className="size-7 oc-surface" />
               </div>
               <div className="px-4 pb-4 pt-3">
                 <p className="text-[24px] leading-[32px] font-medium text-(--oc-text-strong)">

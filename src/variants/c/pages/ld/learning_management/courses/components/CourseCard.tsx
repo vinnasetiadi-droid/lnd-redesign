@@ -97,8 +97,8 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
       onKeyDown={(e) => e.key === 'Enter' && e.target === e.currentTarget && onClick?.()}
       className={cn(
         // Portrait 3:4; grows only if its content needs more room
-        'group flex aspect-[3/4] flex-col rounded-(--oc-radius-card) bg-(--oc-white) p-3 ring-1 ring-(--oc-border) transition-shadow duration-200 cursor-pointer',
-        'hover:shadow-[0_12px_32px_-16px_rgba(10,25,41,0.18)]',
+        'oc-surface group flex aspect-[3/4] flex-col rounded-(--oc-radius-card) p-3 transition-shadow duration-200 cursor-pointer',
+        'hover:shadow-[0_0_0_1px_var(--oc-border),0_12px_28px_-16px_rgba(10,25,41,0.16)]',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25',
         className,
       )}
@@ -125,7 +125,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
               aria-label="More actions"
               aria-haspopup="menu"
               aria-expanded={menuOpen}
-              className={cn(GLASS, "flex size-[30px] items-center justify-center text-(--oc-text-strong) transition-colors hover:bg-(--oc-white)/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/40 cursor-pointer")}
+              className={cn(GLASS, "flex size-[30px] items-center justify-center text-(--oc-text-strong) transition-colors hover:text-(--oc-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/40 cursor-pointer")}
             >
               <MoreHorizontal size={16} />
             </button>

@@ -35,7 +35,7 @@ export function LDDashboardApprovalProgress({ approvals, className }: LDDashboar
     : visible.filter((a) => a.status === activeFilter);
 
   return (
-    <div className={cn('relative rounded-(--oc-radius-card) bg-(--oc-white) ring-1 ring-(--oc-border) p-5 overflow-hidden', className)}>
+    <div className={cn('relative rounded-(--oc-radius-card) oc-surface p-5 overflow-hidden', className)}>
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-gradient-to-br from-(--oc-primary-50)/50 to-(--oc-primary-100)/50 rounded-(--oc-radius-chip) blur-3xl -z-10 translate-x-1/3 -translate-y-1/3 pointer-events-none" />
 
       {/* Header */}

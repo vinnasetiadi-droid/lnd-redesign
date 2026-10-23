@@ -14,8 +14,8 @@ import { useAuthStore } from "@/store/useAuthStore";
 
 /**
  * Option C sidebar, after the "Database Operations Center" reference: a
- * floating glass panel (12px from the window edges, half-round corners,
- * half-transparent white with a light blur, a white edge and a soft shadow)
+ * floating panel 12px from the window edges, in the same material as the
+ * cards (solid white, a 1px hairline, one soft shadow, half-round corners),
  * over the sky gradient. Menu split
  * into groups by thin dividers, a bottom group pinned to the bottom, Option
  * A's icons, and a light grey box for the active page.
@@ -29,10 +29,10 @@ const MENU_GROUPS: string[][] = [
 /** Pinned to the bottom of the sidebar */
 const BOTTOM_KEYS = new Set(["settings"]);
 
-/** Active page: a white box with a hairline, on the glass */
-const ACTIVE_PILL = "bg-(--oc-white)/80 shadow-[0_0_0_1px_var(--oc-border),0_1px_2px_rgba(10,25,41,0.05)]";
+/** Active page: a light grey box (the segmented track's grey), medium weight */
+const ACTIVE_PILL = "bg-(--oc-surface) font-medium";
 /** Hover on the other items */
-const HOVER = "hover:bg-(--oc-white)/60";
+const HOVER = "hover:bg-(--oc-surface-subtle)";
 
 // ============================================================
 // SUB-COMPONENTS
@@ -108,14 +108,14 @@ function SidebarItem({
         className={cn(
           "group flex items-center h-9 gap-2.5 rounded-(--oc-radius-control) cursor-pointer select-none transition-colors text-left",
           collapsed ? "justify-center w-9 mx-auto" : "w-full pl-2.5 pr-2",
-          pill ? cn(ACTIVE_PILL, "text-(--oc-text-strong)") : danger ? cn("text-(--oc-text-secondary) hover:text-(--oc-danger)", HOVER) : cn("text-(--oc-text-secondary) hover:text-(--oc-text-strong)", HOVER),
+          pill ? cn(ACTIVE_PILL, "text-(--oc-text-strong)") : danger ? cn("text-(--oc-text-body) hover:text-(--oc-danger)", HOVER) : cn("text-(--oc-text-body) hover:text-(--oc-text-strong)", HOVER),
         )}
         onClick={handleClick}
       >
         <span
           className={cn(
             "shrink-0 flex items-center justify-center transition-[color,translate] duration-200 group-hover:translate-x-[2px]",
-            active || childActive ? "text-(--oc-text-strong)" : danger ? "text-(--oc-text-muted) group-hover:text-(--oc-danger)" : "text-(--oc-text-muted) group-hover:text-(--oc-text-body)",
+            active || childActive ? "text-(--oc-text-strong)" : danger ? "text-(--oc-text-secondary) group-hover:text-(--oc-danger)" : "text-(--oc-text-secondary) group-hover:text-(--oc-text-body)",
           )}
         >
           {icon}
@@ -213,7 +213,7 @@ function SubmenuItem({ label, active, first, last, onClick }: SubmenuItemProps) 
         type="button"
         className={cn(
           "flex h-8 w-full items-center rounded-(--oc-radius-chip) px-2.5 text-left text-[13px] leading-[20px] transition-colors cursor-pointer",
-          active ? cn(ACTIVE_PILL, "text-(--oc-text-strong)") : cn("text-(--oc-text-secondary) hover:text-(--oc-text-strong)", HOVER),
+          active ? cn(ACTIVE_PILL, "text-(--oc-text-strong)") : cn("text-(--oc-text-body) hover:text-(--oc-text-strong)", HOVER),
         )}
         onClick={onClick}
       >
@@ -319,11 +319,10 @@ export function Sidebar({ className, role = "ld_team", isCollapsed = false, onTo
   return (
     <aside
       className={cn(
-        // Floating glass panel, kept light: half-transparent white, a medium
-        // blur (12px), a white edge and a soft shadow, half-round corners
+        // Floating panel in the cards' material: solid white, hairline, soft shadow
         "h-full flex flex-col font-sans transition-[width] duration-300 ease-in-out",
-        "rounded-(--oc-radius-card) bg-(--oc-white)/55 backdrop-blur-md shadow-[inset_0_0_0_1px_rgba(255,255,255,0.7),0_0_0_1px_color-mix(in_srgb,var(--oc-border)_70%,transparent),0_12px_32px_-18px_rgba(10,25,41,0.16)]",
-        isCollapsed ? "w-[60px]" : "w-[clamp(196px,15vw,220px)]",
+        "oc-surface rounded-(--oc-radius-card)",
+        isCollapsed ? "w-[56px]" : "w-[clamp(172px,12vw,184px)]",
         className,
       )}
     >

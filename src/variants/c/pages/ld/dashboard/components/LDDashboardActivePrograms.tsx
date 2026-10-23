@@ -122,8 +122,10 @@ function ProgramRow({ program }: { program: ProgramOverview }) {
         ? `Course · ends ${shortDate(program.endsOn)}`
         : `Course · ${program.duration ?? program.mode}`;
 
+  // Neutral row for every program: at-risk ones keep the amber text and bar,
+  // not an amber surface (NISA is the page's one coloured surface)
   return (
-    <div className={cn('rounded-(--oc-radius-card) p-3.5', atRisk ? AMBER.frame : 'bg-(--oc-surface-muted)')}>
+    <div className="rounded-(--oc-radius-card) bg-(--oc-surface-muted) p-3.5">
       <div className="flex items-baseline justify-between gap-3">
         <TruncatedTitle text={program.name} className="min-w-0 flex-1 text-[13px] leading-[20px] text-(--oc-text-strong)" />
         <span className={cn('shrink-0 text-[13px] tabular-nums', atRisk ? AMBER.text : 'text-(--oc-text-body)')}>{value}</span>
@@ -161,7 +163,7 @@ export function LDDashboardActivePrograms({ programs, className }: LDDashboardAc
   }, [active, filter]);
 
   return (
-    <div className={cn('relative rounded-(--oc-radius-card) bg-(--oc-white) ring-1 ring-(--oc-border) p-5', className)}>
+    <div className={cn('relative rounded-(--oc-radius-card) oc-surface p-5', className)}>
       <CardHeader
         title="Active programs"
         subtitle={`${active.length} running${atRiskCount ? ` · ${atRiskCount} ${atRiskCount === 1 ? 'needs' : 'need'} attention` : ''}`}

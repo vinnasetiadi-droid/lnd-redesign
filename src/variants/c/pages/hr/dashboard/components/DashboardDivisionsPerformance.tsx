@@ -4,7 +4,7 @@ import { Building2 } from '@/variants/c/icons';
 import { cn } from '@/lib/utils';
 import { AIInsightLine } from '@/variants/c/components/ui/ai-insight-banner';
 import type { DivisionPerformance } from '../types/dashboard.types';
-import { CardHeader, Trend } from '@/variants/c/components/ui/kit';
+import { CardHeader, Trend, tileClass } from '@/variants/c/components/ui/kit';
 import { CHART_BLUE, HATCHED_TRACK } from '@/variants/c/components/ui/chart';
 import { OC_COLORS } from '@/variants/c/theme';
 import { CountUp, GROW } from '@/variants/c/components/ui/count-up';
@@ -114,7 +114,7 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
     `${shortInsight} ${support.map((d) => d.name).join(', ')} are the three divisions below ${Math.max(...support.map((d) => d.score)) + 1}%; a review with each division lead could show where learners drop off.`;
 
   return (
-    <div className={cn('relative flex flex-col gap-4 rounded-(--oc-radius-card) bg-(--oc-white) ring-1 ring-(--oc-border) p-5', className)}>
+    <div className={cn('relative flex flex-col gap-4 rounded-(--oc-radius-card) oc-surface p-5', className)}>
       {/* ── Header ─────────────────────────────────────────── */}
       <CardHeader
         title="Division completion"
@@ -133,10 +133,7 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
               role="tab"
               aria-selected={isSelected}
               onClick={() => setGroup(tile.key)}
-              className={cn(
-                'rounded-(--oc-radius-card) border p-4 text-left transition-colors cursor-pointer',
-                isSelected ? 'border-transparent bg-(--oc-primary)/[0.07]' : 'border-(--oc-border) hover:bg-(--oc-surface-subtle)',
-              )}
+              className={tileClass(isSelected)}
             >
               <p className="text-[13px] leading-[18px] text-(--oc-text-secondary)">{tile.label}</p>
               <div className="mt-1.5 flex items-baseline gap-2">

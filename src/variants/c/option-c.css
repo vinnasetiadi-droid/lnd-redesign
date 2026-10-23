@@ -99,8 +99,9 @@ html.option-c {
   --oc-white: #FFFFFF;
   /* NISA priority card only, after the "Kresna" card: deep navy at the top
      (only a thin dark band), into blue, lighter towards the bottom right */
-  --oc-ai-gradient: radial-gradient(60% 140% at 100% 100%, color-mix(in srgb, var(--oc-primary-300) 50%, transparent) 0%, transparent 70%), linear-gradient(100deg, #052F5C 0%, #0E4A8B 28%, #2070C5 62%, #5499E3 100%);
-  --oc-ai-gradient-tall: radial-gradient(80% 55% at 90% 100%, color-mix(in srgb, var(--oc-primary-300) 50%, transparent) 0%, transparent 70%), linear-gradient(168deg, #052F5C 0%, #0E4A8B 28%, #2070C5 62%, #5499E3 100%);
+  /* Its lightest point (#2070C5) keeps white text at 5:1 or better */
+  --oc-ai-gradient: linear-gradient(100deg, #052F5C 0%, #0E4A8B 35%, #1B60AE 70%, #2070C5 100%);
+  --oc-ai-gradient-tall: linear-gradient(168deg, #052F5C 0%, #0E4A8B 35%, #1B60AE 70%, #2070C5 100%);
   --oc-attention-text: #B54708; /* Amber, only for things that need attention */
   --oc-attention-surface: #FFFAEB;
   --oc-attention-bar: #FEC84B;
@@ -145,6 +146,19 @@ html.option-c {
   --oc-radius-control: 10px; /* Buttons, inputs, segmented tabs, menus */
   --oc-radius-chip: 8px; /* Chips, tags, badges, menu items, small icon boxes */
   --oc-radius-bar: 3px; /* Progress bars and chart bars */
+  /* One material for every white surface (sidebar, top bar controls, cards,
+     tiles): solid white, a 1px hairline and one soft shadow */
+  --oc-shadow-card: 0 1px 2px rgba(10,25,41, 0.05);
+  --oc-surface-shadow: 0 0 0 1px var(--oc-border), var(--oc-shadow-card);
+  /* Selected tiles: a light blue tint with a blue hairline */
+  --oc-selected-surface: var(--oc-primary-50);
+  --oc-selected-border: var(--oc-primary-200);
+}
+
+/* The one white surface: sidebar, top bar controls, cards, tiles */
+html.option-c .oc-surface {
+  background: var(--oc-white);
+  box-shadow: var(--oc-surface-shadow);
 }
 
 /* Regular by default, including elements the base styles make heavier */
@@ -171,7 +185,7 @@ html.option-c .oc-btn-primary:hover {
 html.option-c .oc-btn-secondary {
   background: var(--oc-button-secondary);
   color: var(--oc-text-strong);
-  box-shadow: 0 0 0 1px var(--oc-border), 0 1px 2px rgba(10,25,41, 0.05);
+  box-shadow: var(--oc-surface-shadow); /* the same material as the cards */
 }
 html.option-c .oc-btn-secondary:hover {
   background: var(--oc-button-secondary-hover);
@@ -179,7 +193,7 @@ html.option-c .oc-btn-secondary:hover {
 
 /* ── Motion ─────────────────────────────────────────────────── */
 
-/* Cards: a 1px lift and a faint blue glow on hover */
+/* Cards: a 1px lift and a soft neutral shadow on hover (the hairline stays) */
 html.option-c .oc-lift {
   border-radius: var(--oc-radius-card);
   /* translate, not transform: motion leaves an inline transform after the reveal */
@@ -187,7 +201,7 @@ html.option-c .oc-lift {
 }
 html.option-c .oc-lift:hover {
   translate: 0 -1px;
-  box-shadow: 0 14px 32px -18px color-mix(in srgb, var(--oc-primary) 40%, transparent);
+  box-shadow: 0 0 0 1px var(--oc-border), 0 12px 28px -16px rgba(10,25,41, 0.16);
 }
 
 /* Buttons give a little under the finger. In the base layer, so a button's own

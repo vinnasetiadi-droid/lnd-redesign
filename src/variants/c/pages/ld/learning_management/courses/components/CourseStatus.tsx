@@ -5,8 +5,8 @@
 import { cn } from '@/lib/utils';
 import { COURSE_STATUS_META, type CourseStatus } from '../data/courses.mock';
 
-/** Frosted white over the photo, shared by the status badge and the menu button */
-export const GLASS = 'rounded-(--oc-radius-chip) bg-(--oc-white)/70 ring-1 ring-(--oc-white)/60 backdrop-blur-md shadow-[0_1px_3px_rgba(10,25,41,0.12)]';
+/** Solid white over the photo (the cards' material), shared by the status badge and the menu button. The name is from when it was frosted glass. */
+export const GLASS = 'oc-surface rounded-(--oc-radius-chip)';
 
 /** The stronger shade of each status, for the dot */
 const STATUS_DOT: Record<CourseStatus, string> = {
