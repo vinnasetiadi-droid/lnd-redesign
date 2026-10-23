@@ -116,9 +116,10 @@ html.option-b {
   --ob-status-active: #1A73E8;
   --ob-status-inactive-bg: #F2F4F7;
   --ob-status-inactive: #D0D5DD;
-  /* Shapes: squarer than Option A's pills. Round stays for avatars and pure circles */
+  /* Shapes: squarer than Option A's pills. Round stays for avatars, pure
+     circles and the 3D buttons (the user keeps those as round pills) */
   --ob-radius-control: 6px; /* Chips, tags, inputs, filter buttons, pagination, focus rings */
-  --ob-radius-button: 8px; /* The 3D buttons */
+  --ob-radius-button: 9999px; /* The 3D buttons stay round (chat request, overrides the kit's 8px) */
   --ob-radius-card: 12px; /* Dialogs, menus, tooltips */
 }
 
