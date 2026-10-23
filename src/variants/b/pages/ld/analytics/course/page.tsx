@@ -6,7 +6,7 @@
 // ============================================================
 
 import { motion } from 'motion/react';
-import { useState, type ReactNode } from 'react';
+import { useId, useState, type ReactNode } from 'react';
 import { DashboardLayout } from '@/variants/b/layouts/DashboardLayout';
 import { cn } from '@/lib/utils';
 import { ProgramScopeTabs, PROGRAM_TYPE_TABS, FadeValue, type ScopeTab } from '@/variants/b/pages/ld/dashboard/components/ProgramScopeTabs';
@@ -74,7 +74,7 @@ const COURSE_MODE_BREAKDOWN = [
 ];
 
 const COURSE_MODE_PIE = [
-  { name: 'Self Learning',    value: 28, color: OB_COLORS.modeSelf },
+  { name: 'Self Learning',    value: 28, color: OB_COLORS.primary200 },
   { name: 'Blended Learning', value: 36, color: OB_COLORS.primary },
 ];
 
@@ -137,7 +137,7 @@ const JOURNEY_MODE_BREAKDOWN = [
 ];
 
 const JOURNEY_MODE_PIE = [
-  { name: 'Self Learning',    value: 7,  color: OB_COLORS.modeSelf },
+  { name: 'Self Learning',    value: 7,  color: OB_COLORS.primary200 },
   { name: 'Blended Learning', value: 11, color: OB_COLORS.primary },
 ];
 
@@ -212,11 +212,13 @@ const modeLabel = (m: ProgramMode) => (m === 'Self Learning' ? 'Self-paced' : 'B
 const typeLabel = (t: string) => (t === 'Skill Training' ? 'Skill training' : t);
 
 /** Blended is the deep blue, self-paced the pale one (as in the learning funnel) */
-// The mode colours of Home's Learning mode analytics: blended blue, self-paced green
-const MODE_COLOR: Record<ProgramMode, string> = { 'Blended Learning': OB_COLORS.primary, 'Self Learning': OB_COLORS.modeSelf };
-const MODE_DONE_COLOR: Record<ProgramMode, string> = {
-  'Blended Learning': OB_COLORS.primary300,
-  'Self Learning': `color-mix(in srgb, ${OB_COLORS.modeSelf} 45%, white)`,
+// The blue family the other Option B charts use (the funnel beside it): blended deep blue, self-paced pale blue
+const MODE_COLOR: Record<ProgramMode, string> = { 'Blended Learning': OB_COLORS.primary, 'Self Learning': OB_COLORS.primary200 };
+const MODE_DONE_COLOR: Record<ProgramMode, string> = { 'Blended Learning': OB_COLORS.primary300, 'Self Learning': OB_COLORS.primary100 };
+/** Donut segment fills: a soft gradient in the mode's blue, like the funnel and the highlighted bars */
+const MODE_GRADIENT: Record<ProgramMode, [string, string]> = {
+  'Blended Learning': [OB_COLORS.primary400, OB_COLORS.primary],
+  'Self Learning': [OB_COLORS.primary100, OB_COLORS.primary200],
 };
 
 const metaLine = (p: { category?: string; type: string; mode: ProgramMode; duration?: string; startDate?: string; endDate?: string }) =>
@@ -465,6 +467,7 @@ type SortKey = 'rating' | 'relevancy' | 'duration';
 
 export default function LearningProgramAnalyticsPage() {
   const leftSticky = useStickyColumnTop();
+  const pieId = useId().replace(/[^a-zA-Z0-9]/g, '');
   const rightSticky = useStickyColumnTop();
   const [programType, setProgramType] = useState<ProgramType>('course');
   const noun = PROGRAM_NOUN[programType];
@@ -587,6 +590,14 @@ export default function LearningProgramAnalyticsPage() {
                       with small rounded corners and thin gaps */}
                   <div className="relative size-[220px] shrink-0">
                     <PieChart width={220} height={220}>
+                      <defs>
+                        {(Object.keys(MODE_GRADIENT) as ProgramMode[]).map((m) => (
+                          <linearGradient key={m} id={`${pieId}-${m === 'Blended Learning' ? 'blended' : 'self'}`} x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stopColor={MODE_GRADIENT[m][0]} />
+                            <stop offset="100%" stopColor={MODE_GRADIENT[m][1]} />
+                          </linearGradient>
+                        ))}
+                      </defs>
                       <Pie
                         data={data.modePie}
                         cx="50%"
@@ -601,7 +612,9 @@ export default function LearningProgramAnalyticsPage() {
                         strokeWidth={0}
                         animationDuration={800}
                       >
-                        {data.modePie.map((entry) => (<Cell key={`program-mode-${entry.name}`} fill={MODE_COLOR[entry.name as ProgramMode]} />))}
+                        {data.modePie.map((entry) => (
+                          <Cell key={`program-mode-${entry.name}`} fill={`url(#${pieId}-${entry.name === 'Blended Learning' ? 'blended' : 'self'})`} />
+                        ))}
                       </Pie>
                       <Tooltip
                         content={({ active, payload }) =>
