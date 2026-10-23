@@ -1,10 +1,11 @@
 // ============================================================
 // Upskill Studio — course card (grid view), Option C
-// Landscape, two to a row: the photo on the left with a dark status badge and
-// a white menu button; on the right the name, a two-line description, one meta
-// row (version, duration, mode), the figures for the status (with a bar on
-// active courses), then the owner with the date and either Review (someone
-// else's course waits for you) or an arrow to open the course.
+// Landscape, two to a row: the photo on the left with a dark status badge at
+// its bottom left, the menu at the card's top right. On the right the name and
+// description on one line each, one meta row (version, duration, mode), the
+// figures for the status (with a bar on active courses), then the owner and
+// date on one line with Review (someone else's course waits for you) or an
+// arrow to open the course.
 // ============================================================
 
 import { useState } from 'react';
@@ -16,7 +17,6 @@ import { daysUntil, formatDate } from '@/variants/c/pages/ld/dashboard/period';
 import { PillButton } from '@/variants/c/components/ui/kit';
 import { COURSE_STATUS_META, draftItemsOf, liveVersionOf, type CourseItem } from '../data/courses.mock';
 import { DeleteVersionDialog } from '@/variants/c/components/common/DeleteVersionDialog';
-import { GLASS } from './CourseStatus';
 import { CourseCover } from './CourseCover';
 import { courseMode, ownerName, titleOf } from './CourseLibraryTable';
 
@@ -109,15 +109,13 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
       onKeyDown={(e) => e.key === 'Enter' && e.target === e.currentTarget && onClick?.()}
       className={cn(
         // Landscape: photo left, details right
-        'oc-surface group flex gap-4 rounded-(--oc-radius-card) p-2.5 pr-4 transition-shadow duration-200 cursor-pointer',
+        'oc-surface group relative flex gap-4 rounded-(--oc-radius-card) p-2.5 pr-4 transition-shadow duration-200 cursor-pointer',
         'hover:shadow-[0_1px_2px_rgba(10,25,41,0.04),0_14px_30px_-14px_rgba(10,25,41,0.18)]',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25',
         className,
       )}
     >
-      {/* Photo, inset and rounded, the card's full height; dark status badge top
-          left, white menu top right. The overlays sit outside the clipped photo
-          so the menu can open below it. */}
+      {/* Photo, inset and rounded, the card's full height; dark status badge bottom left */}
       <div className="relative w-[30%] min-h-[132px] shrink-0">
         <div className="absolute inset-0 overflow-hidden rounded-(--oc-radius-control) bg-(--oc-surface)">
           <CourseCover
@@ -126,57 +124,58 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
             className={cn('absolute inset-0 size-full transition-transform duration-500 group-hover:scale-[1.03]', isInactive && 'grayscale-[60%]')}
           />
         </div>
-        <span className="absolute left-2 top-2 inline-flex h-[22px] items-center whitespace-nowrap rounded-[6px] bg-(--oc-text-ink) px-2 text-[11px] leading-none text-(--oc-white)">
+        <span className="absolute bottom-2 left-2 inline-flex h-[22px] items-center whitespace-nowrap rounded-[6px] bg-(--oc-text-ink) px-2 text-[11px] leading-none text-(--oc-white)">
           {COURSE_STATUS_META[course.status].label}
         </span>
-        {/* Clicks here never open the card */}
-        <div className="absolute right-2 top-2" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setMenuOpen((o) => !o)}
-              aria-label="More actions"
-              aria-haspopup="menu"
-              aria-expanded={menuOpen}
-              className={cn(GLASS, "flex size-6 items-center justify-center text-(--oc-text-strong) transition-colors hover:text-(--oc-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/40 cursor-pointer")}
-            >
-              <MoreHorizontal size={14} />
-            </button>
-            {menuOpen && (
-              <>
-                <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-                <div role="menu" className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-(--oc-radius-card) bg-(--oc-white) p-1 shadow-[0_8px_24px_-6px_rgba(10,25,41,0.18),0_2px_4px_rgba(10,25,41,0.04)]">
-                  <button
-                    type="button"
-                    role="menuitem"
-                    disabled={!canToggleStatus}
-                    className={cn(menuItem, canToggleStatus ? 'text-(--oc-text-body) hover:bg-(--oc-surface) cursor-pointer' : 'text-(--oc-border-control) cursor-not-allowed')}
-                    onClick={() => { if (canToggleStatus) { setMenuOpen(false); setShowStatusConfirm(true); } }}
-                  >
-                    {isInactive ? <EyeOn className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-                    {isInactive ? 'Activate' : 'Deactivate'}
-                  </button>
-                  <button
-                    type="button"
-                    role="menuitem"
-                    disabled={!canDelete}
-                    title={canDelete ? undefined : 'Only a draft or a version sent back for revision can be deleted.'}
-                    className={cn(menuItem, canDelete ? 'text-(--oc-danger) hover:bg-(--oc-danger-surface) cursor-pointer' : 'text-(--oc-border-control) cursor-not-allowed')}
-                    onClick={() => { if (canDelete) { setMenuOpen(false); setShowDeleteConfirm(true); } }}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                    Delete
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
+      </div>
+
+      {/* Menu: top right of the card, on the white. Clicks here never open the card */}
+      <div className="absolute right-2.5 top-2.5 z-[1]" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label="More actions"
+            aria-haspopup="menu"
+            aria-expanded={menuOpen}
+            className="flex size-7 items-center justify-center rounded-(--oc-radius-chip) text-(--oc-text-subtle) transition-colors hover:bg-(--oc-surface) hover:text-(--oc-text-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/40 cursor-pointer"
+          >
+            <MoreHorizontal size={16} />
+          </button>
+          {menuOpen && (
+            <>
+              <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
+              <div role="menu" className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-(--oc-radius-card) bg-(--oc-white) p-1 shadow-[0_8px_24px_-6px_rgba(10,25,41,0.18),0_2px_4px_rgba(10,25,41,0.04)]">
+                <button
+                  type="button"
+                  role="menuitem"
+                  disabled={!canToggleStatus}
+                  className={cn(menuItem, canToggleStatus ? 'text-(--oc-text-body) hover:bg-(--oc-surface) cursor-pointer' : 'text-(--oc-border-control) cursor-not-allowed')}
+                  onClick={() => { if (canToggleStatus) { setMenuOpen(false); setShowStatusConfirm(true); } }}
+                >
+                  {isInactive ? <EyeOn className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                  {isInactive ? 'Activate' : 'Deactivate'}
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  disabled={!canDelete}
+                  title={canDelete ? undefined : 'Only a draft or a version sent back for revision can be deleted.'}
+                  className={cn(menuItem, canDelete ? 'text-(--oc-danger) hover:bg-(--oc-danger-surface) cursor-pointer' : 'text-(--oc-border-control) cursor-not-allowed')}
+                  onClick={() => { if (canDelete) { setMenuOpen(false); setShowDeleteConfirm(true); } }}
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Delete
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
       <div className="flex min-w-0 flex-1 flex-col py-1.5">
         <h3
-          className={cn('truncate text-[15px] leading-[22px]', isInactive ? 'text-(--oc-text-secondary)' : 'text-(--oc-text-strong)')}
+          className={cn('truncate pr-7 text-[15px] leading-[22px]', isInactive ? 'text-(--oc-text-secondary)' : 'text-(--oc-text-strong)')}
           title={titleOf(course)}
         >
           {titleOf(course)}
