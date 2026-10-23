@@ -54,7 +54,13 @@ export function ProfileHeroCard({ person, photo = profileCutout, className }: Pr
             clipPath: 'inset(0 0 0 0 round 0 0 0 var(--oc-radius-card))',
           }}
         >
-          <img src={photo} alt={name} className="block size-full object-cover object-bottom" />
+          {/* The photo's right edge cuts through the shoulder: fade it out instead of a hard line */}
+          <img
+            src={photo}
+            alt={name}
+            className="block size-full object-cover object-bottom"
+            style={{ maskImage: 'linear-gradient(to right, #000 84%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to right, #000 84%, transparent 100%)' }}
+          />
         </div>
 
         {/* Details: name, role and up to four contact details */}
