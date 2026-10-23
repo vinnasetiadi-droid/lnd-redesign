@@ -12,3 +12,4 @@ Open product questions (decide before U1 if possible):
 
 Option B: B1 (one accent colour), B2 (section rhythm), B3 (compact profile) and B4 (orange attention colour, sticky right column) are standalone style prompts at the end of `prompts.md`. Run them in that order.
 B5 to B8 give Option B its own identity (foundations, components, page fixes, QA). Run them in order after B4.
+B9 is the final consistency pass for Option B (run after B8).

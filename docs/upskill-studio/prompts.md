@@ -1009,3 +1009,58 @@ insight line, blue as the one accent and orange only for attention.
    changed. /a/... pages look exactly as before. npm run build passes.
    Reply with a short list of what now differs from A on each page.
 ```
+
+
+## B9: Final consistency pass for Option B
+
+```
+Project: Vite + React + Tailwind demo of three L&D admin pages. This prompt
+only touches Option B (src/variants/b/). Option A, Option C and everything
+under src/ outside src/variants/b/ must stay unchanged. Pages:
+/b/ld/dashboard, /b/ld/analytics/course, /b/ld/learning-management/courses
+
+Checklist: docs/upskill-studio/checklist.csv, rows B9-01 to B9-07. Work
+through them in order. When a row is finished set Status to "Done", Done on
+to today's date (YYYY-MM-DD) and a one-line Notes entry; if a row can't be
+done set "Blocked" and say why. Keep the CSV valid.
+
+Style only: do not change any content, label, number or section. Colours
+only through the --ob-* variables in src/variants/b/option-b.css (mirrored in
+src/variants/b/theme.ts). Keep Option B's language: frameless sections,
+hairlines, underline tabs, outlined tags, Geist Mono numbers, 6px controls,
+8px buttons, blue as the one accent, orange only for attention.
+
+1. Learning funnel (src/variants/b/pages/ld/analytics/course/components/
+   LearningProgressFunnel.tsx) is green today, while the Courses by mode
+   donut next to it and Home's Learning mode analytics are blue. Make it
+   blue: Blended = --ob-primary, Self-paced = --ob-mode-self (the pale blue),
+   in the ribbon layers, its left fade, the legend and the dots in the table.
+   Then grep src/variants/b for any other green used as a mode or category
+   colour and switch it to the blue pair. Green stays only on positive trend
+   pills.
+2. Review button: the review strip uses the 3D secondary button, the course
+   card footer uses a tinted blue pill. Make the card footer's Review the same
+   3D secondary button (8px corners, same height and padding as in the
+   strip). No tinted blue fill anywhere for buttons.
+3. Avatar and badge shapes, one rule:
+   - People are circles: owner initials, avatar stacks, the top bar avatar,
+     and the trainee initials in Recent learner feedback (square today).
+   - Things that are not people are 6px rounded squares: license initials
+     (OR, in, LX, Co, MS), rank numbers in Top and Bottom courses, and the
+     IconCircle in components/ui/kit.tsx.
+4. Program overview chart on Home: bars get 4px top corners and a square
+   bottom instead of full pill shapes. Keep the grey bars and the blue
+   gradient highlight as they are.
+5. Sidebar (src/variants/b/components/Sidebar.tsx): the active item has no
+   tinted background. Show it with a 2px --ob-primary bar on the left edge,
+   --ob-text-strong label and a --ob-primary icon. Sub-items (Upskill under
+   Programs, Learning program under Analytics) follow the same rule. Hover:
+   --ob-surface-subtle background, 6px corners.
+6. Upskill course grid: 4 columns from 1440 px, 3 columns from 1024 px, 2 from
+   768 px, 1 below, so the meta row (version, hours, mode) is never cut off.
+7. Verify all three pages at 1440 and 1280 px wide: no green mode colour, one
+   Review style, shapes follow the avatar rule, square-cornered chart bars,
+   new sidebar active state, no truncated card meta. /a/... pages look
+   exactly as before and npm run build passes. Reply with the files you
+   touched.
+```
