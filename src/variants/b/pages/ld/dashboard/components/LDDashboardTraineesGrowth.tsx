@@ -140,7 +140,7 @@ export function LDDashboardTraineesGrowth({ className }: LDDashboardTraineesGrow
               strokeWidth={2}
               fill={`url(#${chartIds.area})`}
               dot={false}
-              activeDot={{ r: 4, fill: CHART_BLUE, stroke: '#fff', strokeWidth: 2 }}
+              activeDot={{ r: 4, fill: CHART_BLUE, stroke: OB_COLORS.white, strokeWidth: 2 }}
               animationDuration={600}
               animationEasing="ease-in-out"
             />

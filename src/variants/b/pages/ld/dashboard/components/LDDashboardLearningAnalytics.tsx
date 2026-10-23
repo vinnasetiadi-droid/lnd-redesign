@@ -60,7 +60,7 @@ function endLabel(label: string, color: string, text: string, lastIndex: number)
     const y = Number(props.y);
     return (
       <g>
-        <circle cx={x} cy={y} r={5} fill={color} stroke="#fff" strokeWidth={2} style={{ filter: `drop-shadow(0 2px 4px color-mix(in srgb, ${color} 45%, transparent))` }} />
+        <circle cx={x} cy={y} r={5} fill={color} stroke={OB_COLORS.white} strokeWidth={2} style={{ filter: `drop-shadow(0 2px 4px color-mix(in srgb, ${color} 45%, transparent))` }} />
         <text x={x + 10} y={y + 4} fill={text} fontSize={12} fontFamily="Inter, sans-serif">
           {label} <tspan fontFamily={OB_NUM_FONT}>{props.value}%</tspan>
         </text>
@@ -196,7 +196,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
                   strokeWidth={2}
                   fill={`url(#${ids.area}-${m.key})`}
                   dot={false}
-                  activeDot={{ r: 4, fill: m.color, stroke: '#fff', strokeWidth: 2 }}
+                  activeDot={{ r: 4, fill: m.color, stroke: OB_COLORS.white, strokeWidth: 2 }}
                   animationDuration={600}
                   animationEasing="ease-out"
                 >

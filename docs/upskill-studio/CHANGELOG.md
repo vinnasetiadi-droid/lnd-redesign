@@ -202,3 +202,45 @@ Files: `components/ui/kit.tsx`, `option-b.css`, `theme.ts`,
 7. Analytics figures still disagree in places (for example "Becoming
    Irreplaceable" at 100% completion, and totals that differ from Home). The
    A pass was visual only, so the data was left as is.
+
+## Option B: B3 to B8 (own identity)
+
+Option B only (`src/variants/b/`); Option A unchanged.
+
+- B3, compact profile: built and tried, then reverted at the user's request.
+  Home keeps the 130px square photo. No headroom offsets are left, and the
+  profile follows the section rhythm. NISA is now one solid blue section, edge
+  to edge in its column, with no card frame (chat request).
+- B5, foundations:
+  - Shape tokens: `--ob-radius-control` 6px and `--ob-radius-card` 12px.
+    `--ob-radius-button` is 14px, a square with almost round corners, as the
+    user asked (the kit said 8px).
+  - Numbers use Geist Mono through `.ob-num`; `NumText`, `NUM_TICK` and
+    `svgNumText` keep units and words in Inter.
+  - Every progress bar is 4px tall with 2px corners.
+  - Self-paced is the pale blue.
+  - The license gauge is orange only below 25% usage.
+  - The last hex values are now tokens, and `OA` is renamed `OB_PALETTE`.
+  - The learning funnel is green, by the user's request.
+- B6, components:
+  - Underline tabs everywhere.
+  - Outlined status tags in the table and on the card photos (the card menu
+    moved to the photo).
+  - The NISA insight line has a left rule and no box.
+  - Search, pagination (new shared `components/ui/pagination.tsx`) and the
+    view toggle are 6px outlined controls.
+  - Filter chips stay in the hairline toolbar as 6px white controls, outlined
+    in blue while filtering.
+- B7, page fixes:
+  - Upskill: the review strip has an orange left rule and no blue band; the
+    table subline is muted and the headers are 11px with letter spacing.
+  - Analytics: the KPIs stay on one line (Avg. enrollment gets a wider
+    column); Top and Bottom names wrap to two lines.
+  - Analytics: the donut ring is 10px, as the kit asks (it replaces the
+    earlier thick donut).
+- B8, QA:
+  - No imports from Option A, and no hex outside the tokens apart from the
+    unrendered mock icon colours.
+  - `rounded-full` is used only for avatars, dots, icon circles, the orb and
+    rank badges.
+  - Nothing outside `src/variants/b` changed, and `npm run build` passes.
