@@ -83,7 +83,7 @@ export function LDDashboardNissaInsight({ insights, className }: LDDashboardNiss
         {/* ── Footer CTA: the 3D blue button ─────────────────────── */}
         <button
           type="button"
-          className="ob-btn-primary group flex h-11 items-center justify-between gap-2 rounded-(--ob-radius-button) px-5 text-[13px] font-medium cursor-pointer"
+          className="ob-btn-primary ob-on-blue group flex h-10 items-center justify-between gap-2 rounded-(--ob-radius-button) px-5 text-[13px] font-medium cursor-pointer"
         >
           <span className="truncate">More insights? Just ask NISA</span>
           <ChevronRight className="size-4 shrink-0 transition-transform group-hover:translate-x-0.5" />

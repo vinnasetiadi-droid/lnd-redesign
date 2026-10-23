@@ -292,7 +292,7 @@ function Avatar({ name }: { name: string }) {
 /** Progress bar: 4px tall with 2px corners, like every bar in B */
 function ThinBar({ value, className }: { value: number; className?: string }) {
   return (
-    <div className={cn('h-1 overflow-hidden rounded-[2px] bg-(--ob-border-strong)', className)}>
+    <div className={cn('h-1 overflow-hidden rounded-[2px] bg-(--ob-track)', className)}>
       <div className="h-full rounded-[2px] bg-(--ob-primary) transition-[width] duration-500" style={{ width: `${Math.max(0, Math.min(100, value))}%` }} />
     </div>
   );
@@ -355,7 +355,7 @@ function ActiveProgramsTable({ programType, programs, noun }: { programType: Pro
               <div key={`${programType}-${program.id}`} className={cn(ACTIVE_GRID, 'min-h-14 border-b border-(--ob-border) px-3 py-2.5 transition-colors last:border-b-0 hover:bg-(--ob-surface-subtle)')}>
                 <div className="min-w-0">
                   <p className="truncate text-[13px] leading-[20px] text-(--ob-text-strong)" title={program.name}>{program.name}</p>
-                  <p className="truncate text-[12px] leading-[18px] text-(--ob-text-muted)">{metaLine(program)}</p>
+                  <p className="truncate text-[12px] leading-[16px] text-(--ob-text-muted)">{metaLine(program)}</p>
                 </div>
                 <span className="ob-num text-right text-[13px] text-(--ob-text-strong)">{program.enrolled}</span>
                 <span className="flex items-center gap-2">
@@ -416,7 +416,7 @@ function RankedList({ programType, rows, metric }: { programType: ProgramType; r
             <div className="min-w-0 flex-1">
               {/* The name wraps to two lines instead of being cut off; the metadata on its own muted line */}
               <p className="line-clamp-2 text-[13px] leading-[20px] text-(--ob-text-strong)" title={program.name}>{program.name}</p>
-              <p className="mt-0.5 truncate text-[12px] leading-[18px] text-(--ob-text-muted)">
+              <p className="mt-0.5 truncate text-[12px] leading-[16px] text-(--ob-text-muted)">
                 {[typeLabel(program.type), modeLabel(program.mode), programSchedule(program)].join(' · ')}
               </p>
             </div>
@@ -503,8 +503,8 @@ export default function LearningProgramAnalyticsPage() {
   );
 
   const idleCount = data.notStarted.length;
-  // A data grid: no gaps, every cell padded, a light line between columns (the lines meet from row to row)
-  const FEEDBACK_GRID = 'grid grid-cols-[minmax(190px,1.1fr)_112px_minmax(240px,2fr)_88px_100px_92px] items-stretch [&>*]:flex [&>*]:items-center [&>*]:px-4 [&>*:first-child]:pl-0 [&>*:last-child]:pr-0 [&>*:not(:first-child)]:border-l [&>*]:border-(--ob-border-subtle)';
+  // Cells padded, rows split by horizontal hairlines only (no lines between columns)
+  const FEEDBACK_GRID = 'grid grid-cols-[minmax(190px,1.1fr)_112px_minmax(240px,2fr)_88px_100px_92px] items-stretch [&>*]:flex [&>*]:items-center [&>*]:px-4 [&>*:first-child]:pl-0 [&>*:last-child]:pr-0';
 
   return (
     <DashboardLayout whitePage>
@@ -537,8 +537,11 @@ export default function LearningProgramAnalyticsPage() {
                   {/* Value, unit and trend always on one line, the same layout for all five */}
                   <div data-kpi-row className="flex items-center gap-1.5 whitespace-nowrap">
                     <p className="flex items-baseline gap-1">
-                      <span className="ob-num text-[30px] leading-[36px] font-semibold text-(--ob-text-strong)"><FadeValue k={kpi.value}>{kpi.value}</FadeValue></span>
-                      {kpi.unit && <span className="text-[13px] text-(--ob-text-muted)"><FadeValue k={kpi.unit}>{kpi.unit}</FadeValue></span>}
+                      {/* Units always small: "76" + "%", "88" + "per course" */}
+                      <span className="ob-num text-[30px] leading-[36px] font-semibold text-(--ob-text-strong)"><FadeValue k={kpi.value}>{kpi.value.replace(/%$/, '')}</FadeValue></span>
+                      {(kpi.unit || kpi.value.endsWith('%')) && (
+                        <span className="text-[13px] font-semibold text-(--ob-text-muted)"><FadeValue k={kpi.unit || '%'}>{kpi.unit || '%'}</FadeValue></span>
+                      )}
                     </p>
                     <DeltaChip positive={kpi.positive}><FadeValue k={change} className="ob-num">{change}</FadeValue></DeltaChip>
                   </div>
@@ -608,7 +611,7 @@ export default function LearningProgramAnalyticsPage() {
                       />
                     </PieChart>
                     <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="ob-num text-[32px] leading-[38px] font-semibold text-(--ob-text-strong)"><FadeValue k={modeTotal}>{modeTotal}</FadeValue></span>
+                      <span className="ob-num text-[30px] leading-[36px] font-semibold text-(--ob-text-strong)"><FadeValue k={modeTotal}>{modeTotal}</FadeValue></span>
                       <span className="text-[13px] text-(--ob-text-muted)">Total</span>
                     </div>
                   </div>
@@ -640,7 +643,7 @@ export default function LearningProgramAnalyticsPage() {
                         <div className="mt-2 flex h-1 w-full gap-0.5 overflow-hidden rounded-[2px]">
                           <div className="h-full rounded-[2px] transition-[width] duration-500" style={{ width: `${pct(item.active)}%`, background: MODE_COLOR[item.mode] }} />
                           {item.completed > 0 && <div className="h-full rounded-[2px] transition-[width] duration-500" style={{ width: `${pct(item.completed)}%`, background: MODE_DONE_COLOR[item.mode] }} />}
-                          <div className="h-full flex-1 rounded-[2px] bg-(--ob-border-strong)" />
+                          <div className="h-full flex-1 rounded-[2px] bg-(--ob-track)" />
                         </div>
                         <p className="mt-1.5 text-[12px] text-(--ob-text-muted)">
                           <NumText>{`Active ${item.active}${item.completed > 0 ? ` · Done ${item.completed}` : ''} · Inactive ${item.inactive}`}</NumText>
@@ -703,7 +706,7 @@ export default function LearningProgramAnalyticsPage() {
                   <div key={`${programType}-${program.id}`} className="flex items-center gap-4 border-b border-(--ob-border) py-3 last:border-b-0">
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-[13px] leading-[20px] text-(--ob-text-strong)" title={program.name}>{program.name}</p>
-                      <p className="truncate text-[12px] leading-[18px] text-(--ob-text-muted)">
+                      <p className="truncate text-[12px] leading-[16px] text-(--ob-text-muted)">
                         {[typeLabel(program.type), modeLabel(program.mode), programSchedule(program)].join(' · ')}
                       </p>
                     </div>
@@ -733,7 +736,7 @@ export default function LearningProgramAnalyticsPage() {
                       <div key={`${programType}-${item.name}`} className="flex items-center gap-3 border-b border-(--ob-border) py-3 last:border-b-0">
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-[13px] leading-[20px] text-(--ob-text-strong)" title={item.name}>{item.name}</p>
-                          <p className="text-[12px] leading-[18px] text-(--ob-text-muted)">{stamp(item.date, item.time)}</p>
+                          <p className="text-[12px] leading-[16px] text-(--ob-text-muted)">{stamp(item.date, item.time)}</p>
                         </div>
                         <RoundChip>{item.type}</RoundChip>
                       </div>
@@ -756,7 +759,7 @@ export default function LearningProgramAnalyticsPage() {
                       <Avatar name={cert.holder} />
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-[13px] leading-[20px] text-(--ob-text-strong)" title={cert.name}>{cert.name}</p>
-                        <p className="truncate text-[12px] leading-[18px] text-(--ob-text-muted)">{cert.holder} · expired {stamp(cert.expiredDate)}</p>
+                        <p className="truncate text-[12px] leading-[16px] text-(--ob-text-muted)">{cert.holder} · expired {stamp(cert.expiredDate)}</p>
                       </div>
                       <span className={cn('shrink-0 text-[13px]', cert.daysExpired >= 30 ? ATTENTION.text : 'text-(--ob-text-muted)')}>
                         <NumText>{`${cert.daysExpired}d`}</NumText>
@@ -799,12 +802,12 @@ export default function LearningProgramAnalyticsPage() {
                       <div key={`${programType}-${fb.id}`} className={cn(FEEDBACK_GRID, 'min-h-16 border-b border-(--ob-border-subtle) transition-colors last:border-b-0 hover:bg-(--ob-surface-subtle) [&>*]:py-3')}>
                         <div className="flex min-w-0 items-center gap-3">
                           {/* A person: a circle, like every other initials avatar */}
-                          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-(--ob-surface) text-[12px] text-(--ob-text-body)">
+                          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-(--ob-surface) text-[11px] text-(--ob-text-body)">
                             {initials(fb.name)}
                           </span>
                           <div className="min-w-0">
                             <p className="truncate text-[13px] leading-[20px] text-(--ob-text-strong)">{fb.name}</p>
-                            <p className="truncate text-[12px] leading-[18px] text-(--ob-text-muted)" title={fb.program}>{fb.program}</p>
+                            <p className="truncate text-[12px] leading-[16px] text-(--ob-text-muted)" title={fb.program}>{fb.program}</p>
                           </div>
                         </div>
                         <span className="whitespace-nowrap text-[13px] text-(--ob-text-body)">{stamp(fb.submittedDate)}</span>

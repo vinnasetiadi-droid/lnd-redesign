@@ -162,7 +162,7 @@ function CourseRowView({ row, me, onOpen, index }: { row: CourseRow; me: string;
           <CourseCover course={c} size="sm" className="h-[30px] w-11 shrink-0 rounded-[8px]" />
           <div className="min-w-0">
             <p className="truncate text-[13px] leading-[20px] text-(--ob-text-strong)" title={titleOf(c)}>{titleOf(c)}</p>
-            <p className="flex min-w-0 items-center gap-1 text-[12px] leading-[18px] text-(--ob-text-muted)">
+            <p className="flex min-w-0 items-center gap-1 text-[12px] leading-[16px] text-(--ob-text-muted)">
               <span className="truncate">
                 {courseType(c)} · {courseMode(c)} · v{versionOf(c)}
                 {/* Nobody reviews their own course */}

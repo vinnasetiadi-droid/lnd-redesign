@@ -1,7 +1,7 @@
 // Home's profile section: a small square photo, then a greeting above the name
 // and role with the original L&D achievement badges under them, and on the
-// right the four contact details in one column (split off by a light
-// hairline), so the row is filled edge to edge. The "head pops out" card it
+// right the four contact details in one column, so the row is filled edge
+// to edge. The "head pops out" card it
 // replaces is kept in src/variants/b/concepts/ProfileHeroCard.tsx.
 
 import { cn } from '@/lib/utils';
@@ -30,7 +30,7 @@ export function LDDashboardProfile({ person, className }: { person: LDProfile; c
   return (
     <div className={cn('flex flex-wrap items-center gap-6', className)}>
       {/* 130px square */}
-      <div className="relative size-[130px] shrink-0 overflow-hidden rounded-[16px] bg-(--ob-primary-50) ring-1 ring-(--ob-border)">
+      <div className="relative size-[130px] shrink-0 overflow-hidden rounded-(--ob-radius-card) bg-(--ob-primary-50) ring-1 ring-(--ob-border)">
         <img src={profilePhoto} alt={name} className="absolute inset-0 size-full object-cover" />
       </div>
 
@@ -42,8 +42,8 @@ export function LDDashboardProfile({ person, className }: { person: LDProfile; c
         <ProfileBadges size={40} className="mt-3" />
       </div>
 
-      {/* Contact details on the right, one per line, after a light hairline */}
-      <div className="flex min-w-[220px] flex-col gap-2.5 border-l border-(--ob-border-subtle) pl-8 max-md:basis-full max-md:border-l-0 max-md:pl-0">
+      {/* Contact details on the right, one per line (inner lines are horizontal only, so no divider) */}
+      <div className="flex min-w-[220px] flex-col gap-2.5 pl-8 max-md:basis-full max-md:pl-0">
         {contacts.map(({ icon: Icon, text }) => (
           <div key={text} className="flex min-w-0 items-center gap-2.5">
             <Icon size={18} className="shrink-0 text-(--ob-text-subtle)" />

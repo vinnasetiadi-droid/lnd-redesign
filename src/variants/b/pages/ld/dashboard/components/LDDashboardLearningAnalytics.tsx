@@ -11,7 +11,7 @@ import { Fragment, useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { CARD, CardHeader, DeltaChip, NumText } from '@/variants/b/components/ui/kit';
 import { AIInsightLine } from '@/variants/b/components/ui/ai-insight-banner';
-import { AXIS_TICK, ChartTooltipCard, GRID_PROPS, GradientProgress, NUM_TICK, areaGradient, useChartIds, ChartOnView } from '@/variants/b/components/ui/chart';
+import { AXIS_TICK, ChartTooltipCard, GRID_PROPS, GradientProgress, LegendMark, NUM_TICK, areaGradient, useChartIds, ChartOnView } from '@/variants/b/components/ui/chart';
 import { Area, AreaChart, CartesianGrid, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { ProgramScopeTabs, FadeValue, type ProgramScope } from './ProgramScopeTabs';
 import { periodLabel } from '../period';
@@ -116,13 +116,13 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
         {/* Attendance: blended sessions only */}
         <div className="min-w-0">
-          <p className="text-[13px] leading-[18px] text-(--ob-text-secondary)">
+          <p className="text-[13px] leading-[18px] text-(--ob-text-muted)">
             Attendance rate <span className="text-(--ob-text-subtle)">· blended sessions</span>
           </p>
           <div className="mt-1 flex items-center gap-2">
             <span className="font-semibold text-[24px] leading-[32px] text-(--ob-text-strong)">
               <FadeValue k={`${scope}-rate`} className="ob-num">{attendance.rate}</FadeValue>
-              <span className="text-[13px] text-(--ob-text-muted)">%</span>
+              <span className="text-[13px] font-semibold text-(--ob-text-muted)">%</span>
             </span>
             {attendance.trend !== 0 && (
               <DeltaChip positive={attendance.trend > 0}>
@@ -138,11 +138,11 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
 
         {/* Hours: one bar split by mode */}
         <div className="min-w-0">
-          <p className="text-[13px] leading-[18px] text-(--ob-text-secondary)">Total learning hours</p>
+          <p className="text-[13px] leading-[18px] text-(--ob-text-muted)">Total learning hours</p>
           <div className="mt-1 flex items-baseline gap-2">
             <span className="font-semibold text-[24px] leading-[32px] text-(--ob-text-strong)">
               <FadeValue k={`${scope}-hours`} className="ob-num">{totalHours.toLocaleString('en-US')}</FadeValue>
-              <span className="text-[13px] text-(--ob-text-muted)">h</span>
+              <span className="text-[13px] font-semibold text-(--ob-text-muted)">h</span>
             </span>
           </div>
           {/* 4px tall with 2px corners, like every progress bar in B */}
@@ -156,7 +156,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
           <div className="mt-1 flex items-center justify-between gap-3 text-[12px] leading-[16px] text-(--ob-text-muted)">
             {MODES.map((m) => (
               <span key={m.key} className="flex items-center gap-1.5 whitespace-nowrap">
-                <span className="size-2 shrink-0 rounded-full" style={{ background: m.color }} />
+                <LegendMark color={m.color} />
                 {m.label}
                 <FadeValue k={`${scope}-${m.key}`} className="text-(--ob-text-body)"><NumText>{`${hours[m.key].toLocaleString('en-US')}h`}</NumText></FadeValue>
               </span>

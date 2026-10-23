@@ -38,8 +38,6 @@ const DEFAULT_MODULES = 5;
 const ATTN = ATTENTION;
 
 const AVATAR_INITIALS = ['AR', 'BS', 'DH', 'RK', 'MP', 'LN', 'YT', 'JW', 'SC', 'EP', 'KD', 'TM'];
-// No green: green is kept for positive trends
-const AVATAR_COLORS = [OB_COLORS.primary100, OB_COLORS.primary50, OB_COLORS.avatarLilac, OB_COLORS.avatarPeach, OB_COLORS.avatarPink, OB_COLORS.avatarCyan];
 
 function shortDate(iso: string): string {
   return new Date(`${iso}T00:00:00`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
@@ -60,8 +58,7 @@ function AvatarStack({ program }: { program: ProgramOverview }) {
         {Array.from({ length: shown }, (_, i) => (
           <span
             key={i}
-            className="flex size-6 items-center justify-center rounded-full text-[10px] text-(--ob-text-body) ring-2 ring-(--ob-white)"
-            style={{ background: AVATAR_COLORS[(seed + i) % AVATAR_COLORS.length] }}
+            className="flex size-6 items-center justify-center rounded-full bg-(--ob-surface) text-[11px] text-(--ob-text-body) ring-2 ring-(--ob-white)"
           >
             {AVATAR_INITIALS[(seed * 2 + i) % AVATAR_INITIALS.length]}
           </span>
@@ -81,7 +78,7 @@ function ProgramProgress({ program }: { program: ProgramOverview }) {
     return (
       <div className="flex gap-1">
         {Array.from({ length: total }, (_, i) => (
-          <span key={i} className="h-1 flex-1 overflow-hidden rounded-[2px] bg-(--ob-border-strong)">
+          <span key={i} className="h-1 flex-1 overflow-hidden rounded-[2px] bg-(--ob-track)">
             {/* Finished modules fill in one after another */}
             {i < done && (
               <motion.span
@@ -97,7 +94,7 @@ function ProgramProgress({ program }: { program: ProgramOverview }) {
     );
   }
   return (
-    <div className={cn('h-1 w-full overflow-hidden rounded-[2px]', program.risk ? ATTN.track : 'bg-(--ob-border-strong)')}>
+    <div className={cn('h-1 w-full overflow-hidden rounded-[2px]', program.risk ? ATTN.track : 'bg-(--ob-track)')}>
       <motion.div
         className="h-full rounded-[2px]"
         style={{ background: program.risk ? ATTN.bar : OB_COLORS.primary }}

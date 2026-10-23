@@ -70,7 +70,7 @@ export function TruncatedTitle({ text, className }: { text: string; className?: 
           initial={{ opacity: 0, y: 2 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.15, ease: 'easeOut' }}
-          className="fixed z-[100] max-w-[320px] px-3 py-1.5 rounded-(--ob-radius-control) bg-(--ob-text-ink) text-white text-[12px] leading-[18px] shadow-lg pointer-events-none"
+          className="fixed z-[100] max-w-[320px] px-3 py-1.5 rounded-(--ob-radius-control) bg-(--ob-text-ink) text-white text-[12px] leading-[16px] shadow-lg pointer-events-none"
           style={{ left: anchor.left, top: anchor.top - 8, transform: 'translateY(-100%)', fontFamily: "'Inter', sans-serif" }}
         >
           {text}

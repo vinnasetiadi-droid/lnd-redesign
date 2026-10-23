@@ -82,7 +82,11 @@ export function LDDashboardHeader({ metrics, flat, className }: LDDashboardHeade
             >
               <p className="text-[13px] leading-[18px] text-(--ob-text-muted)">{card.title}</p>
               <div className="flex flex-wrap items-center gap-2">
-                <h3 className="ob-num text-[30px] leading-[36px] text-(--ob-text-strong)"><CountUpText value={String(card.value)} /></h3>
+                {/* Units always small: "68" + "%" */}
+                <p className="flex items-baseline gap-1">
+                  <span className="ob-num text-[30px] leading-[36px] font-semibold text-(--ob-text-strong)"><CountUpText value={String(card.value).replace(/%$/, '')} /></span>
+                  {String(card.value).endsWith('%') && <span className="text-[13px] font-semibold text-(--ob-text-muted)">%</span>}
+                </p>
                 <DeltaChip positive={card.trendPositive}>{change}</DeltaChip>
               </div>
               <p className="text-[12px] leading-[16px] text-(--ob-text-muted)">
@@ -106,7 +110,10 @@ export function LDDashboardHeader({ metrics, flat, className }: LDDashboardHeade
               <Icon size={18} className="shrink-0 text-(--ob-primary)" />
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <h3 className="ob-num text-[28px] leading-[34px] text-(--ob-text-strong)"><CountUpText value={String(card.value)} /></h3>
+              <p className="flex items-baseline gap-1">
+                <span className="ob-num text-[28px] leading-[34px] font-semibold text-(--ob-text-strong)"><CountUpText value={String(card.value).replace(/%$/, '')} /></span>
+                {String(card.value).endsWith('%') && <span className="text-[13px] font-semibold text-(--ob-text-muted)">%</span>}
+              </p>
               <DeltaChip positive={card.trendPositive}>{change}</DeltaChip>
             </div>
             <p className="text-[12px] leading-[16px] text-(--ob-text-muted)">

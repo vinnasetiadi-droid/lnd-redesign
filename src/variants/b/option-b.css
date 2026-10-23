@@ -64,7 +64,8 @@ html.option-b {
   --ob-text-ai: #282828; /* Text on the NISA card */
   --ob-border: #EDEEF1; /* Card dividers, tile outlines, section rules on Home */
   --ob-border-subtle: #F1F2F5; /* Lines inside a section (between --ob-surface and --ob-border) */
-  --ob-border-strong: #E4E6EA; /* Progress tracks */
+  --ob-border-strong: #E4E6EA;
+  --ob-track: #EBEDF0; /* Every progress track and empty or unselected bar (audit 3.1) */
   --ob-border-control: #D0D5DD;
   --ob-line: #D5D7DA; /* Chart cursor */
   --ob-surface: #F5F6F8; /* Segmented controls, icon circles */
@@ -151,6 +152,10 @@ html.option-b .ob-num {
   /* Loaded at 400 and 500: semibold numbers use the 500 face, never a faked bold */
   font-synthesis-weight: none;
 }
+/* Text inside a number (CountUp spans, FadeValue) takes the number's spacing */
+html.option-b .ob-num * {
+  letter-spacing: inherit;
+}
 html.option-b .ob-num:is([class*="text-[2"], [class*="text-[3"], [class*="text-[4"]),
 html.option-b :is([class*="text-[2"], [class*="text-[3"], [class*="text-[4"]) .ob-num:not([class*="text-[1"]) {
   letter-spacing: -0.02em;
@@ -188,6 +193,14 @@ html.option-b .ob-btn-primary {
     inset 0 -2px 2px rgba(255, 255, 255, 0.24),
     0 0 0 1px color-mix(in srgb, var(--ob-primary-900) 45%, transparent),
     0 6px 14px -6px color-mix(in srgb, var(--ob-primary) 85%, transparent);
+}
+/* On the blue NISA section: a white edge so the blue button still reads */
+html.option-b .ob-btn-primary.ob-on-blue {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -2px 2px rgba(255, 255, 255, 0.24),
+    0 0 0 1px rgba(255, 255, 255, 0.4),
+    0 6px 14px -6px color-mix(in srgb, var(--ob-primary-900) 70%, transparent);
 }
 html.option-b .ob-btn-primary:hover {
   background: linear-gradient(180deg, color-mix(in srgb, var(--ob-primary) 90%, white) 0%, var(--ob-primary-strong) 100%);

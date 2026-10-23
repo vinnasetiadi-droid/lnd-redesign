@@ -185,7 +185,7 @@ export default function CoursesPage() {
               <p className="text-[14px] leading-[20px] text-(--ob-text-strong)">
                 {reviewQueue.length} {reviewQueue.length === 1 ? 'course' : 'courses'} waiting for your review
               </p>
-              <p className="truncate text-[12px] leading-[18px] text-(--ob-text-muted)">
+              <p className="truncate text-[12px] leading-[16px] text-(--ob-text-muted)">
                 {reviewQueue.length === 1
                   ? [
                       reviewQueue[0].title,

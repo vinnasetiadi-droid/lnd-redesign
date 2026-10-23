@@ -165,7 +165,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
         >
           {titleOf(course)}
         </h3>
-        <p className="mt-0.5 truncate text-[12px] leading-[18px] text-(--ob-text-muted)">
+        <p className="mt-0.5 truncate text-[12px] leading-[16px] text-(--ob-text-muted)">
           by <span className="text-(--ob-text-body)">{ownerName(course.creator, me)}</span>
           {' · '}
           {course.updatedOn ? timeAgo(course.updatedOn).toLowerCase() : course.updatedAt}
@@ -197,7 +197,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
         {/* Footer: fixed height and pinned to the bottom, so every card in a row ends on the same line */}
         <div className="mt-auto flex h-[80px] shrink-0 flex-col justify-end">
           {/* Status line: reserved on every card, empty when the status has nothing to say */}
-          <p className={cn('h-[18px] truncate text-[12px] leading-[18px]', f.line?.strong ? 'text-(--ob-text-strong)' : 'text-(--ob-text-muted)')}>
+          <p className={cn('h-4 truncate text-[12px] leading-[16px]', f.line?.strong ? 'text-(--ob-text-strong)' : 'text-(--ob-text-muted)')}>
             {f.line?.text}
           </p>
           <div className="mt-1 flex h-10 items-center justify-between gap-2">
@@ -214,7 +214,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
           {/* Progress slot: the thin blue bar on active courses (4px, 2px corners), empty otherwise */}
           <div className="mt-1 h-1">
             {f.progress !== undefined && (
-              <div className="h-full overflow-hidden rounded-[2px] bg-(--ob-surface)">
+              <div className="h-full overflow-hidden rounded-[2px] bg-(--ob-track)">
                 <div className="h-full rounded-[2px] bg-(--ob-primary)" style={{ width: `${Math.min(100, f.progress)}%` }} />
               </div>
             )}

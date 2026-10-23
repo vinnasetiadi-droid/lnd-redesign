@@ -194,7 +194,7 @@ export function DashboardLicenseUtilization({ licenses = LICENSES, variant = 'de
           {reference ? <TickGauge pct={pct} start={inView} color={gaugeColor} /> : <SegmentGauge pct={pct} start={inView} color={gaugeColor} />}
           <p className={cn('absolute text-(--ob-text-strong)', reference ? 'top-[38%] text-[30px] leading-[36px] font-semibold' : 'bottom-0 text-[24px] leading-[28px]')}>
             <span className="ob-num"><CountUp value={pct} start={inView} /></span>
-            <span className="text-[13px] text-(--ob-text-muted)">%</span>
+            <span className="text-[13px] font-semibold text-(--ob-text-muted)">%</span>
           </p>
         </div>
         <p className="mt-1 text-[12px] text-(--ob-text-muted)">
@@ -218,13 +218,13 @@ export function DashboardLicenseUtilization({ licenses = LICENSES, variant = 'de
                   {l.pct}%
                 </span>
               </div>
-              <div className="flex items-baseline justify-between gap-3 text-[12px] leading-[18px]">
+              <div className="flex items-baseline justify-between gap-3 text-[12px] leading-[16px]">
                 <span className="truncate text-(--ob-text-muted)"><NumText>{`${l.used} of ${l.total} seats · ${l.total - l.used} idle`}</NumText></span>
                 <span className={cn('shrink-0', l.needsAction ? ATTENTION.text : 'text-(--ob-text-muted)')}>
                   {l.renewsOn ? `Renews ${shortDate(l.renewsOn)}` : l.renewsOn === null ? 'No renewal' : ''}
                 </span>
               </div>
-              <div className={cn('mt-1 h-1 w-full overflow-hidden rounded-[2px]', l.needsAction ? ATTENTION.track : 'bg-(--ob-border-strong)')}>
+              <div className={cn('mt-1 h-1 w-full overflow-hidden rounded-[2px]', l.needsAction ? ATTENTION.track : 'bg-(--ob-track)')}>
                 <motion.div
                   className="h-full rounded-[2px]"
                   style={{ background: l.needsAction ? ATTENTION.bar : CHART_BLUE }}

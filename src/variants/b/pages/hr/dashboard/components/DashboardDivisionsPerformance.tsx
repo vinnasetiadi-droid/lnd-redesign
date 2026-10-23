@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { AIInsightLine } from '@/variants/b/components/ui/ai-insight-banner';
 import type { DivisionPerformance } from '../types/dashboard.types';
 import { CARD, CardHeader, DeltaChip, MetricTile, NumText } from '@/variants/b/components/ui/kit';
-import { HATCHED_TRACK } from '@/variants/b/components/ui/chart';
+import { TRACK } from '@/variants/b/components/ui/chart';
 import { AlertTriangle, BarChart2, Trophy, type LucideIcon } from '@/variants/b/icons';
 import { OB_COLORS } from '@/variants/b/theme';
 import { CountUp, GROW } from '@/variants/b/components/ui/count-up';
@@ -61,15 +61,15 @@ function DivisionBar({ name, score, index, highlighted, start }: {
     // Static class: Tailwind cannot see column widths built at runtime (NAME_COL, VALUE_COL)
     <div className="grid grid-cols-[150px_minmax(0,1fr)_40px] items-center gap-3">
       <span
-        className={cn('truncate text-[12px] leading-[18px] transition-colors duration-300', highlighted ? 'text-(--ob-text-body)' : 'text-(--ob-text-subtle)')}
+        className={cn('truncate text-[12px] leading-[20px] transition-colors duration-300', highlighted ? 'text-(--ob-text-body)' : 'text-(--ob-text-subtle)')}
         title={name}
       >
         {name}
       </span>
       {/* 4px tall with 2px corners, like every bar in B */}
-      <div className="h-1 w-full overflow-hidden rounded-[2px]" style={HATCHED_TRACK}>
+      <div className="h-1 w-full overflow-hidden rounded-[2px]" style={TRACK}>
         <motion.div
-          className="relative h-full overflow-hidden rounded-[2px] bg-(--ob-border-strong)"
+          className="relative h-full overflow-hidden rounded-[2px] bg-(--ob-border-control)"
           initial={{ width: 0 }}
           animate={{ width: start ? `${score}%` : 0 }}
           transition={{ ...GROW, delay }}
@@ -81,7 +81,7 @@ function DivisionBar({ name, score, index, highlighted, start }: {
           />
         </motion.div>
       </div>
-      <span className="ob-num text-right text-[12px] leading-[18px] text-(--ob-text-muted)">
+      <span className="ob-num text-right text-[12px] leading-[20px] text-(--ob-text-body)">
         <CountUp value={score} start={start} delay={delay} />%
       </span>
     </div>
@@ -150,7 +150,11 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
         <div className="relative pt-4">
           {/* Org average: dashed line over the bar column only */}
           <div className="pointer-events-none absolute top-0 bottom-0 z-[1]" style={BAR_INSET}>
-            <div className="absolute top-0 bottom-0 border-l border-dashed border-(--ob-text-subtle)" style={{ left: `${benchmark}%` }}>
+            {/* A 1px line with the chart grid's 4 4 dash */}
+            <div
+              className="absolute top-0 bottom-0 w-px"
+              style={{ left: `${benchmark}%`, backgroundImage: 'repeating-linear-gradient(to bottom, var(--ob-text-subtle) 0 4px, transparent 4px 8px)' }}
+            >
               <span className="absolute -top-0.5 left-1.5 whitespace-nowrap text-[11px] leading-none text-(--ob-text-muted)">
                 Org average <span className="ob-num">{benchmark}%</span>
               </span>

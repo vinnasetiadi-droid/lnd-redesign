@@ -143,7 +143,7 @@ export function LearningProgressFunnel({ programType, className }: { programType
               <span>{stage}</span>
               <span className="ob-num text-(--ob-text-strong)">{totals[i]}</span>
             </div>
-            <div className="mt-1 h-1 w-full overflow-hidden rounded-[2px] bg-(--ob-surface)">
+            <div className="mt-1 h-1 w-full overflow-hidden rounded-[2px] bg-(--ob-track)">
               <div className="h-full rounded-[2px] bg-(--ob-primary)" style={{ width: `${(totals[i] / totals[0]) * 100}%` }} />
             </div>
           </div>

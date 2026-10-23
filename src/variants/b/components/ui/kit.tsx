@@ -189,7 +189,7 @@ export function MetricTile({ selected, onClick, label, children, share, icon: Ic
       {/* Divider before every tile but the first: a lighter line, stopping 4px short of the top and bottom */}
       <span aria-hidden className="pointer-events-none absolute bottom-1 left-0 top-1 w-px bg-(--ob-border-subtle) group-first:hidden" />
       <div>
-        <p className={cn('truncate text-[12px] leading-[16px] transition-colors duration-300', selected ? 'text-(--ob-text-strong)' : 'text-(--ob-text-muted) group-hover:text-(--ob-text-body)')}>{label}</p>
+        <p className={cn('truncate text-[13px] leading-[18px] transition-colors duration-300', selected ? 'text-(--ob-text-strong)' : 'text-(--ob-text-muted) group-hover:text-(--ob-text-body)')}>{label}</p>
         <div className="mt-1 flex flex-wrap items-center gap-2">
           {Icon && (
             <Icon
@@ -201,9 +201,9 @@ export function MetricTile({ selected, onClick, label, children, share, icon: Ic
         </div>
       </div>
       {/* Bar on a grey track, 4px tall with 2px corners: the blue gradient when picked, plain grey otherwise (one accent) */}
-      <span className="relative block h-1 overflow-hidden rounded-[2px] bg-(--ob-surface)">
+      <span className="relative block h-1 overflow-hidden rounded-[2px] bg-(--ob-track)">
         <span
-          className={cn('block h-full rounded-[2px] transition-[width,background-color] duration-500', !selected && 'bg-(--ob-border-strong)')}
+          className={cn('block h-full rounded-[2px] transition-[width,background-color] duration-500', !selected && 'bg-(--ob-border-control)')}
           style={{
             width: `${Math.max(0, Math.min(100, share ?? 100))}%`,
             backgroundImage: selected ? `linear-gradient(90deg, ${OB_COLORS.primary}, color-mix(in srgb, ${OB_COLORS.primary} 65%, white))` : undefined,

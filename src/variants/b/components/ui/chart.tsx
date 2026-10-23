@@ -83,12 +83,12 @@ export function ChartTooltipCard({ title, rows }: { title?: ReactNode; rows: Too
   );
 }
 
-/** Small legend marker: a square for bars and areas, a short line for lines (dashed if the series is) */
+/** The one legend mark: an 8px square with 2px corners for bars and areas, a short line for lines (dashed if the series is) */
 export function LegendMark({ color, line, dashed }: { color: string; line?: boolean; dashed?: boolean }) {
   return line || dashed ? (
     <span className={cn('w-3 shrink-0 border-t-2', dashed ? 'border-dashed' : 'border-solid')} style={{ borderColor: color }} />
   ) : (
-    <span className="size-2.5 shrink-0 rounded-[3px]" style={{ background: color }} />
+    <span className="size-2 shrink-0 rounded-[2px]" style={{ background: color }} />
   );
 }
 
@@ -106,9 +106,9 @@ export function ChartLegend({ items, className }: { items: TooltipRow[] | Omit<T
   );
 }
 
-/** Plain light track behind progress fills (the name is from when it was hatched) */
-export const HATCHED_TRACK = {
-  backgroundColor: OB_COLORS.surface,
+/** The one track behind progress fills and bars (--ob-track) */
+export const TRACK = {
+  backgroundColor: OB_COLORS.track,
 } as const;
 
 /** Progress bar: blue gradient fill on a light track, 4px tall with 2px corners */
@@ -122,7 +122,7 @@ export function GradientProgress({ value, className, from = CHART_BLUE, to = OB_
   return (
     <div
       className={cn('h-1 w-full overflow-hidden rounded-[2px]', className)}
-      style={HATCHED_TRACK}
+      style={TRACK}
     >
       <div
         className="h-full rounded-[2px] transition-[width] duration-500"
@@ -176,7 +176,7 @@ export function foldBar(ids: FoldIds, isSelected: (index: number) => boolean, co
         <rect x={x} y={y + height - h} width={width} height={h} fill="transparent" />
         <path
           d={d}
-          fill={on ? `url(#${ids.barSelected})` : OB_COLORS.buttonSecondary}
+          fill={on ? `url(#${ids.barSelected})` : OB_COLORS.track}
           // The selected bar glows a little in its own colour
           style={{ transition: 'fill 300ms ease', filter: on ? `drop-shadow(0 6px 10px ${glow})` : undefined }}
         />
