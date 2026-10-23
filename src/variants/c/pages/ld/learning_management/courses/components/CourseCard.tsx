@@ -109,7 +109,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
       onKeyDown={(e) => e.key === 'Enter' && e.target === e.currentTarget && onClick?.()}
       className={cn(
         // Landscape: photo left, details right
-        'oc-surface group flex min-h-[248px] gap-5 rounded-(--oc-radius-card) p-3 pr-5 transition-shadow duration-200 cursor-pointer',
+        'oc-surface group flex gap-4 rounded-(--oc-radius-card) p-2.5 pr-4 transition-shadow duration-200 cursor-pointer',
         'hover:shadow-[0_1px_2px_rgba(10,25,41,0.04),0_14px_30px_-14px_rgba(10,25,41,0.18)]',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25',
         className,
@@ -118,7 +118,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
       {/* Photo, inset and rounded, the card's full height; dark status badge top
           left, white menu top right. The overlays sit outside the clipped photo
           so the menu can open below it. */}
-      <div className="relative w-[40%] shrink-0">
+      <div className="relative w-[30%] min-h-[132px] shrink-0">
         <div className="absolute inset-0 overflow-hidden rounded-(--oc-radius-control) bg-(--oc-surface)">
           <CourseCover
             course={course}
@@ -126,11 +126,11 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
             className={cn('absolute inset-0 size-full transition-transform duration-500 group-hover:scale-[1.03]', isInactive && 'grayscale-[60%]')}
           />
         </div>
-        <span className="absolute left-2.5 top-2.5 inline-flex h-[26px] items-center whitespace-nowrap rounded-(--oc-radius-chip) bg-(--oc-text-ink) px-2.5 text-[12px] leading-none text-(--oc-white)">
+        <span className="absolute left-2 top-2 inline-flex h-[22px] items-center whitespace-nowrap rounded-[6px] bg-(--oc-text-ink) px-2 text-[11px] leading-none text-(--oc-white)">
           {COURSE_STATUS_META[course.status].label}
         </span>
         {/* Clicks here never open the card */}
-        <div className="absolute right-2.5 top-2.5" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
+        <div className="absolute right-2 top-2" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
           <div className="relative">
             <button
               type="button"
@@ -138,9 +138,9 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
               aria-label="More actions"
               aria-haspopup="menu"
               aria-expanded={menuOpen}
-              className={cn(GLASS, "flex size-[28px] items-center justify-center text-(--oc-text-strong) transition-colors hover:text-(--oc-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/40 cursor-pointer")}
+              className={cn(GLASS, "flex size-6 items-center justify-center text-(--oc-text-strong) transition-colors hover:text-(--oc-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/40 cursor-pointer")}
             >
-              <MoreHorizontal size={16} />
+              <MoreHorizontal size={14} />
             </button>
             {menuOpen && (
               <>
@@ -174,19 +174,19 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
         </div>
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col py-2">
+      <div className="flex min-w-0 flex-1 flex-col py-1.5">
         <h3
-          className={cn('line-clamp-2 text-[18px] leading-[24px]', isInactive ? 'text-(--oc-text-secondary)' : 'text-(--oc-text-strong)')}
+          className={cn('truncate text-[15px] leading-[22px]', isInactive ? 'text-(--oc-text-secondary)' : 'text-(--oc-text-strong)')}
           title={titleOf(course)}
         >
           {titleOf(course)}
         </h3>
-        <p className="mt-1.5 line-clamp-2 text-[13px] leading-[20px] text-(--oc-text-muted)" title={course.description}>
+        <p className="mt-0.5 truncate text-[13px] leading-[20px] text-(--oc-text-muted)" title={course.description}>
           {course.description}
         </p>
 
         {/* Meta: version, duration, mode */}
-        <p className="mt-2 truncate text-[12px] leading-[18px] text-(--oc-text-muted)">
+        <p className="mt-0.5 truncate text-[12px] leading-[18px] text-(--oc-text-subtle)">
           v{version}
           {drafts > 0 && <span className="text-(--oc-primary)"> +{drafts} draft</span>}
           {course.duration && <> · {course.duration.toLowerCase()}</>}
@@ -194,36 +194,35 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
         </p>
 
         {/* The figures for the status; the bar only on active courses */}
-        <div className="mt-3 flex items-baseline justify-between gap-3 text-[13px] leading-[18px]">
+        <div className="mt-2.5 flex items-baseline justify-between gap-3 text-[12px] leading-[18px]">
           <span className={cn('truncate', f.strong ? 'text-(--oc-text-strong)' : 'text-(--oc-text-body)')}>{f.left}</span>
           {f.right && <span className="shrink-0 tabular-nums text-(--oc-text-muted)">{f.right}</span>}
         </div>
         {f.progress !== undefined && (
-          <div className="mt-2 h-1.5 overflow-hidden rounded-(--oc-radius-bar) bg-(--oc-surface)">
+          <div className="mt-1.5 h-1 overflow-hidden rounded-(--oc-radius-bar) bg-(--oc-surface)">
             <div className="h-full rounded-(--oc-radius-bar) bg-(--oc-primary)" style={{ width: `${Math.min(100, f.progress)}%` }} />
           </div>
         )}
 
-        {/* Owner and date, pinned to the bottom; Review or the open arrow on the right */}
-        <div className="mt-auto flex items-center gap-3 pt-4">
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-(--oc-surface) text-[12px] text-(--oc-text-body)">
+        {/* Owner and date on one line, pinned to the bottom; Review or the open arrow on the right */}
+        <div className="mt-auto flex items-center gap-2 pt-3">
+          <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-(--oc-surface) text-[10px] text-(--oc-text-body)">
             {initials(course.creator)}
           </span>
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-[13px] leading-[18px] text-(--oc-text-strong)">{ownerName(course.creator, me)}</p>
-            <p className="truncate text-[12px] leading-[16px] text-(--oc-text-muted)">{dated}</p>
-          </div>
+          <p className="min-w-0 flex-1 truncate text-[12px] leading-[18px] text-(--oc-text-muted)">
+            <span className="text-(--oc-text-body)">{ownerName(course.creator, me)}</span> · {dated}
+          </p>
           <div className="shrink-0" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
             {f.review ? (
-              <PillButton variant="primary" onClick={onClick}>Review</PillButton>
+              <PillButton variant="primary" className="h-7 rounded-(--oc-radius-chip) px-3 text-[12px]" onClick={onClick}>Review</PillButton>
             ) : (
               <button
                 type="button"
                 onClick={onClick}
                 aria-label="Open course"
-                className="flex size-8 items-center justify-center rounded-(--oc-radius-chip) text-(--oc-text-muted) transition-colors hover:bg-(--oc-surface) hover:text-(--oc-text-strong) cursor-pointer"
+                className="flex size-7 items-center justify-center rounded-(--oc-radius-chip) text-(--oc-text-subtle) transition-colors hover:bg-(--oc-surface) hover:text-(--oc-text-strong) cursor-pointer"
               >
-                <ArrowUpRight size={18} />
+                <ArrowUpRight size={16} />
               </button>
             )}
           </div>
