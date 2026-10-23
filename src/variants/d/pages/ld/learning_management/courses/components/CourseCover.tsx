@@ -22,7 +22,7 @@ export function CourseCover({ course, size, className }: { course: CourseItem; s
   if (src) return <ImageWithFallback src={src} alt="" className={cn('object-cover saturate-[.8]', className)} />;
   return (
     <div className={cn('flex items-center justify-center bg-(--od-surface-subtle)', className)} aria-hidden>
-      {size === 'lg' ? <CategoryIcon icon={Icon} size="md" /> : <Icon size={14} className="text-(--od-primary)" />}
+      {size === 'lg' ? <CategoryIcon icon={Icon} size="md" /> : <Icon size={14} className="text-(--od-primary-text)" />}
     </div>
   );
 }

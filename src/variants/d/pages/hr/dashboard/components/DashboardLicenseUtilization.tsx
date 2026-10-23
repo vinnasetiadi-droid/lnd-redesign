@@ -70,7 +70,9 @@ function SegmentGauge({ pct, start }: { pct: number; start: boolean }) {
         const sin = Math.sin(angle);
         const on = i < filled;
         return (
-          <motion.line
+          // A CSS transition (same curve as motion's easeOut), not motion: the
+          // colours are CSS variables, so a theme switch repaints them
+          <line
             key={i}
             x1={cx + inner * cos}
             y1={cy - inner * sin}
@@ -78,9 +80,11 @@ function SegmentGauge({ pct, start }: { pct: number; start: boolean }) {
             y2={cy - outer * sin}
             strokeWidth={9}
             strokeLinecap="round"
-            initial={{ stroke: OD_COLORS.border }}
-            animate={{ stroke: start && on ? CHART_BLUE : OD_COLORS.border }}
-            transition={{ duration: 0.3, ease: 'easeOut', delay: start && on ? 0.15 + i * 0.08 : 0 }}
+            className="transition-[stroke] duration-300 ease-[cubic-bezier(0,0,0.58,1)] motion-reduce:transition-none"
+            style={{
+              stroke: start && on ? CHART_BLUE : OD_COLORS.border,
+              transitionDelay: start && on ? `${0.15 + i * 0.08}s` : '0s',
+            }}
           />
         );
       })}
@@ -118,7 +122,7 @@ export function DashboardLicenseUtilization({ licenses = LICENSES, className }: 
     : `${idle} seats are idle across ${rows.length} licenses. Assign them before the next renewal.`;
 
   return (
-    <div className={cn('relative flex flex-col gap-3 bg-white rounded-[18px] p-5', className)}>
+    <div className={cn('relative flex flex-col gap-3 bg-(--od-card) rounded-[18px] p-5', className)}>
       <CardHeader
         title="License utilization"
         subtitle="Purchased seats actively used by trainees"

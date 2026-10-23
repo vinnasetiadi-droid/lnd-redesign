@@ -28,11 +28,11 @@ export function CategoryIcon({ icon: Icon, size = 'default', className }: Catego
     <div
       className={cn(
         s.wrapper,
-        'border border-[#EDEEF1] bg-white flex items-center justify-center shrink-0',
+        'border border-(--od-border) bg-(--od-card) flex items-center justify-center shrink-0',
         className
       )}
     >
-      <Icon className={cn(s.icon, 'text-[#0E85B4]')} strokeWidth={2} />
+      <Icon className={cn(s.icon, 'text-(--od-primary-text)')} strokeWidth={2} />
     </div>
   );
 }

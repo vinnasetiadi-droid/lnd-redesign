@@ -89,7 +89,7 @@ export function LDDashboardTraineesGrowth({ className }: LDDashboardTraineesGrow
   ];
 
   return (
-    <div className={cn('relative flex flex-col gap-5 rounded-[18px] bg-white p-5', className)}>
+    <div className={cn('relative flex flex-col gap-5 rounded-[18px] bg-(--od-card) p-5', className)}>
       {/* Header: title + period, scope tabs on the right */}
       <CardHeader
         title="Trainees growth trend"
@@ -140,7 +140,7 @@ export function LDDashboardTraineesGrowth({ className }: LDDashboardTraineesGrow
               strokeWidth={2}
               fill={`url(#${chartIds.area})`}
               dot={false}
-              activeDot={{ r: 4, fill: CHART_BLUE, stroke: '#fff', strokeWidth: 2 }}
+              activeDot={{ r: 4, fill: CHART_BLUE, stroke: 'var(--od-card)', strokeWidth: 2 }}
               animationDuration={600}
               animationEasing="ease-in-out"
             />

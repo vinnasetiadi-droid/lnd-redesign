@@ -210,7 +210,7 @@ export default function CoursesPage() {
         {/* ── Review queue: one line, only when there is something to review ── */}
         {reviewQueue.length > 0 && (
           <motion.div variants={revealItem} className="flex items-center gap-4 rounded-[18px] bg-(--od-primary)/[0.07] px-5 py-4">
-            <IconCircle icon={Clock} className="bg-(--od-white)" />
+            <IconCircle icon={Clock} className="bg-(--od-card)" />
             <div className="min-w-0 flex-1">
               <p className="text-[14px] leading-[20px] text-(--od-text-strong)">
                 {reviewQueue.length} {reviewQueue.length === 1 ? 'course' : 'courses'} waiting for your review
@@ -228,15 +228,15 @@ export default function CoursesPage() {
             </div>
             {/* One course: open it. Several: show them all in the In review tab */}
             {reviewQueue.length === 1 ? (
-              <PillButton className="bg-(--od-white) hover:bg-(--od-white)/80" onClick={() => openCourse(reviewQueue[0].id)}>Review</PillButton>
+              <PillButton className="bg-(--od-card) hover:bg-(--od-card)/80" onClick={() => openCourse(reviewQueue[0].id)}>Review</PillButton>
             ) : (
-              <PillButton className="bg-(--od-white) hover:bg-(--od-white)/80" onClick={openReviewTab}>Review all</PillButton>
+              <PillButton className="bg-(--od-card) hover:bg-(--od-card)/80" onClick={openReviewTab}>Review all</PillButton>
             )}
           </motion.div>
         )}
 
         {/* ── Library ── */}
-        <motion.div ref={libraryRef} variants={revealItem} className="flex flex-col gap-4 rounded-[18px] bg-(--od-white) p-5 scroll-mt-3">
+        <motion.div ref={libraryRef} variants={revealItem} className="flex flex-col gap-4 rounded-[18px] bg-(--od-card) p-5 scroll-mt-3">
           {/* Title and count on the left, the list/grid switch on the right */}
           <div className="flex items-center justify-between gap-6">
             <div className="min-w-0">
@@ -254,7 +254,7 @@ export default function CoursesPage() {
                   className={cn(
                     'flex size-8 items-center justify-center rounded-full transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--od-primary)/25',
                     viewMode === m
-                      ? 'bg-(--od-white) text-(--od-text-strong) shadow-[0_1px_2px_rgba(16,24,40,0.08),0_1px_3px_rgba(16,24,40,0.06)]'
+                      ? 'bg-(--od-pill) text-(--od-text-strong) shadow-(--od-shadow-pill)'
                       : 'text-(--od-text-muted) hover:text-(--od-text-body)',
                   )}
                 >

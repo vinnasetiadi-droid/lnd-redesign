@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { COURSE_STATUS_META, type CourseStatus } from '../data/courses.mock';
 
 /** Frosted white over the photo, shared by the status badge and the menu button */
-export const GLASS = 'rounded-full bg-(--od-white)/70 ring-1 ring-(--od-white)/60 backdrop-blur-md shadow-[0_1px_3px_rgba(16,24,40,0.12)]';
+export const GLASS = 'rounded-full bg-(--od-card)/70 ring-1 ring-(--od-card)/60 backdrop-blur-md shadow-(--od-shadow-glass)';
 
 function StatusChip({ status, className }: { status: CourseStatus; className?: string }) {
   const meta = COURSE_STATUS_META[status];

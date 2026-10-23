@@ -1,7 +1,8 @@
 /**
  * Option D palette: one teal blue, #0E85B4 (after the Ultraleads reference), on neutral greys (Finora-style white
- * cards). The design tokens live in option-d.css as CSS variables; OD_COLORS
- * below is their documented mirror, plus the shared gradients.
+ * cards). The design tokens live in option-d.css as CSS variables, with a dark
+ * set under html.option-d.theme-dark; OD_COLORS and the gradients below point
+ * at them. OD is the fixed light scale, for things that never change theme.
  */
 export const OD = {
   primary: {
@@ -26,118 +27,104 @@ export const OD = {
 } as const;
 
 /**
- * Page background: near-white with #0E85B4 glows at 11% (the "Opacity 11%"
- * swatch), so the blue stays a hint behind the white cards.
+ * The shared gradients. Their values live in option-d.css (light on
+ * html.option-d, dark on html.option-d.theme-dark), so these are CSS variables
+ * and switch with the theme on their own.
+ *
+ * - OD_BACKGROUND: page background. Light: near-white with #0E85B4 glows at
+ *   11% (the "Opacity 11%" swatch). Dark: near-black with very faint glows.
+ * - OD_SHEEN: faint diagonal sheen over the background. Plain gradient: a blur
+ *   filter here stops the content from painting.
+ * - OD_AI_GRADIENT: AI frame gradient from the #0E85B4 swatches, from the card
+ *   colour at the top left to the full colour at the bottom right.
+ * - OD_AI_SOLID: solid blue for the NISA card (white text on top).
+ * - OD_AI_SOFT: the card colour with a soft blue glow on the right (NISA card).
  */
-export const OD_BACKGROUND = [
-  'radial-gradient(55% 60% at 0% 0%, rgba(14, 133, 180, 0.11) 0%, rgba(14, 133, 180, 0) 70%)',
-  'radial-gradient(50% 55% at 100% 100%, rgba(14, 133, 180, 0.09) 0%, rgba(14, 133, 180, 0) 70%)',
-  'radial-gradient(40% 45% at 100% 0%, rgba(14, 133, 180, 0.05) 0%, rgba(14, 133, 180, 0) 70%)',
-  '#F7F9FC',
-].join(', ');
-
-/** Faint diagonal sheen over the background. Plain gradient: a blur filter here stops the content from painting. */
-export const OD_SHEEN =
-  'linear-gradient(115deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.55) 48%, rgba(255, 255, 255, 0) 66%)';
+export const OD_BACKGROUND = 'var(--od-page-bg)';
+export const OD_SHEEN = 'var(--od-page-sheen)';
+export const OD_AI_GRADIENT = 'var(--od-ai-gradient)';
+export const OD_AI_SOLID = 'var(--od-ai-solid)';
+export const OD_AI_SOFT = 'var(--od-ai-soft)';
 
 /**
- * AI frame gradient from the #0E85B4 swatches: white at the top left, through
- * 11% and 57%, to the full colour at the bottom right.
- */
-export const OD_AI_GRADIENT = [
-  'radial-gradient(110% 110% at 0% 0%, #FFFFFF 0%, rgba(255, 255, 255, 0.85) 25%, rgba(255, 255, 255, 0) 60%)',
-  'radial-gradient(95% 95% at 100% 100%, #0E85B4 0%, rgba(14, 133, 180, 0.57) 45%, rgba(14, 133, 180, 0.11) 85%)',
-  '#EAF6FB',
-].join(', ');
-
-/** Solid blue for the NISA card (white text on top): soft light at the top left */
-export const OD_AI_SOLID = [
-  'radial-gradient(120% 80% at 0% 0%, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 55%)',
-  'linear-gradient(160deg, #1C9BCC 0%, #0E85B4 45%, #0B74A0 100%)',
-].join(', ');
-
-/** Mostly white with a soft blue glow on the right (NISA card, dark text on top) */
-export const OD_AI_SOFT = [
-  'radial-gradient(85% 65% at 100% 0%, rgba(14, 133, 180, 0.16) 0%, rgba(14, 133, 180, 0) 70%)',
-  'radial-gradient(75% 55% at 100% 100%, rgba(14, 133, 180, 0.12) 0%, rgba(14, 133, 180, 0) 70%)',
-  'radial-gradient(60% 40% at 0% 100%, rgba(125, 203, 233, 0.10) 0%, rgba(125, 203, 233, 0) 70%)',
-  '#FFFFFF',
-].join(', ');
-
-/**
- * Mirror of the CSS design tokens in option-d.css (html.option-d --od-*).
- * Tailwind classes use the variables, e.g. text-(--od-text-strong); code that
- * needs a plain colour string (SVG attributes, recharts props) uses these.
- * Keep both lists in step.
+ * The CSS design tokens in option-d.css (html.option-d --od-*), as `var()`
+ * strings for code that takes a colour string (SVG attributes, recharts props,
+ * inline styles), so those follow the light/dark theme too. Tailwind classes
+ * use the variables directly, e.g. text-(--od-text-strong).
+ * The values are CSS, not hex: never append an alpha or parse them; mix with
+ * `color-mix(in srgb, var(--od-x) 20%, transparent)` instead.
  */
 export const OD_COLORS = {
-  primary: '#0E85B4', // The one accent: buttons, selected states, chart highlight
-  primaryStrong: '#0B6B91', // Blue text on a blue tint, link hover
-  primary50: '#EAF6FB', // Lightest blue tint (pills, chips)
-  primary100: '#D4EEF8',
-  primary200: '#A9DDF1',
-  primary300: '#7DCBE9',
-  primary400: '#45B2DC',
-  primary900: '#0A4A66',
-  primaryTint: '#F4FAFD', // AI insight row background
-  textStrong: '#181D27', // Titles and values
-  textHeading: '#252B37',
-  textInk: '#0A0D12', // Tooltip background
-  textBody: '#414651', // Body text
-  textSecondary: '#535862', // Labels
-  textMuted: '#717680', // Secondary text
-  textSubtle: '#A4A7AE', // Axis ticks, hints
-  textAi: '#282828', // Text on the NISA card
-  border: '#EDEEF1', // Card dividers, tile outlines
-  borderStrong: '#E4E6EA', // Progress tracks
-  borderControl: '#D0D5DD',
-  line: '#D5D7DA', // Chart cursor
-  surface: '#F5F6F8', // Segmented controls, icon circles
-  surfaceMuted: '#F7F8FA', // Row frames
-  surfaceSubtle: '#F9FAFB', // Hover
-  buttonSecondary: '#F0F1F3',
-  buttonSecondaryHover: '#E6E8EB',
-  buttonPrimary: '#0E85B4', // = primary
-  buttonPrimaryHover: '#0B6B91', // = primaryStrong
-  white: '#FFFFFF',
-  attentionText: '#B54708', // Amber, only for things that need attention
-  attentionSurface: '#FFFAEB',
-  attentionBar: '#FEC84B',
-  attentionTrack: '#FEF0C7',
-  warning: '#FDB022',
-  orange: '#FB6514',
-  orangeStrong: '#C4320A',
-  orangeSurface: '#FFEAD5',
-  success: '#039855', // Positive trends
-  successStrong: '#027A48',
-  successSurface: '#ECFDF3',
-  success100: '#D1FADF',
-  successBright: '#32D583',
-  modeSelf: '#34A853', // Self-paced series
-  danger: '#D92D20', // Negative trends
-  dangerStrong: '#B42318',
-  dangerSurface: '#FEF3F2',
-  danger100: '#FEE4E2',
-  dangerBright: '#F97066',
-  yellow: '#FFE07A',
-  yellowText: '#6B4F00',
-  avatarPeach: '#FFE4D5', // Avatar pastels
-  avatarLilac: '#E9D7FE',
-  avatarPink: '#FCE7F6',
-  avatarCyan: '#CFF9FE',
+  primary: 'var(--od-primary)', // The one accent: buttons, selected states, chart highlight
+  primaryStrong: 'var(--od-primary-strong)', // Blue text on a blue tint, link hover
+  primary50: 'var(--od-primary-50)', // Lightest blue tint (pills, chips)
+  primary100: 'var(--od-primary-100)',
+  primary200: 'var(--od-primary-200)',
+  primary300: 'var(--od-primary-300)',
+  primary400: 'var(--od-primary-400)',
+  primary900: 'var(--od-primary-900)',
+  primaryTint: 'var(--od-primary-tint)', // AI insight row background
+  primaryText: 'var(--od-primary-text)', // The accent as text (brighter in dark)
+  textStrong: 'var(--od-text-strong)', // Titles and values
+  textHeading: 'var(--od-text-heading)',
+  textInk: 'var(--od-text-ink)', // Darkest text
+  textBody: 'var(--od-text-body)', // Body text
+  textSecondary: 'var(--od-text-secondary)', // Labels
+  textMuted: 'var(--od-text-muted)', // Secondary text
+  textSubtle: 'var(--od-text-subtle)', // Axis ticks, hints
+  textAi: 'var(--od-text-ai)', // Text on the NISA card
+  border: 'var(--od-border)', // Card dividers, tile outlines
+  borderStrong: 'var(--od-border-strong)', // Progress tracks
+  borderControl: 'var(--od-border-control)',
+  line: 'var(--od-line)', // Chart cursor
+  surface: 'var(--od-surface)', // Segmented controls, icon circles
+  surfaceMuted: 'var(--od-surface-muted)', // Row frames
+  surfaceSubtle: 'var(--od-surface-subtle)', // Hover
+  buttonSecondary: 'var(--od-button-secondary)',
+  buttonSecondaryHover: 'var(--od-button-secondary-hover)',
+  buttonPrimary: 'var(--od-button-primary)', // = primary
+  buttonPrimaryHover: 'var(--od-button-primary-hover)', // = primaryStrong
+  white: 'var(--od-white)', // Always white: text on the accent, SVG masks
+  card: 'var(--od-card)', // Card surface (white in light)
+  raised: 'var(--od-raised)', // Menus, tooltips, floating pills
+  attentionText: 'var(--od-attention-text)', // Amber, only for things that need attention
+  attentionSurface: 'var(--od-attention-surface)',
+  attentionBar: 'var(--od-attention-bar)',
+  attentionTrack: 'var(--od-attention-track)',
+  warning: 'var(--od-warning)',
+  orange: 'var(--od-orange)',
+  orangeStrong: 'var(--od-orange-strong)',
+  orangeSurface: 'var(--od-orange-surface)',
+  success: 'var(--od-success)', // Positive trends
+  successStrong: 'var(--od-success-strong)',
+  successSurface: 'var(--od-success-surface)',
+  success100: 'var(--od-success-100)',
+  successBright: 'var(--od-success-bright)',
+  modeSelf: 'var(--od-mode-self)', // Self-paced series
+  danger: 'var(--od-danger)', // Negative trends
+  dangerStrong: 'var(--od-danger-strong)',
+  dangerSurface: 'var(--od-danger-surface)',
+  danger100: 'var(--od-danger-100)',
+  dangerBright: 'var(--od-danger-bright)',
+  yellow: 'var(--od-yellow)',
+  yellowText: 'var(--od-yellow-text)',
+  avatarPeach: 'var(--od-avatar-peach)', // Avatar pastels
+  avatarLilac: 'var(--od-avatar-lilac)',
+  avatarPink: 'var(--od-avatar-pink)',
+  avatarCyan: 'var(--od-avatar-cyan)',
   // Course status chips: a tint and a stronger bar of the same hue
-  statusDraftBg: '#F2F4F7',
-  statusDraft: '#98A2B3',
-  statusReviewBg: '#F4EBFF',
-  statusReview: '#9E77ED',
-  statusRevisionBg: '#FEE4E2',
-  statusRevision: '#F97066',
-  statusApprovedBg: '#DCFAE6',
-  statusApproved: '#17B26A',
-  statusActiveBg: '#D9EFF8',
-  statusActive: '#0E85B4',
-  statusInactiveBg: '#F2F4F7',
-  statusInactive: '#D0D5DD',
+  statusDraftBg: 'var(--od-status-draft-bg)',
+  statusDraft: 'var(--od-status-draft)',
+  statusReviewBg: 'var(--od-status-review-bg)',
+  statusReview: 'var(--od-status-review)',
+  statusRevisionBg: 'var(--od-status-revision-bg)',
+  statusRevision: 'var(--od-status-revision)',
+  statusApprovedBg: 'var(--od-status-approved-bg)',
+  statusApproved: 'var(--od-status-approved)',
+  statusActiveBg: 'var(--od-status-active-bg)',
+  statusActive: 'var(--od-status-active)',
+  statusInactiveBg: 'var(--od-status-inactive-bg)',
+  statusInactive: 'var(--od-status-inactive)',
 } as const;
 
 export type ODColor = keyof typeof OD_COLORS;
@@ -160,12 +147,13 @@ export interface OdBadgeTone {
 /**
  * The profile's achievement badges (components/ui/profile-badges): three round
  * badges in Option D's blue scale, from deep to light, so they read as one
- * set with the page's accent.
+ * set with the page's accent. Fixed hex from OD (not the themed tokens): the
+ * badges look the same in light and dark.
  */
 export const OD_BADGES = {
-  white: OD_COLORS.white,
-  ink: OD_COLORS.textInk,
-  medal:  { from: OD_COLORS.primary900, to: OD_COLORS.primary400, shadow: OD_COLORS.primary900, shadowOpacity: 0.2, glow: 23, icon: OD_COLORS.primary200 },
-  star:   { from: OD_COLORS.primary, to: OD_COLORS.primary300, shadow: OD_COLORS.primary900, shadowOpacity: 0.18, glow: 25, icon: OD_COLORS.primary100 },
-  trophy: { from: OD_COLORS.primary400, to: OD_COLORS.primary100, shadow: OD_COLORS.primary, shadowOpacity: 0.16, glow: 20, icon: OD_COLORS.primary50 },
+  white: '#FFFFFF',
+  ink: '#0A0D12',
+  medal:  { from: OD.primary[900], to: OD.primary[400], shadow: OD.primary[900], shadowOpacity: 0.2, glow: 23, icon: OD.primary[200] },
+  star:   { from: OD.primary[600], to: OD.primary[300], shadow: OD.primary[900], shadowOpacity: 0.18, glow: 25, icon: OD.primary[100] },
+  trophy: { from: OD.primary[400], to: OD.primary[100], shadow: OD.primary[600], shadowOpacity: 0.16, glow: 20, icon: OD.primary[50] },
 } satisfies Record<string, string | OdBadgeTone>;

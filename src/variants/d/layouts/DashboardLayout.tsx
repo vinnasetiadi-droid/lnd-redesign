@@ -26,7 +26,7 @@ export function DashboardLayout({ children, noFooter = false, fixedContent = fal
 
   return (
     <MotionConfig reducedMotion="user">
-    <div className="flex h-screen w-full font-sans overflow-hidden relative text-[#181D27]">
+    <div className="flex h-screen w-full font-sans overflow-hidden relative text-(--od-text-strong)">
       {/* Background Layer */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <ResponsiveBackground />

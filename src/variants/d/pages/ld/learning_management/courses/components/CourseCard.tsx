@@ -97,8 +97,8 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
       onKeyDown={(e) => e.key === 'Enter' && e.target === e.currentTarget && onClick?.()}
       className={cn(
         // Portrait 3:4; grows only if its content needs more room
-        'group flex aspect-[3/4] flex-col rounded-[14px] bg-(--od-white) p-3 ring-1 ring-(--od-border) transition-shadow duration-200 cursor-pointer',
-        'hover:shadow-[0_12px_32px_-16px_rgba(16,24,40,0.18)]',
+        'group flex aspect-[3/4] flex-col rounded-[14px] bg-(--od-card) p-3 ring-1 ring-(--od-border) transition-shadow duration-200 cursor-pointer',
+        'hover:shadow-(--od-shadow-card-hover)',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--od-primary)/25',
         className,
       )}
@@ -125,14 +125,14 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
               aria-label="More actions"
               aria-haspopup="menu"
               aria-expanded={menuOpen}
-              className={cn(GLASS, "flex size-[30px] items-center justify-center text-(--od-text-strong) transition-colors hover:bg-(--od-white)/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--od-primary)/40 cursor-pointer")}
+              className={cn(GLASS, "flex size-[30px] items-center justify-center text-(--od-text-strong) transition-colors hover:bg-(--od-card)/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--od-primary)/40 cursor-pointer")}
             >
               <MoreHorizontal size={16} />
             </button>
             {menuOpen && (
               <>
                 <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-                <div role="menu" className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-[14px] bg-(--od-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]">
+                <div role="menu" className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-[14px] bg-(--od-raised) p-1 shadow-(--od-shadow-menu)">
                   <button
                     type="button"
                     role="menuitem"
@@ -184,7 +184,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
           <span className="inline-flex items-center gap-1.5">
             <Layers size={14} />
             v{version}
-            {drafts > 0 && <span className="text-(--od-primary)">+{drafts} draft</span>}
+            {drafts > 0 && <span className="text-(--od-primary-text)">+{drafts} draft</span>}
           </span>
           {course.duration && (
             <span className="inline-flex items-center gap-1.5">
@@ -241,8 +241,8 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
 
       {/* Status toggle confirmation, portaled to body */}
       {showStatusConfirm && createPortal(
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(16,24,40,0.5)' }} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
-          <div className="relative w-[460px] rounded-[20px] bg-(--od-white) p-8 flex flex-col items-center text-center shadow-[0_24px_48px_-12px_rgba(16,24,40,0.18)]" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'var(--od-overlay)' }} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
+          <div className="relative w-[460px] rounded-[20px] bg-(--od-raised) p-8 flex flex-col items-center text-center shadow-(--od-shadow-dialog)" onClick={(e) => e.stopPropagation()}>
             <button onClick={() => setShowStatusConfirm(false)} aria-label="Close" className="absolute top-4 right-4 flex size-8 items-center justify-center rounded-full text-(--od-text-muted) transition-colors hover:bg-(--od-surface) cursor-pointer">
               <X className="size-5" />
             </button>

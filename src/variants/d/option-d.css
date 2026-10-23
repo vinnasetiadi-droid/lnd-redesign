@@ -55,8 +55,10 @@ html.option-d * {
 }
 
 /*
- * Design tokens. Defined once here, scoped to Option D; theme.ts (OD_COLORS)
- * mirrors these values for code that needs a plain string (SVG, recharts).
+ * Design tokens, scoped to Option D: the light values here, the dark ones in
+ * the html.option-d.theme-dark block below. theme.ts (OD_COLORS and the
+ * gradients) hands them to code that needs a string (SVG, recharts, inline
+ * styles) as var(--od-...), so that code follows the theme too.
  */
 html.option-d {
   --od-primary: #0E85B4; /* The one accent: buttons, selected states, chart highlight */
@@ -70,7 +72,7 @@ html.option-d {
   --od-primary-tint: #F4FAFD; /* AI insight row background */
   --od-text-strong: #181D27; /* Titles and values */
   --od-text-heading: #252B37;
-  --od-text-ink: #0A0D12; /* Tooltip background */
+  --od-text-ink: #0A0D12; /* Darkest text; the tooltip background in light */
   --od-text-body: #414651; /* Body text */
   --od-text-secondary: #535862; /* Labels */
   --od-text-muted: #717680; /* Secondary text */
@@ -126,6 +128,215 @@ html.option-d {
   --od-status-active: #0E85B4;
   --od-status-inactive-bg: #F2F4F7;
   --od-status-inactive: #D0D5DD;
+
+  /* Added with the dark theme. Light values are the ones the code used before,
+     so the light version is unchanged. */
+  --od-primary-text: var(--od-primary); /* The accent as text (links, checks) */
+  --od-card: #FFFFFF; /* Card surface */
+  --od-raised: #FFFFFF; /* Menus, tooltip cards, floating pills, dialogs */
+  --od-nav: #FFFFFF; /* Top navigation bar, its icon buttons and profile pill */
+  --od-pill: #FFFFFF; /* Active pill in a segmented control */
+  --od-dialog: #FDFDFD; /* Delete dialog */
+  --od-tooltip: var(--od-text-ink); /* Dark tooltip under a truncated title */
+  --od-danger-solid: #D92D20; /* Red fill under white text */
+  --od-danger-500: #F04438;
+  --od-amber: #D97706;
+  --od-overlay: rgba(16, 24, 40, 0.5); /* Scrim behind dialogs */
+  --od-footer-divider: rgb(0 0 0 / 0.1);
+  --od-sweep: rgba(255, 255, 255, 0.85); /* The light sweep over a NISA insight */
+  --od-shadow-menu: 0 8px 24px -6px rgba(16, 24, 40, 0.18), 0 2px 4px rgba(16, 24, 40, 0.04);
+  --od-shadow-menu-lg: 0 12px 32px -8px rgba(16, 24, 40, 0.18), 0 2px 4px rgba(16, 24, 40, 0.04);
+  --od-shadow-pill: 0 1px 2px rgba(16, 24, 40, 0.08), 0 1px 3px rgba(16, 24, 40, 0.06);
+  --od-shadow-dialog: 0 24px 48px -12px rgba(16, 24, 40, 0.18);
+  --od-shadow-float: 0 2px 8px -2px rgba(16, 24, 40, 0.14);
+  --od-shadow-card-hover: 0 12px 32px -16px rgba(16, 24, 40, 0.18);
+  --od-shadow-glass: 0 1px 3px rgba(16, 24, 40, 0.12);
+  --od-shadow-nav: 0 0 #0000; /* None in light; a hairline in dark */
+  --od-shadow-lift: 0 14px 32px -18px rgba(14, 133, 180, 0.28); /* Card hover */
+  --od-shadow-rest: 0 0 #0000; /* Cards at rest: none in light, a hairline in dark */
+
+  /* Gradients (theme.ts OD_BACKGROUND, OD_SHEEN, OD_AI_*) */
+  --od-page-bg:
+    radial-gradient(55% 60% at 0% 0%, rgba(14, 133, 180, 0.11) 0%, rgba(14, 133, 180, 0) 70%),
+    radial-gradient(50% 55% at 100% 100%, rgba(14, 133, 180, 0.09) 0%, rgba(14, 133, 180, 0) 70%),
+    radial-gradient(40% 45% at 100% 0%, rgba(14, 133, 180, 0.05) 0%, rgba(14, 133, 180, 0) 70%),
+    #F7F9FC;
+  --od-page-sheen: linear-gradient(115deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.55) 48%, rgba(255, 255, 255, 0) 66%);
+  --od-ai-gradient:
+    radial-gradient(110% 110% at 0% 0%, #FFFFFF 0%, rgba(255, 255, 255, 0.85) 25%, rgba(255, 255, 255, 0) 60%),
+    radial-gradient(95% 95% at 100% 100%, #0E85B4 0%, rgba(14, 133, 180, 0.57) 45%, rgba(14, 133, 180, 0.11) 85%),
+    #EAF6FB;
+  --od-ai-solid:
+    radial-gradient(120% 80% at 0% 0%, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 55%),
+    linear-gradient(160deg, #1C9BCC 0%, #0E85B4 45%, #0B74A0 100%);
+  --od-ai-soft:
+    radial-gradient(85% 65% at 100% 0%, rgba(14, 133, 180, 0.16) 0%, rgba(14, 133, 180, 0) 70%),
+    radial-gradient(75% 55% at 100% 100%, rgba(14, 133, 180, 0.12) 0%, rgba(14, 133, 180, 0) 70%),
+    radial-gradient(60% 40% at 0% 100%, rgba(125, 203, 233, 0.10) 0%, rgba(125, 203, 233, 0) 70%),
+    #FFFFFF;
+}
+
+/*
+ * Dark theme: <html class="option-d theme-dark"> (src/variants/theme-mode.ts).
+ * Neutral near-black with the one teal accent, after the "Tempo", "exon" and
+ * "My Campaigns" references: near-black page, cards a step lighter, menus a
+ * step lighter again, hairlines instead of shadows. The accent stays #0E85B4
+ * for fills under white text; as text or a thin line it is #3DB2DE. Tints
+ * become teal washes over the card; semantic colours become dark translucent
+ * fills with light text (AA for small text).
+ */
+html.option-d.theme-dark {
+  /* Accent */
+  --od-primary: #0E85B4;
+  --od-primary-strong: #6CCBEE; /* Teal text on a teal wash, link hover */
+  --od-primary-text: #3DB2DE;
+  --od-primary-50: #12262E; /* Teal washes over the card (about 14%, 24%) */
+  --od-primary-100: #133240;
+  /* 200 to 400 stay the light teals: on black they read as the softer series */
+  --od-primary-200: #A9DDF1;
+  --od-primary-300: #7DCBE9;
+  --od-primary-400: #45B2DC;
+  --od-primary-900: #A9DDF1; /* Deepest blue text in light, lightest in dark */
+  --od-primary-tint: #112027; /* AI insight rows */
+
+  /* Text */
+  --od-text-strong: #F1F4F5;
+  --od-text-heading: #E3E8EA;
+  --od-text-ink: #F7F9FA;
+  --od-text-body: #C5CDD1;
+  --od-text-secondary: #A0A9AE;
+  --od-text-muted: #87919A;
+  --od-text-subtle: #67717A;
+  --od-text-ai: #E3E8EA;
+
+  /* Lines and surfaces */
+  --od-border: #23292D;
+  --od-border-strong: #2A3035; /* Progress tracks */
+  --od-border-control: #3A4248;
+  --od-line: #3A4248; /* Chart cursor */
+  --od-surface: #1C2124; /* Segmented controls, icon circles, search */
+  --od-surface-muted: #171B1E; /* Row frames, table heads */
+  --od-surface-subtle: #1A1E21; /* Hover */
+  --od-button-secondary: #22272B;
+  --od-button-secondary-hover: #2B3136;
+  --od-button-primary-hover: #0B78A3; /* Darker on hover, white text stays AA */
+  --od-white: #FFFFFF; /* Stays white: text on the accent, SVG masks */
+  --od-card: #131618;
+  --od-raised: #1A1E21;
+  --od-nav: #131618;
+  --od-pill: #2B3136;
+  --od-dialog: #1A1E21;
+  --od-tooltip: #2A3035;
+
+  /* Semantic */
+  --od-attention-text: #FDB022;
+  --od-attention-surface: #2A2418;
+  --od-attention-bar: #FEC84B;
+  --od-attention-track: #3A3119;
+  --od-warning: #FDB022;
+  --od-orange: #FB6514;
+  --od-orange-strong: #FD853A;
+  --od-orange-surface: #35200F;
+  --od-success: #47CD89;
+  --od-success-strong: #75E0A7;
+  --od-success-surface: #11271C;
+  --od-success-100: #173A29;
+  --od-success-bright: #32D583;
+  --od-mode-self: #3FBF6A;
+  --od-danger: #F97066;
+  --od-danger-strong: #FDA29B;
+  --od-danger-surface: #2C1716;
+  --od-danger-100: #3B1C1A;
+  --od-danger-bright: #F97066;
+  --od-yellow: #3A3113;
+  --od-yellow-text: #FDE272;
+  --od-avatar-peach: #3A2A20;
+  --od-avatar-lilac: #2E2540;
+  --od-avatar-pink: #3A2433;
+  --od-avatar-cyan: #15353A;
+  --od-status-draft-bg: #23282C;
+  --od-status-draft: #7D8792;
+  --od-status-review-bg: #2A2340;
+  --od-status-review: #B692F6;
+  --od-status-revision-bg: #3B1C1A;
+  --od-status-revision: #F97066;
+  --od-status-approved-bg: #133626;
+  --od-status-approved: #47CD89;
+  --od-status-active-bg: #12303D;
+  --od-status-active: #3DB2DE;
+  --od-status-inactive-bg: #1F2427;
+  --od-status-inactive: #4A535A;
+
+  /* Effects: deep black and hairlines, no light glows */
+  --od-overlay: rgba(0, 0, 0, 0.65);
+  --od-footer-divider: rgb(255 255 255 / 0.1);
+  --od-sweep: rgba(255, 255, 255, 0.06);
+  --od-shadow-menu: 0 12px 28px -8px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.07);
+  --od-shadow-menu-lg: 0 16px 36px -8px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.07);
+  --od-shadow-pill: 0 1px 2px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  --od-shadow-dialog: 0 24px 48px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.07);
+  --od-shadow-float: 0 2px 8px -2px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.07);
+  --od-shadow-card-hover: 0 12px 32px -16px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --od-shadow-glass: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --od-shadow-nav: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --od-shadow-lift: 0 14px 32px -18px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.09);
+  --od-shadow-rest: 0 0 0 1px rgba(255, 255, 255, 0.045);
+
+  --od-page-bg:
+    radial-gradient(55% 60% at 0% 0%, rgba(14, 133, 180, 0.07) 0%, rgba(14, 133, 180, 0) 70%),
+    radial-gradient(50% 55% at 100% 100%, rgba(14, 133, 180, 0.05) 0%, rgba(14, 133, 180, 0) 70%),
+    radial-gradient(40% 45% at 100% 0%, rgba(14, 133, 180, 0.03) 0%, rgba(14, 133, 180, 0) 70%),
+    #0A0C0D;
+  --od-page-sheen: linear-gradient(115deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.015) 48%, rgba(255, 255, 255, 0) 66%);
+  --od-ai-gradient:
+    radial-gradient(110% 110% at 0% 0%, #131618 0%, rgba(19, 22, 24, 0.85) 25%, rgba(19, 22, 24, 0) 60%),
+    radial-gradient(95% 95% at 100% 100%, #0E85B4 0%, rgba(14, 133, 180, 0.45) 45%, rgba(14, 133, 180, 0.1) 85%),
+    #12262E;
+  --od-ai-solid:
+    radial-gradient(120% 80% at 0% 0%, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 55%),
+    linear-gradient(160deg, #137FAA 0%, #0B6B91 45%, #095A7A 100%);
+  /* NISA card: the teal glows on the dark card */
+  --od-ai-soft:
+    radial-gradient(85% 65% at 100% 0%, rgba(14, 133, 180, 0.24) 0%, rgba(14, 133, 180, 0) 70%),
+    radial-gradient(75% 55% at 100% 100%, rgba(14, 133, 180, 0.16) 0%, rgba(14, 133, 180, 0) 70%),
+    radial-gradient(60% 40% at 0% 100%, rgba(61, 178, 222, 0.08) 0%, rgba(61, 178, 222, 0) 70%),
+    #131618;
+
+  /* The shared shadcn tokens, for anything inside Option D that reads them
+     (body background, default border colour) */
+  --background: #0A0C0D;
+  --foreground: #F1F4F5;
+  --card: #131618;
+  --card-foreground: #F1F4F5;
+  --popover: #1A1E21;
+  --popover-foreground: #F1F4F5;
+  --muted: #1C2124;
+  --muted-foreground: #87919A;
+  --accent: #22272B;
+  --accent-foreground: #F1F4F5;
+  --border: #23292D;
+  --input-background: #1C2124;
+}
+
+/* Logos: the black one in light, the white one in dark (TopNav) */
+html.option-d:not(.theme-dark) .od-logo-dark,
+html.option-d.theme-dark .od-logo-light {
+  display: none;
+}
+/* The footer's Ajari logo has black letters: invert them, keep the hue */
+html.option-d.theme-dark .od-logo-invert {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Selected tiles and the review strip: the 7% teal reads too faint on black */
+html.option-d.theme-dark .bg-\(--od-primary\)\/\[0\.07\] {
+  background-color: color-mix(in oklab, var(--od-primary) 14%, transparent);
+}
+
+/* Course photos sit a little quieter on the dark cards (joins the photo's own
+   saturate and grayscale filters) */
+html.option-d.theme-dark img.saturate-\[\.8\] {
+  --tw-brightness: brightness(0.92);
 }
 
 /* Regular by default, including elements the base styles make heavier */
@@ -139,15 +350,17 @@ html.option-d :where(.font-medium, .font-semibold, .font-bold, .font-extrabold, 
 
 /* ── Motion ─────────────────────────────────────────────────── */
 
-/* Cards: a 1px lift and a faint blue glow on hover */
+/* Cards: a 1px lift and a faint blue glow on hover (dark: a hairline at rest,
+   a deep shadow and a brighter hairline on hover) */
 html.option-d .od-lift {
   border-radius: 18px;
+  box-shadow: var(--od-shadow-rest);
   /* translate, not transform: motion leaves an inline transform after the reveal */
   transition: translate 300ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 html.option-d .od-lift:hover {
   translate: 0 -1px;
-  box-shadow: 0 14px 32px -18px rgba(14, 133, 180, 0.28);
+  box-shadow: var(--od-shadow-lift);
 }
 
 /* Buttons give a little under the finger. In the base layer, so a button's own
@@ -171,7 +384,7 @@ html.option-d .od-sweep::after {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.85) 50%, transparent 70%);
+  background: linear-gradient(100deg, transparent 30%, var(--od-sweep) 50%, transparent 70%);
   transform: translateX(-100%);
   animation: od-sweep 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.5s 1 forwards;
 }

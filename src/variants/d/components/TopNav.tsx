@@ -23,16 +23,28 @@ const HAS_UNREAD = true;
 /** In the profile menu instead of the bar */
 const PROFILE_KEYS = new Set(["settings"]);
 
+/**
+ * The black logo in light, the white one in dark (od-logo-light / od-logo-dark
+ * in option-d.css hide the other). Each falls back to the wordmark in text.
+ */
 function Logo() {
   const [failed, setFailed] = useState(false);
-  if (failed) {
-    return (
-      <span className="text-[16px] leading-[24px] text-(--od-text-strong)">
-        Learn<span className="text-(--od-primary)">X</span>pert
-      </span>
-    );
-  }
-  return <img src={IMAGES.icons.black_lx} alt="LearnXpert" className="h-[32px] w-auto object-contain" onError={() => setFailed(true)} />;
+  const [darkFailed, setDarkFailed] = useState(false);
+  const wordmark = (className: string) => (
+    <span className={cn(className, "text-[16px] leading-[24px] text-(--od-text-strong)")}>
+      Learn<span className="text-(--od-primary-text)">X</span>pert
+    </span>
+  );
+  return (
+    <>
+      {failed
+        ? wordmark("od-logo-light")
+        : <img src={IMAGES.icons.black_lx} alt="LearnXpert" className="od-logo-light h-[32px] w-auto object-contain" onError={() => setFailed(true)} />}
+      {darkFailed
+        ? wordmark("od-logo-dark")
+        : <img src={IMAGES.icons.white_lx} alt="LearnXpert" className="od-logo-dark h-[32px] w-auto object-contain" onError={() => setDarkFailed(true)} />}
+    </>
+  );
 }
 
 /** Closes a menu on a click outside it or Escape */
@@ -54,7 +66,7 @@ function useDismiss(open: boolean, close: () => void) {
   return ref;
 }
 
-const MENU_CARD = "absolute top-full z-30 mt-2 min-w-[184px] rounded-[14px] bg-(--od-white) p-1 shadow-[0_12px_32px_-8px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]";
+const MENU_CARD = "absolute top-full z-30 mt-2 min-w-[184px] rounded-[14px] bg-(--od-raised) p-1 shadow-(--od-shadow-menu-lg)";
 const MENU_MOTION = {
   initial: { opacity: 0, y: -4, scale: 0.98 },
   animate: { opacity: 1, y: 0, scale: 1 },
@@ -157,7 +169,7 @@ function ProfileMenu({ settings }: { settings?: SidebarMenuItem }) {
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
-        className="flex h-11 items-center gap-2.5 rounded-full bg-(--od-white) pl-1 pr-3 text-left transition-colors hover:bg-(--od-surface-subtle) cursor-pointer"
+        className="flex h-11 items-center gap-2.5 rounded-full bg-(--od-nav) shadow-(--od-shadow-nav) pl-1 pr-3 text-left transition-colors hover:bg-(--od-surface-subtle) cursor-pointer"
       >
         <span className="size-9 shrink-0 overflow-hidden rounded-full bg-(--od-primary-50)">
           <img src={profileCutout} alt="" className="size-full object-cover object-top" />
@@ -205,7 +217,7 @@ function ProfileMenu({ settings }: { settings?: SidebarMenuItem }) {
   );
 }
 
-const ICON_BUTTON = "relative flex size-11 items-center justify-center rounded-full bg-(--od-white) text-(--od-text-body) transition-colors hover:bg-(--od-surface-subtle) cursor-pointer";
+const ICON_BUTTON = "relative flex size-11 items-center justify-center rounded-full bg-(--od-nav) shadow-(--od-shadow-nav) text-(--od-text-body) transition-colors hover:bg-(--od-surface-subtle) cursor-pointer";
 
 export function TopNav({ role = "ld_team" }: { role?: SidebarRole }) {
   const { pathname } = useLocation();
@@ -224,7 +236,7 @@ export function TopNav({ role = "ld_team" }: { role?: SidebarRole }) {
         <Logo />
       </div>
 
-      <nav aria-label="Main" className="flex shrink-0 items-center gap-0.5 rounded-full bg-(--od-white) p-1">
+      <nav aria-label="Main" className="flex shrink-0 items-center gap-0.5 rounded-full bg-(--od-nav) p-1 shadow-(--od-shadow-nav)">
         {barItems.map((item) => (
           <NavItem
             key={item.key}
@@ -243,7 +255,7 @@ export function TopNav({ role = "ld_team" }: { role?: SidebarRole }) {
         </button>
         <button type="button" aria-label={HAS_UNREAD ? "Notifications, unread" : "Notifications"} className={ICON_BUTTON}>
           <Bell size={20} />
-          {HAS_UNREAD && <span className="absolute right-[12px] top-[11px] size-2 rounded-full bg-(--od-danger-bright) ring-2 ring-(--od-white)" />}
+          {HAS_UNREAD && <span className="absolute right-[12px] top-[11px] size-2 rounded-full bg-(--od-danger-bright) ring-2 ring-(--od-nav)" />}
         </button>
         <ProfileMenu settings={settings} />
       </div>

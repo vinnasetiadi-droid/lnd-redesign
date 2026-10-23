@@ -75,7 +75,7 @@ export function FilterPanel({ groups, onClear }: { groups: FilterGroup[]; onClea
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.98 }}
             transition={{ duration: 0.15, ease: EASE_OUT }}
-            className="absolute left-0 top-full z-30 mt-1 w-[260px] origin-top-left rounded-[14px] bg-(--od-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]"
+            className="absolute left-0 top-full z-30 mt-1 w-[260px] origin-top-left rounded-[14px] bg-(--od-raised) p-1 shadow-(--od-shadow-menu)"
           >
             {groups.map((g, i) => (
               <div key={g.key} className={cn('py-1', i > 0 && 'border-t border-(--od-border)')}>
@@ -96,7 +96,7 @@ export function FilterPanel({ groups, onClear }: { groups: FilterGroup[]; onClea
                       )}
                     >
                       {o.label}
-                      {selected && <Check size={14} className="text-(--od-primary)" />}
+                      {selected && <Check size={14} className="text-(--od-primary-text)" />}
                     </button>
                   );
                 })}

@@ -17,7 +17,7 @@ const FLAG_LABEL: Record<AttentionFlag, string> = {
 
 export function LDDashboardCoursesAttention({ courses, className }: LDDashboardCoursesAttentionProps) {
   return (
-    <div className={cn('relative bg-white rounded-[18px] p-5', className)}>
+    <div className={cn('relative bg-(--od-card) rounded-[18px] p-5', className)}>
       <CardHeader
         title="Programs needing attention"
         subtitle="Flagged due to low completion, low rating, or high drop-off"

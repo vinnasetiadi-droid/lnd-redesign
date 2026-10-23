@@ -6,7 +6,7 @@ import { OD_COLORS } from '@/variants/d/theme';
 /**
  * Option D chart styling, after the clean references: folded gradient bars with
  * thin diagonal stripes, thin lines without dots (dashed for comparison series),
- * soft area fills, dashed horizontal grid only, white tooltip cards, and
+ * soft area fills, dashed horizontal grid only, raised tooltip cards, and
  * gradient progress bars on a hatched track.
  *
  * Recharts only renders plain SVG children (like <defs>) inside a chart, so the
@@ -53,10 +53,10 @@ export interface TooltipRow {
   dashed?: boolean;
 }
 
-/** White tooltip card used by every chart */
+/** Tooltip card used by every chart (white in light, raised dark in dark) */
 export function ChartTooltipCard({ title, rows }: { title?: ReactNode; rows: TooltipRow[] }) {
   return (
-    <div className="min-w-[168px] rounded-[12px] bg-white px-3.5 py-3 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]">
+    <div className="min-w-[168px] rounded-[12px] bg-(--od-raised) px-3.5 py-3 shadow-(--od-shadow-menu)">
       {title && <p className="mb-2 text-[12px] text-(--od-text-muted)">{title}</p>}
       <div className="space-y-1.5">
         {rows.map((row) => (
@@ -132,7 +132,7 @@ type FoldIds = Pick<ReturnType<typeof useChartIds>, 'barGradient' | 'barSelected
 export function foldBarDefs(ids: FoldIds) {
   return (
     <>
-      {/* Bar: strong blue at the top, almost white at the base */}
+      {/* Bar: strong blue at the top, fading into the card at the base */}
       <linearGradient id={ids.barGradient} x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stopColor={CHART_BLUE} stopOpacity={0.95} />
         <stop offset="100%" stopColor={CHART_BLUE} stopOpacity={0.06} />
@@ -153,7 +153,7 @@ export function foldBarDefs(ids: FoldIds) {
         <stop offset="100%" stopColor={OD_COLORS.primary50} stopOpacity={0} />
       </linearGradient>
       <pattern id={ids.stripes} width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-        <line x1="0" y1="0" x2="0" y2="9" stroke={OD_COLORS.white} strokeWidth="1.5" strokeOpacity="0.75" />
+        <line x1="0" y1="0" x2="0" y2="9" stroke={OD_COLORS.card} strokeWidth="1.5" strokeOpacity="0.75" />
       </pattern>
     </>
   );

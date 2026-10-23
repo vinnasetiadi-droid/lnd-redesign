@@ -62,7 +62,7 @@ export function LDDashboardHeader({ metrics, className }: LDDashboardHeaderProps
   return (
     <div className={cn('grid grid-cols-1 md:grid-cols-3 gap-3', className)}>
       {metrics.map((card) => (
-        <div key={card.key} className="od-lift rounded-[18px] bg-white p-4">
+        <div key={card.key} className="od-lift rounded-[18px] bg-(--od-card) p-4">
           <div className="flex items-start justify-between gap-2 mb-2">
             {/* Title, plus a one-line hint when the number needs it; together as tall as the icon circle */}
             <div className="min-w-0" title={card.hint}>

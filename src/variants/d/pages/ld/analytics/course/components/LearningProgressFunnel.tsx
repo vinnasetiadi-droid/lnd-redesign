@@ -111,7 +111,7 @@ export function LearningProgressFunnel({ programType, className }: { programType
   const columns = { gridTemplateColumns: `${LABEL_COL}fr repeat(${STAGES.length}, 1fr)` };
 
   return (
-    <div className={cn('relative flex flex-col gap-5 rounded-[18px] bg-white p-5', className)}>
+    <div className={cn('relative flex flex-col gap-5 rounded-[18px] bg-(--od-card) p-5', className)}>
       <CardHeader
         title="Learning funnel"
         subtitle="From assignment to completion · this quarter"
@@ -213,11 +213,11 @@ export function LearningProgressFunnel({ programType, className }: { programType
               animate={{ opacity: inView ? 1 : 0 }}
               transition={{ duration: 0.3, delay: 0.25 + i * 0.15 }}
             >
-              <span className="whitespace-nowrap rounded-full bg-(--od-white) px-3 py-1 text-[13px] tabular-nums text-(--od-text-strong) shadow-[0_2px_8px_-2px_rgba(16,24,40,0.14)]">
+              <span className="whitespace-nowrap rounded-full bg-(--od-raised) px-3 py-1 text-[13px] tabular-nums text-(--od-text-strong) shadow-(--od-shadow-float)">
                 {totals[i]}
               </span>
-              <span className="w-0.5 flex-1 bg-(--od-white)" />
-              <span className="whitespace-nowrap rounded-full bg-(--od-white) px-3 py-1 text-[12px] tabular-nums text-(--od-text-muted) shadow-[0_2px_8px_-2px_rgba(16,24,40,0.14)]">
+              <span className="w-0.5 flex-1 bg-(--od-card)" />
+              <span className="whitespace-nowrap rounded-full bg-(--od-raised) px-3 py-1 text-[12px] tabular-nums text-(--od-text-muted) shadow-(--od-shadow-float)">
                 {i === 0 ? 'All assigned' : `${kept}% kept`}
               </span>
             </motion.div>

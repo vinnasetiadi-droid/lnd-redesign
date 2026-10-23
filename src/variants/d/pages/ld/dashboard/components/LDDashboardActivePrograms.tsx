@@ -161,7 +161,7 @@ export function LDDashboardActivePrograms({ programs, className }: LDDashboardAc
   }, [active, filter]);
 
   return (
-    <div className={cn('relative bg-white rounded-[18px] p-5', className)}>
+    <div className={cn('relative bg-(--od-card) rounded-[18px] p-5', className)}>
       <CardHeader
         title="Active programs"
         subtitle={`${active.length} running${atRiskCount ? ` · ${atRiskCount} ${atRiskCount === 1 ? 'needs' : 'need'} attention` : ''}`}
@@ -169,7 +169,7 @@ export function LDDashboardActivePrograms({ programs, className }: LDDashboardAc
           <button
             type="button"
             onClick={() => navigate('/ld/learning-management/courses')}
-            className="text-[13px] text-(--od-primary) transition-colors hover:text-(--od-primary-strong) cursor-pointer"
+            className="text-[13px] text-(--od-primary-text) transition-colors hover:text-(--od-primary-strong) cursor-pointer"
           >
             See all
           </button>

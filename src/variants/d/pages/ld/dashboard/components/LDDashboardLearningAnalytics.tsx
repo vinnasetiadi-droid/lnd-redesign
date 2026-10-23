@@ -34,9 +34,10 @@ function completionSeries(scope: ProgramScope): MonthlyCompletion[] {
 
 // ── Config ───────────────────────────────────────────────────
 
+// `text`: the end label's colour (the accent is brighter as text in dark)
 const MODES = [
-  { key: 'blended', label: 'Blended',    color: OD_COLORS.primary },
-  { key: 'self',    label: 'Self-paced', color: OD_COLORS.modeSelf },
+  { key: 'blended', label: 'Blended',    color: OD_COLORS.primary,  text: OD_COLORS.primaryText },
+  { key: 'self',    label: 'Self-paced', color: OD_COLORS.modeSelf, text: OD_COLORS.modeSelf },
 ] as const;
 
 /** One line comparing the two modes at the end of the period */
@@ -92,12 +93,12 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
   const lastIndex = data.length - 1;
   const ids = useChartIds('learning-mode');
   const labels = useMemo(
-    () => Object.fromEntries(MODES.map((m) => [m.key, endLabel(m.label, m.color, lastIndex)])),
+    () => Object.fromEntries(MODES.map((m) => [m.key, endLabel(m.label, m.text, lastIndex)])),
     [lastIndex],
   );
 
   return (
-    <div className={cn('relative flex flex-col gap-3 bg-white rounded-[18px] p-5', className)}>
+    <div className={cn('relative flex flex-col gap-3 bg-(--od-card) rounded-[18px] p-5', className)}>
       <CardHeader
         title="Learning mode analytics"
         subtitle={`Blended vs self-paced · ${periodLabel(data)}`}
@@ -186,7 +187,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
                   strokeWidth={2}
                   fill={`url(#${ids.area}-${m.key})`}
                   dot={false}
-                  activeDot={{ r: 4, fill: m.color, stroke: '#fff', strokeWidth: 2 }}
+                  activeDot={{ r: 4, fill: m.color, stroke: 'var(--od-card)', strokeWidth: 2 }}
                   animationDuration={600}
                   animationEasing="ease-out"
                 >

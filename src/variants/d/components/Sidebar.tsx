@@ -27,7 +27,7 @@ const MENU_GROUPS: string[][] = [
 const BOTTOM_KEYS = new Set(["settings"]);
 
 /** Active page: a light blue tint, no white frame */
-const ACTIVE_PILL = "bg-[#0E85B4]/[0.07]";
+const ACTIVE_PILL = "bg-(--od-primary)/[0.07]";
 
 // ============================================================
 // SUB-COMPONENTS
@@ -38,8 +38,8 @@ function Logo() {
   const [failed, setFailed] = useState(false);
   if (failed) {
     return (
-      <span className="text-[16px] leading-[24px] text-[#181D27]">
-        Learn<span className="text-[#0E85B4]">X</span>pert
+      <span className="text-[16px] leading-[24px] text-(--od-text-strong)">
+        Learn<span className="text-(--od-primary-text)">X</span>pert
       </span>
     );
   }
@@ -103,14 +103,14 @@ function SidebarItem({
         className={cn(
           "group flex items-center h-8 gap-2 rounded-[8px] cursor-pointer select-none transition-colors text-left",
           collapsed ? "justify-center w-8 mx-auto" : "w-full pl-2.5 pr-2",
-          pill ? cn(ACTIVE_PILL, "text-[#181D27]") : danger ? "text-[#535862] hover:bg-[#0E85B4]/[0.04] hover:text-[#D92D20]" : "text-[#535862] hover:bg-[#0E85B4]/[0.04] hover:text-[#181D27]",
+          pill ? cn(ACTIVE_PILL, "text-(--od-text-strong)") : danger ? "text-(--od-text-secondary) hover:bg-(--od-primary)/[0.04] hover:text-(--od-danger)" : "text-(--od-text-secondary) hover:bg-(--od-primary)/[0.04] hover:text-(--od-text-strong)",
         )}
         onClick={handleClick}
       >
         <span
           className={cn(
             "shrink-0 flex items-center justify-center transition-[color,translate] duration-200 group-hover:translate-x-[2px]",
-            active || childActive ? "text-[#181D27]" : danger ? "text-[#717680] group-hover:text-[#D92D20]" : "text-[#717680] group-hover:text-[#414651]",
+            active || childActive ? "text-(--od-text-strong)" : danger ? "text-(--od-text-muted) group-hover:text-(--od-danger)" : "text-(--od-text-muted) group-hover:text-(--od-text-body)",
           )}
         >
           {icon}
@@ -119,7 +119,7 @@ function SidebarItem({
           <span className="flex-1 text-[13px] leading-[20px] truncate">{label}</span>
         )}
         {!collapsed && badge !== undefined && (
-          <span className="bg-[#0E85B4] text-white text-[11px] rounded-full h-[18px] min-w-[18px] px-1.5 flex items-center justify-center">
+          <span className="bg-(--od-primary) text-white text-[11px] rounded-full h-[18px] min-w-[18px] px-1.5 flex items-center justify-center">
             {badge}
           </span>
         )}
@@ -208,7 +208,7 @@ function SubmenuItem({ label, active, first, last, onClick }: SubmenuItemProps) 
         type="button"
         className={cn(
           "flex h-8 w-full items-center rounded-[8px] px-2.5 text-left text-[13px] leading-[20px] transition-colors cursor-pointer",
-          active ? cn(ACTIVE_PILL, "text-(--od-text-strong)") : "text-(--od-text-secondary) hover:bg-[#0E85B4]/[0.04] hover:text-(--od-text-strong)",
+          active ? cn(ACTIVE_PILL, "text-(--od-text-strong)") : "text-(--od-text-secondary) hover:bg-(--od-primary)/[0.04] hover:text-(--od-text-strong)",
         )}
         onClick={onClick}
       >
@@ -219,7 +219,7 @@ function SubmenuItem({ label, active, first, last, onClick }: SubmenuItemProps) 
 }
 
 function Divider({ collapsed }: { collapsed?: boolean }) {
-  return <div className={cn("h-px bg-[#EDEEF1] my-3", collapsed ? "mx-3" : "mx-1")} />;
+  return <div className={cn("h-px bg-(--od-border) my-3", collapsed ? "mx-3" : "mx-1")} />;
 }
 
 // ============================================================
@@ -331,7 +331,7 @@ export function Sidebar({ className, role = "ld_team", isCollapsed = false, onTo
           type="button"
           onClick={onToggle}
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className="flex items-center justify-center size-7 rounded-[8px] text-[#717680] hover:text-[#181D27] transition-colors"
+          className="flex items-center justify-center size-7 rounded-[8px] text-(--od-text-muted) hover:text-(--od-text-strong) transition-colors"
         >
           {isCollapsed ? <PanelLeftOpen size={16} strokeWidth={1.5} /> : <PanelLeftClose size={16} strokeWidth={1.5} />}
         </button>

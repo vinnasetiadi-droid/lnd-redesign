@@ -27,8 +27,8 @@ export function CourseFilterTabs({ active, onChange }: CourseFilterTabsProps) {
           className={cn(
             "px-2 py-[2px] rounded-[4px] text-[12px] transition-all duration-200 cursor-pointer border",
             active === f.key
-              ? 'bg-[#0E85B4] text-white border-[#0E85B4]'
-              : 'bg-white text-gray-600 border-gray-200 hover:border-blue-300 hover:text-blue-600',
+              ? 'bg-(--od-primary) text-white border-(--od-primary)'
+              : 'bg-(--od-card) text-gray-600 border-gray-200 hover:border-blue-300 hover:text-blue-600',
           )}
         >
           {f.label}

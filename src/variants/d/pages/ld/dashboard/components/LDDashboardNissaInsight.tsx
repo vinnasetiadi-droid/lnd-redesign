@@ -22,7 +22,7 @@ function InsightRow({ item }: { item: NisaInsight }) {
         <p className="min-w-0 truncate text-[15px] leading-[22px] text-(--od-text-ai)">{item.title}</p>
         <button
           type="button"
-          className="inline-flex shrink-0 items-center gap-1 text-[13px] text-(--od-primary) transition-colors hover:text-(--od-primary-strong)"
+          className="inline-flex shrink-0 items-center gap-1 text-[13px] text-(--od-primary-text) transition-colors hover:text-(--od-primary-strong)"
         >
           {item.cta}
           <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -67,7 +67,7 @@ export function LDDashboardNissaInsight({ insights, className }: LDDashboardNiss
         {/* ── Footer CTA ─────────────────────────────────────── */}
         <button
           type="button"
-          className="group flex items-center justify-between rounded-full bg-white/80 ring-1 ring-(--od-primary)/15 px-5 h-9 text-[13px] text-(--od-primary) transition-colors hover:bg-white"
+          className="group flex items-center justify-between rounded-full bg-(--od-raised)/80 ring-1 ring-(--od-primary)/15 px-5 h-9 text-[13px] text-(--od-primary-text) transition-colors hover:bg-(--od-raised)"
         >
           More insights? Just ask NISA
           <ChevronRight className="size-4 transition-transform group-hover:translate-x-0.5" />
