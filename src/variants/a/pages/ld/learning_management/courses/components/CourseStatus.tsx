@@ -4,6 +4,9 @@
 import { cn } from '@/lib/utils';
 import { COURSE_STATUS_META, type CourseStatus } from '../data/courses.mock';
 
+/** Frosted white over the photo, shared by the status badge and the menu button */
+export const GLASS = 'rounded-full bg-(--oa-white)/70 ring-1 ring-(--oa-white)/60 backdrop-blur-md shadow-[0_1px_3px_rgba(16,24,40,0.12)]';
+
 function StatusChip({ status, className }: { status: CourseStatus; className?: string }) {
   const meta = COURSE_STATUS_META[status];
   return (
@@ -27,8 +30,8 @@ export function StatusLabel({ status, className }: { status: CourseStatus; class
 }
 
 /**
- * For badges. On a photo: a white pill with the label in the status colour
- * (no dot), so it holds on any image; elsewhere the tinted chip.
+ * For badges. On a photo: a frosted glass pill with the label in the status
+ * colour (no dot); elsewhere the tinted chip.
  */
 export function StatusBadge({ status, onImage, className }: { status: CourseStatus; onImage?: boolean; className?: string }) {
   if (!onImage) return <StatusChip status={status} className={className} />;
@@ -36,7 +39,8 @@ export function StatusBadge({ status, onImage, className }: { status: CourseStat
   return (
     <span
       className={cn(
-        'inline-flex h-[30px] w-fit items-center whitespace-nowrap rounded-full bg-(--oa-white) px-3.5 text-[12px] leading-none shadow-[0_1px_3px_rgba(16,24,40,0.16)]',
+        'inline-flex h-[30px] w-fit items-center whitespace-nowrap px-3.5 text-[12px] leading-none',
+        GLASS,
         className,
       )}
       style={{ color: meta.text }}
