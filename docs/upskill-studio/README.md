@@ -14,3 +14,4 @@ Option B: B1 (one accent colour), B2 (section rhythm), B3 (compact profile) and 
 B5 to B8 give Option B its own identity (foundations, components, page fixes, QA). Run them in order after B4.
 B9 is the final consistency pass for Option B (run after B8).
 B10 to B12 fix the findings in option-b-audit.md. X1 makes the profile badges round in Options B and D.
+Option C: C1 restyles the course card after the reference images.

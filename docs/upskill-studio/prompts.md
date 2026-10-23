@@ -1241,3 +1241,86 @@ Option B and Option D) are hexagons. Make them circles in both options.
 4. Check Home in Option B and Option D at 1440 px: round badges, same size and
    position as before. Options A and C unchanged; npm run build passes.
 ```
+
+
+---
+
+# Option C
+
+## C1: Course card in the reference style
+
+```
+Project: Vite + React + Tailwind demo of three L&D admin pages. This prompt
+only touches Option C (src/variants/c/). Options A, B, D and everything
+under src/ outside src/variants/c/ must stay unchanged. Page:
+/c/ld/learning-management/courses (grid view). Main file:
+src/variants/c/pages/ld/learning_management/courses/components/CourseCard.tsx
+
+Checklist: docs/upskill-studio/checklist.csv, rows C1-01 to C1-07. Work
+through them in order. When a row is finished set Status to "Done", Done on
+to today's date (YYYY-MM-DD) and a one-line Notes entry; if a row can't be
+done set "Blocked" and say why. Keep the CSV valid.
+
+Style only: keep every piece of content the card shows today (status, title,
+description, owner, updated time, version and draft, hours, mode, the
+status footer data, the kebab menu actions). Colours only through the --oc-*
+variables in src/variants/c/option-c.css (add tokens there if needed).
+
+Reference look: a white card with big soft corners and a wide, very soft
+shadow on a light grey page; small ink (near-black) pills with a subtle 3D
+finish; a light (regular weight) title with grey text under it; a photo with
+large rounded corners carrying white text on top; a thick pill progress bar
+with the value inside and a white round knob. Ink is Option C's interaction
+colour; sky blue (--oc-primary) is for data.
+
+1. Card shell: white, 26px corners, 14px padding, 1px --oc-border hairline
+   and a wide, very soft drop shadow (for example 0 24px 48px -28px
+   rgba(10, 25, 41, 0.18)). In the grid the cards sit directly on the page
+   background: remove the white library container behind the grid (keep its
+   header, tabs and filters, just without the card frame around the cards).
+2. Top row:
+   - Status pill on the left: ink background (--oc-text-ink), white 11px
+     label, 9px corners, 3D finish (a soft top-to-bottom gradient from a
+     slightly lighter ink, a 1px white inner highlight at the top and a small
+     drop shadow). Draft and Inactive use a white pill with a 1px ink border
+     and ink text instead.
+   - Date pill on the right: two parts in one 9px-cornered pill with an ink
+     border, month in ink with white text ("OCT"), day in white with ink text
+     ("22"). It shows the last-updated date.
+3. Text block: title at 18px, regular weight (400), --oc-text-strong, fixed
+   height for 2 lines with clamp. Description at 12px, line-height 1.5,
+   --oc-text-subtle, fixed height for 2 lines with clamp.
+4. Photo: below the text, full card width inside the padding, about 120px
+   tall at 1440px, 20px corners. Add a dark fade at the bottom and put white
+   text on it, bottom left: a small person icon and the owner ("M. Torres",
+   "You") on line 1, and "type · mode · hours" (or the version and "+1
+   draft" for courses with a draft) on line 2 at 80% opacity. This replaces
+   the old meta row. Move the kebab menu to a white 30px icon button with
+   the 3D finish at the photo's top right.
+5. Status footer under the photo (12px label row above, --oc-text-muted):
+   - Active: label "Completion" left and "N enrolled" right, then a 30px tall
+     fully rounded progress bar: track --oc-surface, fill --oc-primary, the
+     percentage in white 11px inside the fill near its end, and a 22px white
+     round knob at the end of the fill (subtle inner shadow).
+   - In review, owned by someone else: label "Waiting for your review" and
+     "Starts in N days", then a full-width 38px ink 3D "Review" button.
+   - In review, owned by the current user: label "Waiting for another admin"
+     and the start date, no button.
+   - Draft: label "Sections ready" and "4 of 6", the same pill bar with an
+     ink fill and "4/6" inside.
+   - Approved: label "Starts 3 Nov" and "N of cap seats", the pill bar in
+     --oc-primary for seats filled.
+   - Needs revision: "N reviewer comments" in --oc-attention-text and the
+     first comment in quotes, one line.
+   - Inactive: the whole card at reduced emphasis (muted text, photo
+     desaturated), label "Ended d Mon" and completed count, a secondary
+     "Run again" button.
+   All footers have the same height so every card in a row ends on the same
+   line.
+6. Grid: 3 columns from 1280px, 2 from 768px, 1 below, 16px gaps. Hover: the
+   card rises 2px and the shadow gets a little stronger (200ms). Clicking the
+   card opens the course; the kebab and buttons don't trigger it.
+7. Verify at 1440, 1280 and 375 px wide in every status tab. Options A, B
+   and D look exactly as before. npm run build passes. Reply with the files
+   you touched.
+```
