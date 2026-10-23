@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap');
+
+/*
+ * Option C typography. Scoped to <html class="option-c">, which AppRoutes sets
+ * while Option C is open, so options B and C keep the original Poppins setup.
+ *
+ * - Font: DM Sans
+ * - Weights: mostly Regular 400. Medium 500 only for headings (h1-h4, which
+ *   also hold the big KPI numbers) and the `font-medium` class. Nothing bolder.
+ * - Letter spacing: -2% on every element
+ *
+ * Rules are unlayered and start with `html.option-c`, so they win over Tailwind
+ * utilities and over src/styles/theme.css (which sets Poppins on :root, makes
+ * buttons 600 and font-medium 600).
+ */
+html.option-c {
+  --font-sans: 'DM Sans', sans-serif;
+}
+
+html.option-c :where(body, .font-sans, button, input, textarea, select) {
+  font-family: 'DM Sans', sans-serif;
+}
+
+html.option-c,
+html.option-c * {
+  letter-spacing: -0.02em;
+}
+
+/*
+ * Compact type scale. In the base layer, so text-[..] classes still win:
+ * these only change headings and body text that have no size class.
+ */
+@layer base {
+  html.option-c body { font-size: 13px; line-height: 20px; }
+  html.option-c h1 { font-size: 24px; line-height: 32px; }
+  html.option-c h2 { font-size: 20px; line-height: 28px; }
+  html.option-c h3 { font-size: 16px; line-height: 24px; }
+  html.option-c h4 { font-size: 14px; line-height: 20px; }
+  html.option-c button, html.option-c label, html.option-c input { font-size: 13px; }
+}
+
+/*
+ * Design tokens. Defined once here, scoped to Option C; theme.ts (OC_COLORS)
+ * mirrors these values for code that needs a plain string (SVG, recharts).
+ */
+html.option-c {
+  --oc-primary: #1A73E8; /* The one accent: buttons, selected states, chart highlight */
+  --oc-primary-strong: #1967D2; /* Blue text on a blue tint, link hover */
+  --oc-primary-50: #E8F0FE; /* Lightest blue tint (pills, chips) */
+  --oc-primary-100: #D2E3FC;
+  --oc-primary-200: #AECBFA;
+  --oc-primary-300: #8AB4F8;
+  --oc-primary-400: #669DF6;
+  --oc-primary-900: #174EA6;
+  --oc-primary-tint: #F5F9FE; /* AI insight row background */
+  --oc-text-strong: #181D27; /* Titles and values */
+  --oc-text-heading: #252B37;
+  --oc-text-ink: #0A0D12; /* Tooltip background */
+  --oc-text-body: #414651; /* Body text */
+  --oc-text-secondary: #535862; /* Labels */
+  --oc-text-muted: #717680; /* Secondary text */
+  --oc-text-subtle: #A4A7AE; /* Axis ticks, hints */
+  --oc-text-ai: #282828; /* Text on the NISA card */
+  --oc-border: #EDEEF1; /* Card dividers, tile outlines */
+  --oc-border-strong: #E4E6EA; /* Progress tracks */
+  --oc-border-control: #D0D5DD;
+  --oc-line: #D5D7DA; /* Chart cursor */
+  --oc-surface: #F5F6F8; /* Segmented controls, icon circles */
+  --oc-surface-muted: #F7F8FA; /* Row frames */
+  --oc-surface-subtle: #F9FAFB; /* Hover */
+  --oc-button-secondary: #F0F1F3;
+  --oc-button-secondary-hover: #E6E8EB;
+  --oc-button-primary: var(--oc-primary); /* Primary buttons are solid blue, at most one per view */
+  --oc-button-primary-hover: var(--oc-primary-strong);
+  --oc-white: #FFFFFF;
+  --oc-attention-text: #B54708; /* Amber, only for things that need attention */
+  --oc-attention-surface: #FFFAEB;
+  --oc-attention-bar: #FEC84B;
+  --oc-attention-track: #FEF0C7;
+  --oc-warning: #FDB022;
+  --oc-orange: #FB6514;
+  --oc-orange-strong: #C4320A;
+  --oc-orange-surface: #FFEAD5;
+  --oc-success: #039855; /* Positive trends */
+  --oc-success-strong: #027A48;
+  --oc-success-surface: #ECFDF3;
+  --oc-success-100: #D1FADF;
+  --oc-success-bright: #32D583;
+  --oc-mode-self: #34A853; /* Self-paced series */
+  --oc-danger: #D92D20; /* Negative trends */
+  --oc-danger-strong: #B42318;
+  --oc-danger-surface: #FEF3F2;
+  --oc-danger-100: #FEE4E2;
+  --oc-danger-bright: #F97066;
+  --oc-yellow: #FFE07A;
+  --oc-yellow-text: #6B4F00;
+  --oc-avatar-peach: #FFE4D5; /* Avatar pastels */
+  --oc-avatar-lilac: #E9D7FE;
+  --oc-avatar-pink: #FCE7F6;
+  --oc-avatar-cyan: #CFF9FE;
+  /* Course status chips: a tint and a stronger bar of the same hue */
+  --oc-status-draft-bg: #F2F4F7;
+  --oc-status-draft: #98A2B3;
+  --oc-status-review-bg: #F4EBFF;
+  --oc-status-review: #9E77ED;
+  --oc-status-revision-bg: #FEE4E2;
+  --oc-status-revision: #F97066;
+  --oc-status-approved-bg: #DCFAE6;
+  --oc-status-approved: #17B26A;
+  --oc-status-active-bg: #DCE8FC;
+  --oc-status-active: #1A73E8;
+  --oc-status-inactive-bg: #F2F4F7;
+  --oc-status-inactive: #D0D5DD;
+}
+
+/* Regular by default, including elements the base styles make heavier */
+html.option-c :where(button, b, strong, th, label) {
+  font-weight: 400;
+}
+
+html.option-c :where(.font-medium, h1, h2, h3, h4, h5, h6):not(.font-normal, .font-light) {
+  font-weight: 500;
+}
+
+/* ── Motion ─────────────────────────────────────────────────── */
+
+/* Cards: a 1px lift and a faint blue glow on hover */
+html.option-c .oc-lift {
+  border-radius: 18px;
+  /* translate, not transform: motion leaves an inline transform after the reveal */
+  transition: translate 300ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+html.option-c .oc-lift:hover {
+  translate: 0 -1px;
+  box-shadow: 0 14px 32px -18px rgba(26, 115, 232, 0.28);
+}
+
+/* Buttons give a little under the finger. In the base layer, so a button's own
+   transition classes still decide what animates. */
+@layer base {
+  html.option-c button {
+    transition: transform 150ms ease, background-color 200ms ease, color 200ms ease, box-shadow 200ms ease;
+  }
+  html.option-c button:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+}
+
+/* One light sweep across a NISA insight once it scrolls into view */
+html.option-c .oc-sweep {
+  position: relative;
+  overflow: hidden;
+}
+html.option-c .oc-sweep::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.85) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: oc-sweep 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.5s 1 forwards;
+}
+@keyframes oc-sweep {
+  to { transform: translateX(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.option-c .oc-lift,
+  html.option-c .oc-lift:hover { transition: none; translate: none; }
+  html.option-c .oc-sweep::after { animation: none; display: none; }
+}

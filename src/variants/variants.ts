@@ -1,14 +1,14 @@
 import type { ComponentType } from 'react';
 import { BarChart2, BookOpen, Home, type LucideIcon } from 'lucide-react';
-import LDDashboardPage from '@/pages/ld/dashboard/page';
-import LDCourseAnalyticsPage from '@/pages/ld/analytics/course/page';
-import LDCoursesPage from '@/pages/ld/learning_management/courses/page';
 import OptionAHomePage from '@/variants/a/pages/ld/dashboard/page';
 import OptionAAnalyticsPage from '@/variants/a/pages/ld/analytics/course/page';
 import OptionAUpskillPage from '@/variants/a/pages/ld/learning_management/courses/page';
 import OptionBHomePage from '@/variants/b/pages/ld/dashboard/page';
 import OptionBAnalyticsPage from '@/variants/b/pages/ld/analytics/course/page';
 import OptionBUpskillPage from '@/variants/b/pages/ld/learning_management/courses/page';
+import OptionCHomePage from '@/variants/c/pages/ld/dashboard/page';
+import OptionCAnalyticsPage from '@/variants/c/pages/ld/analytics/course/page';
+import OptionCUpskillPage from '@/variants/c/pages/ld/learning_management/courses/page';
 
 export type PageKey = 'home' | 'analytics' | 'upskill';
 
@@ -35,14 +35,9 @@ export interface Variant {
   pages: Record<PageKey, ComponentType>;
 }
 
-// Every option starts from the current design. When an option gets its own style,
-// copy its pages into src/variants/<key>/ and point that option's `pages` there,
-// so restyling one option never changes the others.
-const CURRENT_PAGES: Record<PageKey, ComponentType> = {
-  home:      LDDashboardPage,
-  analytics: LDCourseAnalyticsPage,
-  upskill:   LDCoursesPage,
-};
+// Each option has its own copy of the pages in src/variants/<key>/, so
+// restyling one option never changes the others. The original design stays in
+// src/pages/.
 
 export const VARIANTS: Variant[] = [
   {
@@ -59,7 +54,13 @@ export const VARIANTS: Variant[] = [
     // Own copy, made from Option A (tokens renamed to --ob-*): src/variants/b/
     pages: { home: OptionBHomePage, analytics: OptionBAnalyticsPage, upskill: OptionBUpskillPage },
   },
-  { key: 'c', name: 'Option C', description: 'Not styled yet. Shows the current design.', pages: CURRENT_PAGES },
+  {
+    key: 'c',
+    name: 'Option C',
+    description: 'Starts from a copy of Option A.',
+    // Own copy, made from Option A (tokens renamed to --oc-*): src/variants/c/
+    pages: { home: OptionCHomePage, analytics: OptionCAnalyticsPage, upskill: OptionCUpskillPage },
+  },
 ];
 
 export function variantHref(variant: Variant, pagePath: string = PAGES[0].path): string {
