@@ -305,8 +305,8 @@ export default function CoursesPage() {
           ) : viewMode === 'list' ? (
             <CourseLibraryTable rows={paginated} me={me} onOpen={openCourse} sort={sort} onSort={reset(setSort)} />
           ) : (
-            /* Columns of at least 256px share the full width, so a row is never left half empty; each card stays 3:4 */
-            <div className="grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(256px,1fr))]">
+            /* Landscape cards, two to a row (one when the window is narrow) */
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
               {paginated.map((row) => (
                 <CourseCard key={row.key} course={row.shown} me={me} onClick={() => openCourse(row.shown.id)} />
               ))}

@@ -1,21 +1,22 @@
 // ============================================================
-// Upskill Studio — course card (grid view)
-// Inset rounded photo with the status badge, a two-line name with "by owner",
-// a one-line description, one meta row (version, duration, mode), then a
-// fixed-height footer: who acts next, the figure for the status and Review
-// (only when someone else's course waits for you). Status and menu sit on the photo.
+// Upskill Studio — course card (grid view), Option C
+// Landscape, two to a row: the photo on the left with a dark status badge and
+// a white menu button; on the right the name, a two-line description, one meta
+// row (version, duration, mode), the figures for the status (with a bar on
+// active courses), then the owner with the date and either Review (someone
+// else's course waits for you) or an arrow to open the course.
 // ============================================================
 
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
 import { type CourseLifecycleStatus } from '@/lib/courseActions';
-import { AlertTriangle, BookOpen, Clock, EyeOff, Eye as EyeOn, Layers, MoreHorizontal, Trash2, X } from '@/variants/c/icons';
-import { daysUntil, timeAgo } from '@/variants/c/pages/ld/dashboard/period';
+import { AlertTriangle, ArrowUpRight, EyeOff, Eye as EyeOn, MoreHorizontal, Trash2, X } from '@/variants/c/icons';
+import { daysUntil, formatDate } from '@/variants/c/pages/ld/dashboard/period';
 import { PillButton } from '@/variants/c/components/ui/kit';
-import { draftItemsOf, liveVersionOf, type CourseItem } from '../data/courses.mock';
+import { COURSE_STATUS_META, draftItemsOf, liveVersionOf, type CourseItem } from '../data/courses.mock';
 import { DeleteVersionDialog } from '@/variants/c/components/common/DeleteVersionDialog';
-import { GLASS, StatusBadge } from './CourseStatus';
+import { GLASS } from './CourseStatus';
 import { CourseCover } from './CourseCover';
 import { courseMode, ownerName, titleOf } from './CourseLibraryTable';
 
@@ -28,50 +29,57 @@ interface CourseCardProps {
   onClick?: () => void;
 }
 
-interface Footer {
-  /** The figure for the status, then its words: "80" + "% completed", "20" + "days to start" */
-  value: string;
-  unit: string;
-  /** Who acts next; the line is reserved on every card, so it can be empty */
-  line?: { text: string; strong?: boolean };
-  /** Small figure beside the menu (active: enrolled count) */
-  aside?: string;
-  /** Thin blue bar under the figure (active only) */
+interface Stats {
+  /** Left: the figure for the status in words, "80% completed", or who acts next */
+  left: string;
+  /** "Waiting for your review" reads stronger than a figure */
+  strong?: boolean;
+  /** Right, muted: "25 enrolled", "Starts in 12 days" */
+  right?: string;
+  /** Blue bar under the row (active only) */
   progress?: number;
-  /** In review and owned by someone else: the card's one button */
+  /** In review and owned by someone else: Review instead of the arrow */
   review?: boolean;
 }
 
-function footerOf(course: CourseItem, me: string): Footer {
+function startsIn(iso?: string) {
+  if (!iso) return 'No start date';
+  const d = Math.max(0, daysUntil(iso));
+  return d === 0 ? 'Starts today' : `Starts in ${d} ${d === 1 ? 'day' : 'days'}`;
+}
+
+function statsOf(course: CourseItem, me: string): Stats {
   switch (course.status) {
     case 'active':
-      return { value: `${course.avgCompletion}%`, unit: 'completed', aside: `${course.trainees} enrolled`, progress: course.avgCompletion };
+      return { left: `${course.avgCompletion}% completed`, right: `${course.trainees} enrolled`, progress: course.avgCompletion };
     case 'approved':
-      return course.maxCapacity
-        ? { value: `${course.trainees}/${course.maxCapacity}`, unit: 'seats filled' }
-        : { value: `${course.trainees}`, unit: 'enrolled' };
+      return {
+        left: course.maxCapacity ? `${course.trainees}/${course.maxCapacity} seats filled` : `${course.trainees} enrolled`,
+        right: startsIn(course.startsOn),
+      };
     case 'waiting-approval': {
-      const days = course.startsOn ? Math.max(0, daysUntil(course.startsOn)) : undefined;
       // Nobody reviews their own course
       const own = course.creator === me;
       return {
-        ...(days !== undefined ? { value: `${days}`, unit: days === 1 ? 'day to start' : 'days to start' } : { value: '—', unit: 'no start date' }),
-        line: own ? { text: 'Waiting for another admin' } : { text: 'Waiting for your review', strong: true },
+        left: own ? 'Waiting for another admin' : 'Waiting for your review',
+        strong: !own,
+        right: startsIn(course.startsOn),
         review: !own,
       };
     }
     case 'need-revision': {
       const n = course.reviewComments?.length ?? 0;
-      return { value: `${n}`, unit: n === 1 ? 'comment' : 'comments' };
+      return { left: `${n} review ${n === 1 ? 'comment' : 'comments'}`, right: 'Back to the owner' };
     }
     case 'on-draft':
-      return course.sectionsTotal
-        ? { value: `${course.sectionsReady ?? 0}/${course.sectionsTotal}`, unit: 'sections ready' }
-        : { value: '0', unit: 'sections' };
+      return { left: course.sectionsTotal ? `${course.sectionsReady ?? 0}/${course.sectionsTotal} sections ready` : 'No sections yet' };
     case 'inactive':
-      return { value: `${course.completed ?? 0}/${course.trainees}`, unit: 'completed' };
+      return { left: `${course.completed ?? 0}/${course.trainees} completed`, right: 'Not live' };
   }
 }
+
+const initials = (name?: string) =>
+  (name ?? '?').split(' ').map((p) => p[0]).slice(0, 2).join('').toUpperCase();
 
 export function CourseCard({ course, me, className, onClick }: CourseCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -86,7 +94,11 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
   const canToggleStatus = isActive || isInactive;
   const drafts = course.draftOf ? 0 : draftItemsOf(course).length;
   const version = liveVersionOf(course);
-  const f = footerOf(course, me);
+  const f = statsOf(course, me);
+  // In review: when it was sent; otherwise the last change
+  const dated = course.status === 'waiting-approval' && course.submittedOn
+    ? `Submitted ${formatDate(course.submittedOn)}`
+    : `Updated ${course.updatedOn ? formatDate(course.updatedOn) : course.updatedAt}`;
   const menuItem = 'w-full flex items-center gap-2 rounded-(--oc-radius-control) px-3 py-2 text-[13px] transition-colors focus-visible:outline-none focus-visible:bg-(--oc-surface)';
 
   return (
@@ -96,28 +108,29 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
       onClick={onClick}
       onKeyDown={(e) => e.key === 'Enter' && e.target === e.currentTarget && onClick?.()}
       className={cn(
-        // Portrait 3:4; grows only if its content needs more room
-        'oc-surface group flex aspect-[3/4] flex-col rounded-(--oc-radius-card) p-3 transition-shadow duration-200 cursor-pointer',
-        'hover:shadow-[0_0_0_1px_var(--oc-border),0_12px_28px_-16px_rgba(10,25,41,0.16)]',
+        // Landscape: photo left, details right
+        'oc-surface group flex min-h-[248px] gap-5 rounded-(--oc-radius-card) p-3 pr-5 transition-shadow duration-200 cursor-pointer',
+        'hover:shadow-[0_1px_2px_rgba(10,25,41,0.04),0_14px_30px_-14px_rgba(10,25,41,0.18)]',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25',
         className,
       )}
     >
-      {/* Photo, inset and rounded; glass status badge top left, menu top right.
-          The overlays sit outside the clipped photo so the menu can open below it. */}
-      <div className="relative shrink-0">
-        <div className="relative aspect-[16/10] overflow-hidden rounded-(--oc-radius-control) bg-(--oc-surface)">
+      {/* Photo, inset and rounded, the card's full height; dark status badge top
+          left, white menu top right. The overlays sit outside the clipped photo
+          so the menu can open below it. */}
+      <div className="relative w-[40%] shrink-0">
+        <div className="absolute inset-0 overflow-hidden rounded-(--oc-radius-control) bg-(--oc-surface)">
           <CourseCover
             course={course}
             size="lg"
             className={cn('absolute inset-0 size-full transition-transform duration-500 group-hover:scale-[1.03]', isInactive && 'grayscale-[60%]')}
           />
         </div>
-        <div className="absolute left-3 top-3">
-          <StatusBadge status={course.status} onImage />
-        </div>
+        <span className="absolute left-2.5 top-2.5 inline-flex h-[26px] items-center whitespace-nowrap rounded-(--oc-radius-chip) bg-(--oc-text-ink) px-2.5 text-[12px] leading-none text-(--oc-white)">
+          {COURSE_STATUS_META[course.status].label}
+        </span>
         {/* Clicks here never open the card */}
-        <div className="absolute right-3 top-3" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
+        <div className="absolute right-2.5 top-2.5" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
           <div className="relative">
             <button
               type="button"
@@ -125,7 +138,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
               aria-label="More actions"
               aria-haspopup="menu"
               aria-expanded={menuOpen}
-              className={cn(GLASS, "flex size-[30px] items-center justify-center text-(--oc-text-strong) transition-colors hover:text-(--oc-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/40 cursor-pointer")}
+              className={cn(GLASS, "flex size-[28px] items-center justify-center text-(--oc-text-strong) transition-colors hover:text-(--oc-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/40 cursor-pointer")}
             >
               <MoreHorizontal size={16} />
             </button>
@@ -161,65 +174,57 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col px-2 pb-1 pt-3">
-        {/* Name: always two lines tall, so the rows below line up across cards */}
+      <div className="flex min-w-0 flex-1 flex-col py-2">
         <h3
-          className={cn('line-clamp-2 h-[44px] text-[16px] leading-[22px]', isInactive ? 'text-(--oc-text-secondary)' : 'text-(--oc-text-strong)')}
+          className={cn('line-clamp-2 text-[18px] leading-[24px]', isInactive ? 'text-(--oc-text-secondary)' : 'text-(--oc-text-strong)')}
           title={titleOf(course)}
         >
           {titleOf(course)}
         </h3>
-        <p className="mt-0.5 truncate text-[12px] leading-[18px] text-(--oc-text-muted)">
-          by <span className="text-(--oc-text-body)">{ownerName(course.creator, me)}</span>
-          {' · '}
-          {course.updatedOn ? timeAgo(course.updatedOn).toLowerCase() : course.updatedAt}
-        </p>
-
-        <p className="mt-2 truncate text-[13px] leading-[20px] text-(--oc-text-muted)" title={course.description}>
+        <p className="mt-1.5 line-clamp-2 text-[13px] leading-[20px] text-(--oc-text-muted)" title={course.description}>
           {course.description}
         </p>
 
         {/* Meta: version, duration, mode */}
-        <div className="mt-2.5 flex min-w-0 items-center gap-x-3 overflow-hidden whitespace-nowrap text-[12px] text-(--oc-text-muted)">
-          <span className="inline-flex items-center gap-1.5">
-            <Layers size={14} />
-            v{version}
-            {drafts > 0 && <span className="text-(--oc-primary)">+{drafts} draft</span>}
-          </span>
-          {course.duration && (
-            <span className="inline-flex items-center gap-1.5">
-              <Clock size={14} />
-              {course.duration.toLowerCase()}
-            </span>
-          )}
-          <span className="inline-flex min-w-0 items-center gap-1.5">
-            <BookOpen size={14} className="shrink-0" />
-            <span className="truncate">{courseMode(course)}</span>
-          </span>
-        </div>
+        <p className="mt-2 truncate text-[12px] leading-[18px] text-(--oc-text-muted)">
+          v{version}
+          {drafts > 0 && <span className="text-(--oc-primary)"> +{drafts} draft</span>}
+          {course.duration && <> · {course.duration.toLowerCase()}</>}
+          {' · '}{courseMode(course)}
+        </p>
 
-        {/* Footer: fixed height and pinned to the bottom, so every card in a row ends on the same line */}
-        <div className="mt-auto flex h-[80px] shrink-0 flex-col justify-end">
-          {/* Status line: reserved on every card, empty when the status has nothing to say */}
-          <p className={cn('h-[18px] truncate text-[12px] leading-[18px]', f.line?.strong ? 'text-(--oc-text-strong)' : 'text-(--oc-text-muted)')}>
-            {f.line?.text}
-          </p>
-          <div className="mt-1 flex h-10 items-center justify-between gap-2">
-            <p className="min-w-0 truncate">
-              <span className="text-[20px] leading-[24px] tabular-nums text-(--oc-text-body)">{f.value}</span>
-              <span className="ml-1 text-[12px] text-(--oc-text-muted)">{f.unit}</span>
-            </p>
-            <div className="flex shrink-0 items-center gap-1" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
-              {f.aside && <span className="text-[12px] tabular-nums text-(--oc-text-muted)">{f.aside}</span>}
-              {f.review && <PillButton variant="tint" onClick={onClick}>Review</PillButton>}
-            </div>
+        {/* The figures for the status; the bar only on active courses */}
+        <div className="mt-3 flex items-baseline justify-between gap-3 text-[13px] leading-[18px]">
+          <span className={cn('truncate', f.strong ? 'text-(--oc-text-strong)' : 'text-(--oc-text-body)')}>{f.left}</span>
+          {f.right && <span className="shrink-0 tabular-nums text-(--oc-text-muted)">{f.right}</span>}
+        </div>
+        {f.progress !== undefined && (
+          <div className="mt-2 h-1.5 overflow-hidden rounded-(--oc-radius-bar) bg-(--oc-surface)">
+            <div className="h-full rounded-(--oc-radius-bar) bg-(--oc-primary)" style={{ width: `${Math.min(100, f.progress)}%` }} />
           </div>
-          {/* Progress slot: the thin blue bar on active courses, empty otherwise */}
-          <div className="mt-1 h-1">
-            {f.progress !== undefined && (
-              <div className="h-full overflow-hidden rounded-(--oc-radius-chip) bg-(--oc-border-strong)">
-                <div className="h-full rounded-(--oc-radius-bar) bg-(--oc-primary)" style={{ width: `${Math.min(100, f.progress)}%` }} />
-              </div>
+        )}
+
+        {/* Owner and date, pinned to the bottom; Review or the open arrow on the right */}
+        <div className="mt-auto flex items-center gap-3 pt-4">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-(--oc-surface) text-[12px] text-(--oc-text-body)">
+            {initials(course.creator)}
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-[13px] leading-[18px] text-(--oc-text-strong)">{ownerName(course.creator, me)}</p>
+            <p className="truncate text-[12px] leading-[16px] text-(--oc-text-muted)">{dated}</p>
+          </div>
+          <div className="shrink-0" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
+            {f.review ? (
+              <PillButton variant="primary" onClick={onClick}>Review</PillButton>
+            ) : (
+              <button
+                type="button"
+                onClick={onClick}
+                aria-label="Open course"
+                className="flex size-8 items-center justify-center rounded-(--oc-radius-chip) text-(--oc-text-muted) transition-colors hover:bg-(--oc-surface) hover:text-(--oc-text-strong) cursor-pointer"
+              >
+                <ArrowUpRight size={18} />
+              </button>
             )}
           </div>
         </div>
