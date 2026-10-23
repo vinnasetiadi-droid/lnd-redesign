@@ -2,14 +2,14 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { AnimatePresence, motion } from 'motion/react';
 import { EASE_OUT } from '@/variants/b/motion';
-import { BookOpen } from '@/variants/b/icons';
+import { BookOpen, Route } from '@/variants/b/icons';
 import { cn } from '@/lib/utils';
 import type { ProgramOverview } from '../types/dashboard.types';
 import { runningPrograms } from '../data/dashboard.mock';
 import { daysUntil } from '../period';
 import { TruncatedTitle } from './ProgramListParts';
 import { ProgramScopeTabs, type ScopeTab } from './ProgramScopeTabs';
-import { ATTENTION, CardHeader } from '@/variants/b/components/ui/kit';
+import { ATTENTION, CARD, CardHeader } from '@/variants/b/components/ui/kit';
 import { OB_COLORS } from '@/variants/b/theme';
 
 interface LDDashboardActiveProgramsProps {
@@ -59,7 +59,7 @@ function AvatarStack({ program }: { program: ProgramOverview }) {
         {Array.from({ length: shown }, (_, i) => (
           <span
             key={i}
-            className="flex size-6 items-center justify-center rounded-full text-[10px] text-(--ob-text-body) ring-2 ring-(--ob-surface-muted)"
+            className="flex size-6 items-center justify-center rounded-full text-[10px] text-(--ob-text-body) ring-2 ring-(--ob-white)"
             style={{ background: AVATAR_COLORS[(seed + i) % AVATAR_COLORS.length] }}
           >
             {AVATAR_INITIALS[(seed * 2 + i) % AVATAR_INITIALS.length]}
@@ -122,18 +122,25 @@ function ProgramRow({ program }: { program: ProgramOverview }) {
         ? `Course · ends ${shortDate(program.endsOn)}`
         : `Course · ${program.duration ?? program.mode}`;
 
+  const Icon = isJourney ? Route : BookOpen;
+  // Plain row on a hairline, an icon tile in front (reference table style)
   return (
-    <div className={cn('rounded-[14px] p-3.5', atRisk ? AMBER.frame : 'bg-(--ob-surface-muted)')}>
-      <div className="flex items-baseline justify-between gap-3">
-        <TruncatedTitle text={program.name} className="min-w-0 flex-1 text-[13px] leading-[20px] text-(--ob-text-strong)" />
-        <span className={cn('shrink-0 text-[13px] tabular-nums', atRisk ? AMBER.text : 'text-(--ob-text-body)')}>{value}</span>
-      </div>
-      <div className="mt-0.5 flex min-h-6 items-center justify-between gap-3">
-        <p className={cn('truncate text-[12px]', atRisk ? AMBER.text : 'text-(--ob-text-muted)')}>{meta}</p>
-        {!atRisk && <AvatarStack program={program} />}
-      </div>
-      <div className="mt-2.5">
-        <ProgramProgress program={program} />
+    <div className="flex gap-3 border-b border-(--ob-border) py-3 last:border-b-0">
+      <span className="flex size-9 shrink-0 items-center justify-center rounded-[10px] bg-(--ob-surface) text-(--ob-text-body)">
+        <Icon size={16} />
+      </span>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-baseline justify-between gap-3">
+          <TruncatedTitle text={program.name} className="min-w-0 flex-1 text-[13px] leading-[20px] text-(--ob-text-strong)" />
+          <span className={cn('shrink-0 text-[13px] tabular-nums', atRisk ? AMBER.text : 'text-(--ob-text-body)')}>{value}</span>
+        </div>
+        <div className="mt-0.5 flex min-h-6 items-center justify-between gap-3">
+          <p className={cn('truncate text-[12px]', atRisk ? AMBER.text : 'text-(--ob-text-muted)')}>{meta}</p>
+          {!atRisk && <AvatarStack program={program} />}
+        </div>
+        <div className="mt-2">
+          <ProgramProgress program={program} />
+        </div>
       </div>
     </div>
   );
@@ -161,7 +168,7 @@ export function LDDashboardActivePrograms({ programs, className }: LDDashboardAc
   }, [active, filter]);
 
   return (
-    <div className={cn('relative bg-white rounded-[18px] p-5', className)}>
+    <div className={cn(CARD, 'relative p-5', className)}>
       <CardHeader
         title="Active programs"
         subtitle={`${active.length} running${atRiskCount ? ` · ${atRiskCount} ${atRiskCount === 1 ? 'needs' : 'need'} attention` : ''}`}
@@ -181,7 +188,7 @@ export function LDDashboardActivePrograms({ programs, className }: LDDashboardAc
 
       {/* Program list */}
       {/* Rows slide into place when the filter changes */}
-      <div className="mt-4 flex flex-col gap-2">
+      <div className="mt-2 flex flex-col">
         <AnimatePresence mode="popLayout" initial={false}>
           {visible.length === 0 ? (
             <motion.p

@@ -1,7 +1,7 @@
 import { forwardRef, type ComponentType, type SVGProps } from 'react';
 import { HugeiconsIcon, type IconSvgElement } from '@hugeicons/react';
 import {
-  Activity01Icon, Add01Icon, MinusSignIcon, Alert02Icon, AlertCircleIcon, Analytics01Icon, ArrowDown01Icon,
+  Activity01Icon, Add01Icon, MinusSignIcon, Download04Icon, Attachment01Icon, Mic01Icon, DashboardSquareAddIcon, Alert02Icon, AlertCircleIcon, Analytics01Icon, ArrowDown01Icon,
   ArrowDown02Icon, ArrowDownRight01Icon, ArrowLeft01Icon, ArrowRight01Icon, ArrowRight02Icon,
   ArrowUp01Icon, ArrowUp02Icon, ArrowUpDownIcon, ArrowUpRight01Icon, Award01Icon, Book02Icon,
   BookOpen01Icon, Building03Icon, Calendar03Icon, Calendar04Icon, Call02Icon, Cancel01Icon,
@@ -99,6 +99,10 @@ export const Phone = icon(Call02Icon, 'Phone');
 export const PlayCircle = icon(PlayCircleIcon, 'PlayCircle');
 export const Plus = icon(Add01Icon, 'Plus');
 export const Minus = icon(MinusSignIcon, 'Minus');
+export const Download = icon(Download04Icon, 'Download');
+export const Paperclip = icon(Attachment01Icon, 'Paperclip');
+export const Mic = icon(Mic01Icon, 'Mic');
+export const LayoutGridAdd = icon(DashboardSquareAddIcon, 'LayoutGridAdd');
 export const RefreshCw = icon(RefreshIcon, 'RefreshCw');
 export const Rocket = icon(Rocket01Icon, 'Rocket');
 export const Route = icon(Route01Icon, 'Route');

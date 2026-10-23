@@ -13,13 +13,15 @@ interface DashboardLayoutProps {
   noFooter?: boolean;
   fixedContent?: boolean;
   hideSidebar?: boolean;
+  /** A plain light page instead of the iridescent background (Home, reference style) */
+  plainBackground?: boolean;
 }
 
 /**
  * Option B shell: the sidebar sits flush on the left edge over the same
  * iridescent background as the content (ref 1), instead of a floating card.
  */
-export function DashboardLayout({ children, noFooter = false, fixedContent = false, hideSidebar = false }: DashboardLayoutProps) {
+export function DashboardLayout({ children, noFooter = false, fixedContent = false, hideSidebar = false, plainBackground = false }: DashboardLayoutProps) {
   const user = useAuthStore((s) => s.user);
   const role = (user?.role ?? 'ld_team') as SidebarRole;
   // Phones start with the sidebar collapsed so the content keeps its width
@@ -32,7 +34,7 @@ export function DashboardLayout({ children, noFooter = false, fixedContent = fal
     <div className="flex h-screen w-full font-sans overflow-hidden relative text-[#181D27]">
       {/* Background Layer */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <ResponsiveBackground />
+        {plainBackground ? <div className="size-full bg-(--ob-surface-muted)" /> : <ResponsiveBackground />}
       </div>
 
       {/* Sidebar */}

@@ -108,6 +108,62 @@ export function Chip({ children, tone = 'neutral', dot, icon: Icon, className }:
   );
 }
 
+/** Home card frame: white, 18px corners, a hairline border and the faintest shadow (reference style) */
+export const CARD = 'rounded-[18px] bg-(--ob-white) ring-1 ring-(--ob-border) shadow-[0_1px_2px_rgba(16,24,40,0.04)]';
+
+/** Change chip beside a number: "▲ 15.5%" on green, "▼ 10.5%" on red */
+export function DeltaChip({ children, positive = true, className }: { children: ReactNode; positive?: boolean; className?: string }) {
+  return (
+    <span
+      className={cn(
+        'inline-flex h-6 shrink-0 items-center gap-1 rounded-full px-2 text-[12px] tabular-nums',
+        positive ? 'bg-(--ob-success-surface) text-(--ob-success-strong)' : 'bg-(--ob-danger-surface) text-(--ob-danger-strong)',
+        className,
+      )}
+    >
+      <svg viewBox="0 0 8 6" className={cn('size-2', !positive && 'rotate-180')} aria-hidden>
+        <path d="M4 0 8 6H0z" fill="currentColor" />
+      </svg>
+      {children}
+    </span>
+  );
+}
+
+/**
+ * Summary tile that also picks what a chart shows, drawn like the
+ * reference's segments: a thin line down the left, a bar along the bottom
+ * and a soft wash of blue when selected.
+ */
+export function MetricTile({ selected, onClick, label, children, className }: {
+  selected: boolean;
+  onClick: () => void;
+  label: ReactNode;
+  /** The value row */
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <button
+      type="button"
+      role="tab"
+      aria-selected={selected}
+      onClick={onClick}
+      className={cn('group relative min-w-0 overflow-hidden rounded-t-[10px] text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/30', className)}
+    >
+      <span
+        aria-hidden
+        className={cn('pointer-events-none absolute inset-0 transition-opacity duration-300', selected ? 'opacity-100' : 'opacity-0 group-hover:opacity-40')}
+        style={{ background: `linear-gradient(to top, color-mix(in srgb, ${OB_COLORS.primary} 10%, transparent), transparent 80%)` }}
+      />
+      <div className={cn('relative border-l-2 px-3.5 pb-3 pt-2.5 transition-colors duration-300', selected ? 'border-(--ob-primary)' : 'border-(--ob-border-strong)')}>
+        <p className="truncate text-[13px] leading-[18px] text-(--ob-text-secondary)">{label}</p>
+        <div className="mt-1 flex flex-wrap items-center gap-2">{children}</div>
+      </div>
+      <span className={cn('relative block h-1 rounded-full transition-colors duration-300', selected ? 'bg-(--ob-primary)' : 'bg-(--ob-border-strong)')} />
+    </button>
+  );
+}
+
 /** Plain trend text: "↗ 12.5%" in green, "↘" in red, no background */
 export function Trend({ children, positive = true, className }: { children: ReactNode; positive?: boolean; className?: string }) {
   const Arrow = positive ? ArrowUpRight : ArrowDownRight;

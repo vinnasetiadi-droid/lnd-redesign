@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 import { BarChart2, BookOpen, CheckCircle2, Users, type LucideIcon } from '@/variants/b/icons';
 import type { LDProfile, LDMetricCard } from '../types/dashboard.types';
-import { IconCircle, Trend } from '@/variants/b/components/ui/kit';
+import { CARD, DeltaChip } from '@/variants/b/components/ui/kit';
 import { CountUpText } from '@/variants/b/components/ui/count-up';
 // Background removed from the original profile photo (figma:asset/a28eddf0…png)
 import profileCutout from '@/variants/b/assets/profile-cutout.png';
@@ -54,24 +54,39 @@ interface LDDashboardHeaderProps {
   className?: string;
 }
 
-/** The three KPI cards (the profile card is gone; see LDDashboardGreeting) */
+/** "+13% vs last month" → chip "13%" and "vs last month" */
+function splitTrend(trend: string): { change: string; compare: string } {
+  const m = /^[+-]?(\d+(?:\.\d+)?(?:%| pts)?)\s+(.*)$/.exec(trend);
+  return m ? { change: m[1], compare: m[2] } : { change: trend, compare: '' };
+}
+
+/**
+ * The three KPI cards, reference style: title with a small blue icon on the
+ * right, the number with a green or red change chip, then what it is
+ * compared with.
+ */
 export function LDDashboardHeader({ metrics, className }: LDDashboardHeaderProps) {
   return (
     <div className={cn('grid grid-cols-1 md:grid-cols-3 gap-3', className)}>
-      {metrics.map((card) => (
-        <div key={card.key} className="ob-lift rounded-[18px] bg-white p-4">
-          <div className="flex items-start justify-between gap-2 mb-2">
-            {/* Title, plus a one-line hint when the number needs it; together as tall as the icon circle */}
-            <div className="min-w-0" title={card.hint}>
-              <p className="text-[13px] leading-[18px] text-(--ob-text-secondary)">{card.title}</p>
-              {card.hint && <p className="text-[11px] leading-[14px] text-(--ob-text-subtle)">{card.hint}</p>}
+      {metrics.map((card) => {
+        const Icon = METRIC_ICON[card.key] ?? BarChart2;
+        const { change, compare } = splitTrend(card.trend);
+        return (
+          <div key={card.key} className={cn(CARD, 'ob-lift flex flex-col gap-3 p-5')}>
+            <div className="flex items-start justify-between gap-2" title={card.hint}>
+              <p className="min-w-0 text-[14px] leading-[20px] text-(--ob-text-strong)">{card.title}</p>
+              <Icon size={18} className="shrink-0 text-(--ob-primary)" />
             </div>
-            <IconCircle icon={METRIC_ICON[card.key] ?? BarChart2} />
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="text-[28px] leading-[34px] tabular-nums text-(--ob-text-strong)"><CountUpText value={String(card.value)} /></h3>
+              <DeltaChip positive={card.trendPositive}>{change}</DeltaChip>
+            </div>
+            <p className="text-[12px] leading-[16px] text-(--ob-text-muted)">
+              {compare}{card.hint && <span className="text-(--ob-text-subtle)"> · {card.hint.toLowerCase()}</span>}
+            </p>
           </div>
-          <h3 className="text-[24px] leading-[32px] text-(--ob-text-strong)"><CountUpText value={String(card.value)} /></h3>
-          <Trend positive={card.trendPositive} className="mt-1">{card.trend}</Trend>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

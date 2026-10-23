@@ -1,10 +1,9 @@
 import { useMemo, useRef, useState } from 'react';
 import { motion, useInView } from 'motion/react';
-import { Building2 } from '@/variants/b/icons';
 import { cn } from '@/lib/utils';
 import { AIInsightLine } from '@/variants/b/components/ui/ai-insight-banner';
 import type { DivisionPerformance } from '../types/dashboard.types';
-import { CardHeader, Trend } from '@/variants/b/components/ui/kit';
+import { CARD, CardHeader, DeltaChip, MetricTile } from '@/variants/b/components/ui/kit';
 import { CHART_BLUE, HATCHED_TRACK } from '@/variants/b/components/ui/chart';
 import { OB_COLORS } from '@/variants/b/theme';
 import { CountUp, GROW } from '@/variants/b/components/ui/count-up';
@@ -114,44 +113,27 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
     `${shortInsight} ${support.map((d) => d.name).join(', ')} are the three divisions below ${Math.max(...support.map((d) => d.score)) + 1}%; a review with each division lead could show where learners drop off.`;
 
   return (
-    <div className={cn('relative flex flex-col gap-4 bg-white rounded-[18px] p-5', className)}>
+    <div className={cn(CARD, 'relative flex flex-col gap-4 p-5', className)}>
       {/* ── Header ─────────────────────────────────────────── */}
       <CardHeader
         title="Division completion"
         subtitle={`Completion rate per division vs the org average (${benchmark}%)`}
-        icon={Building2}
       />
 
       {/* ── Summary tiles: also pick what the chart highlights ── */}
-      <div className="grid grid-cols-3 gap-3" role="tablist" aria-label="Chart highlight">
-        {tiles.map((tile) => {
-          const isSelected = tile.key === group;
-          return (
-            <button
-              key={tile.key}
-              type="button"
-              role="tab"
-              aria-selected={isSelected}
-              onClick={() => setGroup(tile.key)}
-              className={cn(
-                'rounded-[14px] border p-4 text-left transition-colors cursor-pointer',
-                isSelected ? 'border-transparent bg-(--ob-primary)/[0.07]' : 'border-(--ob-border) hover:bg-(--ob-surface-subtle)',
-              )}
-            >
-              <p className="text-[13px] leading-[18px] text-(--ob-text-secondary)">{tile.label}</p>
-              <div className="mt-1.5 flex items-baseline gap-2">
-                <span className="text-[24px] leading-[32px] text-(--ob-text-strong)">{tile.value}</span>
-                {tile.key === 'average' ? (
-                  benchmarkTrend !== undefined && benchmarkTrend !== 0 && (
-                    <Trend positive={benchmarkTrend > 0}>{benchmarkTrend > 0 ? '+' : ''}{benchmarkTrend} pts</Trend>
-                  )
-                ) : (
-                  <span className="text-[12px] text-(--ob-text-muted)">{tile.note}</span>
-                )}
-              </div>
-            </button>
-          );
-        })}
+      <div className="grid grid-cols-3 gap-2" role="tablist" aria-label="Chart highlight">
+        {tiles.map((tile) => (
+          <MetricTile key={tile.key} selected={tile.key === group} onClick={() => setGroup(tile.key)} label={tile.label}>
+            <span className="text-[24px] leading-[32px] tabular-nums text-(--ob-text-strong)">{tile.value}</span>
+            {tile.key === 'average' ? (
+              benchmarkTrend !== undefined && benchmarkTrend !== 0 && (
+                <DeltaChip positive={benchmarkTrend > 0}>{Math.abs(benchmarkTrend)} pts</DeltaChip>
+              )
+            ) : (
+              <span className="text-[12px] text-(--ob-text-muted)">{tile.note}</span>
+            )}
+          </MetricTile>
+        ))}
       </div>
 
       {/* ── Chart: one bar per division, org average as a dashed line ── */}

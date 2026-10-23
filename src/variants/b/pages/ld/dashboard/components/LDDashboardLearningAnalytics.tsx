@@ -9,7 +9,7 @@
 
 import { Fragment, useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { CardHeader, Trend } from '@/variants/b/components/ui/kit';
+import { CARD, CardHeader, DeltaChip } from '@/variants/b/components/ui/kit';
 import { AIInsightLine } from '@/variants/b/components/ui/ai-insight-banner';
 import { AXIS_TICK, ChartTooltipCard, GRID_PROPS, GradientProgress, areaGradient, useChartIds, ChartOnView } from '@/variants/b/components/ui/chart';
 import { Area, AreaChart, CartesianGrid, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
@@ -55,7 +55,7 @@ function endLabel(label: string, color: string, lastIndex: number) {
   return function EndLabel(props: { x?: number | string; y?: number | string; value?: number | string; index?: number }) {
     if (props.index !== lastIndex) return null;
     return (
-      <text x={Number(props.x) + 8} y={Number(props.y) + 4} fill={color} fontSize={12} fontFamily="DM Sans, sans-serif">
+      <text x={Number(props.x) + 8} y={Number(props.y) + 4} fill={color} fontSize={12} fontFamily="Inter, sans-serif">
         {label} {props.value}%
       </text>
     );
@@ -97,7 +97,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
   );
 
   return (
-    <div className={cn('relative flex flex-col gap-3 bg-white rounded-[18px] p-5', className)}>
+    <div className={cn(CARD, 'relative flex flex-col gap-3 p-5', className)}>
       <CardHeader
         title="Learning mode analytics"
         subtitle={`Blended vs self-paced · ${periodLabel(data)}`}
@@ -111,15 +111,15 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
           <p className="text-[13px] leading-[18px] text-(--ob-text-secondary)">
             Attendance rate <span className="text-(--ob-text-subtle)">· blended sessions</span>
           </p>
-          <div className="mt-1 flex items-baseline gap-2">
+          <div className="mt-1 flex items-center gap-2">
             <span className="text-[24px] leading-[32px] text-(--ob-text-strong)">
               <FadeValue k={`${scope}-rate`}>{attendance.rate}</FadeValue>
               <span className="text-[13px] text-(--ob-text-muted)">%</span>
             </span>
             {attendance.trend !== 0 && (
-              <Trend positive={attendance.trend > 0}>
-                <FadeValue k={`${scope}-trend`}>{attendance.trend > 0 ? '+' : ''}{attendance.trend} pts</FadeValue>
-              </Trend>
+              <DeltaChip positive={attendance.trend > 0}>
+                <FadeValue k={`${scope}-trend`}>{Math.abs(attendance.trend)} pts</FadeValue>
+              </DeltaChip>
             )}
           </div>
           <GradientProgress value={attendance.rate} className="mt-1.5 h-2" />

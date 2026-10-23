@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { Bar, BarChart, LabelList, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import type { ChartDataPoint } from '../types/dashboard.types';
 import { ProgramScopeTabs, FadeValue, type ProgramScope } from './ProgramScopeTabs';
-import { CardHeader, Trend } from '@/variants/b/components/ui/kit';
+import { CARD, CardHeader, DeltaChip, MetricTile } from '@/variants/b/components/ui/kit';
 import { AIInsightLine } from '@/variants/b/components/ui/ai-insight-banner';
 import { AXIS_TICK, FOLD_BAR_SHARE, foldBar, foldBarDefs, pillLabel, useChartIds } from '@/variants/b/components/ui/chart';
 import { currentMonthIndex, periodLabel } from '../period';
@@ -106,7 +106,7 @@ export function LDDashboardProgramOverview({
   const fullInsight = activeScope === 'course' ? courseInsight ?? insight : activeScope === 'journey' ? journeyInsight ?? insight : insight;
 
   return (
-    <div className={cn('relative flex flex-col gap-4 bg-white rounded-[18px] p-5', className)}>
+    <div className={cn(CARD, 'relative flex flex-col gap-4 p-5', className)}>
       {/* ── Header: title + period, scope tabs on the right ── */}
       <CardHeader
         title="Program overview"
@@ -115,34 +115,20 @@ export function LDDashboardProgramOverview({
       />
 
       {/* ── Summary tiles: also pick the chart's metric ─────── */}
-      <div className="grid grid-cols-3 gap-3" role="tablist" aria-label="Chart metric">
+      <div className="grid grid-cols-3 gap-2" role="tablist" aria-label="Chart metric">
         {totals.map((m) => {
-          const isSelected = m.key === metric;
           const positive = m.trend >= 0;
           return (
-            <button
-              key={m.key}
-              type="button"
-              role="tab"
-              aria-selected={isSelected}
-              onClick={() => setMetric(m.key)}
-              className={cn(
-                'rounded-[14px] border p-4 text-left transition-colors cursor-pointer',
-                // Selected: the sidebar's active tint, no outline
-                isSelected ? 'border-transparent bg-(--ob-primary)/[0.07]' : 'border-(--ob-border) hover:bg-(--ob-surface-subtle)',
+            <MetricTile key={m.key} selected={m.key === metric} onClick={() => setMetric(m.key)} label={m.label}>
+              <span className="text-[24px] leading-[32px] tabular-nums text-(--ob-text-strong)"><FadeValue k={m.total}>{m.total}</FadeValue></span>
+              {m.trend !== 0 && (
+                // Totals are year to date; the change compares the last two months
+                <span className="flex items-center gap-1.5">
+                  <DeltaChip positive={positive}><FadeValue k={m.trend}>{Math.abs(m.trend)}%</FadeValue></DeltaChip>
+                  <span className="text-[12px] text-(--ob-text-muted)">vs {prevMonth}</span>
+                </span>
               )}
-            >
-              <p className="text-[13px] leading-[18px] text-(--ob-text-secondary)">{m.label}</p>
-              <div className="mt-1.5 flex items-baseline gap-2">
-                <span className="text-[24px] leading-[32px] text-(--ob-text-strong)"><FadeValue k={m.total}>{m.total}</FadeValue></span>
-                {m.trend !== 0 && (
-                  <Trend positive={positive}>
-                    {/* Totals are year to date; the trend compares the last two months */}
-                    <FadeValue k={m.trend}>{positive ? '+' : ''}{m.trend}% vs {prevMonth}</FadeValue>
-                  </Trend>
-                )}
-              </div>
-            </button>
+            </MetricTile>
           );
         })}
       </div>
@@ -150,7 +136,7 @@ export function LDDashboardProgramOverview({
       {/* ── Chart: one metric, one highlighted month ────────── */}
       <div className="w-full min-w-0" style={{ height: '200px' }}>
         <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={200}>
-          <BarChart data={series} margin={{ top: 52, right: 8, left: -16, bottom: 0 }} barCategoryGap={0}>
+          <BarChart data={series} margin={{ top: 28, right: 8, left: -16, bottom: 0 }} barCategoryGap={0}>
             <defs>{foldBarDefs(ids)}</defs>
             <XAxis
               dataKey="month"

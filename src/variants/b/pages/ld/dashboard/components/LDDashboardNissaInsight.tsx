@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 import { ArrowRight, ChevronRight } from '@/variants/b/icons';
 import { NisaOrb } from '@/variants/b/components/ui/NisaOrb';
-import { OB_AI_SOFT } from '@/variants/b/theme';
+import { CARD } from '@/variants/b/components/ui/kit';
 import type { NisaInsight } from '../types/dashboard.types';
 
 interface LDDashboardNissaInsightProps {
@@ -40,25 +40,24 @@ function InsightRow({ item }: { item: NisaInsight }) {
 /*  Main component                                                     */
 /* ------------------------------------------------------------------ */
 
-/** Option B AI card: mostly white with a soft blue glow, #282828 text, no inner frames */
+/** Option B AI card: white with a hairline frame; the orb sits in a soft blue glow, like the reference's assistant */
 export function LDDashboardNissaInsight({ insights, className }: LDDashboardNissaInsightProps) {
   return (
-    <div
-      className={cn('relative w-full overflow-hidden rounded-[18px] p-5', className)}
-      style={{ background: OB_AI_SOFT }}
-    >
+    <div className={cn(CARD, 'relative w-full overflow-hidden p-5', className)}>
+      {/* Faint glow behind the orb */}
+      <span className="pointer-events-none absolute -left-10 -top-12 size-44 rounded-full bg-(--ob-primary)/10 blur-3xl" aria-hidden />
       <div className="relative flex flex-col gap-4">
         {/* ── Header ─────────────────────────────────────────── */}
         <div className="flex items-center gap-3">
           <NisaOrb size={40} />
           <div>
-            <p className="text-[20px] leading-[28px] text-(--ob-text-ai)">NISA priority insights</p>
-            <p className="text-[14px] leading-[20px] text-(--ob-text-ai)/70">Smart insights tailored to you</p>
+            <h3 className="text-[16px] leading-[24px] text-(--ob-text-strong)">NISA priority insights</h3>
+            <p className="text-[13px] leading-[18px] text-(--ob-text-muted)">Smart insights tailored to you</p>
           </div>
         </div>
 
         {/* ── Insight rows, split by thin lines ──────────────── */}
-        <div className="divide-y divide-(--ob-text-ai)/10">
+        <div className="divide-y divide-(--ob-border)">
           {insights.map((item) => (
             <InsightRow key={item.title} item={item} />
           ))}
@@ -67,7 +66,7 @@ export function LDDashboardNissaInsight({ insights, className }: LDDashboardNiss
         {/* ── Footer CTA ─────────────────────────────────────── */}
         <button
           type="button"
-          className="group flex items-center justify-between rounded-full bg-white/80 ring-1 ring-(--ob-primary)/15 px-5 h-9 text-[13px] text-(--ob-primary) transition-colors hover:bg-white"
+          className="group flex h-11 items-center justify-between rounded-full bg-(--ob-surface) px-5 text-[13px] text-(--ob-primary) transition-colors hover:bg-(--ob-primary-50)"
         >
           More insights? Just ask NISA
           <ChevronRight className="size-4 transition-transform group-hover:translate-x-0.5" />

@@ -1,11 +1,11 @@
 // ============================================================
-// Concept, not rendered anywhere: the profile card whose cut-out photo rises
-// above the card's top edge (the "head pops out" look). It was Home's header
-// in Option B before the greeting row replaced it; kept for other options.
-// See ./README.md for how to place it.
+// The profile card whose cut-out photo rises above the card's top edge (the
+// "head pops out" look). Back on Option B's Home since 2026-10-23, above the
+// KPI cards. See ./README.md for how to place it.
 // ============================================================
 
 import { Building2, Mail, MapPin, Phone, type LucideIcon } from '@/variants/b/icons';
+import { CARD } from '@/variants/b/components/ui/kit';
 // Background removed from the original profile photo (figma:asset/a28eddf0…png)
 import profileCutout from '@/variants/b/assets/profile-cutout.png';
 
@@ -45,7 +45,7 @@ export function ProfileHeroCard({ person, photo = profileCutout, className }: Pr
   return (
     // The padding is the headroom the head rises into
     <div className={className} style={{ paddingTop: PROFILE_HEADROOM }}>
-      <div className="relative min-h-[176px] rounded-[18px] bg-white">
+      <div className={`relative min-h-[176px] ${CARD}`}>
         {/* Photo: as tall as the card plus the headroom, sitting on the card's bottom edge */}
         <div
           className="absolute left-0 bottom-0"

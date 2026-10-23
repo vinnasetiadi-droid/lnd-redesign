@@ -96,13 +96,12 @@ export function ChartLegend({ items, className }: { items: TooltipRow[] | Omit<T
   );
 }
 
-/** Light hatched track behind progress fills */
+/** Plain light track behind progress fills (the name is from when it was hatched) */
 export const HATCHED_TRACK = {
   backgroundColor: OB_COLORS.surface,
-  backgroundImage: `repeating-linear-gradient(135deg, ${OB_COLORS.borderStrong} 0 1px, transparent 1px 6px)`,
 } as const;
 
-/** Progress bar: blue gradient fill on a light hatched track */
+/** Progress bar: blue gradient fill on a light track */
 export function GradientProgress({ value, className, from = CHART_BLUE, to = OB_COLORS.primary200 }: {
   /** 0-100 */
   value: number;
@@ -123,95 +122,63 @@ export function GradientProgress({ value, className, from = CHART_BLUE, to = OB_
   );
 }
 
-/** Share of each column the folded bar fills; the rest is its folded side */
-export const FOLD_BAR_SHARE = 0.82;
+/**
+ * Kept for the callers that centre labels on the bar: the pill bar is centred
+ * in its column, so the label centres on the whole column.
+ */
+export const FOLD_BAR_SHARE = 1;
 
 type FoldIds = Pick<ReturnType<typeof useChartIds>, 'barGradient' | 'barSelected' | 'fold' | 'column' | 'stripes'>;
 
-/** <defs> for the folded gradient bars; call inside <defs> */
+/** <defs> for the pill bars; call inside <defs> */
 export function foldBarDefs(ids: FoldIds) {
   return (
-    <>
-      {/* Bar: strong blue at the top, almost white at the base */}
-      <linearGradient id={ids.barGradient} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor={CHART_BLUE} stopOpacity={0.95} />
-        <stop offset="100%" stopColor={CHART_BLUE} stopOpacity={0.06} />
-      </linearGradient>
-      {/* Selected bar: solid, no stripes */}
-      <linearGradient id={ids.barSelected} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor={CHART_BLUE} stopOpacity={1} />
-        <stop offset="100%" stopColor={OB_COLORS.primary300} stopOpacity={0.55} />
-      </linearGradient>
-      {/* The lighter side that folds down to the next column */}
-      <linearGradient id={ids.fold} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor={OB_COLORS.primary300} stopOpacity={0.8} />
-        <stop offset="100%" stopColor={OB_COLORS.primary100} stopOpacity={0.08} />
-      </linearGradient>
-      {/* Glow behind the selected column */}
-      <linearGradient id={ids.column} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor={OB_COLORS.primary100} stopOpacity={0.9} />
-        <stop offset="100%" stopColor={OB_COLORS.primary50} stopOpacity={0} />
-      </linearGradient>
-      <pattern id={ids.stripes} width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-        <line x1="0" y1="0" x2="0" y2="9" stroke={OB_COLORS.white} strokeWidth="1.5" strokeOpacity="0.75" />
-      </pattern>
-    </>
+    <linearGradient id={ids.barSelected} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stopColor={OB_COLORS.primary400} />
+      <stop offset="100%" stopColor={CHART_BLUE} />
+    </linearGradient>
   );
 }
 
 /**
- * Bar `shape` for a chart with barCategoryGap={0}: each column holds a
- * gradient bar with white stripes and a lighter side folding down to the next
- * column, split from it by a thin line. The selected column gets a solid bar
- * and a glow from the top.
+ * Bar `shape` for a chart with barCategoryGap={0}: a fully rounded pill in
+ * the middle of each column, light grey, and blue for the selected one (the
+ * reference's "most active day" bars).
  */
 export function foldBar(ids: FoldIds, isSelected: (index: number) => boolean) {
-  return function FoldBar(props: {
-    x?: number;
-    y?: number;
-    width?: number;
-    height?: number;
-    index?: number;
-    background?: { x: number; y: number; width: number; height: number };
-  }) {
-    const { x = 0, y = 0, width = 0, height = 0, index = -1, background } = props;
+  return function PillBar(props: { x?: number; y?: number; width?: number; height?: number; index?: number }) {
+    const { x = 0, y = 0, width = 0, height = 0, index = -1 } = props;
     if (width <= 0) return <g />;
     const on = isSelected(index);
-    const base = y + height;
-    const top = background?.y ?? y;
-    const bottom = background ? background.y + background.height : base;
-    const barW = Math.max(2, width * FOLD_BAR_SHARE);
-    const fold = width - barW;
+    const barW = Math.min(30, Math.max(6, width * 0.56));
+    const h = Math.max(height, 6);
     return (
       <g style={{ cursor: 'pointer' }}>
-        {on && <rect x={x} y={top} width={width} height={bottom - top} fill={`url(#${ids.column})`} />}
-        {index > 0 && <line x1={x} x2={x} y1={top} y2={bottom} stroke={OB_COLORS.border} />}
-        {height > 0 && (
-          <>
-            <polygon
-              points={`${x + barW},${y} ${x + width},${y + Math.min(height, fold * 1.8)} ${x + width},${base} ${x + barW},${base}`}
-              fill={`url(#${ids.fold})`}
-            />
-            <rect x={x} y={y} width={barW} height={height} fill={`url(#${on ? ids.barSelected : ids.barGradient})`} />
-            {!on && <rect x={x} y={y} width={barW} height={height} fill={`url(#${ids.stripes})`} />}
-            <rect x={x} y={y} width={barW} height={1.5} fill={CHART_BLUE} />
-          </>
-        )}
+        {/* Full-height hit area, so the whole column is clickable */}
+        <rect x={x} y={y + height - h} width={width} height={h} fill="transparent" />
+        <rect
+          x={x + (width - barW) / 2}
+          y={y + height - h}
+          width={barW}
+          height={h}
+          rx={Math.min(barW / 2, h / 2)}
+          fill={on ? `url(#${ids.barSelected})` : OB_COLORS.buttonSecondary}
+          style={{ transition: 'fill 300ms ease' }}
+        />
       </g>
     );
   };
 }
 
 /**
- * `LabelList content`: a quiet value pill above the selected bar (34px tall,
- * 13px text, light blue tint). At either end it lines up with the bar's outer
- * edge so it stays inside the chart.
+ * `LabelList content`: the value in plain text above the selected bar. At
+ * either end it lines up with the bar's outer edge so it stays inside the chart.
  */
 export function pillLabel(
   selected: number,
   count: number,
   format: (value: number | string) => string,
-  /** Share of the column the bar fills (foldBar: 0.82), to centre the pill on the bar */
+  /** Share of the column to centre on (the pill bars sit in the middle, so 1) */
   barShare = 1,
 ) {
   return function PillLabel(props: { x?: number | string; y?: number | string; width?: number | string; value?: number | string; index?: number }) {
@@ -220,18 +187,17 @@ export function pillLabel(
     const y = Number(props.y ?? 0);
     const width = Number(props.width ?? 0);
     const text = format(props.value ?? '');
-    const w = text.length * 6.8 + 20;
-    const left =
-      props.index === count - 1 ? x + width - w
-      : props.index === 0 ? x
-      : x + (width * barShare) / 2 - w / 2;
+    // Centred on the bar; the first and last labels shift inwards if they would spill over
+    const half = (text.length * 6.4) / 2;
+    const centre = x + (width * barShare) / 2;
+    const cx =
+      props.index === count - 1 ? Math.min(centre, x + width - half)
+      : props.index === 0 ? Math.max(centre, x + half)
+      : centre;
     return (
-      <g pointerEvents="none">
-        <rect x={left} y={y - 44} width={w} height={34} rx={17} fill={OB_COLORS.primary50} />
-        <text x={left + w / 2} y={y - 22.5} textAnchor="middle" fill={OB_COLORS.primaryStrong} fontSize={13} fontFamily="DM Sans, sans-serif">
-          {text}
-        </text>
-      </g>
+      <text x={cx} y={y - 10} textAnchor="middle" fill={OB_COLORS.textStrong} fontSize={12} fontFamily="Inter, sans-serif" pointerEvents="none">
+        {text}
+      </text>
     );
   };
 }

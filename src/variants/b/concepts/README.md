@@ -1,11 +1,13 @@
-# Concepts (not rendered)
+# Concepts
 
-Pieces kept for other options. Nothing here is imported by a page.
+Pieces kept for other options. ProfileHeroCard is rendered again on Option B's
+Home (above the KPI cards); nothing else here is imported by a page.
 
 ## ProfileHeroCard
 
 The profile card whose cut-out photo rises above the card ("the head pops
-out"). It was Option B's Home header before the greeting row replaced it.
+out"). It was Home's header before the greeting row replaced it, and is Option
+B's Home header again.
 
 ```tsx
 import { ProfileHeroCard, PROFILE_HEADROOM } from '@/variants/b/concepts/ProfileHeroCard';

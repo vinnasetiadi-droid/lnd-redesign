@@ -1,8 +1,10 @@
+import type { CSSProperties } from 'react';
 import { motion } from 'motion/react';
 import { revealContainer, revealItem } from '@/variants/b/motion';
 import { DashboardLayout } from '@/variants/b/layouts/DashboardLayout';
 import { useDashboard } from './hooks/useDashboard';
-import { LDDashboardGreeting, LDDashboardHeader } from './components/LDDashboardHeader';
+import { LDDashboardHeader } from './components/LDDashboardHeader';
+import { ProfileHeroCard, PROFILE_HEADROOM } from '@/variants/b/concepts/ProfileHeroCard';
 import { LDDashboardProgramOverview } from './components/LDDashboardProgramOverview';
 import { LDDashboardActivePrograms }  from './components/LDDashboardActivePrograms';
 import { LDDashboardNissaInsight }     from './components/LDDashboardNissaInsight';
@@ -17,7 +19,13 @@ import { DashboardLicenseUtilization }   from '@/variants/b/pages/hr/dashboard/c
  * All data comes from useDashboard(); all UI lives in components/.
  * Footer is auto-included by DashboardLayout.
  *
- * Not rendered here any more (files kept): LDDashboardCoursesAttention (folded
+ * Visual style after the reference dashboard (hairline-framed white cards on
+ * a plain page, small blue KPI icons, green/red change chips, rounded bars);
+ * the cards and their content are the same as Option A's Home. The profile
+ * card with the photo rising above it is back at the top of the left column.
+ *
+ * Not rendered here any more (files kept): LDDashboardGreeting (the profile
+ * card is back in its place), LDDashboardCoursesAttention (folded
  * into Active programs' "Needs attention" tab), LDDashboardTraineesGrowth (its
  * figures now come from the core data) and LDDashboardRecentCourses
  * (may move to Upskill Studio).
@@ -43,13 +51,9 @@ export default function LDDashboardPage() {
   } = useDashboard();
 
   return (
-    <DashboardLayout>
-      <div className="w-full min-w-0">
-        {/* Greeting: full width, above both columns */}
-        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <LDDashboardGreeting profile={ldProfile} className="mb-3" />
-        </motion.div>
-
+    <DashboardLayout plainBackground>
+      {/* Pulled up by the photo headroom: Diana's head rises into the empty left of the top bar row */}
+      <div className="w-full min-w-0 -mt-7">
         <motion.div
           className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-3"
           variants={revealContainer}
@@ -58,6 +62,10 @@ export default function LDDashboardPage() {
         >
           {/* ── Left column ── */}
           <div className="flex flex-col gap-3 min-w-0">
+            <motion.div variants={revealItem}>
+              <ProfileHeroCard person={ldProfile} />
+            </motion.div>
+
             <motion.div variants={revealItem}>
               <LDDashboardHeader metrics={metricCards} />
             </motion.div>
@@ -87,8 +95,11 @@ export default function LDDashboardPage() {
             </motion.div>
           </div>
 
-          {/* ── Right column: starts level with the KPI row ── */}
-          <div className="flex flex-col gap-3 min-w-0">
+          {/* ── Right column: starts level with the profile card, below the photo's headroom ── */}
+          <div
+            className="flex flex-col gap-3 min-w-0 lg:pt-[var(--profile-headroom)]"
+            style={{ '--profile-headroom': `${PROFILE_HEADROOM}px` } as CSSProperties}
+          >
             <motion.div variants={revealItem} className="ob-lift">
               <LDDashboardNissaInsight insights={nisaInsights} />
             </motion.div>
@@ -98,7 +109,7 @@ export default function LDDashboardPage() {
             </motion.div>
 
             <motion.div variants={revealItem} className="ob-lift">
-              <DashboardLicenseUtilization />
+              <DashboardLicenseUtilization variant="reference" />
             </motion.div>
           </div>
         </motion.div>

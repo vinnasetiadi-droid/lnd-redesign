@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
 
 /*
  * Option B typography. Scoped to <html class="option-b">, which AppRoutes sets
- * while Option B is open, so options B and C keep the original Poppins setup.
+ * while Option B is open, so options A and C keep their own setup.
  *
- * - Font: DM Sans
+ * - Font: Inter
  * - Weights: mostly Regular 400. Medium 500 only for headings (h1-h4, which
  *   also hold the big KPI numbers) and the `font-medium` class. Nothing bolder.
  * - Letter spacing: -2% on every element
@@ -14,11 +14,11 @@
  * buttons 600 and font-medium 600).
  */
 html.option-b {
-  --font-sans: 'DM Sans', sans-serif;
+  --font-sans: 'Inter', sans-serif;
 }
 
 html.option-b :where(body, .font-sans, button, input, textarea, select) {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 html.option-b,

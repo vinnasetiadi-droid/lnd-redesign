@@ -3,7 +3,7 @@ import { motion, useInView } from 'motion/react';
 import { KeyRound } from '@/variants/b/icons';
 import { cn } from '@/lib/utils';
 import { AIInsightLine } from '@/variants/b/components/ui/ai-insight-banner';
-import { ATTENTION, CardHeader } from '@/variants/b/components/ui/kit';
+import { ATTENTION, CARD, CardHeader } from '@/variants/b/components/ui/kit';
 import { CHART_BLUE } from '@/variants/b/components/ui/chart';
 import { CountUp, GROW } from '@/variants/b/components/ui/count-up';
 import { daysFromNow, daysUntil } from '@/variants/b/pages/ld/dashboard/period';
@@ -88,9 +88,52 @@ function SegmentGauge({ pct, start }: { pct: number; start: boolean }) {
   );
 }
 
+/**
+ * Home's reference-style gauge: thin ticks along a 240° arc, blue up to the
+ * share in use, grey for the rest; they light up one after another.
+ */
+const TICKS = 44;
+const TICK_SWEEP = 240;
+function TickGauge({ pct, start }: { pct: number; start: boolean }) {
+  const filled = Math.round((pct / 100) * TICKS);
+  const size = 200;
+  const c = size / 2;
+  const from = 90 + (360 - TICK_SWEEP) / 2;
+  return (
+    <svg viewBox={`0 0 ${size} ${size * 0.86}`} className="w-full max-w-[200px]" aria-hidden>
+      {Array.from({ length: TICKS }, (_, i) => {
+        const angle = ((from + (i / (TICKS - 1)) * TICK_SWEEP) * Math.PI) / 180;
+        const on = i < filled;
+        const inner = on ? 66 : 72;
+        const outer = 90;
+        return (
+          <motion.line
+            key={i}
+            x1={c + inner * Math.cos(angle)}
+            y1={c + inner * Math.sin(angle)}
+            x2={c + outer * Math.cos(angle)}
+            y2={c + outer * Math.sin(angle)}
+            strokeWidth={4}
+            strokeLinecap="round"
+            initial={{ stroke: OB_COLORS.borderStrong }}
+            animate={{ stroke: start && on ? CHART_BLUE : OB_COLORS.borderStrong }}
+            transition={{ duration: 0.25, ease: 'easeOut', delay: start && on ? 0.15 + i * 0.03 : 0 }}
+          />
+        );
+      })}
+    </svg>
+  );
+}
+
 // ── Main component ─────────────────────────────────────────────
 
-export function DashboardLicenseUtilization({ licenses = LICENSES, className }: { licenses?: License[]; className?: string }) {
+export function DashboardLicenseUtilization({ licenses = LICENSES, variant = 'default', className }: {
+  licenses?: License[];
+  /** `reference`: Home's look (hairline frame, no icon, tick gauge); other pages keep the default */
+  variant?: 'default' | 'reference';
+  className?: string;
+}) {
+  const reference = variant === 'reference';
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.4 });
 
@@ -118,18 +161,18 @@ export function DashboardLicenseUtilization({ licenses = LICENSES, className }: 
     : `${idle} seats are idle across ${rows.length} licenses. Assign them before the next renewal.`;
 
   return (
-    <div className={cn('relative flex flex-col gap-3 bg-white rounded-[18px] p-5', className)}>
+    <div className={cn('relative flex flex-col gap-3 p-5', reference ? CARD : 'rounded-[18px] bg-white', className)}>
       <CardHeader
         title="License utilization"
         subtitle="Purchased seats actively used by trainees"
-        icon={KeyRound}
+        icon={reference ? undefined : KeyRound}
       />
 
       {/* ── Gauge with the total in the middle ─────────────── */}
       <div ref={ref} className="flex flex-col items-center">
         <div className="relative flex w-full justify-center">
-          <SegmentGauge pct={pct} start={inView} />
-          <p className="absolute bottom-0 text-[24px] leading-[28px] text-(--ob-text-strong)">
+          {reference ? <TickGauge pct={pct} start={inView} /> : <SegmentGauge pct={pct} start={inView} />}
+          <p className={cn('absolute text-(--ob-text-strong)', reference ? 'top-[38%] text-[30px] leading-[36px]' : 'bottom-0 text-[24px] leading-[28px]')}>
             <CountUp value={pct} start={inView} />
             <span className="text-[13px] text-(--ob-text-muted)">%</span>
           </p>
