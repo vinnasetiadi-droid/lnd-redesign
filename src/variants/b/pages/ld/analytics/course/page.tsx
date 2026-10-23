@@ -557,10 +557,7 @@ export default function LearningProgramAnalyticsPage() {
                   key={kpi.key}
                   className="relative flex min-w-0 flex-col gap-2.5 lg:px-6 lg:first:pl-0 lg:last:pr-0 lg:not-first:before:absolute lg:not-first:before:bottom-1 lg:not-first:before:left-0 lg:not-first:before:top-1 lg:not-first:before:w-px lg:not-first:before:bg-(--ob-border-subtle)"
                 >
-                  <div className="flex items-start justify-between gap-2">
-                    <p className="truncate text-[13px] leading-[18px] text-(--ob-text-muted)"><FadeValue k={kpi.label}>{kpi.label}</FadeValue></p>
-                    <kpi.icon size={18} className="shrink-0 text-(--ob-primary)" />
-                  </div>
+                  <p className="truncate text-[13px] leading-[18px] text-(--ob-text-muted)"><FadeValue k={kpi.label}>{kpi.label}</FadeValue></p>
                   <div className="flex flex-wrap items-center gap-2">
                     <p className="flex items-baseline gap-1">
                       <span className="text-[30px] leading-[36px] font-semibold tabular-nums text-(--ob-text-strong)"><FadeValue k={kpi.value}>{kpi.value}</FadeValue></span>
