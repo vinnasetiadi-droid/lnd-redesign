@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap');
+
+/*
+ * Option D typography. Scoped to <html class="option-d">, which AppRoutes sets
+ * while Option D is open, so options B and C keep the original Poppins setup.
+ *
+ * - Font: DM Sans
+ * - Weights: mostly Regular 400. Medium 500 only for headings (h1-h4, which
+ *   also hold the big KPI numbers) and the `font-medium` class. Nothing bolder.
+ * - Letter spacing: -2% on every element
+ *
+ * Rules are unlayered and start with `html.option-d`, so they win over Tailwind
+ * utilities and over src/styles/theme.css (which sets Poppins on :root, makes
+ * buttons 600 and font-medium 600).
+ */
+html.option-d {
+  --font-sans: 'DM Sans', sans-serif;
+}
+
+html.option-d :where(body, .font-sans, button, input, textarea, select) {
+  font-family: 'DM Sans', sans-serif;
+}
+
+html.option-d,
+html.option-d * {
+  letter-spacing: -0.02em;
+}
+
+/*
+ * Compact type scale. In the base layer, so text-[..] classes still win:
+ * these only change headings and body text that have no size class.
+ */
+@layer base {
+  html.option-d body { font-size: 13px; line-height: 20px; }
+  html.option-d h1 { font-size: 24px; line-height: 32px; }
+  html.option-d h2 { font-size: 20px; line-height: 28px; }
+  html.option-d h3 { font-size: 16px; line-height: 24px; }
+  html.option-d h4 { font-size: 14px; line-height: 20px; }
+  html.option-d button, html.option-d label, html.option-d input { font-size: 13px; }
+}
+
+/*
+ * Design tokens. Defined once here, scoped to Option D; theme.ts (OD_COLORS)
+ * mirrors these values for code that needs a plain string (SVG, recharts).
+ */
+html.option-d {
+  --od-primary: #1A73E8; /* The one accent: buttons, selected states, chart highlight */
+  --od-primary-strong: #1967D2; /* Blue text on a blue tint, link hover */
+  --od-primary-50: #E8F0FE; /* Lightest blue tint (pills, chips) */
+  --od-primary-100: #D2E3FC;
+  --od-primary-200: #AECBFA;
+  --od-primary-300: #8AB4F8;
+  --od-primary-400: #669DF6;
+  --od-primary-900: #174EA6;
+  --od-primary-tint: #F5F9FE; /* AI insight row background */
+  --od-text-strong: #181D27; /* Titles and values */
+  --od-text-heading: #252B37;
+  --od-text-ink: #0A0D12; /* Tooltip background */
+  --od-text-body: #414651; /* Body text */
+  --od-text-secondary: #535862; /* Labels */
+  --od-text-muted: #717680; /* Secondary text */
+  --od-text-subtle: #A4A7AE; /* Axis ticks, hints */
+  --od-text-ai: #282828; /* Text on the NISA card */
+  --od-border: #EDEEF1; /* Card dividers, tile outlines */
+  --od-border-strong: #E4E6EA; /* Progress tracks */
+  --od-border-control: #D0D5DD;
+  --od-line: #D5D7DA; /* Chart cursor */
+  --od-surface: #F5F6F8; /* Segmented controls, icon circles */
+  --od-surface-muted: #F7F8FA; /* Row frames */
+  --od-surface-subtle: #F9FAFB; /* Hover */
+  --od-button-secondary: #F0F1F3;
+  --od-button-secondary-hover: #E6E8EB;
+  --od-button-primary: var(--od-primary); /* Primary buttons are solid blue, at most one per view */
+  --od-button-primary-hover: var(--od-primary-strong);
+  --od-white: #FFFFFF;
+  --od-attention-text: #B54708; /* Amber, only for things that need attention */
+  --od-attention-surface: #FFFAEB;
+  --od-attention-bar: #FEC84B;
+  --od-attention-track: #FEF0C7;
+  --od-warning: #FDB022;
+  --od-orange: #FB6514;
+  --od-orange-strong: #C4320A;
+  --od-orange-surface: #FFEAD5;
+  --od-success: #039855; /* Positive trends */
+  --od-success-strong: #027A48;
+  --od-success-surface: #ECFDF3;
+  --od-success-100: #D1FADF;
+  --od-success-bright: #32D583;
+  --od-mode-self: #34A853; /* Self-paced series */
+  --od-danger: #D92D20; /* Negative trends */
+  --od-danger-strong: #B42318;
+  --od-danger-surface: #FEF3F2;
+  --od-danger-100: #FEE4E2;
+  --od-danger-bright: #F97066;
+  --od-yellow: #FFE07A;
+  --od-yellow-text: #6B4F00;
+  --od-avatar-peach: #FFE4D5; /* Avatar pastels */
+  --od-avatar-lilac: #E9D7FE;
+  --od-avatar-pink: #FCE7F6;
+  --od-avatar-cyan: #CFF9FE;
+  /* Course status chips: a tint and a stronger bar of the same hue */
+  --od-status-draft-bg: #F2F4F7;
+  --od-status-draft: #98A2B3;
+  --od-status-review-bg: #F4EBFF;
+  --od-status-review: #9E77ED;
+  --od-status-revision-bg: #FEE4E2;
+  --od-status-revision: #F97066;
+  --od-status-approved-bg: #DCFAE6;
+  --od-status-approved: #17B26A;
+  --od-status-active-bg: #DCE8FC;
+  --od-status-active: #1A73E8;
+  --od-status-inactive-bg: #F2F4F7;
+  --od-status-inactive: #D0D5DD;
+}
+
+/* Regular by default, including elements the base styles make heavier */
+html.option-d :where(button, b, strong, th, label) {
+  font-weight: 400;
+}
+
+html.option-d :where(.font-medium, h1, h2, h3, h4, h5, h6):not(.font-normal, .font-light) {
+  font-weight: 500;
+}
+
+/* ── Motion ─────────────────────────────────────────────────── */
+
+/* Cards: a 1px lift and a faint blue glow on hover */
+html.option-d .od-lift {
+  border-radius: 18px;
+  /* translate, not transform: motion leaves an inline transform after the reveal */
+  transition: translate 300ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+html.option-d .od-lift:hover {
+  translate: 0 -1px;
+  box-shadow: 0 14px 32px -18px rgba(26, 115, 232, 0.28);
+}
+
+/* Buttons give a little under the finger. In the base layer, so a button's own
+   transition classes still decide what animates. */
+@layer base {
+  html.option-d button {
+    transition: transform 150ms ease, background-color 200ms ease, color 200ms ease, box-shadow 200ms ease;
+  }
+  html.option-d button:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+}
+
+/* One light sweep across a NISA insight once it scrolls into view */
+html.option-d .od-sweep {
+  position: relative;
+  overflow: hidden;
+}
+html.option-d .od-sweep::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.85) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: od-sweep 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.5s 1 forwards;
+}
+@keyframes od-sweep {
+  to { transform: translateX(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.option-d .od-lift,
+  html.option-d .od-lift:hover { transition: none; translate: none; }
+  html.option-d .od-sweep::after { animation: none; display: none; }
+}

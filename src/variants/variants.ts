@@ -9,6 +9,9 @@ import OptionBUpskillPage from '@/variants/b/pages/ld/learning_management/course
 import OptionCHomePage from '@/variants/c/pages/ld/dashboard/page';
 import OptionCAnalyticsPage from '@/variants/c/pages/ld/analytics/course/page';
 import OptionCUpskillPage from '@/variants/c/pages/ld/learning_management/courses/page';
+import OptionDHomePage from '@/variants/d/pages/ld/dashboard/page';
+import OptionDAnalyticsPage from '@/variants/d/pages/ld/analytics/course/page';
+import OptionDUpskillPage from '@/variants/d/pages/ld/learning_management/courses/page';
 
 export type PageKey = 'home' | 'analytics' | 'upskill';
 
@@ -60,6 +63,13 @@ export const VARIANTS: Variant[] = [
     description: 'Starts from a copy of Option A.',
     // Own copy, made from Option A (tokens renamed to --oc-*): src/variants/c/
     pages: { home: OptionCHomePage, analytics: OptionCAnalyticsPage, upskill: OptionCUpskillPage },
+  },
+  {
+    key: 'd',
+    name: 'Option D',
+    description: 'Starts from a copy of Option A.',
+    // Own copy, made from Option A (tokens renamed to --od-*): src/variants/d/
+    pages: { home: OptionDHomePage, analytics: OptionDAnalyticsPage, upskill: OptionDUpskillPage },
   },
 ];
 

@@ -3,7 +3,7 @@ import { ArrowRight, ChevronRight } from 'lucide-react';
 import { ResponsiveBackground } from '@/components/ResponsiveBackground';
 import { PAGES, VARIANTS, variantHref } from '@/variants/variants';
 
-// The three option headers share one gradient (the sidebar's), each showing its own third
+// The option headers share one gradient (the sidebar's), each showing its own slice of it
 const BRAND_GRADIENT = 'linear-gradient(90deg, #000066 0%, #0001FE 35%, #00A3FF 70%, #33E5C9 100%)';
 
 const containerVariants = {
@@ -17,7 +17,7 @@ const itemVariants = {
 };
 
 /**
- * Landing page — pick one of the three design options, or jump straight to one of
+ * Landing page — pick one of the design options, or jump straight to one of
  * its pages. Options are separate routers (see AppRoutes), so links are plain <a>.
  *
  * Route: /  (registered in src/routes/AppRoutes.tsx)
@@ -50,11 +50,11 @@ export default function LandingPage() {
             Redesign mockups
           </h1>
           <p className="mt-3 text-[16px] leading-[24px] text-[#535862]">
-            Three style options for the same three pages. Pick an option to explore it.
+            Four style options for the same three pages. Pick an option to explore it.
           </p>
         </motion.header>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
           {VARIANTS.map((variant, i) => (
             <motion.section
               key={variant.key}
@@ -67,8 +67,8 @@ export default function LandingPage() {
                 className="flex h-[128px] items-end justify-between p-5 text-white"
                 style={{
                   backgroundImage: BRAND_GRADIENT,
-                  backgroundSize: '300% 100%',
-                  backgroundPosition: `${i * 50}% 50%`,
+                  backgroundSize: `${VARIANTS.length * 100}% 100%`,
+                  backgroundPosition: `${(i / Math.max(1, VARIANTS.length - 1)) * 100}% 50%`,
                 }}
               >
                 <span className="text-[64px] font-semibold uppercase leading-[0.8] tracking-tight">{variant.key}</span>
