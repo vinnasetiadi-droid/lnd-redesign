@@ -166,7 +166,7 @@ function CourseRowView({ row, me, onOpen, index }: { row: CourseRow; me: string;
               <span className="truncate">
                 {courseType(c)} · {courseMode(c)} · v{versionOf(c)}
                 {/* Nobody reviews their own course */}
-                {ownReview && <span className="text-(--ob-primary-strong)"> · waiting for another admin</span>}
+                {ownReview && <span> · waiting for another admin</span>}
               </span>
               {drafts.length > 0 && (
                 <button
@@ -254,7 +254,8 @@ export function CourseLibraryTable({ rows, me, onOpen, sort, onSort }: CourseLib
     // Phones: the table scrolls sideways inside its card instead of widening the page
     <div className="min-w-0 max-md:-mx-1 max-md:overflow-x-auto max-md:px-1">
     <div className="max-md:min-w-[600px]">
-      <div className={cn(GRID, 'border-b border-(--ob-border-subtle) px-3 pb-3 text-[12px] text-(--ob-text-muted)')}>
+      {/* Headers: 11px muted with a little letter spacing */}
+      <div className={cn(GRID, 'ob-tracked border-b border-(--ob-border-subtle) px-3 pb-3 text-[11px] leading-[16px] text-(--ob-text-muted)')}>
         <SortHeader label="Course" value="name" sort={sort} onSort={onSort} />
         <span>Status</span>
         <span className="whitespace-nowrap">Owner</span>

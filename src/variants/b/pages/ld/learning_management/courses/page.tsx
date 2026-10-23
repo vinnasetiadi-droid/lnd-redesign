@@ -12,7 +12,6 @@ import { useNavigate } from 'react-router';
 import { motion } from 'motion/react';
 import {
   ArrowUpDown,
-  Clock,
   GraduationCap,
   LayoutGrid,
   List,
@@ -177,11 +176,11 @@ export default function CoursesPage() {
 
         <Rule />
 
-        {/* ── Review queue: a light blue band between two rules, only when there is something to review ── */}
+        {/* ── Review queue: a hairline section with a 2px orange rule on the left (it waits on you),
+              only when there is something to review ── */}
         {reviewQueue.length > 0 && (
-          <motion.div variants={revealItem} className="flex items-center gap-4 bg-(--ob-primary-tint) px-8 py-5">
-            {/* Just the icon, no circle around it */}
-            <Clock size={20} className="shrink-0 text-(--ob-primary)" />
+          <motion.div variants={revealItem} className="relative flex items-center gap-4 px-8 py-5">
+            <span aria-hidden className="absolute inset-y-0 left-0 w-0.5 bg-(--ob-attention-bar)" />
             <div className="min-w-0 flex-1">
               <p className="text-[14px] leading-[20px] text-(--ob-text-strong)">
                 {reviewQueue.length} {reviewQueue.length === 1 ? 'course' : 'courses'} waiting for your review

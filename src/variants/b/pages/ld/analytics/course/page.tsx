@@ -413,8 +413,9 @@ function RankedList({ programType, rows, metric }: { programType: ProgramType; r
               {idx + 1}
             </span>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-[13px] leading-[20px] text-(--ob-text-strong)" title={program.name}>{program.name}</p>
-              <p className="truncate text-[12px] leading-[18px] text-(--ob-text-muted)">
+              {/* The name wraps to two lines instead of being cut off; the metadata on its own muted line */}
+              <p className="line-clamp-2 text-[13px] leading-[20px] text-(--ob-text-strong)" title={program.name}>{program.name}</p>
+              <p className="mt-0.5 truncate text-[12px] leading-[18px] text-(--ob-text-muted)">
                 {[typeLabel(program.type), modeLabel(program.mode), programSchedule(program)].join(' · ')}
               </p>
             </div>
@@ -522,7 +523,8 @@ export default function LearningProgramAnalyticsPage() {
         <Rule />
         {/* KPIs as plain columns, split by light inset hairlines (Home's KPI row) */}
         <motion.div variants={revealItem} className={SECTION}>
-          <div className="grid grid-cols-2 gap-x-6 gap-y-6 md:grid-cols-3 lg:grid-cols-5 lg:gap-x-0">
+          {/* Avg. enrollment gets a wider column: its unit ("per journey") is the longest */}
+          <div className="grid grid-cols-2 gap-x-6 gap-y-6 md:grid-cols-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)] lg:gap-x-0">
             {kpiCards.map((kpi) => {
               const { change, compare } = splitTrend(kpi.trend);
               return (
@@ -531,7 +533,8 @@ export default function LearningProgramAnalyticsPage() {
                   className="relative flex min-w-0 flex-col gap-2.5 lg:px-6 lg:first:pl-0 lg:last:pr-0 lg:not-first:before:absolute lg:not-first:before:bottom-1 lg:not-first:before:left-0 lg:not-first:before:top-1 lg:not-first:before:w-px lg:not-first:before:bg-(--ob-border-subtle)"
                 >
                   <p className="truncate text-[13px] leading-[18px] text-(--ob-text-muted)"><FadeValue k={kpi.label}>{kpi.label}</FadeValue></p>
-                  <div className="flex flex-wrap items-center gap-2">
+                  {/* Value, unit and trend always on one line, the same layout for all five */}
+                  <div data-kpi-row className="flex items-center gap-1.5 whitespace-nowrap">
                     <p className="flex items-baseline gap-1">
                       <span className="ob-num text-[30px] leading-[36px] font-semibold text-(--ob-text-strong)"><FadeValue k={kpi.value}>{kpi.value}</FadeValue></span>
                       {kpi.unit && <span className="text-[13px] text-(--ob-text-muted)"><FadeValue k={kpi.unit}>{kpi.unit}</FadeValue></span>}
@@ -559,8 +562,8 @@ export default function LearningProgramAnalyticsPage() {
               <Card>
                 <CardHeader title={<FadeValue k={programType}>{noun.One}s by mode</FadeValue>} subtitle="Self-paced vs blended" />
                 <div className="flex flex-col items-center gap-4">
-                  {/* Reference donut: a thick ring from the top, clockwise, in blocky segments
-                      with small rounded corners and thin gaps */}
+                  {/* A thin ring (10px) from the top, clockwise, with small gaps between
+                      segments, to match the thin tick gauge */}
                   <div className="relative size-[220px] shrink-0">
                     <PieChart width={220} height={220}>
                       <defs>
@@ -575,12 +578,12 @@ export default function LearningProgramAnalyticsPage() {
                         data={data.modePie}
                         cx="50%"
                         cy="50%"
-                        innerRadius={66}
+                        innerRadius={90}
                         outerRadius={100}
                         startAngle={90}
                         endAngle={-270}
-                        paddingAngle={2.5}
-                        cornerRadius={7}
+                        paddingAngle={2}
+                        cornerRadius={3}
                         dataKey="value"
                         strokeWidth={0}
                         animationDuration={800}
