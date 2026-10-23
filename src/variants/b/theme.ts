@@ -3,7 +3,7 @@
  * cards). The design tokens live in option-b.css as CSS variables; OB_COLORS
  * below is their documented mirror, plus the shared gradients.
  */
-export const OA = {
+export const OB_PALETTE = {
   primary: {
     50: '#E8F0FE',
     100: '#D2E3FC',
@@ -70,6 +70,9 @@ export const OB_AI_SOFT = [
  * needs a plain colour string (SVG attributes, recharts props) uses these.
  * Keep both lists in step.
  */
+/** Geist Mono for numbers drawn in SVG (chart ticks and labels); CSS uses .ob-num */
+export const OB_NUM_FONT = "'Geist Mono', ui-monospace, monospace";
+
 export const OB_COLORS = {
   primary: '#1A73E8', // The one accent: buttons, selected states, chart highlight
   primaryStrong: '#1967D2', // Blue text on a blue tint, link hover
@@ -115,8 +118,9 @@ export const OB_COLORS = {
   successStrong: '#027A48',
   successSurface: '#ECFDF3',
   success100: '#D1FADF',
+  success200: '#A6F4C5', // Pale green band of the learning funnel (self-paced)
   successBright: '#32D583',
-  modeSelf: '#34A853', // Self-paced series
+  modeSelf: '#AECBFA', // Self-paced series: = primary200, the pale blue (green is only for positive trends)
   danger: '#D92D20', // Negative trends
   dangerStrong: '#B42318',
   dangerSurface: '#FEF3F2',
@@ -124,6 +128,7 @@ export const OB_COLORS = {
   dangerBright: '#F97066',
   yellow: '#FFEAD5', // = attentionTrack
   yellowText: '#C4320A', // = attentionText
+  brandLinkedin: '#0A66C2', // LinkedIn's own blue, on the LinkedIn creator mark
   avatarPeach: '#FFE4D5', // Avatar pastels
   avatarLilac: '#E9D7FE',
   avatarPink: '#FCE7F6',
@@ -144,9 +149,9 @@ export const OB_COLORS = {
   statusInactive: '#D0D5DD',
 } as const;
 
-export type OAColor = keyof typeof OB_COLORS;
+export type OBColor = keyof typeof OB_COLORS;
 
 /** The CSS variable for a token, for inline styles: obVar('primary') → 'var(--ob-primary)' */
-export function obVar(token: OAColor): string {
+export function obVar(token: OBColor): string {
   return `var(--ob-${token.replace(/([a-z])([A-Z0-9])/g, '$1-$2').toLowerCase()})`;
 }

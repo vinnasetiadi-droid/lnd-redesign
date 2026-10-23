@@ -75,7 +75,7 @@ function PageSearch({ role }: { role: SidebarRole }) {
         }}
         placeholder="Search anything…"
         aria-label="Search pages"
-        className="h-10 w-full rounded-full bg-(--ob-white) pl-10 pr-12 text-[13px] text-(--ob-text-strong) outline-none ring-1 ring-(--ob-border) transition-shadow placeholder:text-(--ob-text-subtle) focus:ring-2 focus:ring-(--ob-primary)/30"
+        className="h-10 w-full rounded-(--ob-radius-control) bg-(--ob-white) pl-10 pr-12 text-[13px] text-(--ob-text-strong) outline-none ring-1 ring-(--ob-border) transition-shadow placeholder:text-(--ob-text-subtle) focus:ring-2 focus:ring-(--ob-primary)/30"
       />
       <kbd className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded-[6px] bg-(--ob-surface) px-1.5 py-0.5 font-sans text-[11px] text-(--ob-text-muted)">
         ⌘K
@@ -85,7 +85,7 @@ function PageSearch({ role }: { role: SidebarRole }) {
         {open && query.trim() && (
           <motion.ul
             role="listbox"
-            className="absolute left-0 right-0 top-full z-40 mt-1.5 rounded-[14px] bg-(--ob-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]"
+            className="absolute left-0 right-0 top-full z-40 mt-1.5 rounded-(--ob-radius-card) bg-(--ob-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]"
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
@@ -103,7 +103,7 @@ function PageSearch({ role }: { role: SidebarRole }) {
                     onMouseDown={(e) => e.preventDefault()}
                     onMouseEnter={() => setCursor(i)}
                     onClick={() => go(p.path)}
-                    className={cn("flex w-full items-center justify-between gap-3 rounded-[10px] px-3 py-2 text-left text-[13px] cursor-pointer", i === cursor ? "bg-(--ob-surface) text-(--ob-text-strong)" : "text-(--ob-text-body)")}
+                    className={cn("flex w-full items-center justify-between gap-3 rounded-(--ob-radius-control) px-3 py-2 text-left text-[13px] cursor-pointer", i === cursor ? "bg-(--ob-surface) text-(--ob-text-strong)" : "text-(--ob-text-body)")}
                   >
                     {p.label}
                     {p.group && <span className="text-[12px] text-(--ob-text-muted)">{p.group}</span>}
@@ -119,7 +119,7 @@ function PageSearch({ role }: { role: SidebarRole }) {
 }
 
 const ROUND_BUTTON =
-  "ob-btn-secondary relative flex size-10 items-center justify-center rounded-full text-(--ob-text-body) transition-colors hover:text-(--ob-text-strong) cursor-pointer";
+  "ob-btn-secondary relative flex size-10 items-center justify-center rounded-(--ob-radius-button) text-(--ob-text-body) transition-colors hover:text-(--ob-text-strong) cursor-pointer";
 
 /**
  * Option B top bar, after the reference: a white frame across the content

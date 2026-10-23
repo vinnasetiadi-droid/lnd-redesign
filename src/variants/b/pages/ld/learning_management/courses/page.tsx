@@ -27,7 +27,7 @@ import { useSimulatedLoading } from '@/hooks/useSimulatedLoading';
 import { CourseCard } from './components/CourseCard';
 import { CourseLibraryTable, courseMode, courseType, ownerName, type CourseRow } from './components/CourseLibraryTable';
 import { COURSES_MOCK, COURSE_STATUS_META, NOT_LIVE, draftItemsOf, type CourseItem, type CourseStatus } from './data/courses.mock';
-import { IconCircle, PillButton, SearchField } from '@/variants/b/components/ui/kit';
+import { IconCircle, NumText, PillButton, SearchField } from '@/variants/b/components/ui/kit';
 import { FilterChip } from './components/FilterChip';
 import { ProgramScopeTabs, type ScopeTab } from '@/variants/b/pages/ld/dashboard/components/ProgramScopeTabs';
 import { daysUntil, timeAgo } from '@/variants/b/pages/ld/dashboard/period';
@@ -214,7 +214,7 @@ export default function CoursesPage() {
           <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
             <div className="min-w-0">
               <h3 className="text-[18px] leading-[26px] text-(--ob-text-strong)">Course library</h3>
-              <p className="mt-0.5 text-[13px] leading-[18px] text-(--ob-text-muted)">{rows.length} {rows.length === 1 ? 'course' : 'courses'}</p>
+              <p className="mt-0.5 text-[13px] leading-[18px] text-(--ob-text-muted)"><NumText>{`${rows.length} ${rows.length === 1 ? 'course' : 'courses'}`}</NumText></p>
             </div>
             <div className="-mx-1 min-w-0 max-w-full overflow-x-auto px-1 [scrollbar-width:none]">
               <ProgramScopeTabs id="course-status" value={status} onChange={reset(setStatus)} tabs={tabs} />

@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils';
 import { type CourseLifecycleStatus } from '@/lib/courseActions';
 import { AlertTriangle, BookOpen, Clock, EyeOff, Eye as EyeOn, Layers, MoreHorizontal, Trash2, X } from '@/variants/b/icons';
 import { daysUntil, timeAgo } from '@/variants/b/pages/ld/dashboard/period';
-import { PillButton } from '@/variants/b/components/ui/kit';
+import { NumText, PillButton } from '@/variants/b/components/ui/kit';
 import { COURSE_STATUS_META, draftItemsOf, liveVersionOf, type CourseItem } from '../data/courses.mock';
 import { DeleteVersionDialog } from '@/variants/b/components/common/DeleteVersionDialog';
 import { CourseCover } from './CourseCover';
@@ -87,7 +87,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
   const drafts = course.draftOf ? 0 : draftItemsOf(course).length;
   const version = liveVersionOf(course);
   const f = footerOf(course, me);
-  const menuItem = 'w-full flex items-center gap-2 rounded-[10px] px-3 py-2 text-[13px] transition-colors focus-visible:outline-none focus-visible:bg-(--ob-surface)';
+  const menuItem = 'w-full flex items-center gap-2 rounded-(--ob-radius-control) px-3 py-2 text-[13px] transition-colors focus-visible:outline-none focus-visible:bg-(--ob-surface)';
 
   return (
     <div
@@ -125,14 +125,14 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
                 aria-label="More actions"
                 aria-haspopup="menu"
                 aria-expanded={menuOpen}
-                className="-mr-1.5 flex size-8 items-center justify-center rounded-full text-(--ob-text-muted) transition-colors hover:bg-(--ob-surface) hover:text-(--ob-text-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/30 cursor-pointer"
+                className="-mr-1.5 flex size-8 items-center justify-center rounded-(--ob-radius-control) text-(--ob-text-muted) transition-colors hover:bg-(--ob-surface) hover:text-(--ob-text-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/30 cursor-pointer"
               >
                 <MoreHorizontal size={16} />
               </button>
               {menuOpen && (
                 <>
                   <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-                  <div role="menu" className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-[14px] bg-(--ob-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]">
+                  <div role="menu" className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-(--ob-radius-card) bg-(--ob-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]">
                     <button
                       type="button"
                       role="menuitem"
@@ -206,19 +206,19 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
           </p>
           <div className="mt-1 flex h-10 items-center justify-between gap-2">
             <p className="min-w-0 truncate">
-              <span className="text-[20px] leading-[24px] font-semibold tabular-nums text-(--ob-text-strong)">{f.value}</span>
+              <span className="ob-num text-[20px] leading-[24px] font-semibold text-(--ob-text-strong)">{f.value}</span>
               <span className="ml-1 text-[12px] text-(--ob-text-muted)">{f.unit}</span>
             </p>
             <div className="flex shrink-0 items-center gap-1" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
-              {f.aside && <span className="text-[12px] tabular-nums text-(--ob-text-muted)">{f.aside}</span>}
+              {f.aside && <span className="text-[12px] text-(--ob-text-muted)"><NumText>{f.aside}</NumText></span>}
               {f.review && <PillButton variant="tint" onClick={onClick}>Review</PillButton>}
             </div>
           </div>
-          {/* Progress slot: the thin blue bar on active courses, empty otherwise */}
-          <div className="mt-1 h-1.5">
+          {/* Progress slot: the thin blue bar on active courses (4px, 2px corners), empty otherwise */}
+          <div className="mt-1 h-1">
             {f.progress !== undefined && (
-              <div className="h-full overflow-hidden rounded-full bg-(--ob-surface)">
-                <div className="h-full rounded-full bg-(--ob-primary)" style={{ width: `${Math.min(100, f.progress)}%` }} />
+              <div className="h-full overflow-hidden rounded-[2px] bg-(--ob-surface)">
+                <div className="h-full rounded-[2px] bg-(--ob-primary)" style={{ width: `${Math.min(100, f.progress)}%` }} />
               </div>
             )}
           </div>
@@ -242,8 +242,8 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
       {/* Status toggle confirmation, portaled to body */}
       {showStatusConfirm && createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(16,24,40,0.5)' }} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
-          <div className="relative w-[460px] rounded-[20px] bg-(--ob-white) p-8 flex flex-col items-center text-center shadow-[0_24px_48px_-12px_rgba(16,24,40,0.18)]" onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => setShowStatusConfirm(false)} aria-label="Close" className="absolute top-4 right-4 flex size-8 items-center justify-center rounded-full text-(--ob-text-muted) transition-colors hover:bg-(--ob-surface) cursor-pointer">
+          <div className="relative w-[460px] rounded-(--ob-radius-card) bg-(--ob-white) p-8 flex flex-col items-center text-center shadow-[0_24px_48px_-12px_rgba(16,24,40,0.18)]" onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setShowStatusConfirm(false)} aria-label="Close" className="absolute top-4 right-4 flex size-8 items-center justify-center rounded-(--ob-radius-control) text-(--ob-text-muted) transition-colors hover:bg-(--ob-surface) cursor-pointer">
               <X className="size-5" />
             </button>
             <div className="mb-5 flex size-14 items-center justify-center rounded-full bg-(--ob-attention-surface)">

@@ -10,7 +10,7 @@ import { useId, useState, type ReactNode } from 'react';
 import { DashboardLayout } from '@/variants/b/layouts/DashboardLayout';
 import { cn } from '@/lib/utils';
 import { ProgramScopeTabs, PROGRAM_TYPE_TABS, FadeValue, type ScopeTab } from '@/variants/b/pages/ld/dashboard/components/ProgramScopeTabs';
-import { ATTENTION, CardHeader, DeltaChip, SearchField } from '@/variants/b/components/ui/kit';
+import { ATTENTION, CardHeader, DeltaChip, NumText, SearchField } from '@/variants/b/components/ui/kit';
 import { ChartTooltipCard, LegendMark } from '@/variants/b/components/ui/chart';
 import { LearningProgressFunnel } from './components/LearningProgressFunnel';
 import { DashboardLicenseUtilization, type License } from '@/variants/b/pages/hr/dashboard/components/DashboardLicenseUtilization';
@@ -272,7 +272,7 @@ function splitTrend(trend: string): { change: string; compare: string } {
 function RoundChip({ children, tone = 'neutral' }: { children: ReactNode; tone?: 'neutral' | 'attention' }) {
   return (
     <span className={cn(
-      'inline-flex h-[30px] shrink-0 items-center whitespace-nowrap rounded-full px-3.5 text-[12px] leading-none',
+      'inline-flex h-[30px] shrink-0 items-center whitespace-nowrap rounded-(--ob-radius-control) px-3.5 text-[12px] leading-none',
       tone === 'attention' ? 'bg-(--ob-attention-surface) text-(--ob-attention-text)' : 'bg-(--ob-surface) text-(--ob-text-body)',
     )}>
       {children}
@@ -288,10 +288,11 @@ function Avatar({ name }: { name: string }) {
   );
 }
 
+/** Progress bar: 4px tall with 2px corners, like every bar in B */
 function ThinBar({ value, className }: { value: number; className?: string }) {
   return (
-    <div className={cn('h-1.5 overflow-hidden rounded-full bg-(--ob-border-strong)', className)}>
-      <div className="h-full rounded-full bg-(--ob-primary) transition-[width] duration-500" style={{ width: `${Math.max(0, Math.min(100, value))}%` }} />
+    <div className={cn('h-1 overflow-hidden rounded-[2px] bg-(--ob-border-strong)', className)}>
+      <div className="h-full rounded-[2px] bg-(--ob-primary) transition-[width] duration-500" style={{ width: `${Math.max(0, Math.min(100, value))}%` }} />
     </div>
   );
 }
@@ -299,9 +300,9 @@ function ThinBar({ value, className }: { value: number; className?: string }) {
 function Rating({ value }: { value: number }) {
   if (!value) return <span className="text-[13px] text-(--ob-text-subtle)">—</span>;
   return (
-    <span className="inline-flex items-center gap-1 text-[13px] tabular-nums text-(--ob-text-strong)">
+    <span className="inline-flex items-center gap-1 text-[13px] text-(--ob-text-strong)">
       <Star className="size-3.5 fill-(--ob-text-subtle) text-(--ob-text-subtle)" />
-      {value.toFixed(1)}
+      <span className="ob-num">{value.toFixed(1)}</span>
     </span>
   );
 }
@@ -384,10 +385,10 @@ function ActiveProgramsTable({ programType, programs, noun }: { programType: Pro
                   <p className="truncate text-[13px] leading-[20px] text-(--ob-text-strong)" title={program.name}>{program.name}</p>
                   <p className="truncate text-[12px] leading-[18px] text-(--ob-text-muted)">{metaLine(program)}</p>
                 </div>
-                <span className="text-right text-[13px] tabular-nums text-(--ob-text-strong)">{program.enrolled}</span>
+                <span className="ob-num text-right text-[13px] text-(--ob-text-strong)">{program.enrolled}</span>
                 <span className="flex items-center gap-2">
                   <ThinBar value={program.completion} className="w-20" />
-                  <span className="text-[12px] tabular-nums text-(--ob-text-body)">{program.completion}%</span>
+                  <span className="ob-num text-[12px] text-(--ob-text-body)">{program.completion}%</span>
                 </span>
                 <span className="text-right"><Rating value={program.rating} /></span>
               </div>
@@ -418,14 +419,14 @@ function RankValue({ program, metric }: { program: ProgramRow; metric: RankMetri
     return (
       <span className="flex shrink-0 items-center gap-2">
         <ThinBar value={program.completion} className="w-16" />
-        <span className="w-9 text-right text-[13px] tabular-nums text-(--ob-text-strong)">{program.completion}%</span>
+        <span className="ob-num w-9 text-right text-[13px] text-(--ob-text-strong)">{program.completion}%</span>
       </span>
     );
   }
   if (metric === 'rating') return <span className="shrink-0"><Rating value={program.rating} /></span>;
   return (
-    <span className="shrink-0 text-[13px] tabular-nums text-(--ob-text-strong)">
-      {program.enrolled} <span className="text-[12px] text-(--ob-text-muted)">enrolled</span>
+    <span className="shrink-0 text-[13px] text-(--ob-text-strong)">
+      <span className="ob-num">{program.enrolled}</span> <span className="text-[12px] text-(--ob-text-muted)">enrolled</span>
     </span>
   );
 }
@@ -436,7 +437,7 @@ function RankedList({ programType, rows, metric }: { programType: ProgramType; r
       <div>
         {rows.map((program, idx) => (
           <div key={`${programType}-${program.id}`} className="flex items-center gap-3 border-b border-(--ob-border-subtle) py-2.5 last:border-b-0">
-            <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-(--ob-surface) text-[12px] tabular-nums text-(--ob-text-body)">
+            <span className="ob-num flex size-6 shrink-0 items-center justify-center rounded-full bg-(--ob-surface) text-[12px] text-(--ob-text-body)">
               {idx + 1}
             </span>
             <div className="min-w-0 flex-1">
@@ -520,7 +521,7 @@ export default function LearningProgramAnalyticsPage() {
     <button
       type="button"
       onClick={() => handleFbSort(col)}
-      className={cn('inline-flex items-center gap-1 rounded-full transition-colors cursor-pointer', FOCUS, fbSortBy === col ? 'text-(--ob-text-strong)' : 'hover:text-(--ob-text-body)')}
+      className={cn('inline-flex items-center gap-1 rounded-(--ob-radius-control) transition-colors cursor-pointer', FOCUS, fbSortBy === col ? 'text-(--ob-text-strong)' : 'hover:text-(--ob-text-body)')}
     >
       {label}
       {fbSortBy === col ? (fbSortDir === 'desc' ? <ChevronDown className="size-3" /> : <ChevronUp className="size-3" />) : <ArrowUpDown className="size-3" />}
@@ -560,10 +561,10 @@ export default function LearningProgramAnalyticsPage() {
                   <p className="truncate text-[13px] leading-[18px] text-(--ob-text-muted)"><FadeValue k={kpi.label}>{kpi.label}</FadeValue></p>
                   <div className="flex flex-wrap items-center gap-2">
                     <p className="flex items-baseline gap-1">
-                      <span className="text-[30px] leading-[36px] font-semibold tabular-nums text-(--ob-text-strong)"><FadeValue k={kpi.value}>{kpi.value}</FadeValue></span>
+                      <span className="ob-num text-[30px] leading-[36px] font-semibold text-(--ob-text-strong)"><FadeValue k={kpi.value}>{kpi.value}</FadeValue></span>
                       {kpi.unit && <span className="text-[13px] text-(--ob-text-muted)"><FadeValue k={kpi.unit}>{kpi.unit}</FadeValue></span>}
                     </p>
-                    <DeltaChip positive={kpi.positive}><FadeValue k={change}>{change}</FadeValue></DeltaChip>
+                    <DeltaChip positive={kpi.positive}><FadeValue k={change} className="ob-num">{change}</FadeValue></DeltaChip>
                   </div>
                   <p className="text-[12px] leading-[16px] text-(--ob-text-muted)">{compare}</p>
                 </div>
@@ -631,7 +632,7 @@ export default function LearningProgramAnalyticsPage() {
                       />
                     </PieChart>
                     <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="text-[32px] leading-[38px] font-semibold tabular-nums text-(--ob-text-strong)"><FadeValue k={modeTotal}>{modeTotal}</FadeValue></span>
+                      <span className="ob-num text-[32px] leading-[38px] font-semibold text-(--ob-text-strong)"><FadeValue k={modeTotal}>{modeTotal}</FadeValue></span>
                       <span className="text-[13px] text-(--ob-text-muted)">Total</span>
                     </div>
                   </div>
@@ -640,7 +641,7 @@ export default function LearningProgramAnalyticsPage() {
                       <span key={item.name} className="flex items-center gap-1.5 text-[12px] text-(--ob-text-muted)">
                         <LegendMark color={MODE_COLOR[item.name as ProgramMode]} />
                         {modeLabel(item.name as ProgramMode)}
-                        <span className="text-(--ob-text-strong)"><FadeValue k={item.value}>{item.value}</FadeValue></span>
+                        <span className="ob-num text-(--ob-text-strong)"><FadeValue k={item.value}>{item.value}</FadeValue></span>
                       </span>
                     ))}
                   </div>
@@ -655,17 +656,18 @@ export default function LearningProgramAnalyticsPage() {
                         <div className="flex items-baseline justify-between text-[13px]">
                           <span className="text-(--ob-text-body)">{modeLabel(item.mode)}</span>
                           <span className="text-[12px] text-(--ob-text-muted)">
-                            <span className="text-(--ob-text-strong)"><FadeValue k={pct(item.active)}>{pct(item.active)}% active</FadeValue></span>
-                            {' · '}{total} total
+                            <span className="text-(--ob-text-strong)"><FadeValue k={pct(item.active)}><NumText>{`${pct(item.active)}% active`}</NumText></FadeValue></span>
+                            {' · '}<NumText>{`${total} total`}</NumText>
                           </span>
                         </div>
-                        <div className="mt-2 flex h-2 w-full gap-0.5 overflow-hidden rounded-full">
-                          <div className="h-full rounded-full transition-[width] duration-500" style={{ width: `${pct(item.active)}%`, background: MODE_COLOR[item.mode] }} />
-                          {item.completed > 0 && <div className="h-full rounded-full transition-[width] duration-500" style={{ width: `${pct(item.completed)}%`, background: MODE_DONE_COLOR[item.mode] }} />}
-                          <div className="h-full flex-1 rounded-full bg-(--ob-border-strong)" />
+                        {/* 4px tall with 2px corners, like every bar in B */}
+                        <div className="mt-2 flex h-1 w-full gap-0.5 overflow-hidden rounded-[2px]">
+                          <div className="h-full rounded-[2px] transition-[width] duration-500" style={{ width: `${pct(item.active)}%`, background: MODE_COLOR[item.mode] }} />
+                          {item.completed > 0 && <div className="h-full rounded-[2px] transition-[width] duration-500" style={{ width: `${pct(item.completed)}%`, background: MODE_DONE_COLOR[item.mode] }} />}
+                          <div className="h-full flex-1 rounded-[2px] bg-(--ob-border-strong)" />
                         </div>
                         <p className="mt-1.5 text-[12px] text-(--ob-text-muted)">
-                          Active {item.active}{item.completed > 0 ? ` · Done ${item.completed}` : ''} · Inactive {item.inactive}
+                          <NumText>{`Active ${item.active}${item.completed > 0 ? ` · Done ${item.completed}` : ''} · Inactive ${item.inactive}`}</NumText>
                         </p>
                       </div>
                     );
@@ -729,11 +731,11 @@ export default function LearningProgramAnalyticsPage() {
                         {[typeLabel(program.type), modeLabel(program.mode), programSchedule(program)].join(' · ')}
                       </p>
                     </div>
-                    <span className="shrink-0 text-[13px] tabular-nums text-(--ob-text-strong)">
-                      {program.assignedTo} <span className="text-[12px] text-(--ob-text-muted)">assigned</span>
+                    <span className="shrink-0 text-[13px] text-(--ob-text-strong)">
+                      <span className="ob-num">{program.assignedTo}</span> <span className="text-[12px] text-(--ob-text-muted)">assigned</span>
                     </span>
-                    <span className={cn('w-16 shrink-0 text-right text-[13px] tabular-nums', program.daysIdle >= 10 ? ATTENTION.text : 'text-(--ob-text-muted)')}>
-                      {program.daysIdle}d idle
+                    <span className={cn('w-16 shrink-0 text-right text-[13px]', program.daysIdle >= 10 ? ATTENTION.text : 'text-(--ob-text-muted)')}>
+                      <NumText>{`${program.daysIdle}d idle`}</NumText>
                     </span>
                   </div>
                 ))}
@@ -780,8 +782,8 @@ export default function LearningProgramAnalyticsPage() {
                         <p className="truncate text-[13px] leading-[20px] text-(--ob-text-strong)" title={cert.name}>{cert.name}</p>
                         <p className="truncate text-[12px] leading-[18px] text-(--ob-text-muted)">{cert.holder} · expired {stamp(cert.expiredDate)}</p>
                       </div>
-                      <span className={cn('shrink-0 text-[13px] tabular-nums', cert.daysExpired >= 30 ? ATTENTION.text : 'text-(--ob-text-muted)')}>
-                        {cert.daysExpired}d
+                      <span className={cn('shrink-0 text-[13px]', cert.daysExpired >= 30 ? ATTENTION.text : 'text-(--ob-text-muted)')}>
+                        <NumText>{`${cert.daysExpired}d`}</NumText>
                       </span>
                     </div>
                   ))}
@@ -796,7 +798,7 @@ export default function LearningProgramAnalyticsPage() {
         <Card>
           <CardHeader
             title="Recent learner feedback"
-            subtitle={<FadeValue k={programType}>{filteredFeedback.length} of {data.feedback.length} from {noun.one} participants</FadeValue>}
+            subtitle={<FadeValue k={programType}><NumText>{`${filteredFeedback.length} of ${data.feedback.length} from ${noun.one} participants`}</NumText></FadeValue>}
             className="items-center"
             extra={
               <SearchField value={fbSearch} onChange={setFbSearch} placeholder={`Search ${noun.one} or trainee`} loading={fbIsSearching} className="w-64 sm:w-72" />
@@ -835,7 +837,7 @@ export default function LearningProgramAnalyticsPage() {
                         </div>
                         {/* Plain numbers; 3.0 and below in the attention orange */}
                         {[fb.rating, fb.relevancy, fb.duration].map((score, i) => (
-                          <span key={i} className={cn('justify-center text-[14px] tabular-nums', score <= 3 ? ATTENTION.text : 'text-(--ob-text-strong)')}>
+                          <span key={i} className={cn('ob-num justify-center text-[14px]', score <= 3 ? ATTENTION.text : 'text-(--ob-text-strong)')}>
                             {score.toFixed(1)}
                           </span>
                         ))}

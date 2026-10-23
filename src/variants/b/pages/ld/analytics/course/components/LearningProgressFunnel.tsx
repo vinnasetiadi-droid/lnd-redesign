@@ -9,7 +9,7 @@
 import { useId, useMemo, useRef } from 'react';
 import { motion, useInView } from 'motion/react';
 import { cn } from '@/lib/utils';
-import { CardHeader, ATTENTION } from '@/variants/b/components/ui/kit';
+import { CardHeader, ATTENTION, NumText } from '@/variants/b/components/ui/kit';
 import { LegendMark } from '@/variants/b/components/ui/chart';
 import { EASE_OUT } from '@/variants/b/motion';
 import { OB_COLORS } from '@/variants/b/theme';
@@ -31,10 +31,11 @@ const FUNNEL: Record<ProgramType, Record<Mode, number[]>> = {
   },
 };
 
-// One blue: blended is the deep band in the middle, self-paced the pale one around it
+// Option B's green (chat request): blended is the deep green band in the
+// middle, self-paced the pale green around it
 const MODES: { key: Mode; label: string; color: string }[] = [
-  { key: 'blended', label: 'Blended',    color: OB_COLORS.primary },
-  { key: 'self',    label: 'Self-paced', color: OB_COLORS.primary200 },
+  { key: 'blended', label: 'Blended',    color: OB_COLORS.success },
+  { key: 'self',    label: 'Self-paced', color: OB_COLORS.success200 },
 ];
 
 // Layout: a label column, then one column per stage. Stage lines sit in the
@@ -135,25 +136,25 @@ export function LearningProgressFunnel({ programType, className }: { programType
           <div key={stage}>
             {i > 0 && (
               <p className="py-1 text-center text-[12px] text-(--ob-text-muted)">
-                {Math.round((totals[i] / totals[i - 1]) * 100)}% kept
+                <span className="ob-num">{Math.round((totals[i] / totals[i - 1]) * 100)}%</span> kept
               </p>
             )}
             <div className="flex items-center justify-between text-[12px] text-(--ob-text-body)">
               <span>{stage}</span>
-              <span className="tabular-nums text-(--ob-text-strong)">{totals[i]}</span>
+              <span className="ob-num text-(--ob-text-strong)">{totals[i]}</span>
             </div>
-            <div className="mt-1 h-2.5 w-full overflow-hidden rounded-full bg-(--ob-surface)">
-              <div className="h-full rounded-full bg-(--ob-primary)" style={{ width: `${(totals[i] / totals[0]) * 100}%` }} />
+            <div className="mt-1 h-1 w-full overflow-hidden rounded-[2px] bg-(--ob-surface)">
+              <div className="h-full rounded-[2px] bg-(--ob-success)" style={{ width: `${(totals[i] / totals[0]) * 100}%` }} />
             </div>
           </div>
         ))}
       </div>
 
       <div ref={ref} className="relative hidden md:block" style={{ height: H + 56 }}>
-        {/* A faint blue glow behind the start of the flow */}
+        {/* A faint green glow behind the start of the flow */}
         <div
           className="pointer-events-none absolute inset-x-0 top-7"
-          style={{ height: H, background: 'radial-gradient(50% 70% at 24% 50%, rgba(26, 115, 232, 0.08) 0%, rgba(26, 115, 232, 0) 70%)' }}
+          style={{ height: H, background: 'radial-gradient(50% 70% at 24% 50%, color-mix(in srgb, var(--ob-success) 8%, transparent) 0%, transparent 70%)' }}
           aria-hidden
         />
         <svg
@@ -171,14 +172,14 @@ export function LearningProgressFunnel({ programType, className }: { programType
             </linearGradient>
             {/* Each band deepens a little towards the later stages */}
             <linearGradient id={`${id}-blended`} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={W} y2="0">
-              <stop offset="0" stopColor={OB_COLORS.primary300} />
-              <stop offset={String(stageX(0) / 100)} stopColor={OB_COLORS.primary400} />
-              <stop offset="1" stopColor={OB_COLORS.primary} />
+              <stop offset="0" stopColor={OB_COLORS.success200} />
+              <stop offset={String(stageX(0) / 100)} stopColor={OB_COLORS.successBright} />
+              <stop offset="1" stopColor={OB_COLORS.success} />
             </linearGradient>
             <linearGradient id={`${id}-self`} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={W} y2="0">
-              <stop offset="0" stopColor={OB_COLORS.primary50} />
-              <stop offset={String(stageX(0) / 100)} stopColor={OB_COLORS.primary100} />
-              <stop offset="1" stopColor={OB_COLORS.primary200} />
+              <stop offset="0" stopColor={OB_COLORS.successSurface} />
+              <stop offset={String(stageX(0) / 100)} stopColor={OB_COLORS.success100} />
+              <stop offset="1" stopColor={OB_COLORS.success200} />
             </linearGradient>
             <mask id={`${id}-mask`}>
               <rect width={W} height={H} fill={`url(#${id}-fade)`} />
@@ -213,12 +214,12 @@ export function LearningProgressFunnel({ programType, className }: { programType
               animate={{ opacity: inView ? 1 : 0 }}
               transition={{ duration: 0.3, delay: 0.25 + i * 0.15 }}
             >
-              <span className="whitespace-nowrap rounded-full bg-(--ob-white) px-3 py-1 text-[13px] tabular-nums text-(--ob-text-strong) shadow-[0_2px_8px_-2px_rgba(16,24,40,0.14)]">
+              <span className="ob-num whitespace-nowrap rounded-(--ob-radius-control) bg-(--ob-white) px-3 py-1 text-[13px] text-(--ob-text-strong) shadow-[0_2px_8px_-2px_rgba(16,24,40,0.14)]">
                 {totals[i]}
               </span>
               <span className="w-0.5 flex-1 bg-(--ob-white)" />
-              <span className="whitespace-nowrap rounded-full bg-(--ob-white) px-3 py-1 text-[12px] tabular-nums text-(--ob-text-muted) shadow-[0_2px_8px_-2px_rgba(16,24,40,0.14)]">
-                {i === 0 ? 'All assigned' : `${kept}% kept`}
+              <span className="whitespace-nowrap rounded-(--ob-radius-control) bg-(--ob-white) px-3 py-1 text-[12px] text-(--ob-text-muted) shadow-[0_2px_8px_-2px_rgba(16,24,40,0.14)]">
+                {i === 0 ? 'All assigned' : <NumText>{`${kept}% kept`}</NumText>}
               </span>
             </motion.div>
           );
@@ -241,7 +242,7 @@ export function LearningProgressFunnel({ programType, className }: { programType
               <span
                 key={i}
                 className={cn(
-                  'text-center tabular-nums',
+                  'ob-num text-center',
                   weakest.mode === m.key && weakest.stage === i ? ATTENTION.text : 'text-(--ob-text-strong)',
                 )}
                 title={weakest.mode === m.key && weakest.stage === i ? `Biggest drop: ${Math.round((1 - weakest.rate) * 100)}% lost from ${STAGES[i - 1].toLowerCase()}` : undefined}
@@ -253,7 +254,7 @@ export function LearningProgressFunnel({ programType, className }: { programType
         ))}
         <div className="grid items-center pt-3" style={columns}>
           <span className="text-(--ob-text-secondary)">Total</span>
-          {totals.map((v, i) => <span key={i} className="text-center tabular-nums text-(--ob-text-secondary)">{v}</span>)}
+          {totals.map((v, i) => <span key={i} className="ob-num text-center text-(--ob-text-secondary)">{v}</span>)}
         </div>
       </div>
     </div>

@@ -51,50 +51,50 @@ export function DeleteVersionDialog({
       onClick={onCancel}
     >
       <div
-        className="relative w-full max-w-[640px] bg-[#FDFDFD] rounded-[20px] shadow-[0_24px_48px_-12px_rgba(16,24,40,0.18)] p-8 flex flex-col items-center text-center"
+        className="relative w-full max-w-[640px] bg-(--ob-white) rounded-(--ob-radius-card) shadow-[0_24px_48px_-12px_rgba(16,24,40,0.18)] p-8 flex flex-col items-center text-center"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onCancel}
-          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full text-[#717680] hover:bg-[#F5F6F8] transition-colors cursor-pointer"
+          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-(--ob-radius-control) text-(--ob-text-muted) hover:bg-(--ob-surface) transition-colors cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="w-12 h-12 rounded-full bg-[#FEF3F2] flex items-center justify-center mb-4">
-          <Trash2 className="w-6 h-6 text-[#D92D20]" />
+        <div className="w-12 h-12 rounded-full bg-(--ob-danger-surface) flex items-center justify-center mb-4">
+          <Trash2 className="w-6 h-6 text-(--ob-danger)" />
         </div>
 
-        <h3 className="text-[16px] text-[#181D27] leading-[28px]">
+        <h3 className="text-[16px] text-(--ob-text-strong) leading-[28px]">
           Are you sure you want to delete {what}?
         </h3>
         {/* The cover, the state and the age of what is about to go. */}
-        <div className="w-full mt-5 rounded-[14px] bg-[#F7F8FA] p-4 flex items-center gap-4 text-left">
-          <div className="w-[104px] h-[74px] rounded-[10px] overflow-hidden bg-[#F5F6F8] shrink-0">
+        <div className="w-full mt-5 rounded-(--ob-radius-card) bg-(--ob-surface-muted) p-4 flex items-center gap-4 text-left">
+          <div className="w-[104px] h-[74px] rounded-(--ob-radius-control) overflow-hidden bg-(--ob-surface) shrink-0">
             <ImageWithFallback src={image} alt={name} className="w-full h-full object-cover" />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-[17px] text-[#181D27] leading-[24px] line-clamp-2">{name}</p>
+            <p className="text-[17px] text-(--ob-text-strong) leading-[24px] line-clamp-2">{name}</p>
             {/* Version, state and age read as one plain, dot-separated line. */}
-            <p className="text-[12px] text-[#717680] mt-1.5">
+            <p className="text-[12px] text-(--ob-text-muted) mt-1.5">
               Version {version} &middot; {STATUS_LABEL[status]}
               {lastUpdate && <> &middot; Last updated: {lastUpdate}</>}
             </p>
           </div>
         </div>
 
-        <p className="text-[13px] text-[#535862] mt-4">This action cannot be undone.</p>
+        <p className="text-[13px] text-(--ob-text-secondary) mt-4">This action cannot be undone.</p>
 
         <div className="flex gap-3 w-full mt-6">
           <button
             onClick={onCancel}
-            className="flex-1 h-11 rounded-full bg-[#F0F1F3] hover:bg-[#E6E8EB] text-[13px] text-[#414651] hover:bg-[#F5F6F8] cursor-pointer transition-colors"
+            className="flex-1 h-11 rounded-(--ob-radius-button) bg-(--ob-button-secondary) hover:bg-(--ob-button-secondary-hover) text-[13px] text-(--ob-text-body) hover:bg-(--ob-surface) cursor-pointer transition-colors"
           >
             No
           </button>
           <button
             onClick={onConfirm}
-            className="flex-1 h-11 rounded-full bg-[#D92D20] text-[13px] text-white hover:brightness-[0.92] cursor-pointer transition-colors"
+            className="flex-1 h-11 rounded-(--ob-radius-button) bg-(--ob-danger) text-[13px] text-white hover:brightness-[0.92] cursor-pointer transition-colors"
           >
             Yes
           </button>

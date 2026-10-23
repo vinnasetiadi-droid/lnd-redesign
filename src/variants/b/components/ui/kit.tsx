@@ -1,13 +1,35 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import { Children, type ButtonHTMLAttributes, type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { ArrowDownRight, ArrowUpRight, Loader2, Search, type LucideIcon } from '@/variants/b/icons';
 import { OB_COLORS } from '@/variants/b/theme';
 
 /**
  * Option B building blocks, shaped after the "Dashboard Overview" reference:
- * pill buttons and chips, plain green/red trend text, and a small grey icon
- * circle on the right of each card title.
+ * 3D buttons, squarer chips (--ob-radius-control), plain green/red trend
+ * text, and numbers in Geist Mono (.ob-num).
  */
+
+/** Digit runs ("68%", "+14", "1,234", "3/5") in a string; everything else is text */
+const NUMBER_RUN = /([+\-−]?\d[\d,.]*(?:\/\d[\d,.]*)?%?)/;
+
+/**
+ * Text with its numbers in Geist Mono: "36 participants" → "36" in .ob-num,
+ * " participants" stays Inter. Takes plain strings and numbers (or a list of
+ * them, as JSX gives for `{n} pts`); anything else passes through unchanged.
+ */
+export function NumText({ children }: { children: ReactNode }) {
+  return (
+    <>
+      {Children.toArray(children).map((child, i) =>
+        typeof child === 'string' || typeof child === 'number'
+          ? String(child).split(NUMBER_RUN).map((part, j) =>
+              j % 2 ? <span key={`${i}-${j}`} className="ob-num">{part}</span> : part,
+            )
+          : child,
+      )}
+    </>
+  );
+}
 
 /** Small grey circle holding a card's icon (top right of the card) */
 export function IconCircle({ icon: Icon, className }: { icon: LucideIcon; className?: string }) {
@@ -47,15 +69,15 @@ export function CardHeader({ title, subtitle, icon, extra, className }: CardHead
   );
 }
 
-/** The one search pill for tables and card lists: 40px tall like the pill buttons */
-export function SearchField({ value, onChange, placeholder, loading, variant = 'pill', className }: {
+/** The one search field for tables and card lists: 40px tall like the buttons */
+export function SearchField({ value, onChange, placeholder, loading, variant = 'field', className }: {
   value: string;
   onChange: (value: string) => void;
   placeholder: string;
   /** Shows a spinner while results update */
   loading?: boolean;
-  /** `bar`: a flat segment of a hairline toolbar (no fill, no rounding), 48px tall */
-  variant?: 'pill' | 'bar';
+  /** `field`: a white box with a hairline and 6px corners. `bar`: a flat segment of a hairline toolbar (no fill, no rounding), 48px tall */
+  variant?: 'field' | 'bar';
   className?: string;
 }) {
   const bar = variant === 'bar';
@@ -72,7 +94,7 @@ export function SearchField({ value, onChange, placeholder, loading, variant = '
           'w-full text-[13px] text-(--ob-text-strong) outline-none transition-colors placeholder:text-(--ob-text-subtle)',
           bar
             ? 'h-12 bg-transparent pl-7 pr-10'
-            : 'h-10 rounded-full bg-(--ob-surface) pl-11 pr-10 focus:bg-(--ob-white) focus:ring-2 focus:ring-(--ob-primary)/25',
+            : 'h-10 rounded-(--ob-radius-control) bg-(--ob-white) pl-11 pr-10 ring-1 ring-inset ring-(--ob-border) focus:ring-(--ob-primary)',
         )}
       />
       {loading && <Loader2 className="absolute right-4 top-1/2 size-4 -translate-y-1/2 animate-spin text-(--ob-primary)" />}
@@ -82,7 +104,7 @@ export function SearchField({ value, onChange, placeholder, loading, variant = '
 
 /** Framed table: a grey header row, then hairline rows (list tables share it) */
 export const TABLE = {
-  frame: 'overflow-hidden rounded-[14px] border border-(--ob-border)',
+  frame: 'overflow-hidden rounded-(--ob-radius-card) border border-(--ob-border)',
   head: 'min-h-11 bg-(--ob-surface-muted) text-[13px] text-(--ob-text-secondary)',
   row: 'border-t border-(--ob-border) transition-colors hover:bg-(--ob-surface-subtle)',
 } as const;
@@ -100,7 +122,7 @@ const CHIP_TONE: Record<ChipTone, string> = {
   red:     'bg-(--ob-danger-surface) text-(--ob-danger-strong)',
 };
 
-/** Chip shaped like the reference's legend chips (30px tall, 14px side padding, 10px corners); `dot` adds a leading colour dot */
+/** Chip shaped like the reference's legend chips (30px tall, 14px side padding, 6px corners); `dot` adds a leading colour dot */
 export function Chip({ children, tone = 'neutral', dot, icon: Icon, className }: {
   children: ReactNode;
   tone?: ChipTone;
@@ -109,7 +131,7 @@ export function Chip({ children, tone = 'neutral', dot, icon: Icon, className }:
   className?: string;
 }) {
   return (
-    <span className={cn('inline-flex h-[30px] shrink-0 items-center gap-2 rounded-[10px] px-3.5 text-[12px] leading-none', CHIP_TONE[tone], className)}>
+    <span className={cn('inline-flex h-[30px] shrink-0 items-center gap-2 rounded-(--ob-radius-control) px-3.5 text-[12px] leading-none', CHIP_TONE[tone], className)}>
       {dot && <span className="size-[7px] rounded-full" style={{ background: dot }} />}
       {Icon && <Icon size={13} />}
       {children}
@@ -117,15 +139,15 @@ export function Chip({ children, tone = 'neutral', dot, icon: Icon, className }:
   );
 }
 
-/** Card frame: white, 18px corners, a hairline border and the faintest shadow. Inside `.ob-flat` (Home's one frame) it drops its frame. */
-export const CARD = 'ob-card rounded-[18px] bg-(--ob-white) ring-1 ring-(--ob-border) shadow-[0_1px_2px_rgba(16,24,40,0.04)]';
+/** Card frame: white, 12px corners, a hairline border and the faintest shadow. Inside `.ob-flat` (Home's one frame) it drops its frame. */
+export const CARD = 'ob-card rounded-(--ob-radius-card) bg-(--ob-white) ring-1 ring-(--ob-border) shadow-[0_1px_2px_rgba(16,24,40,0.04)]';
 
-/** Change chip beside a number: "▲ 15.5%" on green, "▼ 10.5%" on red */
+/** Change chip beside a number: "▲ 15.5%" on green, "▼ 10.5%" on red; the number in Geist Mono, "pts" in Inter */
 export function DeltaChip({ children, positive = true, className }: { children: ReactNode; positive?: boolean; className?: string }) {
   return (
     <span
       className={cn(
-        'inline-flex h-6 shrink-0 items-center gap-1 rounded-full px-2 text-[12px] tabular-nums',
+        'inline-flex h-6 shrink-0 items-center gap-1 rounded-(--ob-radius-control) px-2 text-[12px]',
         positive ? 'bg-(--ob-success-surface) text-(--ob-success-strong)' : 'bg-(--ob-danger-surface) text-(--ob-danger-strong)',
         className,
       )}
@@ -133,7 +155,7 @@ export function DeltaChip({ children, positive = true, className }: { children: 
       <svg viewBox="0 0 8 6" className={cn('size-2', !positive && 'rotate-180')} aria-hidden>
         <path d="M4 0 8 6H0z" fill="currentColor" />
       </svg>
-      {children}
+      <NumText>{children}</NumText>
     </span>
   );
 }
@@ -178,10 +200,10 @@ export function MetricTile({ selected, onClick, label, children, share, icon: Ic
           {children}
         </div>
       </div>
-      {/* Bar on a grey track: the blue gradient when picked, plain grey otherwise (one accent) */}
-      <span className="relative block h-2 overflow-hidden rounded-[4px] bg-(--ob-surface)">
+      {/* Bar on a grey track, 4px tall with 2px corners: the blue gradient when picked, plain grey otherwise (one accent) */}
+      <span className="relative block h-1 overflow-hidden rounded-[2px] bg-(--ob-surface)">
         <span
-          className={cn('block h-full rounded-[4px] transition-[width,background-color] duration-500', !selected && 'bg-(--ob-border-strong)')}
+          className={cn('block h-full rounded-[2px] transition-[width,background-color] duration-500', !selected && 'bg-(--ob-border-strong)')}
           style={{
             width: `${Math.max(0, Math.min(100, share ?? 100))}%`,
             backgroundImage: selected ? `linear-gradient(90deg, ${OB_COLORS.primary}, color-mix(in srgb, ${OB_COLORS.primary} 65%, white))` : undefined,

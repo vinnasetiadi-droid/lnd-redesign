@@ -39,8 +39,8 @@ function Logo() {
   const [failed, setFailed] = useState(false);
   if (failed) {
     return (
-      <span className="text-[16px] leading-[24px] text-[#181D27]">
-        Learn<span className="text-[#1A73E8]">X</span>pert
+      <span className="text-[16px] leading-[24px] text-(--ob-text-strong)">
+        Learn<span className="text-(--ob-primary)">X</span>pert
       </span>
     );
   }
@@ -104,7 +104,7 @@ function SidebarItem({
         type="button"
         title={collapsed ? label : undefined}
         className={cn(
-          "group flex items-center h-9 gap-2.5 rounded-[10px] cursor-pointer select-none transition-colors text-left",
+          "group flex items-center h-9 gap-2.5 rounded-(--ob-radius-control) cursor-pointer select-none transition-colors text-left",
           collapsed ? "justify-center w-9 mx-auto" : "w-full pl-2.5 pr-2",
           pill ? ACTIVE_PILL : danger ? "text-(--ob-text-body) hover:bg-(--ob-primary)/[0.05] hover:text-(--ob-danger)" : "text-(--ob-text-body) hover:bg-(--ob-primary)/[0.05] hover:text-(--ob-text-strong)",
         )}
@@ -122,7 +122,7 @@ function SidebarItem({
           <span className="flex-1 text-[13px] leading-[20px] truncate">{label}</span>
         )}
         {!collapsed && badge !== undefined && (
-          <span className="flex h-5 min-w-6 items-center justify-center rounded-full bg-(--ob-success-surface) px-1.5 text-[11px] text-(--ob-success-strong)">
+          <span className="ob-num flex h-5 min-w-6 items-center justify-center rounded-(--ob-radius-control) bg-(--ob-primary-50) px-1.5 text-[11px] text-(--ob-primary-strong)">
             {badge}
           </span>
         )}

@@ -5,7 +5,7 @@ import type { ChartDataPoint } from '../types/dashboard.types';
 import { ProgramScopeTabs, FadeValue, type ProgramScope } from './ProgramScopeTabs';
 import { CARD, CardHeader, DeltaChip, MetricTile } from '@/variants/b/components/ui/kit';
 import { AIInsightLine } from '@/variants/b/components/ui/ai-insight-banner';
-import { AXIS_TICK, FOLD_BAR_SHARE, foldBar, foldBarDefs, pillLabel, useChartIds } from '@/variants/b/components/ui/chart';
+import { AXIS_TICK, FOLD_BAR_SHARE, NUM_TICK, foldBar, foldBarDefs, pillLabel, useChartIds } from '@/variants/b/components/ui/chart';
 import { currentMonthIndex, periodLabel } from '../period';
 import { OB_COLORS } from '@/variants/b/theme';
 import { CheckCircle2, Rocket, Users, type LucideIcon } from '@/variants/b/icons';
@@ -123,11 +123,11 @@ export function LDDashboardProgramOverview({
           const positive = m.trend >= 0;
           return (
             <MetricTile key={m.key} selected={m.key === metric} onClick={() => setMetric(m.key)} label={m.label} icon={m.icon}>
-              <span className="font-semibold text-[24px] leading-[32px] tabular-nums text-(--ob-text-strong)"><FadeValue k={m.total}>{m.total}</FadeValue></span>
+              <span className="ob-num font-semibold text-[24px] leading-[32px] text-(--ob-text-strong)"><FadeValue k={m.total}>{m.total}</FadeValue></span>
               {m.trend !== 0 && (
                 // Totals are year to date; the change compares the last two months
                 <span className="flex items-center gap-1.5">
-                  <DeltaChip positive={positive}><FadeValue k={m.trend}>{Math.abs(m.trend)}%</FadeValue></DeltaChip>
+                  <DeltaChip positive={positive}><FadeValue k={m.trend} className="ob-num">{Math.abs(m.trend)}%</FadeValue></DeltaChip>
                   <span className="text-[12px] text-(--ob-text-muted)">vs {prevMonth}</span>
                 </span>
               )}
@@ -162,7 +162,7 @@ export function LDDashboardProgramOverview({
             <YAxis
               axisLine={false}
               tickLine={false}
-              tick={AXIS_TICK}
+              tick={NUM_TICK}
               domain={[0, yMax]}
               ticks={[0, Math.round(yMax / 2), yMax]}
               allowDecimals={false}

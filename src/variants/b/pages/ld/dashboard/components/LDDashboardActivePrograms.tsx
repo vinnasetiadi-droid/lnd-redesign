@@ -9,7 +9,7 @@ import { runningPrograms } from '../data/dashboard.mock';
 import { daysUntil } from '../period';
 import { TruncatedTitle } from './ProgramListParts';
 import { ProgramScopeTabs, type ScopeTab } from './ProgramScopeTabs';
-import { ATTENTION, CARD, CardHeader } from '@/variants/b/components/ui/kit';
+import { ATTENTION, CARD, CardHeader, NumText } from '@/variants/b/components/ui/kit';
 import { OB_COLORS } from '@/variants/b/theme';
 
 interface LDDashboardActiveProgramsProps {
@@ -38,7 +38,8 @@ const DEFAULT_MODULES = 5;
 const ATTN = ATTENTION;
 
 const AVATAR_INITIALS = ['AR', 'BS', 'DH', 'RK', 'MP', 'LN', 'YT', 'JW', 'SC', 'EP', 'KD', 'TM'];
-const AVATAR_COLORS = [OB_COLORS.primary100, OB_COLORS.success100, OB_COLORS.avatarLilac, OB_COLORS.avatarPeach, OB_COLORS.avatarPink, OB_COLORS.avatarCyan];
+// No green: green is kept for positive trends
+const AVATAR_COLORS = [OB_COLORS.primary100, OB_COLORS.primary50, OB_COLORS.avatarLilac, OB_COLORS.avatarPeach, OB_COLORS.avatarPink, OB_COLORS.avatarCyan];
 
 function shortDate(iso: string): string {
   return new Date(`${iso}T00:00:00`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
@@ -67,24 +68,24 @@ function AvatarStack({ program }: { program: ProgramOverview }) {
         ))}
       </div>
       {program.participants > shown && (
-        <span className="text-[12px] text-(--ob-text-muted)">+{program.participants - shown}</span>
+        <span className="ob-num text-[12px] text-(--ob-text-muted)">+{program.participants - shown}</span>
       )}
     </div>
   );
 }
 
-/** Course: one percentage bar. Journey: one segment per module. */
+/** Course: one percentage bar. Journey: one segment per module. 4px tall, 2px corners. */
 function ProgramProgress({ program }: { program: ProgramOverview }) {
   if (program.kind === 'journey') {
     const { total, done } = modulesOf(program);
     return (
       <div className="flex gap-1">
         {Array.from({ length: total }, (_, i) => (
-          <span key={i} className="h-1.5 flex-1 overflow-hidden rounded-full bg-(--ob-border-strong)">
+          <span key={i} className="h-1 flex-1 overflow-hidden rounded-[2px] bg-(--ob-border-strong)">
             {/* Finished modules fill in one after another */}
             {i < done && (
               <motion.span
-                className="block h-full origin-left rounded-full bg-(--ob-primary)"
+                className="block h-full origin-left rounded-[2px] bg-(--ob-primary)"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ duration: 0.4, ease: EASE_OUT, delay: 0.15 + i * 0.08 }}
@@ -96,9 +97,9 @@ function ProgramProgress({ program }: { program: ProgramOverview }) {
     );
   }
   return (
-    <div className={cn('h-1.5 w-full overflow-hidden rounded-full', program.risk ? ATTN.track : 'bg-(--ob-border-strong)')}>
+    <div className={cn('h-1 w-full overflow-hidden rounded-[2px]', program.risk ? ATTN.track : 'bg-(--ob-border-strong)')}>
       <motion.div
-        className="h-full rounded-full"
+        className="h-full rounded-[2px]"
         style={{ background: program.risk ? ATTN.bar : OB_COLORS.primary }}
         initial={{ width: 0 }}
         animate={{ width: `${program.completionRate}%` }}
@@ -128,7 +129,7 @@ function ProgramRow({ program }: { program: ProgramOverview }) {
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline justify-between gap-3">
           <TruncatedTitle text={program.name} className="min-w-0 flex-1 text-[13px] leading-[20px] text-(--ob-text-strong)" />
-          <span className={cn('shrink-0 text-[13px] tabular-nums', atRisk ? ATTN.text : 'text-(--ob-text-body)')}>{value}</span>
+          <span className={cn('ob-num shrink-0 text-[13px]', atRisk ? ATTN.text : 'text-(--ob-text-body)')}>{value}</span>
         </div>
         <div className="mt-0.5 flex min-h-6 items-center justify-between gap-3">
           <p className={cn('truncate text-[12px]', atRisk ? ATTN.text : 'text-(--ob-text-muted)')}>{meta}</p>
@@ -167,7 +168,7 @@ export function LDDashboardActivePrograms({ programs, className }: LDDashboardAc
     <div className={cn(CARD, 'relative p-5', className)}>
       <CardHeader
         title="Active programs"
-        subtitle={`${active.length} running${atRiskCount ? ` · ${atRiskCount} ${atRiskCount === 1 ? 'needs' : 'need'} attention` : ''}`}
+        subtitle={<NumText>{`${active.length} running${atRiskCount ? ` · ${atRiskCount} ${atRiskCount === 1 ? 'needs' : 'need'} attention` : ''}`}</NumText>}
         className="items-center"
         extra={
           <button

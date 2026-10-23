@@ -3,7 +3,7 @@ import { motion, useInView } from 'motion/react';
 import { cn } from '@/lib/utils';
 import { AIInsightLine } from '@/variants/b/components/ui/ai-insight-banner';
 import type { DivisionPerformance } from '../types/dashboard.types';
-import { CARD, CardHeader, DeltaChip, MetricTile } from '@/variants/b/components/ui/kit';
+import { CARD, CardHeader, DeltaChip, MetricTile, NumText } from '@/variants/b/components/ui/kit';
 import { HATCHED_TRACK } from '@/variants/b/components/ui/chart';
 import { AlertTriangle, BarChart2, Trophy, type LucideIcon } from '@/variants/b/icons';
 import { OB_COLORS } from '@/variants/b/theme';
@@ -66,9 +66,10 @@ function DivisionBar({ name, score, index, highlighted, start }: {
       >
         {name}
       </span>
-      <div className="h-2.5 w-full overflow-hidden rounded-full" style={HATCHED_TRACK}>
+      {/* 4px tall with 2px corners, like every bar in B */}
+      <div className="h-1 w-full overflow-hidden rounded-[2px]" style={HATCHED_TRACK}>
         <motion.div
-          className="relative h-full overflow-hidden rounded-full bg-(--ob-border-strong)"
+          className="relative h-full overflow-hidden rounded-[2px] bg-(--ob-border-strong)"
           initial={{ width: 0 }}
           animate={{ width: start ? `${score}%` : 0 }}
           transition={{ ...GROW, delay }}
@@ -80,7 +81,7 @@ function DivisionBar({ name, score, index, highlighted, start }: {
           />
         </motion.div>
       </div>
-      <span className="text-right text-[12px] leading-[18px] tabular-nums text-(--ob-text-muted)">
+      <span className="ob-num text-right text-[12px] leading-[18px] text-(--ob-text-muted)">
         <CountUp value={score} start={start} delay={delay} />%
       </span>
     </div>
@@ -131,13 +132,13 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
       <div className="grid grid-cols-3" role="tablist" aria-label="Chart highlight">
         {tiles.map((tile) => (
           <MetricTile key={tile.key} selected={tile.key === group} onClick={() => setGroup(tile.key)} label={tile.label} share={tile.share} icon={GROUP_ICON[tile.key]}>
-            <span className="font-semibold text-[24px] leading-[32px] tabular-nums text-(--ob-text-strong)">{tile.value}</span>
+            <span className="ob-num font-semibold text-[24px] leading-[32px] text-(--ob-text-strong)">{tile.value}</span>
             {tile.key === 'average' ? (
               benchmarkTrend !== undefined && benchmarkTrend !== 0 && (
                 <DeltaChip positive={benchmarkTrend > 0}>{Math.abs(benchmarkTrend)} pts</DeltaChip>
               )
             ) : (
-              <span className="text-[12px] text-(--ob-text-muted)">{tile.note}</span>
+              <span className="text-[12px] text-(--ob-text-muted)"><NumText>{tile.note}</NumText></span>
             )}
           </MetricTile>
         ))}
@@ -151,7 +152,7 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
           <div className="pointer-events-none absolute top-0 bottom-0 z-[1]" style={BAR_INSET}>
             <div className="absolute top-0 bottom-0 border-l border-dashed border-(--ob-text-subtle)" style={{ left: `${benchmark}%` }}>
               <span className="absolute -top-0.5 left-1.5 whitespace-nowrap text-[11px] leading-none text-(--ob-text-muted)">
-                Org average {benchmark}%
+                Org average <span className="ob-num">{benchmark}%</span>
               </span>
             </div>
           </div>
@@ -175,7 +176,7 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
             <span
               key={v}
               className={cn(
-                'absolute text-[11px] text-(--ob-text-subtle)',
+                'ob-num absolute text-[11px] text-(--ob-text-subtle)',
                 i === 0 ? 'left-0' : i === AXIS.length - 1 ? 'right-0' : '-translate-x-1/2',
               )}
               style={i === 0 || i === AXIS.length - 1 ? undefined : { left: `${v}%` }}

@@ -1,7 +1,8 @@
 import { useId, useMemo, useRef, type ReactNode } from 'react';
 import { useInView } from 'motion/react';
 import { cn } from '@/lib/utils';
-import { OB_COLORS } from '@/variants/b/theme';
+import { OB_COLORS, OB_NUM_FONT } from '@/variants/b/theme';
+import { NumText } from './kit';
 
 /**
  * Option B chart styling, after the clean references: folded gradient bars with
@@ -15,8 +16,17 @@ import { OB_COLORS } from '@/variants/b/theme';
 
 export const CHART_BLUE = OB_COLORS.primary;
 
-/** Axis tick text */
+/** Axis tick text (words: months, names) */
 export const AXIS_TICK = { fill: OB_COLORS.textSubtle, fontSize: 11 };
+/** Axis tick numbers (0, 50, 100%): Geist Mono */
+export const NUM_TICK = { ...AXIS_TICK, fontFamily: OB_NUM_FONT };
+
+/** Text and number parts of a label, for SVG: the numbers as Geist Mono <tspan>s */
+export function svgNumText(text: string) {
+  return text.split(/([+\-−]?\d[\d,.]*%?)/).map((part, i) =>
+    i % 2 ? <tspan key={i} fontFamily={OB_NUM_FONT}>{part}</tspan> : part,
+  );
+}
 
 /** Spread onto <CartesianGrid /> */
 export const GRID_PROPS = { strokeDasharray: '4 4', stroke: OB_COLORS.border, vertical: false } as const;
@@ -56,7 +66,7 @@ export interface TooltipRow {
 /** White tooltip card used by every chart */
 export function ChartTooltipCard({ title, rows }: { title?: ReactNode; rows: TooltipRow[] }) {
   return (
-    <div className="min-w-[168px] rounded-[12px] bg-white px-3.5 py-3 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]">
+    <div className="min-w-[168px] rounded-(--ob-radius-card) bg-(--ob-white) px-3.5 py-3 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]">
       {title && <p className="mb-2 text-[12px] text-(--ob-text-muted)">{title}</p>}
       <div className="space-y-1.5">
         {rows.map((row) => (
@@ -65,7 +75,7 @@ export function ChartTooltipCard({ title, rows }: { title?: ReactNode; rows: Too
               <LegendMark color={row.color} line={row.line} dashed={row.dashed} />
               {row.label}
             </span>
-            <span className="text-[13px] text-(--ob-text-strong)">{row.value}</span>
+            <span className="text-[13px] text-(--ob-text-strong)"><NumText>{row.value}</NumText></span>
           </div>
         ))}
       </div>
@@ -101,7 +111,7 @@ export const HATCHED_TRACK = {
   backgroundColor: OB_COLORS.surface,
 } as const;
 
-/** Progress bar: blue gradient fill on a light track */
+/** Progress bar: blue gradient fill on a light track, 4px tall with 2px corners */
 export function GradientProgress({ value, className, from = CHART_BLUE, to = OB_COLORS.primary200 }: {
   /** 0-100 */
   value: number;
@@ -111,11 +121,11 @@ export function GradientProgress({ value, className, from = CHART_BLUE, to = OB_
 }) {
   return (
     <div
-      className={cn('h-2.5 w-full overflow-hidden rounded-full', className)}
+      className={cn('h-1 w-full overflow-hidden rounded-[2px]', className)}
       style={HATCHED_TRACK}
     >
       <div
-        className="h-full rounded-full transition-[width] duration-500"
+        className="h-full rounded-[2px] transition-[width] duration-500"
         style={{ width: `${Math.max(0, Math.min(100, value))}%`, backgroundImage: `linear-gradient(90deg, ${from}, ${to})` }}
       />
     </div>
@@ -198,7 +208,7 @@ export function pillLabel(
       : centre;
     return (
       <text x={cx} y={y - 10} textAnchor="middle" fill={OB_COLORS.textStrong} fontSize={12} fontFamily="Inter, sans-serif" pointerEvents="none">
-        {text}
+        {svgNumText(text)}
       </text>
     );
   };

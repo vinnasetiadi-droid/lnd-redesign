@@ -9,14 +9,14 @@
 
 import { Fragment, useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { CARD, CardHeader, DeltaChip } from '@/variants/b/components/ui/kit';
+import { CARD, CardHeader, DeltaChip, NumText } from '@/variants/b/components/ui/kit';
 import { AIInsightLine } from '@/variants/b/components/ui/ai-insight-banner';
-import { AXIS_TICK, ChartTooltipCard, GRID_PROPS, GradientProgress, areaGradient, useChartIds, ChartOnView } from '@/variants/b/components/ui/chart';
+import { AXIS_TICK, ChartTooltipCard, GRID_PROPS, GradientProgress, NUM_TICK, areaGradient, useChartIds, ChartOnView } from '@/variants/b/components/ui/chart';
 import { Area, AreaChart, CartesianGrid, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { ProgramScopeTabs, FadeValue, type ProgramScope } from './ProgramScopeTabs';
 import { periodLabel } from '../period';
 import { LAST_QUARTER, MONTHS, NOW, attendance as attendanceSeries, completion, hours as hoursOf } from '../data/core.mock';
-import { OB_COLORS } from '@/variants/b/theme';
+import { OB_COLORS, OB_NUM_FONT } from '@/variants/b/theme';
 
 // ── Data: everything comes from the shared core figures ──────
 
@@ -34,9 +34,11 @@ function completionSeries(scope: ProgramScope): MonthlyCompletion[] {
 
 // ── Config ───────────────────────────────────────────────────
 
+// One blue: blended the deep blue, self-paced the pale one (as on Analytics).
+// `label` is the end label's text colour: pale blue is too light for text.
 const MODES = [
-  { key: 'blended', label: 'Blended',    color: OB_COLORS.primary },
-  { key: 'self',    label: 'Self-paced', color: OB_COLORS.modeSelf },
+  { key: 'blended', label: 'Blended',    color: OB_COLORS.primary,  text: OB_COLORS.primary },
+  { key: 'self',    label: 'Self-paced', color: OB_COLORS.modeSelf, text: OB_COLORS.textMuted },
 ] as const;
 
 /** One line comparing the two modes at the end of the period */
@@ -50,8 +52,8 @@ function completionInsight(data: MonthlyCompletion[]): string {
   return `${ahead} completes ${Math.abs(gap)} pts higher than ${behind}. ${trend}`;
 }
 
-/** `LabelList content`: a dot with a white ring on the last point, then the line's name in its colour */
-function endLabel(label: string, color: string, lastIndex: number) {
+/** `LabelList content`: a dot with a white ring on the last point, then the line's name (the value in Geist Mono) */
+function endLabel(label: string, color: string, text: string, lastIndex: number) {
   return function EndLabel(props: { x?: number | string; y?: number | string; value?: number | string; index?: number }) {
     if (props.index !== lastIndex) return null;
     const x = Number(props.x);
@@ -59,8 +61,8 @@ function endLabel(label: string, color: string, lastIndex: number) {
     return (
       <g>
         <circle cx={x} cy={y} r={5} fill={color} stroke="#fff" strokeWidth={2} style={{ filter: `drop-shadow(0 2px 4px color-mix(in srgb, ${color} 45%, transparent))` }} />
-        <text x={x + 10} y={y + 4} fill={color} fontSize={12} fontFamily="Inter, sans-serif">
-          {label} {props.value}%
+        <text x={x + 10} y={y + 4} fill={text} fontSize={12} fontFamily="Inter, sans-serif">
+          {label} <tspan fontFamily={OB_NUM_FONT}>{props.value}%</tspan>
         </text>
       </g>
     );
@@ -97,7 +99,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
   const lastIndex = data.length - 1;
   const ids = useChartIds('learning-mode');
   const labels = useMemo(
-    () => Object.fromEntries(MODES.map((m) => [m.key, endLabel(m.label, m.color, lastIndex)])),
+    () => Object.fromEntries(MODES.map((m) => [m.key, endLabel(m.label, m.color, m.text, lastIndex)])),
     [lastIndex],
   );
 
@@ -119,18 +121,18 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
           </p>
           <div className="mt-1 flex items-center gap-2">
             <span className="font-semibold text-[24px] leading-[32px] text-(--ob-text-strong)">
-              <FadeValue k={`${scope}-rate`}>{attendance.rate}</FadeValue>
+              <FadeValue k={`${scope}-rate`} className="ob-num">{attendance.rate}</FadeValue>
               <span className="text-[13px] text-(--ob-text-muted)">%</span>
             </span>
             {attendance.trend !== 0 && (
               <DeltaChip positive={attendance.trend > 0}>
-                <FadeValue k={`${scope}-trend`}>{Math.abs(attendance.trend)} pts</FadeValue>
+                <FadeValue k={`${scope}-trend`}><NumText>{Math.abs(attendance.trend)} pts</NumText></FadeValue>
               </DeltaChip>
             )}
           </div>
-          <GradientProgress value={attendance.rate} className="mt-1.5 h-2" />
+          <GradientProgress value={attendance.rate} className="mt-1.5" />
           <p className="mt-1 text-[12px] leading-[16px] text-(--ob-text-muted)">
-            <FadeValue k={`${scope}-att`}>{attendance.attending} of {attendance.enrolled} enrolled attending</FadeValue>
+            <FadeValue k={`${scope}-att`}><NumText>{attendance.attending} of {attendance.enrolled} enrolled attending</NumText></FadeValue>
           </p>
         </div>
 
@@ -139,23 +141,24 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
           <p className="text-[13px] leading-[18px] text-(--ob-text-secondary)">Total learning hours</p>
           <div className="mt-1 flex items-baseline gap-2">
             <span className="font-semibold text-[24px] leading-[32px] text-(--ob-text-strong)">
-              <FadeValue k={`${scope}-hours`}>{totalHours.toLocaleString('en-US')}</FadeValue>
+              <FadeValue k={`${scope}-hours`} className="ob-num">{totalHours.toLocaleString('en-US')}</FadeValue>
               <span className="text-[13px] text-(--ob-text-muted)">h</span>
             </span>
           </div>
-          <div className="mt-1.5 flex h-2 w-full gap-1">
+          {/* 4px tall with 2px corners, like every progress bar in B */}
+          <div className="mt-1.5 flex h-1 w-full gap-1">
             <div
-              className="h-full rounded-full transition-[width] duration-500 ease-out"
+              className="h-full rounded-[2px] transition-[width] duration-500 ease-out"
               style={{ width: `${blendedShare}%`, background: MODES[0].color }}
             />
-            <div className="h-full flex-1 rounded-full" style={{ background: MODES[1].color }} />
+            <div className="h-full flex-1 rounded-[2px]" style={{ background: MODES[1].color }} />
           </div>
           <div className="mt-1 flex items-center justify-between gap-3 text-[12px] leading-[16px] text-(--ob-text-muted)">
             {MODES.map((m) => (
               <span key={m.key} className="flex items-center gap-1.5 whitespace-nowrap">
                 <span className="size-2 shrink-0 rounded-full" style={{ background: m.color }} />
                 {m.label}
-                <FadeValue k={`${scope}-${m.key}`} className="text-(--ob-text-body)">{hours[m.key].toLocaleString('en-US')}h</FadeValue>
+                <FadeValue k={`${scope}-${m.key}`} className="text-(--ob-text-body)"><NumText>{`${hours[m.key].toLocaleString('en-US')}h`}</NumText></FadeValue>
               </span>
             ))}
           </div>
@@ -175,7 +178,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
               <CartesianGrid {...GRID_PROPS} />
               <XAxis dataKey="month" tick={AXIS_TICK} axisLine={false} tickLine={false} />
               <YAxis
-                tick={AXIS_TICK}
+                tick={NUM_TICK}
                 axisLine={false}
                 tickLine={false}
                 domain={[0, 100]}

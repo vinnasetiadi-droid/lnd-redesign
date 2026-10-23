@@ -11,7 +11,7 @@ export function Footer() {
           alt="Ajari"
           className="h-[19px] w-auto object-contain"
         />
-        <p className="text-[10px] leading-[24px] text-[#535862] whitespace-nowrap">
+        <p className="text-[10px] leading-[24px] text-(--ob-text-secondary) whitespace-nowrap">
           © 2026 HR Platform. All rights reserved.
         </p>
       </div>
@@ -20,21 +20,21 @@ export function Footer() {
       <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
         <Link
           to="/user-guide"
-          className="text-[12px] leading-[18px] text-[#535862] hover:text-[#414651] no-underline whitespace-nowrap"
+          className="text-[12px] leading-[18px] text-(--ob-text-secondary) hover:text-(--ob-text-body) no-underline whitespace-nowrap"
         >
           User guide
         </Link>
         <div className="h-[21px] w-px bg-black/10" />
         <Link
           to="/technical-help"
-          className="text-[12px] leading-[18px] text-[#535862] hover:text-[#414651] no-underline whitespace-nowrap"
+          className="text-[12px] leading-[18px] text-(--ob-text-secondary) hover:text-(--ob-text-body) no-underline whitespace-nowrap"
         >
           Technical help
         </Link>
         <div className="h-[21px] w-px bg-black/10" />
         <Link
           to="/privacy-policy"
-          className="text-[12px] leading-[18px] text-[#535862] hover:text-[#414651] no-underline whitespace-nowrap"
+          className="text-[12px] leading-[18px] text-(--ob-text-secondary) hover:text-(--ob-text-body) no-underline whitespace-nowrap"
         >
           Privacy policy
         </Link>

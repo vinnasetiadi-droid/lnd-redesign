@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap');
 
 /*
  * Option B typography. Scoped to <html class="option-b">, which AppRoutes sets
  * while Option B is open, so options A and C keep their own setup.
  *
- * - Font: Inter
+ * - Font: Inter for text, Geist Mono for data numbers (.ob-num, below)
  * - Weights: mostly Regular 400. Semibold 600 for page and card titles and
  *   big numbers (h1-h3 and `font-semibold`), Medium 500 for h4-h6 and
  *   `font-medium`. Nothing bolder.
@@ -89,8 +89,9 @@ html.option-b {
   --ob-success-strong: #027A48;
   --ob-success-surface: #ECFDF3;
   --ob-success-100: #D1FADF;
+  --ob-success-200: #A6F4C5; /* Pale green band of the learning funnel (self-paced) */
   --ob-success-bright: #32D583;
-  --ob-mode-self: #34A853; /* Self-paced series */
+  --ob-mode-self: var(--ob-primary-200); /* Self-paced series: the pale blue (green is only for positive trends) */
   --ob-danger: #D92D20; /* Negative trends */
   --ob-danger-strong: #B42318;
   --ob-danger-surface: #FEF3F2;
@@ -136,6 +137,23 @@ html.option-b :where(.font-medium, h4, h5, h6):not(.font-normal, .font-light) {
 
 html.option-b :where(.font-semibold, h1, h2, h3):not(.font-normal, .font-light, .font-medium) {
   font-weight: 600;
+}
+
+/* ── Data numbers ─────────────────────────────────────────────
+   Numbers in Geist Mono with even digit widths; the words and units around
+   them stay Inter. Tighter (-0.02em) from 20px up: on a number that carries a
+   20px+ size class itself, or inside an element that does (unless the number
+   sets a size under 20px). Below 20px, Inter's 0. */
+html.option-b .ob-num {
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  /* Loaded at 400 and 500: semibold numbers use the 500 face, never a faked bold */
+  font-synthesis-weight: none;
+}
+html.option-b .ob-num:is([class*="text-[2"], [class*="text-[3"], [class*="text-[4"]),
+html.option-b :is([class*="text-[2"], [class*="text-[3"], [class*="text-[4"]) .ob-num:not([class*="text-[1"]) {
+  letter-spacing: -0.02em;
 }
 
 /* ── Home's single frame ─────────────────────────────────────
@@ -194,7 +212,7 @@ html.option-b .ob-btn-tint:hover {
 
 /* Cards: a 1px lift and a faint blue glow on hover */
 html.option-b .ob-lift {
-  border-radius: 18px;
+  border-radius: var(--ob-radius-card);
   /* translate, not transform: motion leaves an inline transform after the reveal */
   transition: translate 300ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1);
 }

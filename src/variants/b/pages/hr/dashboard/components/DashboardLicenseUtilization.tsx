@@ -3,7 +3,7 @@ import { motion, useInView } from 'motion/react';
 import { KeyRound } from '@/variants/b/icons';
 import { cn } from '@/lib/utils';
 import { AIInsightLine } from '@/variants/b/components/ui/ai-insight-banner';
-import { ATTENTION, CARD, CardHeader } from '@/variants/b/components/ui/kit';
+import { ATTENTION, CARD, CardHeader, NumText } from '@/variants/b/components/ui/kit';
 import { CHART_BLUE } from '@/variants/b/components/ui/chart';
 import { CountUp, GROW } from '@/variants/b/components/ui/count-up';
 import { daysFromNow, daysUntil } from '@/variants/b/pages/ld/dashboard/period';
@@ -55,7 +55,7 @@ function inTime(days: number): string {
  * the number: 20% lights up 4 of 20 segments, so the idle seats read at a
  * glance. The segments light up one after another the first time it is seen.
  */
-function SegmentGauge({ pct, start }: { pct: number; start: boolean }) {
+function SegmentGauge({ pct, start, color }: { pct: number; start: boolean; color: string }) {
   const filled = Math.round((pct / 100) * SEGMENTS);
   const cx = 120;
   const cy = 118;
@@ -79,7 +79,7 @@ function SegmentGauge({ pct, start }: { pct: number; start: boolean }) {
             strokeWidth={9}
             strokeLinecap="round"
             initial={{ stroke: OB_COLORS.border }}
-            animate={{ stroke: start && on ? CHART_BLUE : OB_COLORS.border }}
+            animate={{ stroke: start && on ? color : OB_COLORS.border }}
             transition={{ duration: 0.3, ease: 'easeOut', delay: start && on ? 0.15 + i * 0.08 : 0 }}
           />
         );
@@ -89,14 +89,15 @@ function SegmentGauge({ pct, start }: { pct: number; start: boolean }) {
 }
 
 /**
- * Home's reference-style gauge: thin ticks along a 240° arc, orange up to the
- * share in use (pale at the start, deepening towards the rate) and grey for
- * the rest, fading out towards the end, inside a faint outer ring. The ticks
- * light up one after another.
+ * Home's reference-style gauge: thin ticks along a 240° arc, coloured up to
+ * the share in use (pale at the start, deepening towards the rate) and grey
+ * for the rest, fading out towards the end, inside a faint outer ring. The
+ * ticks light up one after another. Orange only when usage is low (it needs
+ * attention), blue otherwise.
  */
 const TICKS = 44;
 const TICK_SWEEP = 240;
-function TickGauge({ pct, start }: { pct: number; start: boolean }) {
+function TickGauge({ pct, start, color }: { pct: number; start: boolean; color: string }) {
   const filled = Math.round((pct / 100) * TICKS);
   const size = 200;
   const c = size / 2;
@@ -127,7 +128,7 @@ function TickGauge({ pct, start }: { pct: number; start: boolean }) {
             // Filled ticks deepen towards the rate; the grey ones fade towards the end
             strokeOpacity={on ? 0.3 + 0.7 * (i / Math.max(1, filled - 1)) : 1 - 0.6 * ((i - filled) / Math.max(1, TICKS - filled - 1))}
             initial={{ stroke: OB_COLORS.borderStrong }}
-            animate={{ stroke: start && on ? OB_COLORS.orange : OB_COLORS.borderStrong }}
+            animate={{ stroke: start && on ? color : OB_COLORS.borderStrong }}
             transition={{ duration: 0.25, ease: 'easeOut', delay: start && on ? 0.15 + i * 0.03 : 0 }}
           />
         );
@@ -168,6 +169,9 @@ export function DashboardLicenseUtilization({ licenses = LICENSES, variant = 'de
   const total = rows.reduce((s, l) => s + l.total, 0);
   const idle = total - used;
   const pct = Math.round((used / total) * 100);
+  // Orange means attention only: below the low-usage line the gauge (and the idle count) turn orange
+  const lowUsage = pct < LOW_USAGE;
+  const gaugeColor = lowUsage ? OB_COLORS.orange : CHART_BLUE;
 
   // Points at a decision: the license that renews soon while barely used.
   const urgent = rows.find((l) => l.needsAction);
@@ -176,7 +180,7 @@ export function DashboardLicenseUtilization({ licenses = LICENSES, variant = 'de
     : `${idle} seats are idle across ${rows.length} licenses. Assign them before the next renewal.`;
 
   return (
-    <div className={cn('relative flex flex-col p-5', reference ? cn(CARD, 'gap-5') : 'gap-3 rounded-[18px] bg-white', className)}>
+    <div className={cn('relative flex flex-col p-5', reference ? cn(CARD, 'gap-5') : 'gap-3 rounded-(--ob-radius-card) bg-(--ob-white)', className)}>
       <CardHeader
         title="License utilization"
         subtitle="Purchased seats actively used by trainees"
@@ -187,14 +191,15 @@ export function DashboardLicenseUtilization({ licenses = LICENSES, variant = 'de
       {/* ── Gauge with the total in the middle ─────────────── */}
       <div ref={ref} className="flex flex-col items-center">
         <div className="relative flex w-full justify-center">
-          {reference ? <TickGauge pct={pct} start={inView} /> : <SegmentGauge pct={pct} start={inView} />}
+          {reference ? <TickGauge pct={pct} start={inView} color={gaugeColor} /> : <SegmentGauge pct={pct} start={inView} color={gaugeColor} />}
           <p className={cn('absolute text-(--ob-text-strong)', reference ? 'top-[38%] text-[30px] leading-[36px] font-semibold' : 'bottom-0 text-[24px] leading-[28px]')}>
-            <CountUp value={pct} start={inView} />
+            <span className="ob-num"><CountUp value={pct} start={inView} /></span>
             <span className="text-[13px] text-(--ob-text-muted)">%</span>
           </p>
         </div>
         <p className="mt-1 text-[12px] text-(--ob-text-muted)">
-          {used} of {total} seats used · <span className={ATTENTION.text}>{idle} idle</span>
+          <NumText>{`${used} of ${total} seats used · `}</NumText>
+          <span className={lowUsage ? ATTENTION.text : undefined}><NumText>{`${idle} idle`}</NumText></span>
         </p>
       </div>
 
@@ -208,19 +213,19 @@ export function DashboardLicenseUtilization({ licenses = LICENSES, variant = 'de
             <div className="min-w-0 flex-1">
               <div className="flex items-baseline justify-between gap-3">
                 <p className="truncate text-[13px] leading-[20px] text-(--ob-text-strong)">{l.name}</p>
-                <span className={cn('shrink-0 text-[13px] tabular-nums', l.needsAction ? ATTENTION.text : 'text-(--ob-text-body)')}>
+                <span className={cn('ob-num shrink-0 text-[13px]', l.needsAction ? ATTENTION.text : 'text-(--ob-text-body)')}>
                   {l.pct}%
                 </span>
               </div>
               <div className="flex items-baseline justify-between gap-3 text-[12px] leading-[18px]">
-                <span className="truncate text-(--ob-text-muted)">{l.used} of {l.total} seats · {l.total - l.used} idle</span>
+                <span className="truncate text-(--ob-text-muted)"><NumText>{`${l.used} of ${l.total} seats · ${l.total - l.used} idle`}</NumText></span>
                 <span className={cn('shrink-0', l.needsAction ? ATTENTION.text : 'text-(--ob-text-muted)')}>
                   {l.renewsOn ? `Renews ${shortDate(l.renewsOn)}` : l.renewsOn === null ? 'No renewal' : ''}
                 </span>
               </div>
-              <div className={cn('mt-1 h-1.5 w-full overflow-hidden rounded-full', l.needsAction ? ATTENTION.track : 'bg-(--ob-border-strong)')}>
+              <div className={cn('mt-1 h-1 w-full overflow-hidden rounded-[2px]', l.needsAction ? ATTENTION.track : 'bg-(--ob-border-strong)')}>
                 <motion.div
-                  className="h-full rounded-full"
+                  className="h-full rounded-[2px]"
                   style={{ background: l.needsAction ? ATTENTION.bar : CHART_BLUE }}
                   initial={{ width: 0 }}
                   animate={{ width: inView ? `${l.pct}%` : 0 }}

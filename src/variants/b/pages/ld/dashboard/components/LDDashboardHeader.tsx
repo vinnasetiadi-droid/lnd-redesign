@@ -82,7 +82,7 @@ export function LDDashboardHeader({ metrics, flat, className }: LDDashboardHeade
             >
               <p className="text-[13px] leading-[18px] text-(--ob-text-muted)">{card.title}</p>
               <div className="flex flex-wrap items-center gap-2">
-                <h3 className="text-[30px] leading-[36px] tabular-nums text-(--ob-text-strong)"><CountUpText value={String(card.value)} /></h3>
+                <h3 className="ob-num text-[30px] leading-[36px] text-(--ob-text-strong)"><CountUpText value={String(card.value)} /></h3>
                 <DeltaChip positive={card.trendPositive}>{change}</DeltaChip>
               </div>
               <p className="text-[12px] leading-[16px] text-(--ob-text-muted)">
@@ -106,7 +106,7 @@ export function LDDashboardHeader({ metrics, flat, className }: LDDashboardHeade
               <Icon size={18} className="shrink-0 text-(--ob-primary)" />
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <h3 className="text-[28px] leading-[34px] tabular-nums text-(--ob-text-strong)"><CountUpText value={String(card.value)} /></h3>
+              <h3 className="ob-num text-[28px] leading-[34px] text-(--ob-text-strong)"><CountUpText value={String(card.value)} /></h3>
               <DeltaChip positive={card.trendPositive}>{change}</DeltaChip>
             </div>
             <p className="text-[12px] leading-[16px] text-(--ob-text-muted)">

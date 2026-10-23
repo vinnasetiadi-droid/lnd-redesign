@@ -77,7 +77,7 @@ function Enrolled({ course }: { course: CourseItem }) {
   const text = enrolledText(course);
   if (!text) return <span className="text-right text-[12px] text-(--ob-text-subtle)">Not live</span>;
   return (
-    <span className={cn('text-right text-[13px] tabular-nums', course.status === 'inactive' ? 'text-(--ob-text-muted)' : 'text-(--ob-text-strong)')}>
+    <span className={cn('ob-num text-right text-[13px]', course.status === 'inactive' ? 'text-(--ob-text-muted)' : 'text-(--ob-text-strong)')}>
       {text}
     </span>
   );
@@ -89,7 +89,7 @@ export function RowMenu({ course, onOpen, className }: { course: CourseItem; onO
   const [open, setOpen] = useState(false);
   const canToggle = course.status === 'active' || course.status === 'inactive';
   const canDelete = course.status === 'on-draft' || course.status === 'need-revision';
-  const item = 'w-full rounded-[10px] px-3 py-2 text-left text-[13px] transition-colors focus-visible:outline-none focus-visible:bg-(--ob-surface)';
+  const item = 'w-full rounded-(--ob-radius-control) px-3 py-2 text-left text-[13px] transition-colors focus-visible:outline-none focus-visible:bg-(--ob-surface)';
   return (
     // The menu never triggers the row click
     <div className={cn('relative justify-self-end', className)} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
@@ -99,7 +99,7 @@ export function RowMenu({ course, onOpen, className }: { course: CourseItem; onO
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
-        className="flex size-8 items-center justify-center rounded-full text-(--ob-text-muted) transition-colors hover:bg-(--ob-surface) hover:text-(--ob-text-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25 cursor-pointer"
+        className="flex size-8 items-center justify-center rounded-(--ob-radius-control) text-(--ob-text-muted) transition-colors hover:bg-(--ob-surface) hover:text-(--ob-text-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25 cursor-pointer"
       >
         <MoreHorizontal size={18} />
       </button>
@@ -113,7 +113,7 @@ export function RowMenu({ course, onOpen, className }: { course: CourseItem; onO
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -4, scale: 0.98 }}
               transition={{ duration: 0.15, ease: EASE_OUT }}
-              className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-[14px] bg-(--ob-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]"
+              className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-(--ob-radius-card) bg-(--ob-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]"
             >
               <button type="button" role="menuitem" className={cn(item, 'text-(--ob-text-body) hover:bg-(--ob-surface) cursor-pointer')} onClick={() => { setOpen(false); onOpen(); }}>
                 View details
@@ -174,7 +174,7 @@ function CourseRowView({ row, me, onOpen, index }: { row: CourseRow; me: string;
                   aria-expanded={expanded}
                   onClick={(e) => { e.stopPropagation(); setExpanded((x) => !x); }}
                   onKeyDown={(e) => e.stopPropagation()}
-                  className="inline-flex shrink-0 items-center gap-0.5 rounded-full text-(--ob-primary) transition-colors hover:text-(--ob-primary-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25 cursor-pointer"
+                  className="inline-flex shrink-0 items-center gap-0.5 rounded-(--ob-radius-control) text-(--ob-primary) transition-colors hover:text-(--ob-primary-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25 cursor-pointer"
                 >
                   · {drafts.length} draft
                   <ChevronDown size={14} className={cn('transition-transform duration-200', expanded && 'rotate-180')} />
@@ -238,7 +238,7 @@ function SortHeader({ label, value, sort, onSort, align = 'left' }: {
       onClick={() => onSort(value)}
       aria-pressed={active}
       className={cn(
-        'inline-flex items-center gap-1 rounded-full transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25',
+        'inline-flex items-center gap-1 rounded-(--ob-radius-control) transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25',
         align === 'right' && 'justify-self-end',
         active ? 'text-(--ob-text-strong)' : 'hover:text-(--ob-text-body)',
       )}

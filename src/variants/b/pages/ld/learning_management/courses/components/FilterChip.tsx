@@ -85,7 +85,7 @@ export function FilterChip<V extends string>({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.98 }}
             transition={{ duration: 0.15, ease: EASE_OUT }}
-            className="absolute left-0 top-full z-30 mt-1 min-w-[180px] rounded-[14px] bg-(--ob-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]"
+            className="absolute left-0 top-full z-30 mt-1 min-w-[180px] rounded-(--ob-radius-card) bg-(--ob-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]"
           >
             {options.map((o) => {
               const selected = o.value === value;
@@ -100,7 +100,7 @@ export function FilterChip<V extends string>({
                     setOpen(false);
                   }}
                   className={cn(
-                    'flex w-full items-center justify-between gap-3 rounded-[10px] px-3 py-2 text-left text-[13px] transition-colors cursor-pointer',
+                    'flex w-full items-center justify-between gap-3 rounded-(--ob-radius-control) px-3 py-2 text-left text-[13px] transition-colors cursor-pointer',
                     'focus-visible:outline-none focus-visible:bg-(--ob-surface)',
                     selected ? 'text-(--ob-text-strong)' : 'text-(--ob-text-body) hover:bg-(--ob-surface)',
                   )}

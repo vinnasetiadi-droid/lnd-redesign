@@ -19,7 +19,7 @@ const KIND_STYLE: Record<ProgramKind, string> = {
 
 export function ProgramKindLabel({ kind }: { kind: ProgramKind }) {
   return (
-    <span className={cn('inline-flex h-[30px] items-center rounded-[10px] px-3.5 text-[12px] leading-none shrink-0', KIND_STYLE[kind])}>
+    <span className={cn('inline-flex h-[30px] items-center rounded-(--ob-radius-control) px-3.5 text-[12px] leading-none shrink-0', KIND_STYLE[kind])}>
       {kind === 'course' ? 'Course' : 'Journey'}
     </span>
   );
@@ -70,7 +70,7 @@ export function TruncatedTitle({ text, className }: { text: string; className?: 
           initial={{ opacity: 0, y: 2 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.15, ease: 'easeOut' }}
-          className="fixed z-[100] max-w-[320px] px-3 py-1.5 rounded-[10px] bg-(--ob-text-ink) text-white text-[12px] leading-[18px] shadow-lg pointer-events-none"
+          className="fixed z-[100] max-w-[320px] px-3 py-1.5 rounded-(--ob-radius-control) bg-(--ob-text-ink) text-white text-[12px] leading-[18px] shadow-lg pointer-events-none"
           style={{ left: anchor.left, top: anchor.top - 8, transform: 'translateY(-100%)', fontFamily: "'Inter', sans-serif" }}
         >
           {text}
@@ -203,7 +203,7 @@ export function InfiniteListFooter({ list, total, noun }: { list: InfiniteList; 
       <button
         type="button"
         onClick={list.showMore}
-        className="mt-3 w-full h-9 rounded-full bg-(--ob-button-secondary) text-[13px] text-(--ob-text-strong) hover:bg-(--ob-button-secondary-hover) transition-colors cursor-pointer"
+        className="mt-3 w-full h-9 rounded-(--ob-radius-button) bg-(--ob-button-secondary) text-[13px] text-(--ob-text-strong) hover:bg-(--ob-button-secondary-hover) transition-colors cursor-pointer"
       >
         Show more
       </button>

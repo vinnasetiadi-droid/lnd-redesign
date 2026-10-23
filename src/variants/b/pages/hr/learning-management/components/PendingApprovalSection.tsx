@@ -138,7 +138,7 @@ export function PendingApprovalSection({
   return (
     <div
       className={cn(
-        'relative bg-white rounded-[18px] p-5 overflow-hidden',
+        'relative bg-white rounded-(--ob-radius-card) p-5 overflow-hidden',
         className
       )}
     >
@@ -156,8 +156,8 @@ export function PendingApprovalSection({
         {visibleCourses.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <CheckCircle2 className="w-12 h-12 text-emerald-400 mb-3" />
-            <p className="text-[#414651]">All caught up!</p>
-            <p className="text-[13px] text-[#A4A7AE] mt-1">
+            <p className="text-(--ob-text-body)">All caught up!</p>
+            <p className="text-[13px] text-(--ob-text-subtle) mt-1">
               No pending courses to review right now.
             </p>
           </div>
@@ -170,12 +170,12 @@ export function PendingApprovalSection({
               <div
                 key={course.id}
                 className={cn(
-                  'rounded-[14px] overflow-hidden transition-colors',
+                  'rounded-(--ob-radius-card) overflow-hidden transition-colors',
                   urgency.level === 'overdue' || urgency.level === 'critical'
-                    ? 'bg-[#FEF3F2]/70'
+                    ? 'bg-(--ob-danger-surface)/70'
                     : urgency.level === 'urgent'
                       ? 'bg-(--ob-attention-surface)'
-                      : 'bg-[#F7F8FA]'
+                      : 'bg-(--ob-surface-muted)'
                 )}
               >
                 {/* Card row */}
@@ -218,41 +218,41 @@ export function PendingApprovalSection({
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <span className="text-[14px] text-[#181D27] truncate">
+                      <span className="text-[14px] text-(--ob-text-strong) truncate">
                         {course.title}
                       </span>
                       <Chip tone={course.type === 'journey' ? 'neutral' : 'blue'} className="capitalize">
                         {course.type}
                       </Chip>
-                      <span className="text-[#A4A7AE] text-[12px]">
+                      <span className="text-(--ob-text-subtle) text-[12px]">
                         {course.approvalId}
                       </span>
                     </div>
-                    <p className="text-[12px] text-[#717680] mb-0.5">
+                    <p className="text-[12px] text-(--ob-text-muted) mb-0.5">
                       Created by{' '}
-                      <span className="text-[#414651]">
+                      <span className="text-(--ob-text-body)">
                         {course.requestedBy.name}
                       </span>{' '}
                       · Start{' '}
-                      <span className="text-[#414651]">
+                      <span className="text-(--ob-text-body)">
                         {formatDate(course.proposedStartDate)}
                       </span>{' '}
                       ·{' '}
-                      <span className="text-[#414651]">
+                      <span className="text-(--ob-text-body)">
                         {course.learningMode === 'blended' ? 'Blended Learning' : 'Self Learning'}
                       </span>{' '}
                       ·{' '}
-                      <span className="text-[#414651]">
+                      <span className="text-(--ob-text-body)">
                         {course.trainingType === 'compliance' ? 'Compliance' : 'Skill Training'}
                       </span>
                     </p>
-                    <p className="text-[12px] text-[#A4A7AE]">
+                    <p className="text-[12px] text-(--ob-text-subtle)">
                       Latest activity: Submitted on {formatDate(course.submittedAt)}
                     </p>
                   </div>
 
                   {/* Review CTA */}
-                  <span className="inline-flex h-9 items-center rounded-full px-4 text-[13px] bg-(--ob-button-secondary) text-(--ob-text-strong) hover:bg-(--ob-button-secondary-hover) transition-colors shrink-0">
+                  <span className="inline-flex h-9 items-center rounded-(--ob-radius-button) px-4 text-[13px] bg-(--ob-button-secondary) text-(--ob-text-strong) hover:bg-(--ob-button-secondary-hover) transition-colors shrink-0">
                     {course.type === 'journey' ? 'Review journey' : 'Review course'}
                   </span>
                 </button>
