@@ -1,13 +1,14 @@
-@import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500&display=swap');
 
 /*
  * Option C typography. Scoped to <html class="option-c">, which AppRoutes sets
  * while Option C is open, so the other options keep their own setup.
  *
  * - Font: General Sans (Fontshare, free)
- * - Weights: Regular 400 for text, Medium 500 for `font-medium` and h4-h6,
- *   Semibold 600 for h1-h3, big numbers and `font-semibold`. Nothing bolder.
- * - Letter spacing: -2% on every element
+ * - Weights: Regular 400 for text, Medium 500 at most: headings, big numbers
+ *   and every bold class (`font-medium` up to `font-black`) use 500. Nothing
+ *   heavier is loaded or shown.
+ * - Letter spacing: -1% on every element
  *
  * Rules are unlayered and start with `html.option-c`, so they win over Tailwind
  * utilities and over src/styles/theme.css (which sets Poppins on :root, makes
@@ -23,7 +24,7 @@ html.option-c :where(body, .font-sans, button, input, textarea, select) {
 
 html.option-c,
 html.option-c * {
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
 /*
@@ -151,12 +152,9 @@ html.option-c :where(button, b, strong, th, label) {
   font-weight: 400;
 }
 
-/* Medium for `font-medium` and the small headings; Semibold for titles and big numbers */
-html.option-c :where(.font-medium, h4, h5, h6):not(.font-normal, .font-light) {
+/* Medium is the heaviest weight: headings, big numbers and every bold class */
+html.option-c :where(.font-medium, .font-semibold, .font-bold, .font-extrabold, .font-black, h1, h2, h3, h4, h5, h6):not(.font-normal, .font-light) {
   font-weight: 500;
-}
-html.option-c :where(.font-semibold, h1, h2, h3):not(.font-normal, .font-light, .font-medium) {
-  font-weight: 600;
 }
 
 /* ── Buttons ─────────────────────────────────────────────────

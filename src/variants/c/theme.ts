@@ -30,9 +30,10 @@ export const OC = {
  * (--oc-sky) fading into the cool grey page, with a soft white haze.
  */
 export const OC_BACKGROUND = [
-  'radial-gradient(60% 34% at 18% 0%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 70%)',
-  'radial-gradient(45% 30% at 82% 4%, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 70%)',
-  'linear-gradient(180deg, var(--oc-sky) 0%, color-mix(in srgb, var(--oc-sky) 70%, var(--oc-surface-muted)) 200px, color-mix(in srgb, var(--oc-sky) 30%, var(--oc-surface-muted)) 380px, var(--oc-surface-muted) 560px)',
+  'radial-gradient(60% 20% at 18% 0%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 70%)',
+  'radial-gradient(45% 18% at 82% 2%, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 70%)',
+  // A short span: the sky fades into the page within the first 300px
+  'linear-gradient(180deg, var(--oc-sky) 0%, color-mix(in srgb, var(--oc-sky) 60%, var(--oc-surface-muted)) 110px, color-mix(in srgb, var(--oc-sky) 25%, var(--oc-surface-muted)) 200px, var(--oc-surface-muted) 300px)',
 ].join(', ');
 
 /** Kept for the background component: no sheen in Option C */
