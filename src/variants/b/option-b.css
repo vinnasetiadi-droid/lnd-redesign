@@ -62,7 +62,8 @@ html.option-b {
   --ob-text-muted: #717680; /* Secondary text */
   --ob-text-subtle: #A4A7AE; /* Axis ticks, hints */
   --ob-text-ai: #282828; /* Text on the NISA card */
-  --ob-border: #EDEEF1; /* Card dividers, tile outlines */
+  --ob-border: #EDEEF1; /* Card dividers, tile outlines, section rules on Home */
+  --ob-border-subtle: #F1F2F5; /* Lines inside a section (between --ob-surface and --ob-border) */
   --ob-border-strong: #E4E6EA; /* Progress tracks */
   --ob-border-control: #D0D5DD;
   --ob-line: #D5D7DA; /* Chart cursor */

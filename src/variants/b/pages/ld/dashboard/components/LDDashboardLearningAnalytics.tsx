@@ -106,6 +106,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
       <CardHeader
         title="Learning mode analytics"
         subtitle={`Blended vs self-paced · ${periodLabel(data)}`}
+        className="items-center"
         extra={<ProgramScopeTabs id="learning-analytics-scope" value={scope} onChange={setScope} />}
       />
 
@@ -162,7 +163,8 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
       </div>
 
       {/* ── Completion over time ──────────────────────────────── */}
-      <div className="border-t border-(--ob-border) pt-3">
+      {/* Spacing instead of a line: 20px gap + 4px = 24px */}
+      <div className="mt-1">
         <h4 className="text-[14px] leading-[18px] text-(--ob-text-strong)">Completion over time</h4>
         <ChartOnView height={180} className="mt-1">
           <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={180}>

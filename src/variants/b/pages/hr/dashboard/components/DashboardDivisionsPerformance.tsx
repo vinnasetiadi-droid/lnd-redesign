@@ -33,12 +33,6 @@ const AXIS = [0, 25, 50, 75, 100];
  */
 type Group = 'average' | 'top' | 'support';
 
-/** Each tile's colour, also used for the bars it highlights */
-const GROUP_COLOR: Record<Group, string> = {
-  average: OB_COLORS.primary,
-  top: OB_COLORS.modeSelf,
-  support: OB_COLORS.orange,
-};
 const GROUP_ICON: Record<Group, LucideIcon> = { average: BarChart2, top: Trophy, support: AlertTriangle };
 
 // ── Animation ────────────────────────────────────────────────
@@ -52,12 +46,14 @@ const VALUE_COL = 40;
 /** Insets that line the benchmark line and the axis up with the bar column */
 const BAR_INSET = { left: NAME_COL + 12, right: VALUE_COL + 12 };
 
-function DivisionBar({ name, score, index, highlighted, color, start }: {
+/** Highlighted bars: the blue gradient (blue is the one accent) */
+const BAR_GRADIENT = `linear-gradient(90deg, color-mix(in srgb, ${OB_COLORS.primary} 55%, white), ${OB_COLORS.primary})`;
+
+function DivisionBar({ name, score, index, highlighted, start }: {
   name: string;
   score: number;
   index: number;
   highlighted: boolean;
-  color: string;
   start: boolean;
 }) {
   const delay = index * STAGGER;
@@ -77,10 +73,10 @@ function DivisionBar({ name, score, index, highlighted, color, start }: {
           animate={{ width: start ? `${score}%` : 0 }}
           transition={{ ...GROW, delay }}
         >
-          {/* The tile's colour fades out to plain grey when this division is not highlighted */}
+          {/* The blue fades out to plain grey when this division is not highlighted */}
           <span
-            className={cn('absolute inset-0 transition-[opacity,background-image] duration-300', highlighted ? 'opacity-100' : 'opacity-0')}
-            style={{ backgroundImage: `linear-gradient(90deg, color-mix(in srgb, ${color} 55%, white), ${color})` }}
+            className={cn('absolute inset-0 transition-opacity duration-300', highlighted ? 'opacity-100' : 'opacity-0')}
+            style={{ backgroundImage: BAR_GRADIENT }}
           />
         </motion.div>
       </div>
@@ -134,7 +130,7 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
       {/* ── Summary tiles: also pick what the chart highlights ── */}
       <div className="grid grid-cols-3" role="tablist" aria-label="Chart highlight">
         {tiles.map((tile) => (
-          <MetricTile key={tile.key} selected={tile.key === group} onClick={() => setGroup(tile.key)} label={tile.label} color={GROUP_COLOR[tile.key]} share={tile.share} icon={GROUP_ICON[tile.key]}>
+          <MetricTile key={tile.key} selected={tile.key === group} onClick={() => setGroup(tile.key)} label={tile.label} share={tile.share} icon={GROUP_ICON[tile.key]}>
             <span className="font-semibold text-[24px] leading-[32px] tabular-nums text-(--ob-text-strong)">{tile.value}</span>
             {tile.key === 'average' ? (
               benchmarkTrend !== undefined && benchmarkTrend !== 0 && (
@@ -167,7 +163,6 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
                 score={d.score}
                 index={i}
                 highlighted={isHighlighted(i)}
-                color={GROUP_COLOR[group]}
                 start={inView}
               />
             ))}

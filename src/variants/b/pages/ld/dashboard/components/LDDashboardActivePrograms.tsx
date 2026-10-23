@@ -168,6 +168,7 @@ export function LDDashboardActivePrograms({ programs, className }: LDDashboardAc
       <CardHeader
         title="Active programs"
         subtitle={`${active.length} running${atRiskCount ? ` · ${atRiskCount} ${atRiskCount === 1 ? 'needs' : 'need'} attention` : ''}`}
+        className="items-center"
         extra={
           <button
             type="button"

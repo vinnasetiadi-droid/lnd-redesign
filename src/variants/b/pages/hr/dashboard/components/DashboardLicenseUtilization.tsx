@@ -89,7 +89,7 @@ function SegmentGauge({ pct, start }: { pct: number; start: boolean }) {
 }
 
 /**
- * Home's reference-style gauge: thin ticks along a 240° arc, green up to the
+ * Home's reference-style gauge: thin ticks along a 240° arc, orange up to the
  * share in use (pale at the start, deepening towards the rate) and grey for
  * the rest, fading out towards the end, inside a faint outer ring. The ticks
  * light up one after another.
@@ -127,7 +127,7 @@ function TickGauge({ pct, start }: { pct: number; start: boolean }) {
             // Filled ticks deepen towards the rate; the grey ones fade towards the end
             strokeOpacity={on ? 0.3 + 0.7 * (i / Math.max(1, filled - 1)) : 1 - 0.6 * ((i - filled) / Math.max(1, TICKS - filled - 1))}
             initial={{ stroke: OB_COLORS.borderStrong }}
-            animate={{ stroke: start && on ? OB_COLORS.modeSelf : OB_COLORS.borderStrong }}
+            animate={{ stroke: start && on ? OB_COLORS.orange : OB_COLORS.borderStrong }}
             transition={{ duration: 0.25, ease: 'easeOut', delay: start && on ? 0.15 + i * 0.03 : 0 }}
           />
         );
@@ -194,7 +194,7 @@ export function DashboardLicenseUtilization({ licenses = LICENSES, variant = 'de
       </div>
 
       {/* ── One row per license ────────────────────────────── */}
-      <div className="divide-y divide-(--ob-border) border-t border-(--ob-border)">
+      <div className={cn('divide-y border-t', reference ? 'divide-(--ob-border-subtle) border-(--ob-border-subtle)' : 'divide-(--ob-border) border-(--ob-border)')}>
         {rows.map((l, i) => (
           <div key={l.name} className="flex gap-3 py-2.5">
             <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-(--ob-surface) text-[11px] text-(--ob-text-body)">

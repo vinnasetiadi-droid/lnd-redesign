@@ -89,6 +89,7 @@ export const OB_COLORS = {
   textSubtle: '#A4A7AE', // Axis ticks, hints
   textAi: '#282828', // Text on the NISA card
   border: '#EDEEF1', // Card dividers, tile outlines
+  borderSubtle: '#F1F2F5', // Lines inside a section
   borderStrong: '#E4E6EA', // Progress tracks
   borderControl: '#D0D5DD',
   line: '#D5D7DA', // Chart cursor

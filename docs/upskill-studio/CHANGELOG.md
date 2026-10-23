@@ -164,6 +164,30 @@ Files: `pages/ld/analytics/course/page.tsx`,
 `pages/ld/analytics/course/components/LearningProgressFunnel.tsx`,
 `pages/hr/dashboard/components/DashboardLicenseUtilization.tsx`.
 
+## Option B: B1 and B2
+
+Option B only (`src/variants/b/`); Option A unchanged.
+
+- B1, one accent: summary tiles, the Program overview chart and the division
+  bars use blue as the only accent (the picked tile's icon and bar, the
+  highlighted bar and month). Unselected tiles are grey. Green and red trend
+  pills, the green Self-paced series and amber attention stay. The license
+  gauge is orange, at the user's request during the run (B1-04 asked for
+  blue).
+- B2, section rhythm: section rules run edge to edge in their column and meet
+  the column divider; lines inside a section use the new `--ob-border-subtle`
+  and the vertical ones stop 4px short of the top and bottom. Every section has
+  40px top, 32px bottom and 32px side padding, 20px between header and content
+  and between content and insight. Section headers: 18px semibold title, 13px
+  subtitle, tabs and links centred on the title block.
+
+Files: `components/ui/kit.tsx`, `option-b.css`, `theme.ts`,
+`pages/ld/dashboard/page.tsx`, `pages/ld/dashboard/components/`
+(`LDDashboardHeader`, `LDDashboardProgramOverview`,
+`LDDashboardLearningAnalytics`, `LDDashboardActivePrograms`),
+`pages/hr/dashboard/components/` (`DashboardDivisionsPerformance`,
+`DashboardLicenseUtilization`).
+
 ## Open questions for product
 
 1. Can an admin approve a course they created? Built as no.

@@ -69,7 +69,7 @@ export default function LDDashboardPage() {
             </motion.div>
 
             <Rule />
-            <motion.div variants={revealItem} className="px-8 py-8">
+            <motion.div variants={revealItem} className={SECTION}>
               <LDDashboardHeader metrics={metricCards} flat />
             </motion.div>
 
@@ -83,13 +83,13 @@ export default function LDDashboardPage() {
                 journeyData={journeyChartData}
                 journeyInsight={journeyChartInsight}
                 shortInsights={chartShortInsights}
-                className="px-8 py-8"
+                className={SECTION}
               />
             </motion.div>
 
             <Rule />
             <motion.div variants={revealItem}>
-              <LDDashboardLearningAnalytics className="px-8 py-8" />
+              <LDDashboardLearningAnalytics className={SECTION} />
             </motion.div>
 
             <Rule />
@@ -98,7 +98,7 @@ export default function LDDashboardPage() {
                 divisions={divisions}
                 benchmark={orgCompletion}
                 benchmarkTrend={orgCompletionTrend}
-                className="px-8 py-8"
+                className={SECTION}
               />
             </motion.div>
           </div>
@@ -112,12 +112,12 @@ export default function LDDashboardPage() {
 
             <Rule />
             <motion.div variants={revealItem}>
-              <LDDashboardActivePrograms programs={programs} className="px-8 py-8" />
+              <LDDashboardActivePrograms programs={programs} className={SECTION} />
             </motion.div>
 
             <Rule />
             <motion.div variants={revealItem}>
-              <DashboardLicenseUtilization variant="reference" className="px-8 py-8" />
+              <DashboardLicenseUtilization variant="reference" className={SECTION} />
             </motion.div>
           </div>
         </div>
@@ -126,7 +126,13 @@ export default function LDDashboardPage() {
   );
 }
 
-/** Hairline between two sections, inset to the content edges */
+/** Every section's padding: 40px top, 32px bottom, 32px sides */
+const SECTION = 'px-8 pt-10 pb-8';
+
+/**
+ * Section rule: edge to edge across its column, so it meets the vertical line
+ * between the columns. Lines inside a section are lighter and inset.
+ */
 function Rule() {
-  return <div className="mx-8 h-px bg-(--ob-border)" aria-hidden />;
+  return <div className="h-px bg-(--ob-border)" aria-hidden />;
 }

@@ -70,11 +70,16 @@ function splitTrend(trend: string): { change: string; compare: string } {
 export function LDDashboardHeader({ metrics, flat, className }: LDDashboardHeaderProps) {
   if (flat) {
     return (
-      <div className={cn('grid grid-cols-1 divide-y divide-(--ob-border) md:grid-cols-3 md:divide-x md:divide-y-0', className)}>
+      <div className={cn('grid grid-cols-1 md:grid-cols-3', className)}>
         {metrics.map((card) => {
           const { change, compare } = splitTrend(card.trend);
           return (
-            <div key={card.key} className="flex min-w-0 flex-col gap-2.5 px-8 py-1 max-md:py-5 md:first:pl-0 md:last:pr-0" title={card.hint}>
+            // Lighter dividers that stop 4px short of the top and bottom (lines inside a section)
+            <div
+              key={card.key}
+              className="relative flex min-w-0 flex-col gap-2.5 px-8 py-1 max-md:py-5 max-md:px-0 md:first:pl-0 md:last:pr-0 max-md:not-first:border-t max-md:not-first:border-(--ob-border-subtle) md:not-first:before:absolute md:not-first:before:bottom-1 md:not-first:before:left-0 md:not-first:before:top-1 md:not-first:before:w-px md:not-first:before:bg-(--ob-border-subtle)"
+              title={card.hint}
+            >
               <p className="text-[13px] leading-[18px] text-(--ob-text-muted)">{card.title}</p>
               <div className="flex flex-wrap items-center gap-2">
                 <h3 className="text-[30px] leading-[36px] tabular-nums text-(--ob-text-strong)"><CountUpText value={String(card.value)} /></h3>

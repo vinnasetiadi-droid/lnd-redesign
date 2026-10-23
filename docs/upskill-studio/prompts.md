@@ -571,3 +571,112 @@ Rows: A5-01 to A5-05.
 5. /b/ld/analytics/course is unchanged and npm run build passes. Add an
    "Analytics (A1 to A5)" section to docs/upskill-studio/CHANGELOG.md.
 ```
+
+
+---
+
+# Option B: style pass
+
+## B1: One accent colour on Home
+
+```
+Project: Vite + React + Tailwind demo of three L&D admin pages. This prompt
+only touches Option B (src/variants/b/). Option A, Option C and everything
+under src/ outside src/variants/b/ must stay unchanged. Preview:
+http://localhost:32106/b/ld/dashboard
+
+Checklist: docs/upskill-studio/checklist.csv, rows B1-01 to B1-05. Work
+through them in order. When a row is finished set Status to "Done", Done on
+to today's date (YYYY-MM-DD) and a one-line Notes entry; if a row can't be
+done set "Blocked" and say why. Keep the CSV valid.
+
+Style only: do not change any content, label, number or layout. Colours only
+through the --ob-* variables in src/variants/b/option-b.css (OB_COLORS in
+src/variants/b/theme.ts mirrors them for SVG and recharts props).
+
+Rule: blue (--ob-primary) is the one accent and marks "what is selected or
+what matters". Green and orange must not be used just to tell tiles apart.
+
+1. src/variants/b/components/ui/kit.tsx, MetricTile:
+   - Selected tile: the small icon and the bottom bar use --ob-primary (the
+     current blue gradient), full strength.
+   - Unselected tiles: icon in --ob-text-subtle (--ob-text-muted on hover),
+     bottom bar in a neutral grey fill (--ob-border-strong) on the existing
+     --ob-surface track. Keep the bar's width logic (`share`) as it is.
+   - Stop using a per-tile colour for the icon and the bar. Remove the
+     `color` prop or keep it unused, and update the callers.
+2. src/variants/b/pages/ld/dashboard/components/LDDashboardProgramOverview.tsx:
+   remove the per-metric colours (OB_COLORS.modeSelf and OB_COLORS.orange in
+   METRICS). The highlighted bar in the chart, its gradient defs and the
+   selected month label are always OB_COLORS.primary, whichever metric tile
+   is picked.
+3. src/variants/b/pages/hr/dashboard/components/DashboardDivisionsPerformance.tsx:
+   remove GROUP_COLOR. Highlighted division bars always use the blue
+   gradient; divisions that are not highlighted stay grey as today. Tiles
+   follow the MetricTile change from step 1.
+4. src/variants/b/pages/hr/dashboard/components/DashboardLicenseUtilization.tsx:
+   the reference-style tick gauge fills its active ticks with
+   OB_COLORS.primary instead of OB_COLORS.modeSelf (keep the opacity ramp
+   and the animation). The "N idle" text stays in attention amber.
+5. Keep these colours, they carry meaning: green and red trend pills, the
+   green Self-paced line and bar in Learning mode analytics, amber for
+   attention items.
+
+Verify: open /b/ld/dashboard at 1440 and 1280 px wide, click every metric
+tile in Program overview and Division completion and check that only blue
+appears as an accent. Check that /a/ld/dashboard looks exactly as before and
+that npm run build passes. Reply with the files you touched.
+```
+
+
+## B2: Section rhythm, keeping the hairline layout
+
+```
+Project: Vite + React + Tailwind demo of three L&D admin pages. This prompt
+only touches Option B (src/variants/b/). Option A, Option C and everything
+under src/ outside src/variants/b/ must stay unchanged. Preview:
+http://localhost:32106/b/ld/dashboard
+
+Checklist: docs/upskill-studio/checklist.csv, rows B2-01 to B2-05. Work
+through them in order. When a row is finished set Status to "Done", Done on
+to today's date (YYYY-MM-DD) and a one-line Notes entry; if a row can't be
+done set "Blocked" and say why. Keep the CSV valid.
+
+Style only: keep the frameless layout where sections sit on the white page
+and are split by hairlines. Do not add cards or backgrounds, do not change
+any content, label or number. The NISA card keeps its blue card. Colours only
+through the --ob-* variables in src/variants/b/option-b.css.
+
+Problem: today every line has the same colour and the same inset (the Rule
+between sections is mx-8, like the lines inside sections), so section breaks
+and in-section dividers look identical and the page reads as one long
+document. Fix it with two levels of lines plus a steady spacing rhythm.
+
+1. Section rules: in src/variants/b/pages/ld/dashboard/page.tsx, the Rule
+   between sections runs edge to edge across its column (no side inset), so
+   it meets the vertical hairline that splits the two columns. Colour stays
+   --ob-border. This makes the page read as a grid of sections.
+2. Lines inside sections: add a lighter token --ob-border-subtle to
+   option-b.css (about halfway between --ob-surface and --ob-border, mirror
+   it in OB_COLORS) and use it for:
+   - the vertical dividers between the three KPIs (LDDashboardHeader, flat
+     mode) and between MetricTiles (components/ui/kit.tsx). Make these
+     vertical lines inset: they stop about 4px short of the top and bottom
+     of the tile row instead of running full height;
+   - any other horizontal line inside a section.
+   In LDDashboardLearningAnalytics, replace the border-t above "Completion
+   over time" with spacing (24px), no line.
+3. Spacing rhythm, the same for every section in both columns: 40px top,
+   32px bottom, 32px left and right; 20px between the section header and its
+   content; 20px between the content and the insight row at the bottom. The
+   right column keeps the NISA card aligned with the profile as today.
+4. Section headers: title 18px semibold (--ob-text-strong), subtitle 13px
+   --ob-text-muted with 2px gap, and any tabs or "See all" link vertically
+   centred on the title block. Apply the same header to Program overview,
+   Learning mode analytics, Division completion, Active programs and License
+   utilization.
+5. Verify at 1440 and 1280 px wide: section lines clearly longer than the
+   lines inside sections, both columns on the same rhythm, nothing else
+   changed. /a/ld/dashboard looks exactly as before and npm run build passes.
+   Reply with the files you touched.
+```

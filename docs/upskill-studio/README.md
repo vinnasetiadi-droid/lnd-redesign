@@ -9,3 +9,5 @@ Open product questions (decide before U1 if possible):
 1. Can an admin approve a course they created? The kit assumes no.
 2. Is "Approved" different from "Active"? The kit assumes Approved = signed off but not started yet.
 3. Do drafts track section completeness, reviewer comments and seat capacity in the real platform? If not, the card footers fall back to simpler info.
+
+Option B: B1 (one accent colour) and B2 (section rhythm) are standalone style prompts at the end of `prompts.md`. Run B1 first.

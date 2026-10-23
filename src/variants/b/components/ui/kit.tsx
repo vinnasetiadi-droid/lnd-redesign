@@ -34,7 +34,7 @@ export function CardHeader({ title, subtitle, icon, extra, className }: CardHead
     <div className={cn('flex flex-wrap items-start justify-between gap-3', className)}>
       <div className="min-w-0">
         <h3 className="text-[18px] leading-[26px] text-(--ob-text-strong)">{title}</h3>
-        {subtitle && <p className="mt-1 text-[13px] leading-[18px] text-(--ob-text-muted)">{subtitle}</p>}
+        {subtitle && <p className="mt-0.5 text-[13px] leading-[18px] text-(--ob-text-muted)">{subtitle}</p>}
       </div>
       {(extra || icon) && (
         <div className="flex shrink-0 items-center gap-2">
@@ -131,20 +131,18 @@ export function DeltaChip({ children, positive = true, className }: { children: 
 
 /**
  * Summary tile that also picks what a chart shows: a loose column with no
- * frame, the value with a small icon in the tile's colour, and a bar along
- * the bottom in that colour (full strength when picked).
+ * frame, the value with a small icon, and a bar along the bottom. Blue is
+ * the one accent: only the picked tile's icon and bar are blue.
  */
-export function MetricTile({ selected, onClick, label, children, color = OB_COLORS.primary, share, icon: Icon, className }: {
+export function MetricTile({ selected, onClick, label, children, share, icon: Icon, className }: {
   selected: boolean;
   onClick: () => void;
   label: ReactNode;
   /** The value row */
   children: ReactNode;
-  /** The tile's own colour for its line, bar and wash */
-  color?: string;
   /** 0-100: fills that much of the bottom bar on a grey track, like the reference's segments; full when left out */
   share?: number;
-  /** Small icon in the tile's colour before the value */
+  /** Small icon before the value: blue when picked, grey otherwise */
   icon?: LucideIcon;
   className?: string;
 }) {
@@ -154,26 +152,30 @@ export function MetricTile({ selected, onClick, label, children, color = OB_COLO
       role="tab"
       aria-selected={selected}
       onClick={onClick}
-      // No frame: a loose column (the parent splits tiles with vertical hairlines);
-      // a column layout, so the bar sits at the bottom whatever the tile's height
-      // The hairline is set here, not with divide-x on the parent: the button reset would cancel that
-      className={cn('group relative flex min-w-0 flex-col justify-between gap-3 border-(--ob-border) px-6 text-left cursor-pointer first:pl-0 last:pr-0 not-first:border-l focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/30', className)}
+      // No frame: a loose column; a column layout, so the bar sits at the bottom whatever the tile's height
+      className={cn('group relative flex min-w-0 flex-col justify-between gap-3 px-6 text-left cursor-pointer first:pl-0 last:pr-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/30', className)}
     >
+      {/* Divider before every tile but the first: a lighter line, stopping 4px short of the top and bottom */}
+      <span aria-hidden className="pointer-events-none absolute bottom-1 left-0 top-1 w-px bg-(--ob-border-subtle) group-first:hidden" />
       <div>
         <p className={cn('truncate text-[12px] leading-[16px] transition-colors duration-300', selected ? 'text-(--ob-text-strong)' : 'text-(--ob-text-muted) group-hover:text-(--ob-text-body)')}>{label}</p>
         <div className="mt-1 flex flex-wrap items-center gap-2">
-          {Icon && <Icon size={16} className="shrink-0" style={{ color }} />}
+          {Icon && (
+            <Icon
+              size={16}
+              className={cn('shrink-0 transition-colors duration-300', selected ? 'text-(--ob-primary)' : 'text-(--ob-text-subtle) group-hover:text-(--ob-text-muted)')}
+            />
+          )}
           {children}
         </div>
       </div>
-      {/* Bar: the colour fades lighter to the right, on a grey track; quieter when not picked */}
+      {/* Bar on a grey track: the blue gradient when picked, plain grey otherwise (one accent) */}
       <span className="relative block h-2 overflow-hidden rounded-[4px] bg-(--ob-surface)">
         <span
-          className="block h-full rounded-[4px] transition-[width,opacity] duration-500"
+          className={cn('block h-full rounded-[4px] transition-[width,background-color] duration-500', !selected && 'bg-(--ob-border-strong)')}
           style={{
             width: `${Math.max(0, Math.min(100, share ?? 100))}%`,
-            background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 65%, white))`,
-            opacity: selected ? 1 : 0.5,
+            backgroundImage: selected ? `linear-gradient(90deg, ${OB_COLORS.primary}, color-mix(in srgb, ${OB_COLORS.primary} 65%, white))` : undefined,
           }}
         />
       </span>
