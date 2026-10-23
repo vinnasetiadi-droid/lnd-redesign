@@ -133,20 +133,9 @@ export const OB_COLORS = {
   avatarLilac: '#E9D7FE',
   avatarPink: '#FCE7F6',
   avatarCyan: '#CFF9FE',
-  // Course status chips: a tint and a stronger bar of the same hue
-  statusDraftBg: '#F2F4F7',
-  statusDraft: '#98A2B3',
-  statusReviewBg: '#F4EBFF',
-  statusReview: '#9E77ED',
-  statusReviewText: '#B54708', // In review label on the course badge
-  statusRevisionBg: '#FEE4E2',
-  statusRevision: '#F97066',
-  statusApprovedBg: '#DCFAE6',
-  statusApproved: '#17B26A',
-  statusActiveBg: '#DCE8FC',
-  statusActive: '#1A73E8',
-  statusInactiveBg: '#F2F4F7',
-  statusInactive: '#D0D5DD',
+  // Course status tags (the borders are color-mix tints in option-b.css)
+  statusReview: '#9E77ED', // Violet
+  statusReviewText: '#6941C6',
 } as const;
 
 export type OBColor = keyof typeof OB_COLORS;

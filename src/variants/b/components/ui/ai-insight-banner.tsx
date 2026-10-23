@@ -1,8 +1,5 @@
-import { useRef } from "react";
-import { useInView } from "motion/react";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "@/variants/b/icons";
-import { NisaOrb } from "./NisaOrb";
 
 interface AIInsightBannerProps {
   children: React.ReactNode;
@@ -20,7 +17,7 @@ export function AIInsightBanner({
   return (
     <div
       className={cn(
-        "relative rounded-[14px] bg-gradient-to-br from-white via-(--ob-primary-tint) to-(--ob-primary-50) p-4 overflow-hidden",
+        "relative rounded-(--ob-radius-card) bg-gradient-to-br from-white via-(--ob-primary-tint) to-(--ob-primary-50) p-4 overflow-hidden",
         className,
       )}
     >
@@ -38,26 +35,25 @@ export function AIInsightBanner({
   );
 }
 /**
- * One-line NISA insight under a chart: blob, truncated text (full text on
- * hover) and an "Ask NISA" link. Narrow cards can allow two lines.
+ * Option B NISA insight line: no box and no orb. A 2px blue rule on the left,
+ * a small "NISA" label, then the sentence in strong text (up to two lines,
+ * the full text on hover) with "Ask NISA" as a link at its end. `lines`
+ * stays for callers; the sentence may always wrap to two lines.
  */
-export function AIInsightLine({ text, fullText, lines = 1, className }: { text: string; fullText?: string; lines?: 1 | 2; className?: string }) {
-  // The light sweep plays once, when the row first scrolls into view
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.8 });
+export function AIInsightLine({ text, fullText, className }: { text: string; fullText?: string; lines?: 1 | 2; className?: string }) {
   return (
-    <div ref={ref} className={cn("flex items-center gap-3 rounded-[14px] bg-(--ob-primary-tint) px-4 py-3", inView && "ob-sweep", className)}>
-      <NisaOrb size={20} />
-      <p className={cn("min-w-0 flex-1 text-[13px] leading-[18px] text-(--ob-text-ai)", lines === 2 ? "line-clamp-2" : "truncate")} title={fullText ?? text}>
-        {text}
+    <div className={cn("border-l-2 border-(--ob-primary) pl-3", className)}>
+      <p className="ob-tracked text-[11px] leading-[16px] font-medium text-(--ob-primary-strong)">NISA</p>
+      <p className="mt-0.5 line-clamp-2 text-[13px] leading-[20px] text-(--ob-text-strong)" title={fullText ?? text}>
+        {text}{" "}
+        <button
+          type="button"
+          className="inline-flex items-center gap-0.5 whitespace-nowrap rounded-(--ob-radius-control) align-baseline text-(--ob-primary) transition-colors hover:text-(--ob-primary-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25 cursor-pointer"
+        >
+          Ask NISA
+          <ArrowRight size={13} className="self-center" />
+        </button>
       </p>
-      <button
-        type="button"
-        className="inline-flex shrink-0 items-center gap-1 text-[13px] text-(--ob-primary) transition-colors hover:text-(--ob-primary-strong) cursor-pointer"
-      >
-        Ask NISA
-        <ArrowRight size={14} />
-      </button>
     </div>
   );
 }

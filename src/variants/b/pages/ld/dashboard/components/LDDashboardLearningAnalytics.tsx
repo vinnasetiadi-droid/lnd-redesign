@@ -209,7 +209,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
       </div>
 
       {/* ── AI insight: one line ─────────────────────────────── */}
-      <AIInsightLine text={completionInsight(data)} className="py-2.5" />
+      <AIInsightLine text={completionInsight(data)} />
     </div>
   );
 }

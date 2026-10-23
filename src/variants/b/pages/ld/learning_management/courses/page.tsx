@@ -12,8 +12,6 @@ import { useNavigate } from 'react-router';
 import { motion } from 'motion/react';
 import {
   ArrowUpDown,
-  ChevronLeft,
-  ChevronRight,
   Clock,
   GraduationCap,
   LayoutGrid,
@@ -29,6 +27,7 @@ import { CourseLibraryTable, courseMode, courseType, ownerName, type CourseRow }
 import { COURSES_MOCK, COURSE_STATUS_META, NOT_LIVE, draftItemsOf, type CourseItem, type CourseStatus } from './data/courses.mock';
 import { IconCircle, NumText, PillButton, SearchField } from '@/variants/b/components/ui/kit';
 import { FilterChip } from './components/FilterChip';
+import { Pagination } from '@/variants/b/components/ui/pagination';
 import { ProgramScopeTabs, type ScopeTab } from '@/variants/b/pages/ld/dashboard/components/ProgramScopeTabs';
 import { daysUntil, timeAgo } from '@/variants/b/pages/ld/dashboard/period';
 import { revealContainer, revealItem } from '@/variants/b/motion';
@@ -276,8 +275,8 @@ export default function CoursesPage() {
               ]}
             />
 
-            {/* View: list by default, grid to browse; the picked one in blue */}
-            <div className="ml-auto flex items-center gap-0.5 border-l border-(--ob-border-subtle) pl-2">
+            {/* View: list by default, grid to browse; the picked one outlined in blue */}
+            <div className="ml-auto flex items-center gap-1 border-l border-(--ob-border-subtle) px-2">
               {([['list', List, 'List view'], ['grid', LayoutGrid, 'Grid view']] as const).map(([m, Icon, label]) => (
                 <button
                   key={m}
@@ -286,8 +285,8 @@ export default function CoursesPage() {
                   aria-pressed={viewMode === m}
                   onClick={() => setViewMode(m)}
                   className={cn(
-                    'flex size-9 items-center justify-center rounded-[8px] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25',
-                    viewMode === m ? 'text-(--ob-primary)' : 'text-(--ob-text-subtle) hover:bg-(--ob-surface-subtle) hover:text-(--ob-text-body)',
+                    'flex size-8 items-center justify-center rounded-(--ob-radius-control) bg-(--ob-white) transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25',
+                    viewMode === m ? 'text-(--ob-primary-strong) ring-1 ring-inset ring-(--ob-primary)' : 'text-(--ob-text-subtle) hover:text-(--ob-text-body)',
                   )}
                 >
                   <Icon size={18} />
@@ -333,43 +332,7 @@ export default function CoursesPage() {
               <p className="text-[12px] text-(--ob-text-muted)">
                 Showing {(current - 1) * PAGE_SIZE + 1} to {Math.min(current * PAGE_SIZE, rows.length)} of {rows.length} courses
               </p>
-              {totalPages > 1 && (
-                <div className="flex items-center gap-1">
-                  <button
-                    type="button"
-                    aria-label="Previous page"
-                    onClick={() => setPage(Math.max(1, current - 1))}
-                    disabled={current === 1}
-                    className="flex size-8 items-center justify-center rounded-full text-(--ob-text-body) transition-colors hover:bg-(--ob-surface) disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25"
-                  >
-                    <ChevronLeft className="size-4" />
-                  </button>
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                    <button
-                      key={p}
-                      type="button"
-                      onClick={() => setPage(p)}
-                      aria-current={p === current ? 'page' : undefined}
-                      className={cn(
-                        'flex size-8 items-center justify-center rounded-full text-[12px] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25',
-                        // Tint, not a solid fill: Create course is the only solid button on the page
-                        p === current ? 'bg-(--ob-primary-50) text-(--ob-primary-strong)' : 'text-(--ob-text-secondary) hover:bg-(--ob-surface)',
-                      )}
-                    >
-                      {p}
-                    </button>
-                  ))}
-                  <button
-                    type="button"
-                    aria-label="Next page"
-                    onClick={() => setPage(Math.min(totalPages, current + 1))}
-                    disabled={current === totalPages}
-                    className="flex size-8 items-center justify-center rounded-full text-(--ob-text-body) transition-colors hover:bg-(--ob-surface) disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25"
-                  >
-                    <ChevronRight className="size-4" />
-                  </button>
-                </div>
-              )}
+              {totalPages > 1 && <Pagination page={current} total={totalPages} onPage={setPage} />}
             </div>
           )}
         </motion.div>

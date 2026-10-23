@@ -104,20 +104,21 @@ html.option-b {
   --ob-avatar-lilac: #E9D7FE;
   --ob-avatar-pink: #FCE7F6;
   --ob-avatar-cyan: #CFF9FE;
-  /* Course status chips: a tint and a stronger bar of the same hue */
-  --ob-status-draft-bg: #F2F4F7;
-  --ob-status-draft: #98A2B3;
-  --ob-status-review-bg: #F4EBFF;
-  --ob-status-review: #9E77ED;
-  --ob-status-review-text: #B54708; /* In review label on the course badge (status colours stay as they were) */
-  --ob-status-revision-bg: #FEE4E2;
-  --ob-status-revision: #F97066;
-  --ob-status-approved-bg: #DCFAE6;
-  --ob-status-approved: #17B26A;
-  --ob-status-active-bg: #DCE8FC;
-  --ob-status-active: #1A73E8;
-  --ob-status-inactive-bg: #F2F4F7;
-  --ob-status-inactive: #D0D5DD;
+  /* Course status tags: outlined, the label in the status colour and a 1px
+     border in a tint of it. Needs revision uses the attention orange, not red */
+  --ob-status-review: #9E77ED; /* Violet */
+  --ob-status-review-text: #6941C6;
+  --ob-status-active-text: var(--ob-primary-strong);
+  --ob-status-active-border: color-mix(in srgb, var(--ob-primary) 35%, white);
+  --ob-status-review-border: color-mix(in srgb, var(--ob-status-review) 45%, white);
+  --ob-status-revision-text: var(--ob-attention-text);
+  --ob-status-revision-border: color-mix(in srgb, var(--ob-orange) 40%, white);
+  --ob-status-approved-text: var(--ob-success-strong);
+  --ob-status-approved-border: color-mix(in srgb, var(--ob-success) 38%, white);
+  --ob-status-draft-text: var(--ob-text-secondary);
+  --ob-status-draft-border: var(--ob-border-control);
+  --ob-status-inactive-text: var(--ob-text-muted);
+  --ob-status-inactive-border: var(--ob-border-strong);
   /* Shapes: squarer than Option A's pills. Round stays for avatars and pure circles */
   --ob-radius-control: 6px; /* Chips, tags, inputs, filter buttons, pagination, focus rings */
   --ob-radius-button: 14px; /* The 3D buttons: square with big, almost round corners (chat request; the kit said 8px) */
@@ -154,6 +155,12 @@ html.option-b .ob-num {
 html.option-b .ob-num:is([class*="text-[2"], [class*="text-[3"], [class*="text-[4"]),
 html.option-b :is([class*="text-[2"], [class*="text-[3"], [class*="text-[4"]) .ob-num:not([class*="text-[1"]) {
   letter-spacing: -0.02em;
+}
+
+/* Small labels with a little letter spacing (the NISA label, table headers).
+   Beats the 0 on every element above. */
+html.option-b .ob-tracked {
+  letter-spacing: 0.04em;
 }
 
 /* ── Home's single frame ─────────────────────────────────────

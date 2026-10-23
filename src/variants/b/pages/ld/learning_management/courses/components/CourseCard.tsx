@@ -1,8 +1,8 @@
 // ============================================================
 // Upskill Studio — course card (grid view)
-// Option B: a frameless cell in a hairline grid. A photo with small corners, then the
-// status as a coloured word with the menu beside it, a two-line name with
-// "by owner", a one-line description, one meta row (version, duration, mode),
+// Option B: a frameless cell in a hairline grid. A photo with small corners,
+// the outlined status tag on its top left and the menu on its top right, then
+// a two-line name with "by owner", a one-line description, one meta row (version, duration, mode),
 // then a fixed-height footer: who acts next, the figure for the status and
 // Review (only when someone else's course waits for you).
 // ============================================================
@@ -14,7 +14,8 @@ import { type CourseLifecycleStatus } from '@/lib/courseActions';
 import { AlertTriangle, BookOpen, Clock, EyeOff, Eye as EyeOn, Layers, MoreHorizontal, Trash2, X } from '@/variants/b/icons';
 import { daysUntil, timeAgo } from '@/variants/b/pages/ld/dashboard/period';
 import { NumText, PillButton } from '@/variants/b/components/ui/kit';
-import { COURSE_STATUS_META, draftItemsOf, liveVersionOf, type CourseItem } from '../data/courses.mock';
+import { draftItemsOf, liveVersionOf, type CourseItem } from '../data/courses.mock';
+import { ON_PHOTO, StatusBadge } from './CourseStatus';
 import { DeleteVersionDialog } from '@/variants/b/components/common/DeleteVersionDialog';
 import { CourseCover } from './CourseCover';
 import { courseMode, ownerName, titleOf } from './CourseLibraryTable';
@@ -103,7 +104,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
         className,
       )}
     >
-      {/* Photo with nearly square corners, nothing on top of it */}
+      {/* Photo with nearly square corners: the status tag on its top left, the menu on its top right */}
       <div className="relative aspect-[16/10] shrink-0 overflow-hidden rounded-[6px] bg-(--ob-surface)">
         <CourseCover
           course={course}
@@ -111,57 +112,52 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
           className={cn('absolute inset-0 size-full transition-transform duration-500 group-hover:scale-[1.03]', isInactive && 'grayscale-[60%]')}
         />
       </div>
-
-      {/* Status as a small coloured word, the menu on the same row (clicks here never open the card) */}
-      <div className="mt-4 flex h-8 items-center justify-between gap-2">
-        <span className="text-[12px] leading-[16px] font-medium" style={{ color: COURSE_STATUS_META[course.status].text }}>
-          {COURSE_STATUS_META[course.status].label}
-        </span>
-        <div onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setMenuOpen((o) => !o)}
-                aria-label="More actions"
-                aria-haspopup="menu"
-                aria-expanded={menuOpen}
-                className="-mr-1.5 flex size-8 items-center justify-center rounded-(--ob-radius-control) text-(--ob-text-muted) transition-colors hover:bg-(--ob-surface) hover:text-(--ob-text-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/30 cursor-pointer"
-              >
-                <MoreHorizontal size={16} />
-              </button>
-              {menuOpen && (
-                <>
-                  <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-                  <div role="menu" className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-(--ob-radius-card) bg-(--ob-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]">
-                    <button
-                      type="button"
-                      role="menuitem"
-                      disabled={!canToggleStatus}
-                      className={cn(menuItem, canToggleStatus ? 'text-(--ob-text-body) hover:bg-(--ob-surface) cursor-pointer' : 'text-(--ob-border-control) cursor-not-allowed')}
-                      onClick={() => { if (canToggleStatus) { setMenuOpen(false); setShowStatusConfirm(true); } }}
-                    >
-                      {isInactive ? <EyeOn className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-                      {isInactive ? 'Activate' : 'Deactivate'}
-                    </button>
-                    <button
-                      type="button"
-                      role="menuitem"
-                      disabled={!canDelete}
-                      title={canDelete ? undefined : 'Only a draft or a version sent back for revision can be deleted.'}
-                      className={cn(menuItem, canDelete ? 'text-(--ob-danger) hover:bg-(--ob-danger-surface) cursor-pointer' : 'text-(--ob-border-control) cursor-not-allowed')}
-                      onClick={() => { if (canDelete) { setMenuOpen(false); setShowDeleteConfirm(true); } }}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                      Delete
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
+      <StatusBadge status={course.status} onImage className="absolute left-8 top-8" />
+      {/* Outside the photo's clip, so the menu can open below it; clicks here never open the card */}
+      <div className="absolute right-8 top-8 z-10" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label="More actions"
+            aria-haspopup="menu"
+            aria-expanded={menuOpen}
+            className={cn(ON_PHOTO, 'flex size-7 items-center justify-center text-(--ob-text-body) transition-colors hover:text-(--ob-text-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/30 cursor-pointer')}
+          >
+            <MoreHorizontal size={16} />
+          </button>
+          {menuOpen && (
+            <>
+              <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
+              <div role="menu" className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-(--ob-radius-card) bg-(--ob-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]">
+                <button
+                  type="button"
+                  role="menuitem"
+                  disabled={!canToggleStatus}
+                  className={cn(menuItem, canToggleStatus ? 'text-(--ob-text-body) hover:bg-(--ob-surface) cursor-pointer' : 'text-(--ob-border-control) cursor-not-allowed')}
+                  onClick={() => { if (canToggleStatus) { setMenuOpen(false); setShowStatusConfirm(true); } }}
+                >
+                  {isInactive ? <EyeOn className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                  {isInactive ? 'Activate' : 'Deactivate'}
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  disabled={!canDelete}
+                  title={canDelete ? undefined : 'Only a draft or a version sent back for revision can be deleted.'}
+                  className={cn(menuItem, canDelete ? 'text-(--ob-danger) hover:bg-(--ob-danger-surface) cursor-pointer' : 'text-(--ob-border-control) cursor-not-allowed')}
+                  onClick={() => { if (canDelete) { setMenuOpen(false); setShowDeleteConfirm(true); } }}
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Delete
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col pt-1">
+      <div className="mt-4 flex flex-1 flex-col">
         {/* Name: always two lines tall, so the rows below line up across cards */}
         <h3
           className={cn('line-clamp-2 h-[44px] text-[16px] leading-[22px]', isInactive ? 'text-(--ob-text-secondary)' : 'text-(--ob-text-strong)')}

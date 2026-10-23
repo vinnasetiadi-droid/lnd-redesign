@@ -12,13 +12,14 @@ import { cn } from '@/lib/utils';
 import { ProgramScopeTabs, PROGRAM_TYPE_TABS, FadeValue, type ScopeTab } from '@/variants/b/pages/ld/dashboard/components/ProgramScopeTabs';
 import { ATTENTION, CardHeader, DeltaChip, NumText, SearchField } from '@/variants/b/components/ui/kit';
 import { ChartTooltipCard, LegendMark } from '@/variants/b/components/ui/chart';
+import { Pagination } from '@/variants/b/components/ui/pagination';
 import { LearningProgressFunnel } from './components/LearningProgressFunnel';
 import { DashboardLicenseUtilization, type License } from '@/variants/b/pages/hr/dashboard/components/DashboardLicenseUtilization';
 import { revealContainer, revealItem } from '@/variants/b/motion';
 import { useStickyColumnTop } from '@/variants/b/hooks/useStickyColumnTop';
 import { OB_COLORS } from '@/variants/b/theme';
 import {
-  BookOpen, CheckCircle2, Star, Users, GraduationCap, ChevronDown, ArrowUpDown, ChevronUp, ChevronLeft, ChevronRight, Route,
+  BookOpen, CheckCircle2, Star, Users, GraduationCap, ChevronDown, ArrowUpDown, ChevronUp, Route,
 } from '@/variants/b/icons';
 import { useSimulatedLoading } from '@/hooks/useSimulatedLoading';
 import { PieChart, Pie, Cell, Tooltip } from 'recharts';
@@ -304,35 +305,6 @@ function Rating({ value }: { value: number }) {
       <Star className="size-3.5 fill-(--ob-text-subtle) text-(--ob-text-subtle)" />
       <span className="ob-num">{value.toFixed(1)}</span>
     </span>
-  );
-}
-
-function Pagination({ page, total, onPage }: { page: number; total: number; onPage: (p: number) => void }) {
-  const arrow = cn('flex size-8 items-center justify-center rounded-full text-(--ob-text-body) transition-colors hover:bg-(--ob-surface) disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer', FOCUS);
-  return (
-    <div className="flex items-center gap-1">
-      <button type="button" aria-label="Previous page" onClick={() => onPage(Math.max(1, page - 1))} disabled={page === 1} className={arrow}>
-        <ChevronLeft className="size-4" />
-      </button>
-      {Array.from({ length: total }, (_, i) => i + 1).map((p) => (
-        <button
-          key={p}
-          type="button"
-          onClick={() => onPage(p)}
-          aria-current={p === page ? 'page' : undefined}
-          className={cn(
-            'flex size-8 items-center justify-center rounded-full text-[12px] transition-colors cursor-pointer',
-            FOCUS,
-            p === page ? 'bg-(--ob-primary-50) text-(--ob-primary-strong)' : 'text-(--ob-text-secondary) hover:bg-(--ob-surface)',
-          )}
-        >
-          {p}
-        </button>
-      ))}
-      <button type="button" aria-label="Next page" onClick={() => onPage(Math.min(total, page + 1))} disabled={page === total} className={arrow}>
-        <ChevronRight className="size-4" />
-      </button>
-    </div>
   );
 }
 

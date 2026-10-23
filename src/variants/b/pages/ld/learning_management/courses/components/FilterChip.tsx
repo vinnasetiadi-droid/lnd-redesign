@@ -1,6 +1,7 @@
 // A segment of the library's hairline toolbar that opens a small menu of
 // options. Shows only its name while on the default option, and "Name: Value"
-// otherwise (e.g. "Owner: You"), then in blue.
+// otherwise (e.g. "Owner: You"). Option B control: white, 6px corners, no
+// fill; while it filters, a 1px blue border and blue text.
 
 import { useEffect, useId, useRef, useState, type ElementType } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
@@ -58,7 +59,7 @@ export function FilterChip<V extends string>({
   }, [open]);
 
   return (
-    <div ref={ref} className="relative flex border-l border-(--ob-border-subtle)">
+    <div ref={ref} className="relative flex items-center border-l border-(--ob-border-subtle) px-2">
       <button
         type="button"
         aria-haspopup="menu"
@@ -66,9 +67,11 @@ export function FilterChip<V extends string>({
         aria-controls={menuId}
         onClick={() => setOpen((o) => !o)}
         className={cn(
-          'inline-flex h-12 items-center gap-1.5 px-4 text-[13px] transition-colors hover:bg-(--ob-surface-subtle) cursor-pointer',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ob-primary)/25',
-          active && !showValueOnly ? 'text-(--ob-primary-strong)' : 'text-(--ob-text-strong)',
+          'inline-flex h-8 items-center gap-1.5 rounded-(--ob-radius-control) bg-(--ob-white) px-3 text-[13px] transition-colors cursor-pointer',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25',
+          active && !showValueOnly
+            ? 'text-(--ob-primary-strong) ring-1 ring-inset ring-(--ob-primary)'
+            : 'text-(--ob-text-strong) hover:bg-(--ob-surface-subtle)',
         )}
       >
         {Icon && <Icon size={14} className="text-(--ob-text-muted)" />}
@@ -85,7 +88,7 @@ export function FilterChip<V extends string>({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.98 }}
             transition={{ duration: 0.15, ease: EASE_OUT }}
-            className="absolute left-0 top-full z-30 mt-1 min-w-[180px] rounded-(--ob-radius-card) bg-(--ob-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]"
+            className="absolute left-2 top-full z-30 mt-1 min-w-[180px] rounded-(--ob-radius-card) bg-(--ob-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]"
           >
             {options.map((o) => {
               const selected = o.value === value;

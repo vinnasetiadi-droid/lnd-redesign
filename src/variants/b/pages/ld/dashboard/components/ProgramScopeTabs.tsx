@@ -1,5 +1,6 @@
-// All programs / Course / Journey pill tabs shared by the L&D dashboard cards.
-// The active pill slides between tabs; each card fades its own content in.
+// All programs / Course / Journey tabs shared by the L&D dashboard cards (and
+// every other tab set in Option B): underline tabs whose blue underline slides
+// between tabs; each card fades its own content in.
 
 import { motion } from 'motion/react';
 import { Layers, BookOpen, Route } from '@/variants/b/icons';
@@ -54,7 +55,7 @@ export const PROGRAM_TYPE_TABS: ScopeTab<'course' | 'journey'>[] = [
 ];
 
 interface ProgramScopeTabsProps<K extends string> {
-  /** Unique per card, so each card's highlight slides on its own. */
+  /** Unique per card, so each card's underline slides on its own. */
   id: string;
   value: K;
   onChange: (scope: K) => void;
@@ -65,38 +66,44 @@ interface ProgramScopeTabsProps<K extends string> {
   className?: string;
 }
 
+/**
+ * Option B underline tabs: plain text labels on a hairline, the active one in
+ * strong text with a 2px blue underline that slides between tabs. No pill
+ * background. Counts (e.g. "Draft 2") sit after the label in Geist Mono.
+ */
 export function ProgramScopeTabs<K extends string = ProgramScope>({ id, value, onChange, tabs, stretch, className }: ProgramScopeTabsProps<K>) {
   const options = (tabs ?? SCOPE_TABS) as ScopeTab<K>[];
   return (
-    <div className={cn('flex items-center gap-0.5 p-1 rounded-full bg-(--ob-surface)', stretch ? 'w-full' : 'w-fit', className)}>
+    <div
+      role="tablist"
+      className={cn('flex items-stretch gap-5 border-b border-(--ob-border)', stretch ? 'w-full gap-0' : 'w-fit', className)}
+    >
       {options.map(({ key, label, count }) => {
         const isActive = value === key;
         return (
           <button
             key={key}
             type="button"
+            role="tab"
             onClick={() => onChange(key)}
-            aria-pressed={isActive}
+            aria-selected={isActive}
             className={cn(
-              // No z-index here: the pill (z-[1]) must paint over the grey
-              // background of whichever tab it is sliding across.
-              'relative flex items-center gap-1.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition-colors duration-200 cursor-pointer',
-              stretch ? 'flex-1 justify-center px-2' : 'px-3.5',
-              'focus:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/40 focus-visible:ring-offset-1',
+              'relative flex items-center gap-1.5 pb-2.5 pt-1 text-[13px] leading-[18px] whitespace-nowrap transition-colors duration-200 cursor-pointer',
+              stretch && 'flex-1 justify-center px-2',
+              'rounded-t-(--ob-radius-control) focus:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/30',
               isActive ? 'text-(--ob-text-strong)' : 'text-(--ob-text-muted) hover:text-(--ob-text-body)',
             )}
           >
+            {label}
+            {count !== undefined && <span className="ob-num text-(--ob-text-subtle)">{count}</span>}
+            {/* Sits on the row's hairline */}
             {isActive && (
               <motion.span
                 layoutId={id}
-                className="absolute inset-0 z-[1] rounded-full bg-white shadow-[0_1px_2px_rgba(16,24,40,0.08),0_1px_3px_rgba(16,24,40,0.06)]"
+                className="absolute inset-x-0 -bottom-px h-0.5 rounded-[1px] bg-(--ob-primary)"
                 transition={{ type: 'spring', stiffness: 500, damping: 40, mass: 0.8 }}
               />
             )}
-            <span className="relative z-[2]">
-              {label}
-              {count !== undefined && <span className="ml-1.5 tabular-nums text-(--ob-text-subtle)">{count}</span>}
-            </span>
           </button>
         );
       })}

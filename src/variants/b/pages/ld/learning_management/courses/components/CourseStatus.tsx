@@ -1,23 +1,24 @@
-// Course status chip, drawn from the one source (COURSE_STATUS_META): a round
-// pill in a tint of the status colour, with dark text.
+// Option B course status tag, drawn from the one source (COURSE_STATUS_META):
+// outlined on white, 22px tall with 6px corners, the label in the status
+// colour and a 1px border in a tint of it. No fill, no dot. The same tag in
+// the table and on the card photos (there with a very soft shadow).
 
 import { cn } from '@/lib/utils';
 import { COURSE_STATUS_META, type CourseStatus } from '../data/courses.mock';
 
-/** Frosted white over the photo, shared by the status badge and the menu button */
-export const GLASS = 'rounded-full bg-(--ob-white)/70 ring-1 ring-(--ob-white)/60 backdrop-blur-md shadow-[0_1px_3px_rgba(16,24,40,0.12)]';
+/** White control on a photo: 6px corners, a hairline and a very soft shadow (status tag, card menu button) */
+export const ON_PHOTO = 'rounded-(--ob-radius-control) bg-(--ob-white) shadow-[0_1px_2px_rgba(16,24,40,0.08),0_2px_6px_-2px_rgba(16,24,40,0.12)]';
 
-function StatusChip({ status, className }: { status: CourseStatus; className?: string }) {
+function StatusTag({ status, onImage, className }: { status: CourseStatus; onImage?: boolean; className?: string }) {
   const meta = COURSE_STATUS_META[status];
   return (
     <span
       className={cn(
-        // Same size as Home's chips (30px tall, 14px sides), but round
-        'inline-flex h-[30px] w-fit items-center whitespace-nowrap rounded-full px-3.5 text-[12px] leading-none',
-        status === 'inactive' ? 'text-(--ob-text-muted)' : 'text-(--ob-text-strong)',
+        'inline-flex h-[22px] w-fit items-center whitespace-nowrap rounded-(--ob-radius-control) border bg-(--ob-white) px-2 text-[12px] leading-none font-medium',
+        onImage && ON_PHOTO,
         className,
       )}
-      style={{ background: meta.bg }}
+      style={{ color: meta.text, borderColor: meta.border }}
     >
       {meta.label}
     </span>
@@ -26,26 +27,10 @@ function StatusChip({ status, className }: { status: CourseStatus; className?: s
 
 /** For table cells */
 export function StatusLabel({ status, className }: { status: CourseStatus; className?: string }) {
-  return <StatusChip status={status} className={className} />;
+  return <StatusTag status={status} className={className} />;
 }
 
-/**
- * For badges. On a photo: a frosted glass pill with the label in the status
- * colour (no dot); elsewhere the tinted chip.
- */
+/** For badges: the same tag; `onImage` adds the soft shadow so it reads on any photo */
 export function StatusBadge({ status, onImage, className }: { status: CourseStatus; onImage?: boolean; className?: string }) {
-  if (!onImage) return <StatusChip status={status} className={className} />;
-  const meta = COURSE_STATUS_META[status];
-  return (
-    <span
-      className={cn(
-        'inline-flex h-[30px] w-fit items-center whitespace-nowrap px-3.5 text-[12px] leading-none',
-        GLASS,
-        className,
-      )}
-      style={{ color: meta.text }}
-    >
-      {meta.label}
-    </span>
-  );
+  return <StatusTag status={status} onImage={onImage} className={className} />;
 }

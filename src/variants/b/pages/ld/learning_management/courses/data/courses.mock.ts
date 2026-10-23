@@ -106,13 +106,14 @@ export interface CourseItem {
 
 /** Status labels and chip tints (CSS tokens), shared by the tabs, table and cards */
 /** bg: the chip tint in tables; text: the label colour on the white badge over a photo */
-export const COURSE_STATUS_META: Record<CourseStatus, { label: string; bg: string; text: string }> = {
-  'on-draft':         { label: 'Draft',          bg: 'var(--ob-status-draft-bg)',    text: 'var(--ob-text-secondary)' },
-  'waiting-approval': { label: 'In review',      bg: 'var(--ob-status-review-bg)',   text: 'var(--ob-status-review-text)' },
-  'need-revision':    { label: 'Needs revision', bg: 'var(--ob-status-revision-bg)', text: 'var(--ob-danger)' },
-  approved:           { label: 'Approved',       bg: 'var(--ob-status-approved-bg)', text: 'var(--ob-success-strong)' },
-  active:             { label: 'Active',         bg: 'var(--ob-status-active-bg)',   text: 'var(--ob-primary-strong)' },
-  inactive:           { label: 'Inactive',       bg: 'var(--ob-status-inactive-bg)', text: 'var(--ob-text-muted)' },
+/** Option B status tags: the label in the status colour, a 1px border in a tint of it (option-b.css) */
+export const COURSE_STATUS_META: Record<CourseStatus, { label: string; text: string; border: string }> = {
+  'on-draft':         { label: 'Draft',          text: 'var(--ob-status-draft-text)',    border: 'var(--ob-status-draft-border)' },
+  'waiting-approval': { label: 'In review',      text: 'var(--ob-status-review-text)',   border: 'var(--ob-status-review-border)' },
+  'need-revision':    { label: 'Needs revision', text: 'var(--ob-status-revision-text)', border: 'var(--ob-status-revision-border)' },
+  approved:           { label: 'Approved',       text: 'var(--ob-status-approved-text)', border: 'var(--ob-status-approved-border)' },
+  active:             { label: 'Active',         text: 'var(--ob-status-active-text)',   border: 'var(--ob-status-active-border)' },
+  inactive:           { label: 'Inactive',       text: 'var(--ob-status-inactive-text)', border: 'var(--ob-status-inactive-border)' },
 };
 
 /** Statuses that are not live yet: nobody can be enrolled */

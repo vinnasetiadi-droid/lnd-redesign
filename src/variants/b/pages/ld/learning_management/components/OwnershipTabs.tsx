@@ -2,8 +2,8 @@
 // All / Created by me / Created by Admin / Created by Trainer — shared by the
 // admin Upskill and Journey libraries.
 
-import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/useAuthStore';
+import { ProgramScopeTabs, type ScopeTab } from '@/variants/b/pages/ld/dashboard/components/ProgramScopeTabs';
 
 export type OwnershipFilter = 'all' | 'mine' | 'admin' | 'trainer';
 
@@ -40,32 +40,12 @@ interface OwnershipTabsProps {
   allLabel?: string;
 }
 
-/** Segmented pill tabs (Option B), each with its item count */
+/** Option B underline tabs (the shared tab set), each with its item count */
 export function OwnershipTabs({ items, value, onChange, me, allLabel }: OwnershipTabsProps) {
-  return (
-    <div className="flex w-fit items-center gap-0.5 rounded-full bg-(--ob-surface) p-1">
-      {TABS.map((tab) => {
-        const active = value === tab.key;
-        return (
-          <button
-            key={tab.key}
-            type="button"
-            aria-pressed={active}
-            onClick={() => onChange(tab.key)}
-            className={cn(
-              'flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] transition-colors cursor-pointer',
-              active
-                ? 'bg-white text-(--ob-text-strong) shadow-[0_1px_2px_rgba(16,24,40,0.08),0_1px_3px_rgba(16,24,40,0.06)]'
-                : 'text-(--ob-text-muted) hover:text-(--ob-text-body)',
-            )}
-          >
-            {tab.key === 'all' && allLabel ? allLabel : tab.label}
-            <span className="text-[12px] text-(--ob-text-subtle)">
-              {items.filter((i) => matchesOwnership(i, tab.key, me)).length}
-            </span>
-          </button>
-        );
-      })}
-    </div>
-  );
+  const tabs: ScopeTab<OwnershipFilter>[] = TABS.map((tab) => ({
+    key: tab.key,
+    label: tab.key === 'all' && allLabel ? allLabel : tab.label,
+    count: items.filter((i) => matchesOwnership(i, tab.key, me)).length,
+  }));
+  return <ProgramScopeTabs id="ownership-tabs" value={value} onChange={onChange} tabs={tabs} />;
 }

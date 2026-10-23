@@ -181,7 +181,7 @@ export function LDDashboardActivePrograms({ programs, className }: LDDashboardAc
         }
       />
 
-      {/* Filter: segmented control, like the other cards */}
+      {/* Filter: underline tabs, like the other cards */}
       <ProgramScopeTabs id="active-programs-filter" value={filter} onChange={setFilter} tabs={FILTERS} stretch className="mt-5" />
 
       {/* Program list */}
