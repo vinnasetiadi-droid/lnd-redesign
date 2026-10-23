@@ -165,7 +165,7 @@ export function LDDashboardProgramOverview({
                   dy={14}
                   textAnchor="middle"
                   fontSize={AXIS_TICK.fontSize}
-                  fill={props.index === selected ? OB_COLORS.primary : AXIS_TICK.fill}
+                  fill={props.index === selected ? OB_COLORS.primaryText : AXIS_TICK.fill}
                 >
                   {props.payload.value}
                 </text>

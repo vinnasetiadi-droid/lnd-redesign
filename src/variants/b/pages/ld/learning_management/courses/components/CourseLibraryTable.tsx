@@ -113,7 +113,7 @@ export function RowMenu({ course, onOpen, className }: { course: CourseItem; onO
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -4, scale: 0.98 }}
               transition={{ duration: 0.15, ease: EASE_OUT }}
-              className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-(--ob-radius-card) bg-(--ob-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]"
+              className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-(--ob-radius-card) bg-(--ob-surface-raised) p-1 shadow-(--ob-shadow-menu)"
             >
               <button type="button" role="menuitem" className={cn(item, 'text-(--ob-text-body) hover:bg-(--ob-surface) cursor-pointer')} onClick={() => { setOpen(false); onOpen(); }}>
                 View details
@@ -174,7 +174,7 @@ function CourseRowView({ row, me, onOpen, index }: { row: CourseRow; me: string;
                   aria-expanded={expanded}
                   onClick={(e) => { e.stopPropagation(); setExpanded((x) => !x); }}
                   onKeyDown={(e) => e.stopPropagation()}
-                  className="inline-flex shrink-0 items-center gap-0.5 rounded-(--ob-radius-control) text-(--ob-primary) transition-colors hover:text-(--ob-primary-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25 cursor-pointer"
+                  className="inline-flex shrink-0 items-center gap-0.5 rounded-(--ob-radius-control) text-(--ob-primary-text) transition-colors hover:text-(--ob-primary-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25 cursor-pointer"
                 >
                   · {drafts.length} draft
                   <ChevronDown size={14} className={cn('transition-transform duration-200', expanded && 'rotate-180')} />

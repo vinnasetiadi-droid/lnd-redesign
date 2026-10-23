@@ -285,7 +285,7 @@ export default function CoursesPage() {
                   onClick={() => setViewMode(m)}
                   className={cn(
                     'flex size-8 items-center justify-center rounded-(--ob-radius-control) bg-(--ob-white) transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25',
-                    viewMode === m ? 'text-(--ob-primary) ring-1 ring-inset ring-(--ob-primary)' : 'text-(--ob-text-muted) hover:text-(--ob-text-strong)',
+                    viewMode === m ? 'text-(--ob-primary-text) ring-1 ring-inset ring-(--ob-primary)' : 'text-(--ob-text-muted) hover:text-(--ob-text-strong)',
                   )}
                 >
                   <Icon size={16} />

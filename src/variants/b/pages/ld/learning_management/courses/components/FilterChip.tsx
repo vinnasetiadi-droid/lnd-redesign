@@ -88,7 +88,7 @@ export function FilterChip<V extends string>({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.98 }}
             transition={{ duration: 0.15, ease: EASE_OUT }}
-            className="absolute left-2 top-full z-30 mt-1 min-w-[180px] rounded-(--ob-radius-card) bg-(--ob-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]"
+            className="absolute left-2 top-full z-30 mt-1 min-w-[180px] rounded-(--ob-radius-card) bg-(--ob-surface-raised) p-1 shadow-(--ob-shadow-menu)"
           >
             {options.map((o) => {
               const selected = o.value === value;
@@ -109,7 +109,7 @@ export function FilterChip<V extends string>({
                   )}
                 >
                   {o.label}
-                  {selected && <Check size={14} className="text-(--ob-primary)" />}
+                  {selected && <Check size={14} className="text-(--ob-primary-text)" />}
                 </button>
               );
             })}

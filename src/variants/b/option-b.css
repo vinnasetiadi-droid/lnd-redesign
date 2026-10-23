@@ -41,8 +41,9 @@ html.option-b * {
 }
 
 /*
- * Design tokens. Defined once here, scoped to Option B; theme.ts (OB_COLORS)
- * mirrors these values for code that needs a plain string (SVG, recharts).
+ * Design tokens. Defined once here, scoped to Option B (dark values further
+ * down). theme.ts: OB_HEX lists these light values, OB_COLORS gives each as its
+ * var() for code that needs a colour string (SVG, recharts).
  */
 html.option-b {
   --ob-primary: #1A73E8; /* The one accent: buttons, selected states, chart highlight */
@@ -119,10 +120,155 @@ html.option-b {
   --ob-status-draft-border: var(--ob-border-control);
   --ob-status-inactive-text: var(--ob-text-muted);
   --ob-status-inactive-border: var(--ob-border-strong);
+  /* Theme roles: in light each one is the value these places used before, so
+     light is unchanged; html.option-b.theme-dark (below) gives them their own */
+  --ob-primary-text: var(--ob-primary); /* Blue used as text or an icon (dark: lighter, for contrast) */
+  --ob-page: var(--ob-surface-muted); /* The layout behind non-white pages */
+  --ob-sidebar-bg: var(--ob-primary-tint);
+  --ob-surface-raised: var(--ob-white); /* Menus, tooltips, dialogs */
+  --ob-tooltip-bg: var(--ob-text-ink); /* The small dark name tooltip */
+  --ob-danger-solid: var(--ob-danger); /* Filled red button with white text */
+  --ob-divider-faint: rgba(0, 0, 0, 0.1); /* Footer link dividers */
+  --ob-overlay: rgba(16, 24, 40, 0.5); /* Behind dialogs */
+  --ob-shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04);
+  --ob-shadow-menu: 0 8px 24px -6px rgba(16, 24, 40, 0.18), 0 2px 4px rgba(16, 24, 40, 0.04);
+  --ob-shadow-dialog: 0 24px 48px -12px rgba(16, 24, 40, 0.18);
+  --ob-shadow-on-photo: 0 1px 2px rgba(16, 24, 40, 0.08), 0 2px 6px -2px rgba(16, 24, 40, 0.12);
+  --ob-nisa-bg: linear-gradient(160deg, var(--ob-primary) 0%, var(--ob-primary-900) 100%);
+  /* The gradients theme.ts exports (OB_BACKGROUND, OB_SHEEN, OB_AI_*) */
+  --ob-background:
+    radial-gradient(55% 60% at 0% 0%, rgba(26, 115, 232, 0.11) 0%, rgba(26, 115, 232, 0) 70%),
+    radial-gradient(50% 55% at 100% 100%, rgba(26, 115, 232, 0.09) 0%, rgba(26, 115, 232, 0) 70%),
+    radial-gradient(40% 45% at 100% 0%, rgba(26, 115, 232, 0.05) 0%, rgba(26, 115, 232, 0) 70%),
+    #F7F9FC;
+  --ob-sheen: linear-gradient(115deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.55) 48%, rgba(255, 255, 255, 0) 66%);
+  --ob-ai-gradient:
+    radial-gradient(110% 110% at 0% 0%, #FFFFFF 0%, rgba(255, 255, 255, 0.85) 25%, rgba(255, 255, 255, 0) 60%),
+    radial-gradient(95% 95% at 100% 100%, #1A73E8 0%, rgba(26, 115, 232, 0.57) 45%, rgba(26, 115, 232, 0.11) 85%),
+    #E8F0FE;
+  --ob-ai-solid:
+    radial-gradient(120% 80% at 0% 0%, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 55%),
+    linear-gradient(160deg, #2F80F0 0%, #1A73E8 45%, #1764D0 100%);
+  --ob-ai-soft:
+    radial-gradient(85% 65% at 100% 0%, rgba(26, 115, 232, 0.16) 0%, rgba(26, 115, 232, 0) 70%),
+    radial-gradient(75% 55% at 100% 100%, rgba(26, 115, 232, 0.12) 0%, rgba(26, 115, 232, 0) 70%),
+    radial-gradient(60% 40% at 0% 100%, rgba(138, 180, 248, 0.10) 0%, rgba(138, 180, 248, 0) 70%),
+    #FFFFFF;
   /* Shapes: squarer than Option A's pills. Round stays for avatars and pure circles */
   --ob-radius-control: 6px; /* Chips, tags, inputs, filter buttons, pagination, focus rings */
   --ob-radius-button: 14px; /* The 3D buttons: square with big, almost round corners (chat request; the kit said 8px) */
   --ob-radius-card: 12px; /* Dialogs, menus, tooltips */
+}
+
+/*
+ * Dark version: neutral near-black, after the "Tempo", "exon" and "My
+ * Campaigns" references. Switched on by `theme-dark` on <html>
+ * (variants/theme-mode.ts); not Tailwind's `dark:` or `.dark`, which belong to
+ * the shared shadcn theme. Only colours, shadows and gradients change.
+ *
+ * Surfaces, darkest first: sidebar #0B0C0E, page and top bar (--ob-white)
+ * #121316, row frames #17181B, hover #1A1C1F, menus and dialogs #1C1E22,
+ * chips and icon squares #212327. Tints of blue, green, red and orange are
+ * translucent washes, so they sit on any of these.
+ */
+html.option-b.theme-dark {
+  --ob-primary: #1A73E8; /* Buttons and bars keep B's blue */
+  --ob-primary-strong: #4A93F0; /* Blue text on a blue wash */
+  --ob-primary-text: #4A93F0;
+  --ob-primary-50: rgba(26, 115, 232, 0.14);
+  --ob-primary-100: rgba(26, 115, 232, 0.22);
+  /* The data shades step down towards the background (lighter = quieter in light, darker = quieter here) */
+  --ob-primary-200: #2E5A96;
+  --ob-primary-300: #3A6DB8;
+  --ob-primary-400: #4A86E0;
+  --ob-primary-900: #A9C7F7; /* Text on a blue wash */
+  --ob-primary-tint: rgba(26, 115, 232, 0.08);
+  --ob-text-strong: #F2F4F7;
+  --ob-text-heading: #E4E7EC;
+  --ob-text-ink: #F2F4F7;
+  --ob-text-body: #C9CED6;
+  --ob-text-secondary: #A3AAB5;
+  --ob-text-muted: #8A919C;
+  --ob-text-subtle: #687079;
+  --ob-text-ai: #E4E7EC;
+  --ob-border: #24272C;
+  --ob-border-subtle: #1D1F23;
+  --ob-border-strong: #2C2F35;
+  --ob-track: #222428;
+  --ob-border-control: #363A41;
+  --ob-line: #41454D;
+  --ob-surface: #212327;
+  --ob-surface-muted: #17181B;
+  --ob-surface-subtle: #1A1C1F;
+  --ob-button-secondary: #22252A;
+  --ob-button-secondary-hover: #2A2D33;
+  --ob-button-primary-hover: #2F80EC;
+  --ob-white: #121316; /* The page surface (Home, Analytics and Upskill are "white pages") */
+  --ob-orange: #FB6514;
+  --ob-orange-strong: #FDA26B;
+  --ob-orange-surface: rgba(251, 101, 20, 0.22);
+  --ob-orange-50: rgba(251, 101, 20, 0.12);
+  --ob-success: #3CCB7F;
+  --ob-success-strong: #5FD99A;
+  --ob-success-surface: rgba(50, 213, 131, 0.12);
+  --ob-success-100: rgba(50, 213, 131, 0.2);
+  --ob-success-bright: #32D583;
+  --ob-danger: #F97066;
+  --ob-danger-strong: #FDA29B;
+  --ob-danger-surface: rgba(240, 68, 56, 0.14);
+  --ob-danger-100: rgba(240, 68, 56, 0.22);
+  --ob-danger-bright: #F97066;
+  --ob-avatar-peach: rgba(253, 162, 107, 0.18);
+  --ob-avatar-lilac: rgba(189, 165, 245, 0.18);
+  --ob-avatar-pink: rgba(240, 130, 200, 0.18);
+  --ob-avatar-cyan: rgba(103, 227, 249, 0.16);
+  --ob-status-review: #9E77ED;
+  --ob-status-review-text: #BDA5F5;
+  --ob-status-active-border: color-mix(in srgb, var(--ob-primary) 55%, var(--ob-white));
+  --ob-status-review-border: color-mix(in srgb, var(--ob-status-review) 50%, var(--ob-white));
+  --ob-status-revision-border: color-mix(in srgb, var(--ob-orange) 50%, var(--ob-white));
+  --ob-status-approved-border: color-mix(in srgb, var(--ob-success) 45%, var(--ob-white));
+  --ob-page: #0B0C0E;
+  --ob-sidebar-bg: #0B0C0E;
+  --ob-surface-raised: #1C1E22;
+  --ob-tooltip-bg: #2A2D33;
+  --ob-danger-solid: #D92D20; /* Keeps white text readable */
+  --ob-divider-faint: rgba(255, 255, 255, 0.1);
+  --ob-overlay: rgba(0, 0, 0, 0.64);
+  /* Quiet shadows: a light hairline and a deep black drop, no glow */
+  --ob-shadow-card: 0 0 #0000;
+  --ob-shadow-menu: 0 0 0 1px rgba(255, 255, 255, 0.07), 0 12px 32px -8px rgba(0, 0, 0, 0.7);
+  --ob-shadow-dialog: 0 0 0 1px rgba(255, 255, 255, 0.07), 0 24px 56px -12px rgba(0, 0, 0, 0.8);
+  --ob-shadow-on-photo: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.5);
+  /* NISA stays a blue section, a little deeper so it does not glare on black */
+  --ob-nisa-bg: linear-gradient(160deg, #1A66D0 0%, #0F2E66 100%);
+  --ob-background:
+    radial-gradient(55% 60% at 0% 0%, rgba(26, 115, 232, 0.10) 0%, rgba(26, 115, 232, 0) 70%),
+    radial-gradient(50% 55% at 100% 100%, rgba(26, 115, 232, 0.07) 0%, rgba(26, 115, 232, 0) 70%),
+    #0B0C0E;
+  --ob-sheen: linear-gradient(115deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.03) 48%, rgba(255, 255, 255, 0) 66%);
+  --ob-ai-gradient:
+    radial-gradient(110% 110% at 0% 0%, #1C1E22 0%, rgba(28, 30, 34, 0.85) 25%, rgba(28, 30, 34, 0) 60%),
+    radial-gradient(95% 95% at 100% 100%, #1A73E8 0%, rgba(26, 115, 232, 0.45) 45%, rgba(26, 115, 232, 0.08) 85%),
+    #152439;
+  --ob-ai-solid:
+    radial-gradient(120% 80% at 0% 0%, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0) 55%),
+    linear-gradient(160deg, #1F6FD8 0%, #1A5FC4 45%, #123F8A 100%);
+  --ob-ai-soft:
+    radial-gradient(85% 65% at 100% 0%, rgba(26, 115, 232, 0.18) 0%, rgba(26, 115, 232, 0) 70%),
+    radial-gradient(75% 55% at 100% 100%, rgba(26, 115, 232, 0.12) 0%, rgba(26, 115, 232, 0) 70%),
+    radial-gradient(60% 40% at 0% 100%, rgba(138, 180, 248, 0.06) 0%, rgba(138, 180, 248, 0) 70%),
+    #121316;
+}
+
+/* Images with a light and a dark version (the sidebar logo): one shows per theme */
+html.option-b:not(.theme-dark) .ob-dark-only,
+html.option-b.theme-dark .ob-light-only {
+  display: none;
+}
+/* A dark wordmark with a coloured mark (the footer logo): the text turns light, the colours keep their hue */
+html.option-b.theme-dark .ob-logo-invert {
+  filter: invert(1) hue-rotate(180deg);
 }
 
 /* Regular by default, including elements the base styles make heavier */
@@ -218,6 +364,28 @@ html.option-b .ob-btn-secondary:hover {
   background: var(--ob-surface-subtle);
 }
 
+/* Dark: the blue button keeps its lip with a black drop instead of a blue glow;
+   the white button becomes a dark raised surface with a hairline */
+html.option-b.theme-dark .ob-btn-primary,
+html.option-b.theme-dark .ob-btn-primary.ob-on-blue {
+  box-shadow:
+    inset 0 -3px 4px -1px rgba(255, 255, 255, 0.22),
+    0 6px 14px -6px rgba(0, 0, 0, 0.7);
+}
+html.option-b.theme-dark .ob-btn-primary:hover {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ob-primary) 88%, white) 0%, var(--ob-button-primary-hover) 100%);
+}
+html.option-b.theme-dark .ob-btn-secondary {
+  background: linear-gradient(180deg, #1F2125 0%, #1A1C1F 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 0 1px var(--ob-border-strong),
+    0 1px 2px rgba(0, 0, 0, 0.5);
+}
+html.option-b.theme-dark .ob-btn-secondary:hover {
+  background: #24272B;
+}
+
 /* ── Motion ─────────────────────────────────────────────────── */
 
 /* Cards: a 1px lift and a faint blue glow on hover */
@@ -229,6 +397,10 @@ html.option-b .ob-lift {
 html.option-b .ob-lift:hover {
   translate: 0 -1px;
   box-shadow: 0 14px 32px -18px rgba(26, 115, 232, 0.28);
+}
+/* Dark: a deep shadow, no blue glow */
+html.option-b.theme-dark .ob-lift:hover {
+  box-shadow: 0 14px 32px -18px rgba(0, 0, 0, 0.9);
 }
 
 /* Buttons give a little under the finger. In the base layer, so a button's own
@@ -255,6 +427,10 @@ html.option-b .ob-sweep::after {
   background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.85) 50%, transparent 70%);
   transform: translateX(-100%);
   animation: ob-sweep 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.5s 1 forwards;
+}
+/* Dark: a faint sweep, not a white flash */
+html.option-b.theme-dark .ob-sweep::after {
+  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.07) 50%, transparent 70%);
 }
 @keyframes ob-sweep {
   to { transform: translateX(100%); }

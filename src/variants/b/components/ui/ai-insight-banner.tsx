@@ -17,7 +17,7 @@ export function AIInsightBanner({
   return (
     <div
       className={cn(
-        "relative rounded-(--ob-radius-card) bg-gradient-to-br from-white via-(--ob-primary-tint) to-(--ob-primary-50) p-4 overflow-hidden",
+        "relative rounded-(--ob-radius-card) bg-gradient-to-br from-(--ob-white) via-(--ob-primary-tint) to-(--ob-primary-50) p-4 overflow-hidden",
         className,
       )}
     >
@@ -48,7 +48,7 @@ export function AIInsightLine({ text, fullText, className }: { text: string; ful
         {text}{" "}
         <button
           type="button"
-          className="inline-flex items-center gap-0.5 whitespace-nowrap rounded-(--ob-radius-control) align-baseline text-(--ob-primary) transition-colors hover:text-(--ob-primary-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25 cursor-pointer"
+          className="inline-flex items-center gap-0.5 whitespace-nowrap rounded-(--ob-radius-control) align-baseline text-(--ob-primary-text) transition-colors hover:text-(--ob-primary-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25 cursor-pointer"
         >
           Ask NISA
           <ArrowRight size={14} className="self-center" />

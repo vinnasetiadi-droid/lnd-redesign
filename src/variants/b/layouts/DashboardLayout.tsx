@@ -32,7 +32,7 @@ export function DashboardLayout({ children, noFooter = false, fixedContent = fal
 
   return (
     <MotionConfig reducedMotion="user">
-    <div className="flex h-screen w-full overflow-hidden bg-(--ob-surface-muted) font-sans text-(--ob-text-strong)">
+    <div className="flex h-screen w-full overflow-hidden bg-(--ob-page) font-sans text-(--ob-text-strong)">
       {!hideSidebar && (
         <div className="relative z-10 h-full flex-shrink-0">
           <Sidebar className="h-full" role={role} isCollapsed={isSidebarCollapsed} onToggle={toggleSidebar} />

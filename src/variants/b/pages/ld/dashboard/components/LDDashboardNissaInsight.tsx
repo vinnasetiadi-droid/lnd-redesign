@@ -50,7 +50,7 @@ export function LDDashboardNissaInsight({ insights, className }: LDDashboardNiss
   return (
     <div
       className={cn('relative w-full overflow-hidden', className)}
-      style={{ background: 'linear-gradient(160deg, var(--ob-primary) 0%, var(--ob-primary-900) 100%)' }}
+      style={{ background: 'var(--ob-nisa-bg)' }}
     >
       {/* Dot pattern, fading out from the top right corner */}
       <span

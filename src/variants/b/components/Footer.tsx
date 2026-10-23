@@ -9,7 +9,7 @@ export function Footer() {
         <img
           src={imgAjari}
           alt="Ajari"
-          className="h-[19px] w-auto object-contain"
+          className="ob-logo-invert h-[19px] w-auto object-contain"
         />
         <p className="text-[12px] leading-[16px] text-(--ob-text-secondary) whitespace-nowrap">
           © 2026 HR Platform. All rights reserved.
@@ -24,14 +24,14 @@ export function Footer() {
         >
           User guide
         </Link>
-        <div className="h-[21px] w-px bg-black/10" />
+        <div className="h-[21px] w-px bg-(--ob-divider-faint)" />
         <Link
           to="/technical-help"
           className="text-[12px] leading-[16px] text-(--ob-text-secondary) hover:text-(--ob-text-body) no-underline whitespace-nowrap"
         >
           Technical help
         </Link>
-        <div className="h-[21px] w-px bg-black/10" />
+        <div className="h-[21px] w-px bg-(--ob-divider-faint)" />
         <Link
           to="/privacy-policy"
           className="text-[12px] leading-[16px] text-(--ob-text-secondary) hover:text-(--ob-text-body) no-underline whitespace-nowrap"

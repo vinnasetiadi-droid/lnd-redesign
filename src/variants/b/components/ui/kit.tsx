@@ -35,7 +35,7 @@ export function NumText({ children }: { children: ReactNode }) {
 export function IconCircle({ icon: Icon, className }: { icon: LucideIcon; className?: string }) {
   return (
     // The icon is in the accent blue: an icon circle marks something to look at
-    <span className={cn('flex size-8 shrink-0 items-center justify-center rounded-(--ob-radius-control) bg-(--ob-surface) text-(--ob-primary)', className)}>
+    <span className={cn('flex size-8 shrink-0 items-center justify-center rounded-(--ob-radius-control) bg-(--ob-surface) text-(--ob-primary-text)', className)}>
       <Icon size={16} />
     </span>
   );
@@ -97,7 +97,7 @@ export function SearchField({ value, onChange, placeholder, loading, variant = '
             : 'h-10 rounded-(--ob-radius-control) bg-(--ob-white) pl-11 pr-10 ring-1 ring-inset ring-(--ob-border) focus:ring-(--ob-primary)',
         )}
       />
-      {loading && <Loader2 className="absolute right-4 top-1/2 size-4 -translate-y-1/2 animate-spin text-(--ob-primary)" />}
+      {loading && <Loader2 className="absolute right-4 top-1/2 size-4 -translate-y-1/2 animate-spin text-(--ob-primary-text)" />}
     </div>
   );
 }
@@ -140,7 +140,7 @@ export function Chip({ children, tone = 'neutral', dot, icon: Icon, className }:
 }
 
 /** Card frame: white, 12px corners, a hairline border and the faintest shadow. Inside `.ob-flat` (Home's one frame) it drops its frame. */
-export const CARD = 'ob-card rounded-(--ob-radius-card) bg-(--ob-white) ring-1 ring-(--ob-border) shadow-[0_1px_2px_rgba(16,24,40,0.04)]';
+export const CARD = 'ob-card rounded-(--ob-radius-card) bg-(--ob-white) ring-1 ring-(--ob-border) shadow-(--ob-shadow-card)';
 
 /** Change chip beside a number: "▲ 15.5%" on green, "▼ 10.5%" on red; the number in Geist Mono, "pts" in Inter */
 export function DeltaChip({ children, positive = true, className }: { children: ReactNode; positive?: boolean; className?: string }) {
@@ -194,7 +194,7 @@ export function MetricTile({ selected, onClick, label, children, share, icon: Ic
           {Icon && (
             <Icon
               size={16}
-              className={cn('shrink-0 transition-colors duration-300', selected ? 'text-(--ob-primary)' : 'text-(--ob-text-muted)')}
+              className={cn('shrink-0 transition-colors duration-300', selected ? 'text-(--ob-primary-text)' : 'text-(--ob-text-muted)')}
             />
           )}
           {children}

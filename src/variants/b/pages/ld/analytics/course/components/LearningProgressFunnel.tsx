@@ -165,10 +165,11 @@ export function LearningProgressFunnel({ programType, className }: { programType
           aria-hidden
         >
           <defs>
-            {/* The flow fades in from the left edge */}
+            {/* The flow fades in from the left edge. A mask works on luminance, so
+                these stops are real white in both themes (not the page colour) */}
             <linearGradient id={`${id}-fade`} x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stopColor={OB_COLORS.white} stopOpacity="0" />
-              <stop offset={String(stageX(0) / 100)} stopColor={OB_COLORS.white} stopOpacity="1" />
+              <stop offset="0" stopColor="#FFFFFF" stopOpacity="0" />
+              <stop offset={String(stageX(0) / 100)} stopColor="#FFFFFF" stopOpacity="1" />
             </linearGradient>
                         <mask id={`${id}-mask`}>
               <rect width={W} height={H} fill={`url(#${id}-fade)`} />

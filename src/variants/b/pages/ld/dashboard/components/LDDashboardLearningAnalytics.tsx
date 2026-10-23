@@ -39,7 +39,7 @@ function completionSeries(scope: ProgramScope): MonthlyCompletion[] {
 // self-paced uses primary-300 and keeps the tint for its area and bar);
 // `text` is the end label's colour.
 const MODES = [
-  { key: 'blended', label: 'Blended',    color: OB_COLORS.primary,  line: OB_COLORS.primary,    text: OB_COLORS.primary },
+  { key: 'blended', label: 'Blended',    color: OB_COLORS.primary,  line: OB_COLORS.primary,    text: OB_COLORS.primaryText },
   { key: 'self',    label: 'Self-paced', color: OB_COLORS.modeSelf, line: OB_COLORS.primary300, text: OB_COLORS.textMuted },
 ] as const;
 

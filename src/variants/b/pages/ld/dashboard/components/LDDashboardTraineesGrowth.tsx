@@ -89,7 +89,7 @@ export function LDDashboardTraineesGrowth({ className }: LDDashboardTraineesGrow
   ];
 
   return (
-    <div className={cn('relative flex flex-col gap-5 rounded-[18px] bg-white p-5', className)}>
+    <div className={cn('relative flex flex-col gap-5 rounded-[18px] bg-(--ob-white) p-5', className)}>
       {/* Header: title + period, scope tabs on the right */}
       <CardHeader
         title="Trainees growth trend"

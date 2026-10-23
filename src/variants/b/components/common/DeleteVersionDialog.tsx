@@ -47,11 +47,11 @@ export function DeleteVersionDialog({
   return createPortal(
     <div
       className="fixed inset-0 z-[60] flex items-center justify-center px-4"
-      style={{ backgroundColor: 'rgba(16,24,40,0.5)', fontFamily: FONT }}
+      style={{ backgroundColor: 'var(--ob-overlay)', fontFamily: FONT }}
       onClick={onCancel}
     >
       <div
-        className="relative w-full max-w-[640px] bg-(--ob-white) rounded-(--ob-radius-card) shadow-[0_24px_48px_-12px_rgba(16,24,40,0.18)] p-8 flex flex-col items-center text-center"
+        className="relative w-full max-w-[640px] bg-(--ob-surface-raised) rounded-(--ob-radius-card) shadow-(--ob-shadow-dialog) p-8 flex flex-col items-center text-center"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -94,7 +94,7 @@ export function DeleteVersionDialog({
           </button>
           <button
             onClick={onConfirm}
-            className="flex-1 h-11 rounded-(--ob-radius-button) bg-(--ob-danger) text-[13px] text-white hover:brightness-[0.92] cursor-pointer transition-colors"
+            className="flex-1 h-11 rounded-(--ob-radius-button) bg-(--ob-danger-solid) text-[13px] text-white hover:brightness-[0.92] cursor-pointer transition-colors"
           >
             Yes
           </button>

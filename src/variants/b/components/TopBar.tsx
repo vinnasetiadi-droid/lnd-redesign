@@ -85,7 +85,7 @@ function PageSearch({ role }: { role: SidebarRole }) {
         {open && query.trim() && (
           <motion.ul
             role="listbox"
-            className="absolute left-0 right-0 top-full z-40 mt-1.5 rounded-(--ob-radius-card) bg-(--ob-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]"
+            className="absolute left-0 right-0 top-full z-40 mt-1.5 rounded-(--ob-radius-card) bg-(--ob-surface-raised) p-1 shadow-(--ob-shadow-menu)"
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}

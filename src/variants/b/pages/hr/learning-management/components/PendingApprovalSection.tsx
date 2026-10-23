@@ -138,7 +138,7 @@ export function PendingApprovalSection({
   return (
     <div
       className={cn(
-        'relative bg-white rounded-(--ob-radius-card) p-5 overflow-hidden',
+        'relative bg-(--ob-white) rounded-(--ob-radius-card) p-5 overflow-hidden',
         className
       )}
     >

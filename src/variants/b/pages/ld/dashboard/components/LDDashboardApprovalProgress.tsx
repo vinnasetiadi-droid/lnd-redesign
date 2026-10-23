@@ -35,13 +35,13 @@ export function LDDashboardApprovalProgress({ approvals, className }: LDDashboar
     : visible.filter((a) => a.status === activeFilter);
 
   return (
-    <div className={cn('relative bg-white rounded-[18px] p-5 overflow-hidden', className)}>
+    <div className={cn('relative bg-(--ob-white) rounded-[18px] p-5 overflow-hidden', className)}>
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-gradient-to-br from-(--ob-primary-50)/50 to-(--ob-primary-100)/50 rounded-full blur-3xl -z-10 translate-x-1/3 -translate-y-1/3 pointer-events-none" />
 
       {/* Header */}
       <div className="flex flex-col gap-4 mb-5">
         <div className="flex gap-3 items-center">
-          <div className="w-12 h-12 rounded-[10px] border border-(--ob-border) bg-white flex items-center justify-center shrink-0">
+          <div className="w-12 h-12 rounded-[10px] border border-(--ob-border) bg-(--ob-white) flex items-center justify-center shrink-0">
             <ClipboardCheck className="w-6 h-6 text-(--ob-text-body)" strokeWidth={1.75} />
           </div>
           <div className="space-y-0.5">
@@ -55,7 +55,7 @@ export function LDDashboardApprovalProgress({ approvals, className }: LDDashboar
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-[12px] border border-(--ob-border) overflow-hidden">
+      <div className="bg-(--ob-white) rounded-[12px] border border-(--ob-border) overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>

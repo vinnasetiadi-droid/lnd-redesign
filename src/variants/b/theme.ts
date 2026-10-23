@@ -1,7 +1,10 @@
 /**
  * Option B palette: one blue, #1A73E8, on neutral greys (Finora-style white
- * cards). The design tokens live in option-b.css as CSS variables; OB_COLORS
- * below is their documented mirror, plus the shared gradients.
+ * cards), with a near-black dark version. The design tokens live in
+ * option-b.css as CSS variables (light on html.option-b, dark on
+ * html.option-b.theme-dark); OB_HEX below lists their light values, OB_COLORS
+ * and the shared gradients point at the variables so they follow the theme.
+ * OB_PALETTE is the light reference scale (not drawn anywhere).
  */
 export const OB_PALETTE = {
   primary: {
@@ -26,55 +29,39 @@ export const OB_PALETTE = {
 } as const;
 
 /**
- * Page background: near-white with #1A73E8 glows at 11% (the "Opacity 11%"
- * swatch), so the blue stays a hint behind the white cards.
+ * The shared gradients. Each reads a CSS variable from option-b.css, so it
+ * follows the light/dark theme; the light values there are the originals:
+ *
+ * - OB_BACKGROUND: near-white with #1A73E8 glows at 11% (the "Opacity 11%"
+ *   swatch), so the blue stays a hint behind the white cards
+ * - OB_SHEEN: faint diagonal sheen over the background (a plain gradient: a
+ *   blur filter here stops the content from painting)
+ * - OB_AI_GRADIENT: AI frame gradient from the #1A73E8 swatches, white at the
+ *   top left, through 11% and 57%, to the full colour at the bottom right
+ * - OB_AI_SOLID: solid blue for the NISA card (white text on top), soft light
+ *   at the top left
+ * - OB_AI_SOFT: mostly white with a soft blue glow on the right (NISA card,
+ *   dark text on top)
  */
-export const OB_BACKGROUND = [
-  'radial-gradient(55% 60% at 0% 0%, rgba(26, 115, 232, 0.11) 0%, rgba(26, 115, 232, 0) 70%)',
-  'radial-gradient(50% 55% at 100% 100%, rgba(26, 115, 232, 0.09) 0%, rgba(26, 115, 232, 0) 70%)',
-  'radial-gradient(40% 45% at 100% 0%, rgba(26, 115, 232, 0.05) 0%, rgba(26, 115, 232, 0) 70%)',
-  '#F7F9FC',
-].join(', ');
+export const OB_BACKGROUND = 'var(--ob-background)';
+export const OB_SHEEN = 'var(--ob-sheen)';
+export const OB_AI_GRADIENT = 'var(--ob-ai-gradient)';
+export const OB_AI_SOLID = 'var(--ob-ai-solid)';
+export const OB_AI_SOFT = 'var(--ob-ai-soft)';
 
-/** Faint diagonal sheen over the background. Plain gradient: a blur filter here stops the content from painting. */
-export const OB_SHEEN =
-  'linear-gradient(115deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.55) 48%, rgba(255, 255, 255, 0) 66%)';
-
-/**
- * AI frame gradient from the #1A73E8 swatches: white at the top left, through
- * 11% and 57%, to the full colour at the bottom right.
- */
-export const OB_AI_GRADIENT = [
-  'radial-gradient(110% 110% at 0% 0%, #FFFFFF 0%, rgba(255, 255, 255, 0.85) 25%, rgba(255, 255, 255, 0) 60%)',
-  'radial-gradient(95% 95% at 100% 100%, #1A73E8 0%, rgba(26, 115, 232, 0.57) 45%, rgba(26, 115, 232, 0.11) 85%)',
-  '#E8F0FE',
-].join(', ');
-
-/** Solid blue for the NISA card (white text on top): soft light at the top left */
-export const OB_AI_SOLID = [
-  'radial-gradient(120% 80% at 0% 0%, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 55%)',
-  'linear-gradient(160deg, #2F80F0 0%, #1A73E8 45%, #1764D0 100%)',
-].join(', ');
-
-/** Mostly white with a soft blue glow on the right (NISA card, dark text on top) */
-export const OB_AI_SOFT = [
-  'radial-gradient(85% 65% at 100% 0%, rgba(26, 115, 232, 0.16) 0%, rgba(26, 115, 232, 0) 70%)',
-  'radial-gradient(75% 55% at 100% 100%, rgba(26, 115, 232, 0.12) 0%, rgba(26, 115, 232, 0) 70%)',
-  'radial-gradient(60% 40% at 0% 100%, rgba(138, 180, 248, 0.10) 0%, rgba(138, 180, 248, 0) 70%)',
-  '#FFFFFF',
-].join(', ');
-
-/**
- * Mirror of the CSS design tokens in option-b.css (html.option-b --ob-*).
- * Tailwind classes use the variables, e.g. text-(--ob-text-strong); code that
- * needs a plain colour string (SVG attributes, recharts props) uses these.
- * Keep both lists in step.
- */
 /** Geist Mono for numbers drawn in SVG (chart ticks and labels); CSS uses .ob-num */
 export const OB_NUM_FONT = "'Geist Mono', ui-monospace, monospace";
 
-export const OB_COLORS = {
+/**
+ * The light values of the CSS design tokens in option-b.css (html.option-b
+ * --ob-*), as plain hex: the documented palette, and the fixed colours of the
+ * achievement badges (which look the same in both themes). Keep both lists in
+ * step. Anything drawn on the page uses OB_COLORS below instead, so it follows
+ * the theme.
+ */
+export const OB_HEX = {
   primary: '#1A73E8', // The one accent: buttons, selected states, chart highlight
+  primaryText: '#1A73E8', // = primary in light; a lighter blue in dark, where blue is text or an icon
   primaryStrong: '#1967D2', // Blue text on a blue tint, link hover
   primary50: '#E8F0FE', // Lightest blue tint (pills, chips)
   primary100: '#D2E3FC',
@@ -138,12 +125,25 @@ export const OB_COLORS = {
   statusReviewText: '#6941C6',
 } as const;
 
-export type OBColor = keyof typeof OB_COLORS;
+export type OBColor = keyof typeof OB_HEX;
 
 /** The CSS variable for a token, for inline styles: obVar('primary') → 'var(--ob-primary)' */
 export function obVar(token: OBColor): string {
   return `var(--ob-${token.replace(/([a-z])([A-Z0-9])/g, '$1-$2').toLowerCase()})`;
 }
+
+/**
+ * Every token as its CSS variable, e.g. OB_COLORS.primary = 'var(--ob-primary)'.
+ * Tailwind classes use the variables directly (text-(--ob-text-strong)); code
+ * that needs a colour string (SVG attributes, recharts props, inline styles)
+ * uses these, so it switches with the light/dark theme. They are not hex, so
+ * never append an alpha to them or parse them: tint with
+ * `color-mix(in srgb, ${color} 20%, transparent)` instead. An SVG mask needs
+ * real white, not OB_COLORS.white (the page colour, dark in dark mode).
+ */
+export const OB_COLORS = Object.fromEntries(
+  (Object.keys(OB_HEX) as OBColor[]).map((token) => [token, obVar(token)]),
+) as { readonly [K in OBColor]: string };
 
 /** One achievement badge: its gradient, drop shadow, white glow size and (for the ones with one) its icon tint */
 export interface ObBadgeTone {
@@ -158,12 +158,13 @@ export interface ObBadgeTone {
 /**
  * The profile's achievement badges (components/ui/profile-badges): three round
  * badges in Option B's blue scale, from deep to light, so they read as one
- * set with the page's accent.
+ * set with the page's accent. Fixed hex (OB_HEX): blue gradients with a white
+ * glow read the same on the light and the dark page.
  */
 export const OB_BADGES = {
-  white: OB_COLORS.white,
-  ink: OB_COLORS.textInk,
-  medal:  { from: OB_COLORS.primary900, to: OB_COLORS.primary400, shadow: OB_COLORS.primary900, shadowOpacity: 0.2, glow: 23, icon: OB_COLORS.primary200 },
-  star:   { from: OB_COLORS.primary, to: OB_COLORS.primary300, shadow: OB_COLORS.primary900, shadowOpacity: 0.18, glow: 25, icon: OB_COLORS.primary100 },
-  trophy: { from: OB_COLORS.primary400, to: OB_COLORS.primary100, shadow: OB_COLORS.primary, shadowOpacity: 0.16, glow: 20, icon: OB_COLORS.primary50 },
+  white: OB_HEX.white,
+  ink: OB_HEX.textInk,
+  medal:  { from: OB_HEX.primary900, to: OB_HEX.primary400, shadow: OB_HEX.primary900, shadowOpacity: 0.2, glow: 23, icon: OB_HEX.primary200 },
+  star:   { from: OB_HEX.primary, to: OB_HEX.primary300, shadow: OB_HEX.primary900, shadowOpacity: 0.18, glow: 25, icon: OB_HEX.primary100 },
+  trophy: { from: OB_HEX.primary400, to: OB_HEX.primary100, shadow: OB_HEX.primary, shadowOpacity: 0.16, glow: 20, icon: OB_HEX.primary50 },
 } satisfies Record<string, string | ObBadgeTone>;

@@ -171,7 +171,7 @@ export function LDDashboardActivePrograms({ programs, className }: LDDashboardAc
           <button
             type="button"
             onClick={() => navigate('/ld/learning-management/courses')}
-            className="text-[13px] text-(--ob-primary) transition-colors hover:text-(--ob-primary-strong) cursor-pointer"
+            className="text-[13px] text-(--ob-primary-text) transition-colors hover:text-(--ob-primary-strong) cursor-pointer"
           >
             See all
           </button>

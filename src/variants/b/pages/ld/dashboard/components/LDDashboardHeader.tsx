@@ -107,7 +107,7 @@ export function LDDashboardHeader({ metrics, flat, className }: LDDashboardHeade
           <div key={card.key} className={cn(CARD, 'ob-lift flex flex-col gap-3 p-5')}>
             <div className="flex items-start justify-between gap-2" title={card.hint}>
               <p className="min-w-0 text-[14px] leading-[20px] text-(--ob-text-strong)">{card.title}</p>
-              <Icon size={18} className="shrink-0 text-(--ob-primary)" />
+              <Icon size={18} className="shrink-0 text-(--ob-primary-text)" />
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <p className="flex items-baseline gap-1">

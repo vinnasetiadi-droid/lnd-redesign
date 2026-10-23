@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { COURSE_STATUS_META, type CourseStatus } from '../data/courses.mock';
 
 /** White control on a photo: 6px corners, a hairline and a very soft shadow (status tag, card menu button) */
-export const ON_PHOTO = 'rounded-(--ob-radius-control) bg-(--ob-white) shadow-[0_1px_2px_rgba(16,24,40,0.08),0_2px_6px_-2px_rgba(16,24,40,0.12)]';
+export const ON_PHOTO = 'rounded-(--ob-radius-control) bg-(--ob-white) shadow-(--ob-shadow-on-photo)';
 
 function StatusTag({ status, onImage, className }: { status: CourseStatus; onImage?: boolean; className?: string }) {
   const meta = COURSE_STATUS_META[status];

@@ -70,7 +70,8 @@ function SegmentGauge({ pct, start, color }: { pct: number; start: boolean; colo
         const sin = Math.sin(angle);
         const on = i < filled;
         return (
-          <motion.line
+          // A CSS transition rather than motion, so the colours stay CSS variables and follow the theme
+          <line
             key={i}
             x1={cx + inner * cos}
             y1={cy - inner * sin}
@@ -78,9 +79,7 @@ function SegmentGauge({ pct, start, color }: { pct: number; start: boolean; colo
             y2={cy - outer * sin}
             strokeWidth={9}
             strokeLinecap="round"
-            initial={{ stroke: OB_COLORS.border }}
-            animate={{ stroke: start && on ? color : OB_COLORS.border }}
-            transition={{ duration: 0.3, ease: 'easeOut', delay: start && on ? 0.15 + i * 0.08 : 0 }}
+            style={{ stroke: start && on ? color : OB_COLORS.border, transition: `stroke 0.3s ease-out ${start && on ? 0.15 + i * 0.08 : 0}s` }}
           />
         );
       })}
@@ -117,7 +116,7 @@ function TickGauge({ pct, start, color }: { pct: number; start: boolean; color: 
         const inner = on ? 66 : 72;
         const outer = 90;
         return (
-          <motion.line
+          <line
             key={i}
             x1={c + inner * Math.cos(angle)}
             y1={c + inner * Math.sin(angle)}
@@ -127,9 +126,8 @@ function TickGauge({ pct, start, color }: { pct: number; start: boolean; color: 
             strokeLinecap="round"
             // Filled ticks deepen towards the rate; the grey ones fade towards the end
             strokeOpacity={on ? 0.3 + 0.7 * (i / Math.max(1, filled - 1)) : 1 - 0.6 * ((i - filled) / Math.max(1, TICKS - filled - 1))}
-            initial={{ stroke: OB_COLORS.borderStrong }}
-            animate={{ stroke: start && on ? color : OB_COLORS.borderStrong }}
-            transition={{ duration: 0.25, ease: 'easeOut', delay: start && on ? 0.15 + i * 0.03 : 0 }}
+            // A CSS transition rather than motion, so the colours stay CSS variables and follow the theme
+            style={{ stroke: start && on ? color : OB_COLORS.borderStrong, transition: `stroke 0.25s ease-out ${start && on ? 0.15 + i * 0.03 : 0}s` }}
           />
         );
       })}

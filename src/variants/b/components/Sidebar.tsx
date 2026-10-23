@@ -42,23 +42,28 @@ function EdgeBar({ className }: { className?: string }) {
 // SUB-COMPONENTS
 // ============================================================
 
-/** Dark logo from the asset server; falls back to a wordmark when the server is down */
+/**
+ * Dark logo from the asset server (light theme; falls back to a wordmark when
+ * the server is down) and the bundled white logo (dark theme). CSS shows one.
+ */
 function Logo() {
   const [failed, setFailed] = useState(false);
-  if (failed) {
-    return (
-      <span className="text-[16px] leading-[24px] text-(--ob-text-strong)">
-        Learn<span className="text-(--ob-primary)">X</span>pert
-      </span>
-    );
-  }
   return (
-    <img
-      src={IMAGES.icons.black_lx}
-      alt="LearnXpert"
-      className="h-[34px] w-auto object-contain"
-      onError={() => setFailed(true)}
-    />
+    <>
+      {failed ? (
+        <span className="ob-light-only text-[16px] leading-[24px] text-(--ob-text-strong)">
+          Learn<span className="text-(--ob-primary-text)">X</span>pert
+        </span>
+      ) : (
+        <img
+          src={IMAGES.icons.black_lx}
+          alt="LearnXpert"
+          className="ob-light-only h-[34px] w-auto object-contain"
+          onError={() => setFailed(true)}
+        />
+      )}
+      <img src={IMAGES.icons.white_lx} alt="LearnXpert" className="ob-dark-only h-[34px] w-auto object-contain" />
+    </>
   );
 }
 
@@ -122,7 +127,7 @@ function SidebarItem({
         <span
           className={cn(
             "shrink-0 flex items-center justify-center transition-[color,translate] duration-200 group-hover:translate-x-[2px]",
-            pill ? "text-(--ob-primary)" : childActive ? "text-(--ob-text-strong)" : danger ? "text-(--ob-text-muted) group-hover:text-(--ob-danger)" : "text-(--ob-text-muted) group-hover:text-(--ob-text-body)",
+            pill ? "text-(--ob-primary-text)" : childActive ? "text-(--ob-text-strong)" : danger ? "text-(--ob-text-muted) group-hover:text-(--ob-danger)" : "text-(--ob-text-muted) group-hover:text-(--ob-text-body)",
           )}
         >
           {icon}
@@ -322,8 +327,8 @@ export function Sidebar({ className, role = "ld_team", isCollapsed = false, onTo
   return (
     <aside
       className={cn(
-        // A very light blue tint, so the sidebar reads apart from the white page
-        "h-full flex flex-col border-r border-(--ob-border) bg-(--ob-primary-tint) font-sans transition-[width] duration-300 ease-in-out",
+        // A very light blue tint, so the sidebar reads apart from the white page (dark: the darkest surface)
+        "h-full flex flex-col border-r border-(--ob-border) bg-(--ob-sidebar-bg) font-sans transition-[width] duration-300 ease-in-out",
         isCollapsed ? "w-[60px]" : "w-[clamp(176px,12.5vw,188px)]",
         className,
       )}
