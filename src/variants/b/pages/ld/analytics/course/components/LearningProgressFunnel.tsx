@@ -31,11 +31,11 @@ const FUNNEL: Record<ProgramType, Record<Mode, number[]>> = {
   },
 };
 
-// Option B's green (chat request): blended is the deep green band in the
-// middle, self-paced the pale green around it
+// The mode blue pair (as the donut and Home's Learning mode): blended is the
+// deep band in the middle, self-paced the pale one around it
 const MODES: { key: Mode; label: string; color: string }[] = [
-  { key: 'blended', label: 'Blended',    color: OB_COLORS.success },
-  { key: 'self',    label: 'Self-paced', color: OB_COLORS.success200 },
+  { key: 'blended', label: 'Blended',    color: OB_COLORS.primary },
+  { key: 'self',    label: 'Self-paced', color: OB_COLORS.modeSelf },
 ];
 
 // Layout: a label column, then one column per stage. Stage lines sit in the
@@ -144,17 +144,17 @@ export function LearningProgressFunnel({ programType, className }: { programType
               <span className="ob-num text-(--ob-text-strong)">{totals[i]}</span>
             </div>
             <div className="mt-1 h-1 w-full overflow-hidden rounded-[2px] bg-(--ob-surface)">
-              <div className="h-full rounded-[2px] bg-(--ob-success)" style={{ width: `${(totals[i] / totals[0]) * 100}%` }} />
+              <div className="h-full rounded-[2px] bg-(--ob-primary)" style={{ width: `${(totals[i] / totals[0]) * 100}%` }} />
             </div>
           </div>
         ))}
       </div>
 
       <div ref={ref} className="relative hidden md:block" style={{ height: H + 56 }}>
-        {/* A faint green glow behind the start of the flow */}
+        {/* A faint blue glow behind the start of the flow */}
         <div
           className="pointer-events-none absolute inset-x-0 top-7"
-          style={{ height: H, background: 'radial-gradient(50% 70% at 24% 50%, color-mix(in srgb, var(--ob-success) 8%, transparent) 0%, transparent 70%)' }}
+          style={{ height: H, background: 'radial-gradient(50% 70% at 24% 50%, color-mix(in srgb, var(--ob-primary) 8%, transparent) 0%, transparent 70%)' }}
           aria-hidden
         />
         <svg
@@ -172,14 +172,14 @@ export function LearningProgressFunnel({ programType, className }: { programType
             </linearGradient>
             {/* Each band deepens a little towards the later stages */}
             <linearGradient id={`${id}-blended`} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={W} y2="0">
-              <stop offset="0" stopColor={OB_COLORS.success200} />
-              <stop offset={String(stageX(0) / 100)} stopColor={OB_COLORS.successBright} />
-              <stop offset="1" stopColor={OB_COLORS.success} />
+              <stop offset="0" stopColor={OB_COLORS.primary300} />
+              <stop offset={String(stageX(0) / 100)} stopColor={OB_COLORS.primary400} />
+              <stop offset="1" stopColor={OB_COLORS.primary} />
             </linearGradient>
             <linearGradient id={`${id}-self`} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={W} y2="0">
-              <stop offset="0" stopColor={OB_COLORS.successSurface} />
-              <stop offset={String(stageX(0) / 100)} stopColor={OB_COLORS.success100} />
-              <stop offset="1" stopColor={OB_COLORS.success200} />
+              <stop offset="0" stopColor={OB_COLORS.primary50} />
+              <stop offset={String(stageX(0) / 100)} stopColor={OB_COLORS.primary100} />
+              <stop offset="1" stopColor={OB_COLORS.modeSelf} />
             </linearGradient>
             <mask id={`${id}-mask`}>
               <rect width={W} height={H} fill={`url(#${id}-fade)`} />

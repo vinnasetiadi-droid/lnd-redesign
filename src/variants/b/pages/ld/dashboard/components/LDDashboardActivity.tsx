@@ -2,9 +2,10 @@ import { Activity } from '@/variants/b/icons';
 import { cn } from '@/lib/utils';
 import type { ActivityItem, ActivityColorScheme } from '../types/dashboard.types';
 
+// Categories use the blue family; green is kept for positive trends
 const COLOR_SCHEMES: Record<ActivityColorScheme, { bg: string; icon: string }> = {
   blue:   { bg: 'bg-(--ob-primary-100)',    icon: 'text-(--ob-primary)'    },
-  green:  { bg: 'bg-(--ob-success-100)', icon: 'text-(--ob-success)' },
+  green:  { bg: 'bg-(--ob-primary-50)',  icon: 'text-(--ob-primary-strong)' },
   purple: { bg: 'bg-(--ob-primary-50)',  icon: 'text-(--ob-primary)'  },
 };
 
@@ -35,7 +36,7 @@ export function LDDashboardActivity({ activities, className }: LDDashboardActivi
             const colors = COLOR_SCHEMES[activity.colorScheme];
             return (
               <div key={activity.id} className="flex gap-3 items-start">
-                <div className={cn('flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center', colors.bg)}>
+                <div className={cn('flex-shrink-0 w-9 h-9 rounded-(--ob-radius-control) flex items-center justify-center', colors.bg)}>
                   <Activity className={cn('w-4 h-4', colors.icon)} />
                 </div>
                 <div className="flex-1 min-w-0">

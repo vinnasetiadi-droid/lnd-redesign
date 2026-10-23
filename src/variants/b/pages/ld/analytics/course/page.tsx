@@ -409,7 +409,8 @@ function RankedList({ programType, rows, metric }: { programType: ProgramType; r
       <div>
         {rows.map((program, idx) => (
           <div key={`${programType}-${program.id}`} className="flex items-center gap-3 border-b border-(--ob-border-subtle) py-2.5 last:border-b-0">
-            <span className="ob-num flex size-6 shrink-0 items-center justify-center rounded-full bg-(--ob-surface) text-[12px] text-(--ob-text-body)">
+            {/* Not a person: a 6px rounded square */}
+            <span className="ob-num flex size-6 shrink-0 items-center justify-center rounded-(--ob-radius-control) bg-(--ob-surface) text-[12px] text-(--ob-text-body)">
               {idx + 1}
             </span>
             <div className="min-w-0 flex-1">
@@ -797,7 +798,8 @@ export default function LearningProgramAnalyticsPage() {
                     filteredFeedback.map((fb) => (
                       <div key={`${programType}-${fb.id}`} className={cn(FEEDBACK_GRID, 'min-h-16 border-b border-(--ob-border-subtle) transition-colors last:border-b-0 hover:bg-(--ob-surface-subtle) [&>*]:py-3')}>
                         <div className="flex min-w-0 items-center gap-3">
-                          <span className="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-(--ob-surface) text-[12px] text-(--ob-text-body)">
+                          {/* A person: a circle, like every other initials avatar */}
+                          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-(--ob-surface) text-[12px] text-(--ob-text-body)">
                             {initials(fb.name)}
                           </span>
                           <div className="min-w-0">

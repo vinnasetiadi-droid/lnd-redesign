@@ -89,7 +89,6 @@ html.option-b {
   --ob-success-strong: #027A48;
   --ob-success-surface: #ECFDF3;
   --ob-success-100: #D1FADF;
-  --ob-success-200: #A6F4C5; /* Pale green band of the learning funnel (self-paced) */
   --ob-success-bright: #32D583;
   --ob-mode-self: var(--ob-primary-200); /* Self-paced series: the pale blue (green is only for positive trends) */
   --ob-danger: #D92D20; /* Negative trends */
@@ -203,16 +202,6 @@ html.option-b .ob-btn-secondary {
 }
 html.option-b .ob-btn-secondary:hover {
   background: var(--ob-surface-subtle);
-}
-html.option-b .ob-btn-tint {
-  background: var(--ob-primary-50);
-  color: var(--ob-primary-strong);
-  box-shadow:
-    inset 0 -2px 1px rgba(255, 255, 255, 0.7),
-    0 0 0 1px color-mix(in srgb, var(--ob-primary) 14%, transparent);
-}
-html.option-b .ob-btn-tint:hover {
-  background: var(--ob-primary-100);
 }
 
 /* ── Motion ─────────────────────────────────────────────────── */

@@ -31,11 +31,11 @@ export function NumText({ children }: { children: ReactNode }) {
   );
 }
 
-/** Small grey circle holding a card's icon (top right of the card) */
+/** Small grey 6px square holding an icon (round shapes are for people) */
 export function IconCircle({ icon: Icon, className }: { icon: LucideIcon; className?: string }) {
   return (
     // The icon is in the accent blue: an icon circle marks something to look at
-    <span className={cn('flex size-8 shrink-0 items-center justify-center rounded-full bg-(--ob-surface) text-(--ob-primary)', className)}>
+    <span className={cn('flex size-8 shrink-0 items-center justify-center rounded-(--ob-radius-control) bg-(--ob-surface) text-(--ob-primary)', className)}>
       <Icon size={16} />
     </span>
   );
@@ -225,12 +225,11 @@ export function Trend({ children, positive = true, className }: { children: Reac
   );
 }
 
-/** Button, reference style: 3D blue primary, white secondary, or a blue tint; square with big, almost round corners */
+/** Button, reference style: 3D blue primary or white secondary (no tinted fills); square with big, almost round corners */
 export function PillButton({ children, icon: Icon, variant = 'secondary', className, ...rest }: {
   children: ReactNode;
   icon?: LucideIcon;
-  /** tint: a blue-tinted pill for the one action a card asks for (e.g. Review) */
-  variant?: 'primary' | 'secondary' | 'tint';
+  variant?: 'primary' | 'secondary';
 } & ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
@@ -238,7 +237,7 @@ export function PillButton({ children, icon: Icon, variant = 'secondary', classN
       className={cn(
         // The 3D look (gradient, white lip, hairline, shadow) lives in option-b.css
         'inline-flex h-10 items-center justify-center gap-2 rounded-(--ob-radius-button) px-5 text-[13px] font-medium transition-[background,box-shadow] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25 focus-visible:ring-offset-1',
-        variant === 'primary' ? 'ob-btn-primary' : variant === 'tint' ? 'ob-btn-tint' : 'ob-btn-secondary',
+        variant === 'primary' ? 'ob-btn-primary' : 'ob-btn-secondary',
         className,
       )}
       {...rest}

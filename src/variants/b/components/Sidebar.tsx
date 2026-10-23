@@ -15,8 +15,9 @@ import { useAuthStore } from "@/store/useAuthStore";
 /**
  * Option B sidebar, after the reference dashboard: a white panel from the top
  * of the window to the bottom with a hairline on its right, menu groups split
- * by thin dividers, a bottom group pinned to the bottom, and the active page
- * in a light blue tint with blue text and a short blue bar on the left edge.
+ * by thin dividers, a bottom group pinned to the bottom. The active page (or
+ * sub-page) has no tint: a 2px blue bar on the sidebar's left edge, a strong
+ * label and a blue icon. Hover is a subtle grey with 6px corners.
  */
 
 /** Menu groups, top to bottom, by item key. Items not listed join the last group. */
@@ -27,8 +28,15 @@ const MENU_GROUPS: string[][] = [
 /** Pinned to the bottom of the sidebar */
 const BOTTOM_KEYS = new Set(["settings"]);
 
-/** Active page: a light blue tint behind blue text */
-const ACTIVE_PILL = "bg-(--ob-primary-50) text-(--ob-primary)";
+/** Active page: no background, strong text (the icon turns blue, the edge bar marks it) */
+const ACTIVE = "text-(--ob-text-strong)";
+/** Hover on any row: a subtle grey, 6px corners */
+const HOVER = "hover:bg-(--ob-surface-subtle)";
+
+/** 2px blue bar on the sidebar's left edge (12px out from the menu column), level with the active row */
+function EdgeBar({ className }: { className?: string }) {
+  return <span aria-hidden className={cn("pointer-events-none absolute -left-3 h-5 w-[2px] -translate-y-1/2 rounded-r-[1px] bg-(--ob-primary)", className)} />;
+}
 
 // ============================================================
 // SUB-COMPONENTS
@@ -98,15 +106,16 @@ function SidebarItem({
 
   return (
     <div className="relative w-full">
-      {/* Blue bar on the sidebar's left edge, level with the active page */}
-      {pill && <span aria-hidden className="absolute -left-3 top-[18px] h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-(--ob-primary)" />}
+      {/* Blue bar on the sidebar's left edge, level with the active page (the 36px row) */}
+      {pill && <EdgeBar className="top-[18px]" />}
       <button
         type="button"
         title={collapsed ? label : undefined}
         className={cn(
           "group flex items-center h-9 gap-2.5 rounded-(--ob-radius-control) cursor-pointer select-none transition-colors text-left",
           collapsed ? "justify-center w-9 mx-auto" : "w-full pl-2.5 pr-2",
-          pill ? ACTIVE_PILL : danger ? "text-(--ob-text-body) hover:bg-(--ob-primary)/[0.05] hover:text-(--ob-danger)" : "text-(--ob-text-body) hover:bg-(--ob-primary)/[0.05] hover:text-(--ob-text-strong)",
+          HOVER,
+          pill ? ACTIVE : danger ? "text-(--ob-text-body) hover:text-(--ob-danger)" : "text-(--ob-text-body) hover:text-(--ob-text-strong)",
         )}
         onClick={handleClick}
       >
@@ -138,12 +147,14 @@ function SidebarItem({
 
       {/* Submenu: a tree line from the parent icon, one rounded branch per page.
           It slides open; the pages follow one after another. The wrapper starts
-          6px up (inside the parent row's padding) so the clip never cuts the line. */}
+          6px up (inside the parent row's padding) so the clip never cuts the line.
+          Clipped with clip-path rather than overflow, so an active page's edge bar
+          can reach 12px out to the sidebar's left edge. */}
       <AnimatePresence initial={false}>
         {hasSubmenu && isOpen && !collapsed && (
           <motion.div
             key="submenu"
-            className="pointer-events-none overflow-hidden"
+            className="pointer-events-none [clip-path:inset(0_0_0_-12px)]"
             initial={{ height: 0, marginTop: 0, opacity: 0 }}
             animate={{ height: "auto", marginTop: -6, opacity: 1 }}
             exit={{ height: 0, marginTop: 0, opacity: 0 }}
@@ -198,11 +209,14 @@ function SubmenuItem({ label, active, first, last, onClick }: SubmenuItemProps) 
         aria-hidden
         className={cn(TREE_LINE, TREE_X, "w-[10px] rounded-bl-[8px] border-b border-l", first ? "-top-[6px] h-[22px]" : "-top-[2px] h-[18px]")}
       />
+      {/* Same edge bar as a top-level page, level with this sub-page */}
+      {active && <EdgeBar className="top-1/2" />}
       <button
         type="button"
         className={cn(
-          "flex h-8 w-full items-center rounded-[8px] px-2.5 text-left text-[13px] leading-[20px] transition-colors cursor-pointer",
-          active ? ACTIVE_PILL : "text-(--ob-text-secondary) hover:bg-(--ob-primary)/[0.05] hover:text-(--ob-text-strong)",
+          "flex h-8 w-full items-center rounded-(--ob-radius-control) px-2.5 text-left text-[13px] leading-[20px] transition-colors cursor-pointer",
+          HOVER,
+          active ? ACTIVE : "text-(--ob-text-secondary) hover:text-(--ob-text-strong)",
         )}
         onClick={onClick}
       >

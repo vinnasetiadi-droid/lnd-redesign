@@ -133,14 +133,14 @@ export function GradientProgress({ value, className, from = CHART_BLUE, to = OB_
 }
 
 /**
- * Kept for the callers that centre labels on the bar: the pill bar is centred
+ * Kept for the callers that centre labels on the bar: the bar is centred
  * in its column, so the label centres on the whole column.
  */
 export const FOLD_BAR_SHARE = 1;
 
 type FoldIds = Pick<ReturnType<typeof useChartIds>, 'barGradient' | 'barSelected' | 'fold' | 'column' | 'stripes'>;
 
-/** <defs> for the pill bars; call inside <defs>. `color` is the selected bar's */
+/** <defs> for the column bars; call inside <defs>. `color` is the selected bar's */
 export function foldBarDefs(ids: FoldIds, color: string = CHART_BLUE) {
   return (
     <linearGradient id={ids.barSelected} x1="0" y1="0" x2="0" y2="1">
@@ -151,9 +151,9 @@ export function foldBarDefs(ids: FoldIds, color: string = CHART_BLUE) {
 }
 
 /**
- * Bar `shape` for a chart with barCategoryGap={0}: a fully rounded pill in
- * the middle of each column, light grey, and blue for the selected one (the
- * reference's "most active day" bars).
+ * Bar `shape` for a chart with barCategoryGap={0}: a bar in the middle of each
+ * column with 4px top corners and a square bottom, light grey, and the blue
+ * gradient (with a soft glow) for the selected one.
  */
 export function foldBar(ids: FoldIds, isSelected: (index: number) => boolean, color: string = CHART_BLUE) {
   const glow = `color-mix(in srgb, ${color} 40%, transparent)`;
@@ -163,16 +163,19 @@ export function foldBar(ids: FoldIds, isSelected: (index: number) => boolean, co
     const on = isSelected(index);
     const barW = Math.min(30, Math.max(6, width * 0.56));
     const h = Math.max(height, 6);
+    // 4px top corners, square bottom
+    const x0 = x + (width - barW) / 2;
+    const x1 = x0 + barW;
+    const top = y + height - h;
+    const bottom = y + height;
+    const r = Math.min(4, barW / 2, h);
+    const d = `M${x0},${bottom} V${top + r} A${r},${r} 0 0 1 ${x0 + r},${top} H${x1 - r} A${r},${r} 0 0 1 ${x1},${top + r} V${bottom} Z`;
     return (
       <g style={{ cursor: 'pointer' }}>
         {/* Full-height hit area, so the whole column is clickable */}
         <rect x={x} y={y + height - h} width={width} height={h} fill="transparent" />
-        <rect
-          x={x + (width - barW) / 2}
-          y={y + height - h}
-          width={barW}
-          height={h}
-          rx={Math.min(barW / 2, h / 2)}
+        <path
+          d={d}
           fill={on ? `url(#${ids.barSelected})` : OB_COLORS.buttonSecondary}
           // The selected bar glows a little in its own colour
           style={{ transition: 'fill 300ms ease', filter: on ? `drop-shadow(0 6px 10px ${glow})` : undefined }}
@@ -190,7 +193,7 @@ export function pillLabel(
   selected: number,
   count: number,
   format: (value: number | string) => string,
-  /** Share of the column to centre on (the pill bars sit in the middle, so 1) */
+  /** Share of the column to centre on (the bars sit in the middle, so 1) */
   barShare = 1,
 ) {
   return function PillLabel(props: { x?: number | string; y?: number | string; width?: number | string; value?: number | string; index?: number }) {

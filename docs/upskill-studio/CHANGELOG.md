@@ -244,3 +244,21 @@ Option B only (`src/variants/b/`); Option A unchanged.
   - `rounded-full` is used only for avatars, dots, icon circles, the orb and
     rank badges.
   - Nothing outside `src/variants/b` changed, and `npm run build` passes.
+
+## Option B: B9 (final consistency pass)
+
+Option B only (`src/variants/b/`); Option A unchanged.
+
+- **Learning funnel:** back to the blue pair, the same as the donut and Home's
+  Learning mode: Blended is `--ob-primary`, Self-paced is `--ob-mode-self`.
+  Green is left only on positive trend pills and the Approved status.
+- **Review buttons:** one style, the 3D secondary button. The tint button
+  variant is removed. Corners stay 14px by the user's request.
+- **Avatar rule:** people are circles. Things that are not people are 6px
+  squares: license initials, rank numbers, IconCircle and dialog icons.
+- **Program overview bars:** 4px top corners and a square bottom.
+- **Sidebar:** the active page and sub-page have no tint. They show a 2px blue
+  bar on the left edge, strong text and a blue icon. Hover is a subtle grey
+  with 6px corners.
+- **Upskill grid:** 4 columns from 1440px, 3 from 1024px, 2 from 768px, so the
+  card meta row is never cut off.

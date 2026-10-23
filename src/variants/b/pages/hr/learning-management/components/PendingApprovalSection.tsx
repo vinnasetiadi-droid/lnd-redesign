@@ -190,7 +190,7 @@ export function PendingApprovalSection({
                   <div className="flex flex-col items-center shrink-0 w-16">
                     <div
                       className={cn(
-                        'size-10 rounded-full bg-white flex items-center justify-center mb-1',
+                        'size-10 rounded-(--ob-radius-control) bg-(--ob-white) flex items-center justify-center mb-1',
                         urgency.bg
                       )}
                     >

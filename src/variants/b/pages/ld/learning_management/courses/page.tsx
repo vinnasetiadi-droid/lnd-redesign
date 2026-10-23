@@ -311,7 +311,8 @@ export default function CoursesPage() {
                the photos line up with the section's content edge, and up to the toolbar's
                bottom line, so the lines between cells meet it. */
             <div className="-mx-5 -mt-5 overflow-hidden">
-              <div className="-mb-px -mr-px grid [grid-template-columns:repeat(auto-fill,minmax(256px,1fr))]">
+              {/* 4 columns from 1440px (90rem), 3 from 1024px, 2 from 768px, 1 below: the meta row always fits */}
+              <div className="-mb-px -mr-px grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 min-[90rem]:grid-cols-4">
                 {paginated.map((row) => (
                   <CourseCard
                     key={row.key}

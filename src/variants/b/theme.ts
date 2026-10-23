@@ -118,7 +118,6 @@ export const OB_COLORS = {
   successStrong: '#027A48',
   successSurface: '#ECFDF3',
   success100: '#D1FADF',
-  success200: '#A6F4C5', // Pale green band of the learning funnel (self-paced)
   successBright: '#32D583',
   modeSelf: '#AECBFA', // Self-paced series: = primary200, the pale blue (green is only for positive trends)
   danger: '#D92D20', // Negative trends

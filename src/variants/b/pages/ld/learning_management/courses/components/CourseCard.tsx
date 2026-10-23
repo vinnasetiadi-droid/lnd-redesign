@@ -207,7 +207,8 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
             </p>
             <div className="flex shrink-0 items-center gap-1" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
               {f.aside && <span className="text-[12px] text-(--ob-text-muted)"><NumText>{f.aside}</NumText></span>}
-              {f.review && <PillButton variant="tint" onClick={onClick}>Review</PillButton>}
+              {/* The same 3D secondary button as the review strip above the library */}
+              {f.review && <PillButton onClick={onClick}>Review</PillButton>}
             </div>
           </div>
           {/* Progress slot: the thin blue bar on active courses (4px, 2px corners), empty otherwise */}
@@ -242,7 +243,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
             <button onClick={() => setShowStatusConfirm(false)} aria-label="Close" className="absolute top-4 right-4 flex size-8 items-center justify-center rounded-(--ob-radius-control) text-(--ob-text-muted) transition-colors hover:bg-(--ob-surface) cursor-pointer">
               <X className="size-5" />
             </button>
-            <div className="mb-5 flex size-14 items-center justify-center rounded-full bg-(--ob-attention-surface)">
+            <div className="mb-5 flex size-14 items-center justify-center rounded-(--ob-radius-control) bg-(--ob-attention-surface)">
               <AlertTriangle className="size-7 text-(--ob-attention-text)" />
             </div>
             <h3 className="text-[16px] text-(--ob-text-strong)">

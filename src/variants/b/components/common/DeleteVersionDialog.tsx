@@ -61,7 +61,7 @@ export function DeleteVersionDialog({
           <X className="w-5 h-5" />
         </button>
 
-        <div className="w-12 h-12 rounded-full bg-(--ob-danger-surface) flex items-center justify-center mb-4">
+        <div className="w-12 h-12 rounded-(--ob-radius-control) bg-(--ob-danger-surface) flex items-center justify-center mb-4">
           <Trash2 className="w-6 h-6 text-(--ob-danger)" />
         </div>
 

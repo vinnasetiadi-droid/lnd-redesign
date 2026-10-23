@@ -295,7 +295,7 @@ export function CourseTable({ courses, onCourseClick = () => {}, className, page
             <button onClick={() => setInactiveConfirmId(null)} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-(--ob-radius-control) text-(--ob-text-muted) hover:bg-(--ob-surface) transition-colors cursor-pointer">
               <X className="w-5 h-5" />
             </button>
-            <div className="w-14 h-14 rounded-full bg-(--ob-attention-surface) flex items-center justify-center mb-5">
+            <div className="w-14 h-14 rounded-(--ob-radius-control) bg-(--ob-attention-surface) flex items-center justify-center mb-5">
               <AlertTriangle className="w-7 h-7 text-(--ob-attention-text)" />
             </div>
             <h3 className="text-[16px] text-(--ob-text-strong)">
@@ -339,7 +339,7 @@ export function CourseTable({ courses, onCourseClick = () => {}, className, page
           <button onClick={() => setDeleteConfirmId(null)} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-(--ob-radius-control) text-(--ob-text-muted) hover:bg-(--ob-surface) transition-colors cursor-pointer">
             <X className="w-5 h-5" />
           </button>
-          <div className="w-14 h-14 rounded-full bg-(--ob-danger-surface) flex items-center justify-center mb-5">
+          <div className="w-14 h-14 rounded-(--ob-radius-control) bg-(--ob-danger-surface) flex items-center justify-center mb-5">
             <Trash2 className="w-7 h-7 text-(--ob-danger)" />
           </div>
           <h3 className="text-[16px] text-(--ob-text-strong)">

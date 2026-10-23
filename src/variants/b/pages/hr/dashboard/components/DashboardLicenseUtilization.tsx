@@ -207,7 +207,8 @@ export function DashboardLicenseUtilization({ licenses = LICENSES, variant = 'de
       <div className={cn('divide-y border-t', wide && 'max-lg:mt-3 lg:border-t-0', reference ? 'divide-(--ob-border-subtle) border-(--ob-border-subtle)' : 'divide-(--ob-border) border-(--ob-border)')}>
         {rows.map((l, i) => (
           <div key={l.name} className="flex gap-3 py-2.5">
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-(--ob-surface) text-[11px] text-(--ob-text-body)">
+            {/* A license, not a person: a 6px rounded square */}
+            <span className="flex size-8 shrink-0 items-center justify-center rounded-(--ob-radius-control) bg-(--ob-surface) text-[11px] text-(--ob-text-body)">
               {l.initials}
             </span>
             <div className="min-w-0 flex-1">
