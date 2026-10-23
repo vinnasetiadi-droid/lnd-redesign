@@ -97,7 +97,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
   );
 
   return (
-    <div className={cn('relative flex flex-col gap-3 bg-white rounded-[18px] p-5', className)}>
+    <div className={cn('relative flex flex-col gap-3 bg-(--oa-white) rounded-[18px] p-5', className)}>
       <CardHeader
         title="Learning mode analytics"
         subtitle={`Blended vs self-paced · ${periodLabel(data)}`}
@@ -186,7 +186,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
                   strokeWidth={2}
                   fill={`url(#${ids.area}-${m.key})`}
                   dot={false}
-                  activeDot={{ r: 4, fill: m.color, stroke: '#fff', strokeWidth: 2 }}
+                  activeDot={{ r: 4, fill: m.color, stroke: OA_COLORS.white, strokeWidth: 2 }}
                   animationDuration={600}
                   animationEasing="ease-out"
                 >

@@ -106,7 +106,7 @@ export function LDDashboardProgramOverview({
   const fullInsight = activeScope === 'course' ? courseInsight ?? insight : activeScope === 'journey' ? journeyInsight ?? insight : insight;
 
   return (
-    <div className={cn('relative flex flex-col gap-4 bg-white rounded-[18px] p-5', className)}>
+    <div className={cn('relative flex flex-col gap-4 bg-(--oa-white) rounded-[18px] p-5', className)}>
       {/* ── Header: title + period, scope tabs on the right ── */}
       <CardHeader
         title="Program overview"
@@ -129,7 +129,7 @@ export function LDDashboardProgramOverview({
               className={cn(
                 'rounded-[14px] border p-4 text-left transition-colors cursor-pointer',
                 // Selected: the sidebar's active tint, no outline
-                isSelected ? 'border-transparent bg-(--oa-primary)/[0.07]' : 'border-(--oa-border) hover:bg-(--oa-surface-subtle)',
+                isSelected ? 'border-transparent bg-(--oa-primary-wash)' : 'border-(--oa-border) hover:bg-(--oa-surface-subtle)',
               )}
             >
               <p className="text-[13px] leading-[18px] text-(--oa-text-secondary)">{m.label}</p>

@@ -43,7 +43,7 @@ interface OwnershipTabsProps {
 /** Segmented pill tabs (Option A), each with its item count */
 export function OwnershipTabs({ items, value, onChange, me, allLabel }: OwnershipTabsProps) {
   return (
-    <div className="flex w-fit items-center gap-0.5 rounded-full bg-[#F5F6F8] p-1">
+    <div className="flex w-fit items-center gap-0.5 rounded-full bg-(--oa-surface) p-1">
       {TABS.map((tab) => {
         const active = value === tab.key;
         return (
@@ -55,12 +55,12 @@ export function OwnershipTabs({ items, value, onChange, me, allLabel }: Ownershi
             className={cn(
               'flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] transition-colors cursor-pointer',
               active
-                ? 'bg-white text-[#181D27] shadow-[0_1px_2px_rgba(16,24,40,0.08),0_1px_3px_rgba(16,24,40,0.06)]'
-                : 'text-[#717680] hover:text-[#414651]',
+                ? 'bg-(--oa-thumb) text-(--oa-text-strong) shadow-[0_1px_2px_rgba(16,24,40,0.08),0_1px_3px_rgba(16,24,40,0.06)]'
+                : 'text-(--oa-text-muted) hover:text-(--oa-text-body)',
             )}
           >
             {tab.key === 'all' && allLabel ? allLabel : tab.label}
-            <span className="text-[12px] text-[#A4A7AE]">
+            <span className="text-[12px] text-(--oa-text-subtle)">
               {items.filter((i) => matchesOwnership(i, tab.key, me)).length}
             </span>
           </button>

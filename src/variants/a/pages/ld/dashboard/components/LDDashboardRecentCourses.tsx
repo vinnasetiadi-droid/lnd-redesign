@@ -23,7 +23,7 @@ export function LDDashboardRecentCourses({ courses, className }: LDDashboardRece
   const list = useInfiniteList(courses, { initial: 4, step: 4 });
 
   return (
-    <div className={cn('relative bg-white rounded-[18px] p-5 overflow-hidden', className)}>
+    <div className={cn('relative bg-(--oa-white) rounded-[18px] p-5 overflow-hidden', className)}>
       <CardHeader
         title="Recent programs"
         subtitle="Newly launched or recently updated courses and journeys"

@@ -243,7 +243,7 @@ const FOCUS = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:rin
 
 function Card({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <motion.div variants={revealItem} className={cn('oa-lift relative flex flex-col gap-4 rounded-[18px] bg-white p-5', className)}>
+    <motion.div variants={revealItem} className={cn('oa-lift relative flex flex-col gap-4 rounded-[18px] bg-(--oa-white) p-5', className)}>
       {children}
     </motion.div>
   );
@@ -525,7 +525,7 @@ export default function LearningProgramAnalyticsPage() {
         {/* KPI cards, exactly like Home's */}
         <motion.div variants={revealItem} className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {kpiCards.map((kpi) => (
-            <div key={kpi.key} className="oa-lift rounded-[18px] bg-white p-4">
+            <div key={kpi.key} className="oa-lift rounded-[18px] bg-(--oa-white) p-4">
               <div className="mb-2 flex items-start justify-between gap-2">
                 <p className="text-[13px] leading-[18px] text-(--oa-text-secondary)"><FadeValue k={kpi.label}>{kpi.label}</FadeValue></p>
                 <IconCircle icon={kpi.icon} />

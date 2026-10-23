@@ -172,7 +172,7 @@ export default function CoursesPage() {
 
         {/* ── Review queue: one line, only when there is something to review ── */}
         {reviewQueue.length > 0 && (
-          <motion.div variants={revealItem} className="flex items-center gap-4 rounded-[18px] bg-(--oa-primary)/[0.07] px-5 py-4">
+          <motion.div variants={revealItem} className="flex items-center gap-4 rounded-[18px] bg-(--oa-primary-wash) px-5 py-4">
             <IconCircle icon={Clock} className="bg-(--oa-white)" />
             <div className="min-w-0 flex-1">
               <p className="text-[14px] leading-[20px] text-(--oa-text-strong)">
@@ -277,7 +277,7 @@ export default function CoursesPage() {
                   className={cn(
                     'flex size-8 items-center justify-center rounded-full transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oa-primary)/25',
                     viewMode === m
-                      ? 'bg-(--oa-white) text-(--oa-text-strong) shadow-[0_1px_2px_rgba(16,24,40,0.08),0_1px_3px_rgba(16,24,40,0.06)]'
+                      ? 'bg-(--oa-thumb) text-(--oa-text-strong) shadow-[0_1px_2px_rgba(16,24,40,0.08),0_1px_3px_rgba(16,24,40,0.06)]'
                       : 'text-(--oa-text-muted) hover:text-(--oa-text-body)',
                   )}
                 >

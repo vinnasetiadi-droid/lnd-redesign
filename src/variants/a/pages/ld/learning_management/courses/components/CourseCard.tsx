@@ -132,7 +132,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
             {menuOpen && (
               <>
                 <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-                <div role="menu" className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-[14px] bg-(--oa-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]">
+                <div role="menu" className="oa-pop absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-[14px] bg-(--oa-raised) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]">
                   <button
                     type="button"
                     role="menuitem"
@@ -184,7 +184,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
           <span className="inline-flex items-center gap-1.5">
             <Layers size={14} />
             v{version}
-            {drafts > 0 && <span className="text-(--oa-primary)">+{drafts} draft</span>}
+            {drafts > 0 && <span className="text-(--oa-primary-text)">+{drafts} draft</span>}
           </span>
           {course.duration && (
             <span className="inline-flex items-center gap-1.5">
@@ -241,8 +241,8 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
 
       {/* Status toggle confirmation, portaled to body */}
       {showStatusConfirm && createPortal(
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(16,24,40,0.5)' }} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
-          <div className="relative w-[460px] rounded-[20px] bg-(--oa-white) p-8 flex flex-col items-center text-center shadow-[0_24px_48px_-12px_rgba(16,24,40,0.18)]" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'var(--oa-scrim)' }} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
+          <div className="oa-pop relative w-[460px] rounded-[20px] bg-(--oa-raised) p-8 flex flex-col items-center text-center shadow-[0_24px_48px_-12px_rgba(16,24,40,0.18)]" onClick={(e) => e.stopPropagation()}>
             <button onClick={() => setShowStatusConfirm(false)} aria-label="Close" className="absolute top-4 right-4 flex size-8 items-center justify-center rounded-full text-(--oa-text-muted) transition-colors hover:bg-(--oa-surface) cursor-pointer">
               <X className="size-5" />
             </button>

@@ -20,7 +20,7 @@ export function AIInsightBanner({
   return (
     <div
       className={cn(
-        "relative rounded-[14px] bg-gradient-to-br from-white via-(--oa-primary-tint) to-(--oa-primary-50) p-4 overflow-hidden",
+        "relative rounded-[14px] bg-gradient-to-br from-(--oa-white) via-(--oa-primary-tint) to-(--oa-primary-50) p-4 overflow-hidden",
         className,
       )}
     >
@@ -53,7 +53,7 @@ export function AIInsightLine({ text, fullText, lines = 1, className }: { text: 
       </p>
       <button
         type="button"
-        className="inline-flex shrink-0 items-center gap-1 text-[13px] text-(--oa-primary) transition-colors hover:text-(--oa-primary-strong) cursor-pointer"
+        className="inline-flex shrink-0 items-center gap-1 text-[13px] text-(--oa-primary-text) transition-colors hover:text-(--oa-primary-strong) cursor-pointer"
       >
         Ask NISA
         <ArrowRight size={14} />

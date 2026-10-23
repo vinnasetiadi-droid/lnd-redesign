@@ -114,7 +114,7 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
     `${shortInsight} ${support.map((d) => d.name).join(', ')} are the three divisions below ${Math.max(...support.map((d) => d.score)) + 1}%; a review with each division lead could show where learners drop off.`;
 
   return (
-    <div className={cn('relative flex flex-col gap-4 bg-white rounded-[18px] p-5', className)}>
+    <div className={cn('relative flex flex-col gap-4 bg-(--oa-white) rounded-[18px] p-5', className)}>
       {/* ── Header ─────────────────────────────────────────── */}
       <CardHeader
         title="Division completion"
@@ -135,7 +135,7 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
               onClick={() => setGroup(tile.key)}
               className={cn(
                 'rounded-[14px] border p-4 text-left transition-colors cursor-pointer',
-                isSelected ? 'border-transparent bg-(--oa-primary)/[0.07]' : 'border-(--oa-border) hover:bg-(--oa-surface-subtle)',
+                isSelected ? 'border-transparent bg-(--oa-primary-wash)' : 'border-(--oa-border) hover:bg-(--oa-surface-subtle)',
               )}
             >
               <p className="text-[13px] leading-[18px] text-(--oa-text-secondary)">{tile.label}</p>

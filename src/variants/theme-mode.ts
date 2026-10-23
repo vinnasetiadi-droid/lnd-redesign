@@ -6,7 +6,7 @@
 export type ThemeMode = 'light' | 'dark';
 
 /** Options that have a dark version; the others always show light */
-export const DARK_OPTIONS = new Set(['b', 'c', 'd']);
+export const DARK_OPTIONS = new Set(['a', 'b', 'c', 'd']);
 
 const KEY = 'lnd-theme';
 const CLASS = 'theme-dark';

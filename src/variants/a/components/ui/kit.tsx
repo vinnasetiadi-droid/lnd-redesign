@@ -66,7 +66,7 @@ export function SearchField({ value, onChange, placeholder, loading, className }
         onChange={(e) => onChange(e.target.value)}
         className="h-10 w-full rounded-full bg-(--oa-surface) pl-11 pr-10 text-[13px] text-(--oa-text-strong) outline-none transition-colors placeholder:text-(--oa-text-subtle) focus:bg-(--oa-white) focus:ring-2 focus:ring-(--oa-primary)/25"
       />
-      {loading && <Loader2 className="absolute right-4 top-1/2 size-4 -translate-y-1/2 animate-spin text-(--oa-primary)" />}
+      {loading && <Loader2 className="absolute right-4 top-1/2 size-4 -translate-y-1/2 animate-spin text-(--oa-primary-text)" />}
     </div>
   );
 }

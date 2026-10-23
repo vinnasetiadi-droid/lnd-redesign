@@ -7,7 +7,7 @@ import { ATTENTION, CardHeader } from '@/variants/a/components/ui/kit';
 import { CHART_BLUE } from '@/variants/a/components/ui/chart';
 import { CountUp, GROW } from '@/variants/a/components/ui/count-up';
 import { daysFromNow, daysUntil } from '@/variants/a/pages/ld/dashboard/period';
-import { OA_COLORS } from '@/variants/a/theme';
+import { useOaDark } from '@/variants/a/theme';
 
 // ── Mock data ──────────────────────────────────────────────────
 
@@ -55,7 +55,14 @@ function inTime(days: number): string {
  * the number: 20% lights up 4 of 20 segments, so the idle seats read at a
  * glance. The segments light up one after another the first time it is seen.
  */
+// Motion tweens plain colours, so the gauge takes the hex for the current mode (--oa-border, --oa-primary)
+const GAUGE_COLORS = {
+  light: { off: '#EDEEF1', on: '#1A73E8' },
+  dark: { off: '#24282E', on: '#1A73E8' },
+} as const;
+
 function SegmentGauge({ pct, start }: { pct: number; start: boolean }) {
+  const colors = GAUGE_COLORS[useOaDark() ? 'dark' : 'light'];
   const filled = Math.round((pct / 100) * SEGMENTS);
   const cx = 120;
   const cy = 118;
@@ -78,8 +85,8 @@ function SegmentGauge({ pct, start }: { pct: number; start: boolean }) {
             y2={cy - outer * sin}
             strokeWidth={9}
             strokeLinecap="round"
-            initial={{ stroke: OA_COLORS.border }}
-            animate={{ stroke: start && on ? CHART_BLUE : OA_COLORS.border }}
+            initial={{ stroke: colors.off }}
+            animate={{ stroke: start && on ? colors.on : colors.off }}
             transition={{ duration: 0.3, ease: 'easeOut', delay: start && on ? 0.15 + i * 0.08 : 0 }}
           />
         );
@@ -118,7 +125,7 @@ export function DashboardLicenseUtilization({ licenses = LICENSES, className }: 
     : `${idle} seats are idle across ${rows.length} licenses. Assign them before the next renewal.`;
 
   return (
-    <div className={cn('relative flex flex-col gap-3 bg-white rounded-[18px] p-5', className)}>
+    <div className={cn('relative flex flex-col gap-3 bg-(--oa-white) rounded-[18px] p-5', className)}>
       <CardHeader
         title="License utilization"
         subtitle="Purchased seats actively used by trainees"

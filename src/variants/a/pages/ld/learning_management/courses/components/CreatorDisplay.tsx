@@ -46,7 +46,7 @@ export function CreatorDisplay({
             <LinkedInLogo className="w-full h-full" />
           </span>
         ) : (
-          <User className={cn('text-[#A4A7AE] shrink-0', iconSize)} />
+          <User className={cn('text-(--oa-text-subtle) shrink-0', iconSize)} />
         )
       )}
       <span className="truncate">{creator}</span>
