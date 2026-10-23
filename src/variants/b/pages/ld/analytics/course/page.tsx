@@ -636,8 +636,8 @@ export default function LearningProgramAnalyticsPage() {
         {SHOW_ACTIVE_LIST && <ActiveProgramsTable programType={programType} programs={data.table} noun={noun} />}
 
         <Rule />
-        {/* Top and bottom programs, then licenses */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
+        {/* Top and bottom programs side by side: two lists of the same length */}
+        <div className="grid grid-cols-1 lg:grid-cols-2">
           <Card>
             <CardHeader
               title={<FadeValue k={programType}>Top {noun.many}</FadeValue>}
@@ -658,11 +658,13 @@ export default function LearningProgramAnalyticsPage() {
             </div>
             <RankedList programType={programType} rows={bottomSorted} metric={bottomFilter} />
           </Card>
-          <motion.div variants={revealItem} className="min-w-0 border-t border-(--ob-border) lg:col-span-2 xl:col-span-1 xl:border-l xl:border-t-0">
-            {/* Same section as Home, with this page's licenses */}
-            <DashboardLicenseUtilization licenses={SOURCE_LICENSES} variant="reference" className={SECTION} />
-          </motion.div>
         </div>
+
+        <Rule />
+        {/* Licenses get their own row, wide: gauge left, licenses right, so no column runs long */}
+        <motion.div variants={revealItem}>
+          <DashboardLicenseUtilization licenses={SOURCE_LICENSES} variant="reference" wide className={SECTION} />
+        </motion.div>
 
         {/* Assigned but not started: the attention chip is the only warning signal */}
         {SHOW_NOT_STARTED && <Rule />}
