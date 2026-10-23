@@ -32,7 +32,7 @@ export function CategoryIcon({ icon: Icon, size = 'default', className }: Catego
         className
       )}
     >
-      <Icon className={cn(s.icon, 'text-[#1A73E8]')} strokeWidth={2} />
+      <Icon className={cn(s.icon, 'text-[#0E85B4]')} strokeWidth={2} />
     </div>
   );
 }

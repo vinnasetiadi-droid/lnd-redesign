@@ -27,7 +27,7 @@ const MENU_GROUPS: string[][] = [
 const BOTTOM_KEYS = new Set(["settings"]);
 
 /** Active page: a light blue tint, no white frame */
-const ACTIVE_PILL = "bg-[#1A73E8]/[0.07]";
+const ACTIVE_PILL = "bg-[#0E85B4]/[0.07]";
 
 // ============================================================
 // SUB-COMPONENTS
@@ -39,7 +39,7 @@ function Logo() {
   if (failed) {
     return (
       <span className="text-[16px] leading-[24px] text-[#181D27]">
-        Learn<span className="text-[#1A73E8]">X</span>pert
+        Learn<span className="text-[#0E85B4]">X</span>pert
       </span>
     );
   }
@@ -103,7 +103,7 @@ function SidebarItem({
         className={cn(
           "group flex items-center h-8 gap-2 rounded-[8px] cursor-pointer select-none transition-colors text-left",
           collapsed ? "justify-center w-8 mx-auto" : "w-full pl-2.5 pr-2",
-          pill ? cn(ACTIVE_PILL, "text-[#181D27]") : danger ? "text-[#535862] hover:bg-[#1A73E8]/[0.04] hover:text-[#D92D20]" : "text-[#535862] hover:bg-[#1A73E8]/[0.04] hover:text-[#181D27]",
+          pill ? cn(ACTIVE_PILL, "text-[#181D27]") : danger ? "text-[#535862] hover:bg-[#0E85B4]/[0.04] hover:text-[#D92D20]" : "text-[#535862] hover:bg-[#0E85B4]/[0.04] hover:text-[#181D27]",
         )}
         onClick={handleClick}
       >
@@ -119,7 +119,7 @@ function SidebarItem({
           <span className="flex-1 text-[13px] leading-[20px] truncate">{label}</span>
         )}
         {!collapsed && badge !== undefined && (
-          <span className="bg-[#1A73E8] text-white text-[11px] rounded-full h-[18px] min-w-[18px] px-1.5 flex items-center justify-center">
+          <span className="bg-[#0E85B4] text-white text-[11px] rounded-full h-[18px] min-w-[18px] px-1.5 flex items-center justify-center">
             {badge}
           </span>
         )}
@@ -208,7 +208,7 @@ function SubmenuItem({ label, active, first, last, onClick }: SubmenuItemProps) 
         type="button"
         className={cn(
           "flex h-8 w-full items-center rounded-[8px] px-2.5 text-left text-[13px] leading-[20px] transition-colors cursor-pointer",
-          active ? cn(ACTIVE_PILL, "text-(--od-text-strong)") : "text-(--od-text-secondary) hover:bg-[#1A73E8]/[0.04] hover:text-(--od-text-strong)",
+          active ? cn(ACTIVE_PILL, "text-(--od-text-strong)") : "text-(--od-text-secondary) hover:bg-[#0E85B4]/[0.04] hover:text-(--od-text-strong)",
         )}
         onClick={onClick}
       >

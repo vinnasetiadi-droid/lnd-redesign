@@ -153,7 +153,7 @@ export function LearningProgressFunnel({ programType, className }: { programType
         {/* A faint blue glow behind the start of the flow */}
         <div
           className="pointer-events-none absolute inset-x-0 top-7"
-          style={{ height: H, background: 'radial-gradient(50% 70% at 24% 50%, rgba(26, 115, 232, 0.08) 0%, rgba(26, 115, 232, 0) 70%)' }}
+          style={{ height: H, background: 'radial-gradient(50% 70% at 24% 50%, rgba(14, 133, 180, 0.08) 0%, rgba(14, 133, 180, 0) 70%)' }}
           aria-hidden
         />
         <svg

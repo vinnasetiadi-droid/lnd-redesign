@@ -40,7 +40,7 @@ export function TopBar() {
         type="button"
         className="flex h-11 items-center gap-2.5 rounded-full bg-white pl-1 pr-3.5 text-left transition-colors hover:bg-[#F9FAFB]"
       >
-        <span className="size-9 shrink-0 overflow-hidden rounded-full bg-[#E8F0FE]">
+        <span className="size-9 shrink-0 overflow-hidden rounded-full bg-[#EAF6FB]">
           <img src={profileCutout} alt="" className="size-full object-cover object-top" />
         </span>
         <span className="flex flex-col">

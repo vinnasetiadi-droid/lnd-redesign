@@ -1,12 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap');
+/* Outfit, from the user's files (assets/fonts, OFL): Regular and Medium only */
+@font-face {
+  font-family: 'Outfit';
+  src: url('./assets/fonts/Outfit-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Outfit';
+  src: url('./assets/fonts/Outfit-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
 
 /*
  * Option D typography. Scoped to <html class="option-d">, which AppRoutes sets
  * while Option D is open, so options B and C keep the original Poppins setup.
  *
- * - Font: DM Sans
+ * - Font: Outfit
  * - Weights: mostly Regular 400. Medium 500 only for headings (h1-h4, which
- *   also hold the big KPI numbers) and the `font-medium` class. Nothing bolder.
+ *   also hold the big KPI numbers) and the `font-medium` class. Nothing bolder:
+ *   semibold and bold classes also stop at Medium.
  * - Letter spacing: -2% on every element
  *
  * Rules are unlayered and start with `html.option-d`, so they win over Tailwind
@@ -14,11 +29,11 @@
  * buttons 600 and font-medium 600).
  */
 html.option-d {
-  --font-sans: 'DM Sans', sans-serif;
+  --font-sans: 'Outfit', sans-serif;
 }
 
 html.option-d :where(body, .font-sans, button, input, textarea, select) {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Outfit', sans-serif;
 }
 
 html.option-d,
@@ -44,15 +59,15 @@ html.option-d * {
  * mirrors these values for code that needs a plain string (SVG, recharts).
  */
 html.option-d {
-  --od-primary: #1A73E8; /* The one accent: buttons, selected states, chart highlight */
-  --od-primary-strong: #1967D2; /* Blue text on a blue tint, link hover */
-  --od-primary-50: #E8F0FE; /* Lightest blue tint (pills, chips) */
-  --od-primary-100: #D2E3FC;
-  --od-primary-200: #AECBFA;
-  --od-primary-300: #8AB4F8;
-  --od-primary-400: #669DF6;
-  --od-primary-900: #174EA6;
-  --od-primary-tint: #F5F9FE; /* AI insight row background */
+  --od-primary: #0E85B4; /* The one accent: buttons, selected states, chart highlight */
+  --od-primary-strong: #0B6B91; /* Blue text on a blue tint, link hover */
+  --od-primary-50: #EAF6FB; /* Lightest blue tint (pills, chips) */
+  --od-primary-100: #D4EEF8;
+  --od-primary-200: #A9DDF1;
+  --od-primary-300: #7DCBE9;
+  --od-primary-400: #45B2DC;
+  --od-primary-900: #0A4A66;
+  --od-primary-tint: #F4FAFD; /* AI insight row background */
   --od-text-strong: #181D27; /* Titles and values */
   --od-text-heading: #252B37;
   --od-text-ink: #0A0D12; /* Tooltip background */
@@ -107,8 +122,8 @@ html.option-d {
   --od-status-revision: #F97066;
   --od-status-approved-bg: #DCFAE6;
   --od-status-approved: #17B26A;
-  --od-status-active-bg: #DCE8FC;
-  --od-status-active: #1A73E8;
+  --od-status-active-bg: #D9EFF8;
+  --od-status-active: #0E85B4;
   --od-status-inactive-bg: #F2F4F7;
   --od-status-inactive: #D0D5DD;
 }
@@ -118,7 +133,7 @@ html.option-d :where(button, b, strong, th, label) {
   font-weight: 400;
 }
 
-html.option-d :where(.font-medium, h1, h2, h3, h4, h5, h6):not(.font-normal, .font-light) {
+html.option-d :where(.font-medium, .font-semibold, .font-bold, .font-extrabold, .font-black, h1, h2, h3, h4, h5, h6):not(.font-normal, .font-light) {
   font-weight: 500;
 }
 
@@ -132,7 +147,7 @@ html.option-d .od-lift {
 }
 html.option-d .od-lift:hover {
   translate: 0 -1px;
-  box-shadow: 0 14px 32px -18px rgba(26, 115, 232, 0.28);
+  box-shadow: 0 14px 32px -18px rgba(14, 133, 180, 0.28);
 }
 
 /* Buttons give a little under the finger. In the base layer, so a button's own

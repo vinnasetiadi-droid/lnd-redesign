@@ -55,7 +55,7 @@ function endLabel(label: string, color: string, lastIndex: number) {
   return function EndLabel(props: { x?: number | string; y?: number | string; value?: number | string; index?: number }) {
     if (props.index !== lastIndex) return null;
     return (
-      <text x={Number(props.x) + 8} y={Number(props.y) + 4} fill={color} fontSize={12} fontFamily="DM Sans, sans-serif">
+      <text x={Number(props.x) + 8} y={Number(props.y) + 4} fill={color} fontSize={12} fontFamily="Outfit, sans-serif">
         {label} {props.value}%
       </text>
     );

@@ -228,7 +228,7 @@ export function pillLabel(
     return (
       <g pointerEvents="none">
         <rect x={left} y={y - 44} width={w} height={34} rx={17} fill={OD_COLORS.primary50} />
-        <text x={left + w / 2} y={y - 22.5} textAnchor="middle" fill={OD_COLORS.primaryStrong} fontSize={13} fontFamily="DM Sans, sans-serif">
+        <text x={left + w / 2} y={y - 22.5} textAnchor="middle" fill={OD_COLORS.primaryStrong} fontSize={13} fontFamily="Outfit, sans-serif">
           {text}
         </text>
       </g>

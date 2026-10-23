@@ -12,7 +12,7 @@ import { Trash2, X } from '@/variants/d/icons';
 import { STATUS_LABEL, type CourseLifecycleStatus } from '@/lib/courseActions';
 import { ImageWithFallback } from '@/app/components/figma/ImageWithFallback';
 
-const FONT = "'DM Sans', sans-serif";
+const FONT = "'Outfit', sans-serif";
 
 interface DeleteVersionDialogProps {
   open: boolean;

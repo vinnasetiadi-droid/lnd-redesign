@@ -323,7 +323,7 @@ export function CourseTable({ courses, onCourseClick = () => {}, className, page
             )}
             <div className="flex gap-3 w-full mt-6">
               <button onClick={() => setInactiveConfirmId(null)} className="flex-1 h-10 rounded-full bg-[#F0F1F3] hover:bg-[#E6E8EB] text-[13px] text-[#414651] hover:bg-[#F5F6F8] cursor-pointer transition-colors">Cancel</button>
-              <button onClick={() => setInactiveConfirmId(null)} className={cn('flex-1 h-10 rounded-full text-[13px] text-white hover:brightness-[0.92] cursor-pointer transition-colors', cIsActive ? 'bg-[#D97706]' : 'bg-[#1A73E8]')}>
+              <button onClick={() => setInactiveConfirmId(null)} className={cn('flex-1 h-10 rounded-full text-[13px] text-white hover:brightness-[0.92] cursor-pointer transition-colors', cIsActive ? 'bg-[#D97706]' : 'bg-[#0E85B4]')}>
                 {cIsActive ? 'Deactivate' : 'Activate'}
               </button>
             </div>
