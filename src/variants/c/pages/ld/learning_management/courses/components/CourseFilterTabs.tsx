@@ -28,7 +28,7 @@ export function CourseFilterTabs({ active, onChange }: CourseFilterTabsProps) {
             "px-2 py-[2px] rounded-(--oc-radius-chip) text-[12px] transition-all duration-200 cursor-pointer border",
             active === f.key
               ? 'bg-(--oc-primary) text-(--oc-white) border-(--oc-primary)'
-              : 'bg-(--oc-white) text-(--oc-text-secondary) border-(--oc-border) hover:border-(--oc-primary-200) hover:text-(--oc-primary-strong)',
+              : 'bg-(--oc-card) text-(--oc-text-secondary) border-(--oc-border) hover:border-(--oc-primary-200) hover:text-(--oc-primary-strong)',
           )}
         >
           {f.label}

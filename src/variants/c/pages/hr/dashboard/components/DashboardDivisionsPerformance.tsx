@@ -71,7 +71,7 @@ function DivisionBar({ name, score, index, highlighted, start }: {
           {/* Blue fill fades out to plain grey when this division is not highlighted */}
           <span
             className={cn('absolute inset-0 transition-opacity duration-300', highlighted ? 'opacity-100' : 'opacity-0')}
-            style={{ backgroundImage: `linear-gradient(90deg, ${CHART_BLUE}, ${OC_COLORS.primary200})` }}
+            style={{ backgroundImage: `linear-gradient(90deg, ${CHART_BLUE}, ${OC_COLORS.progressEnd})` }}
           />
         </motion.div>
       </div>

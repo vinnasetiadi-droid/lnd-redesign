@@ -20,7 +20,7 @@ export function AIInsightBanner({
   return (
     <div
       className={cn(
-        "relative rounded-(--oc-radius-card) bg-gradient-to-br from-white via-(--oc-primary-tint) to-(--oc-primary-50) p-4 overflow-hidden",
+        "relative rounded-(--oc-radius-card) bg-gradient-to-br from-(--oc-card) via-(--oc-primary-tint) to-(--oc-primary-50) p-4 overflow-hidden",
         className,
       )}
     >
@@ -48,14 +48,14 @@ export function AIInsightLine({ text, fullText, lines = 1, className }: { text: 
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.8 });
   return (
-    <div ref={ref} className={cn("flex items-center gap-3 rounded-(--oc-radius-control) bg-(--oc-white) px-4 py-3 ring-1 ring-inset ring-(--oc-border)", inView && "oc-sweep", className)}>
+    <div ref={ref} className={cn("flex items-center gap-3 rounded-(--oc-radius-control) bg-(--oc-raised) px-4 py-3 ring-1 ring-inset ring-(--oc-border)", inView && "oc-sweep", className)}>
       <NisaOrb size={20} />
       <p className={cn("min-w-0 flex-1 text-[13px] leading-[18px] text-(--oc-text-body)", lines === 2 ? "line-clamp-2" : "truncate")} title={fullText ?? text}>
         {text}
       </p>
       <button
         type="button"
-        className="inline-flex shrink-0 items-center gap-1 text-[13px] text-(--oc-primary) transition-colors hover:text-(--oc-primary-strong) cursor-pointer"
+        className="inline-flex shrink-0 items-center gap-1 text-[13px] text-(--oc-primary-text) transition-colors hover:text-(--oc-primary-strong) cursor-pointer"
       >
         Ask NISA
         <ArrowRight size={14} />

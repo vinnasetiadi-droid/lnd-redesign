@@ -85,7 +85,7 @@ function PageSearch({ role }: { role: SidebarRole }) {
         {open && query.trim() && (
           <motion.ul
             role="listbox"
-            className="absolute left-0 right-0 top-full z-40 mt-1.5 rounded-(--oc-radius-card) bg-(--oc-white) p-1 shadow-[0_0_0_1px_var(--oc-border),0_8px_24px_-6px_rgba(10,25,41,0.18)]"
+            className="absolute left-0 right-0 top-full z-40 mt-1.5 rounded-(--oc-radius-card) bg-(--oc-raised) p-1 shadow-(--oc-shadow-search)"
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
@@ -148,7 +148,7 @@ export function TopBar() {
         >
           <Bell size={18} />
           {HAS_UNREAD && (
-            <span className="absolute right-[10px] top-[9px] size-2 rounded-full bg-(--oc-danger) ring-2 ring-(--oc-white)" />
+            <span className="absolute right-[10px] top-[9px] size-2 rounded-full bg-(--oc-danger) ring-2 ring-(--oc-button-secondary)" />
           )}
         </button>
 

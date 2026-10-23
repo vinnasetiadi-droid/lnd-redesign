@@ -65,9 +65,9 @@ export function SearchField({ value, onChange, placeholder, loading, className }
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-10 w-full rounded-(--oc-radius-control) bg-(--oc-white) pl-11 pr-10 text-[13px] text-(--oc-text-strong) outline-none ring-1 ring-inset ring-(--oc-border) transition-shadow placeholder:text-(--oc-text-subtle) focus:ring-2 focus:ring-(--oc-primary)/40"
+        className="h-10 w-full rounded-(--oc-radius-control) bg-(--oc-card) pl-11 pr-10 text-[13px] text-(--oc-text-strong) outline-none ring-1 ring-inset ring-(--oc-border) transition-shadow placeholder:text-(--oc-text-subtle) focus:ring-2 focus:ring-(--oc-primary)/40"
       />
-      {loading && <Loader2 className="absolute right-4 top-1/2 size-4 -translate-y-1/2 animate-spin text-(--oc-primary)" />}
+      {loading && <Loader2 className="absolute right-4 top-1/2 size-4 -translate-y-1/2 animate-spin text-(--oc-primary-text)" />}
     </div>
   );
 }
@@ -81,7 +81,7 @@ export function tileClass(selected: boolean) {
     'rounded-(--oc-radius-control) border p-4 text-left transition-colors cursor-pointer',
     selected
       ? 'border-transparent bg-(--oc-selected-surface)'
-      : 'border-transparent bg-(--oc-white) shadow-(--oc-shadow-card) hover:bg-(--oc-surface-subtle)',
+      : 'border-transparent bg-(--oc-card) shadow-(--oc-shadow-card) hover:bg-(--oc-surface-subtle)',
   );
 }
 
@@ -162,7 +162,7 @@ export function PillButton({ children, icon: Icon, variant = 'secondary', classN
     <button
       type="button"
       className={cn(
-        'inline-flex h-10 items-center justify-center gap-2 rounded-(--oc-radius-control) px-5 text-[13px] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25 focus-visible:ring-offset-1',
+        'inline-flex h-10 items-center justify-center gap-2 rounded-(--oc-radius-control) px-5 text-[13px] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25 focus-visible:ring-offset-1 focus-visible:ring-offset-(color:--oc-card)',
         variant === 'primary'
           ? 'oc-btn-primary'
           : variant === 'tint'

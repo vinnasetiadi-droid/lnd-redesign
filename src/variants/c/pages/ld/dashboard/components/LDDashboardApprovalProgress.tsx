@@ -41,7 +41,7 @@ export function LDDashboardApprovalProgress({ approvals, className }: LDDashboar
       {/* Header */}
       <div className="flex flex-col gap-4 mb-5">
         <div className="flex gap-3 items-center">
-          <div className="w-12 h-12 rounded-(--oc-radius-control) border border-(--oc-border) bg-white flex items-center justify-center shrink-0">
+          <div className="w-12 h-12 rounded-(--oc-radius-control) border border-(--oc-border) bg-(--oc-card) flex items-center justify-center shrink-0">
             <ClipboardCheck className="w-6 h-6 text-(--oc-text-body)" strokeWidth={1.75} />
           </div>
           <div className="space-y-0.5">
@@ -55,7 +55,7 @@ export function LDDashboardApprovalProgress({ approvals, className }: LDDashboar
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-(--oc-radius-card) border border-(--oc-border) overflow-hidden">
+      <div className="bg-(--oc-card) rounded-(--oc-radius-card) border border-(--oc-border) overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>

@@ -84,7 +84,7 @@ export function ProgramScopeTabs<K extends string = ProgramScope>({ id, value, o
               // background of whichever tab it is sliding across.
               'relative flex items-center gap-1.5 py-1.5 rounded-(--oc-radius-chip) text-[13px] whitespace-nowrap transition-colors duration-200 cursor-pointer',
               stretch ? 'flex-1 justify-center px-2' : 'px-3.5',
-              'focus:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/40 focus-visible:ring-offset-1',
+              'focus:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/40 focus-visible:ring-offset-1 focus-visible:ring-offset-(color:--oc-card)',
               // Active: strong text, medium; inactive: secondary text, regular
               isActive ? 'text-(--oc-text-strong)' : 'text-(--oc-text-secondary) hover:text-(--oc-text-body)',
             )}
@@ -92,7 +92,7 @@ export function ProgramScopeTabs<K extends string = ProgramScope>({ id, value, o
             {isActive && (
               <motion.span
                 layoutId={id}
-                className="absolute inset-0 z-[1] rounded-(--oc-radius-chip) bg-(--oc-white) shadow-[0_1px_2px_rgba(10,25,41,0.08)]"
+                className="absolute inset-0 z-[1] rounded-(--oc-radius-chip) bg-(--oc-thumb) shadow-(--oc-shadow-thumb)"
                 // A visible glide: long enough to follow, eased out at the end
                 transition={{ duration: 0.38, ease: EASE_OUT }}
               />

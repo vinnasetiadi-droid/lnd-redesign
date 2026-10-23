@@ -227,7 +227,7 @@ export function CourseTable({ courses, onCourseClick = () => {}, className, page
                         {openMenuId === course.id && (
                           <>
                             <div className="fixed inset-0 z-10" onClick={() => setOpenMenuId(null)} />
-                            <div className="absolute right-0 top-full mt-1 z-20 bg-white rounded-(--oc-radius-card) shadow-[0_8px_24px_-6px_rgba(10,25,41,0.18),0_2px_4px_rgba(10,25,41,0.04)] p-1 min-w-[170px]">
+                            <div className="absolute right-0 top-full mt-1 z-20 bg-(--oc-raised) rounded-(--oc-radius-card) shadow-(--oc-shadow-pop) p-1 min-w-[170px]">
                               <button
                                 type="button"
                                 className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-(--oc-text-body) hover:bg-(--oc-surface) transition-colors"
@@ -290,8 +290,8 @@ export function CourseTable({ courses, onCourseClick = () => {}, className, page
     {confirmCourse && (() => {
       const cIsActive = confirmCourse.status === 'active';
       return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(10,25,41,0.5)' }}>
-          <div className="relative w-[460px] bg-(--oc-white) rounded-(--oc-radius-card) shadow-[0_24px_48px_-12px_rgba(10,25,41,0.18)] p-8 flex flex-col items-center text-center" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'var(--oc-overlay)' }}>
+          <div className="relative w-[460px] bg-(--oc-raised) rounded-(--oc-radius-card) shadow-(--oc-shadow-dialog) p-8 flex flex-col items-center text-center" onClick={(e) => e.stopPropagation()}>
             <button onClick={() => setInactiveConfirmId(null)} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-(--oc-radius-chip) text-(--oc-text-muted) hover:bg-(--oc-surface) transition-colors cursor-pointer">
               <X className="w-5 h-5" />
             </button>
@@ -323,7 +323,7 @@ export function CourseTable({ courses, onCourseClick = () => {}, className, page
             )}
             <div className="flex gap-3 w-full mt-6">
               <button onClick={() => setInactiveConfirmId(null)} className="flex-1 h-10 rounded-(--oc-radius-control) bg-(--oc-surface) hover:bg-(--oc-button-secondary-hover) text-[13px] text-(--oc-text-body) hover:bg-(--oc-surface) cursor-pointer transition-colors">Cancel</button>
-              <button onClick={() => setInactiveConfirmId(null)} className={cn('flex-1 h-10 rounded-(--oc-radius-control) text-[13px] text-white hover:brightness-[0.92] cursor-pointer transition-colors', cIsActive ? 'bg-(--oc-attention-text)' : 'bg-(--oc-primary)')}>
+              <button onClick={() => setInactiveConfirmId(null)} className={cn('flex-1 h-10 rounded-(--oc-radius-control) text-[13px] text-(--oc-white) hover:brightness-[0.92] cursor-pointer transition-colors', cIsActive ? 'bg-(--oc-attention-fill)' : 'bg-(--oc-primary)')}>
                 {cIsActive ? 'Deactivate' : 'Activate'}
               </button>
             </div>
@@ -334,8 +334,8 @@ export function CourseTable({ courses, onCourseClick = () => {}, className, page
 
     {/* Delete Confirmation Modal */}
     {deleteCourse && (
-      <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(10,25,41,0.5)' }}>
-        <div className="relative w-[460px] bg-(--oc-white) rounded-(--oc-radius-card) shadow-[0_24px_48px_-12px_rgba(10,25,41,0.18)] p-8 flex flex-col items-center text-center" onClick={(e) => e.stopPropagation()}>
+      <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'var(--oc-overlay)' }}>
+        <div className="relative w-[460px] bg-(--oc-raised) rounded-(--oc-radius-card) shadow-(--oc-shadow-dialog) p-8 flex flex-col items-center text-center" onClick={(e) => e.stopPropagation()}>
           <button onClick={() => setDeleteConfirmId(null)} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-(--oc-radius-chip) text-(--oc-text-muted) hover:bg-(--oc-surface) transition-colors cursor-pointer">
             <X className="w-5 h-5" />
           </button>
@@ -357,7 +357,7 @@ export function CourseTable({ courses, onCourseClick = () => {}, className, page
           </div>
           <div className="flex gap-3 w-full mt-6">
             <button onClick={() => setDeleteConfirmId(null)} className="flex-1 h-10 rounded-(--oc-radius-control) bg-(--oc-surface) hover:bg-(--oc-button-secondary-hover) text-[13px] text-(--oc-text-body) hover:bg-(--oc-surface) cursor-pointer transition-colors">Cancel</button>
-            <button onClick={() => setDeleteConfirmId(null)} className="flex-1 h-10 rounded-(--oc-radius-control) bg-(--oc-danger) text-[13px] text-white hover:brightness-[0.92] cursor-pointer transition-colors">Delete</button>
+            <button onClick={() => setDeleteConfirmId(null)} className="flex-1 h-10 rounded-(--oc-radius-control) bg-(--oc-danger-fill) text-[13px] text-(--oc-white) hover:brightness-[0.92] cursor-pointer transition-colors">Delete</button>
           </div>
         </div>
       </div>

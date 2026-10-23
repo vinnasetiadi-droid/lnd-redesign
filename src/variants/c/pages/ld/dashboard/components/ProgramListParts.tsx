@@ -70,11 +70,11 @@ export function TruncatedTitle({ text, className }: { text: string; className?: 
           initial={{ opacity: 0, y: 2 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.15, ease: 'easeOut' }}
-          className="fixed z-[100] max-w-[320px] px-3 py-1.5 rounded-(--oc-radius-control) bg-(--oc-text-ink) text-white text-[12px] leading-[18px] shadow-lg pointer-events-none"
+          className="fixed z-[100] max-w-[320px] px-3 py-1.5 rounded-(--oc-radius-control) bg-(--oc-tooltip) text-(--oc-on-ink) text-[12px] leading-[18px] shadow-lg ring-1 ring-(--oc-tooltip-ring) pointer-events-none"
           style={{ left: anchor.left, top: anchor.top - 8, transform: 'translateY(-100%)', fontFamily: "'General Sans', sans-serif" }}
         >
           {text}
-          <span className="absolute -bottom-1 left-4 w-2 h-2 bg-(--oc-text-ink) rotate-45" aria-hidden />
+          <span className="absolute -bottom-1 left-4 w-2 h-2 bg-(--oc-tooltip) rotate-45" aria-hidden />
         </motion.div>,
         document.body,
       )}
@@ -187,7 +187,7 @@ export function InfiniteListBody({ list, children, className }: { list: Infinite
       <div
         aria-hidden
         className={cn(
-          'pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white via-white/80 to-transparent transition-opacity duration-300',
+          'pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-(--oc-card) via-(--oc-card)/80 to-transparent transition-opacity duration-300',
           showFade ? 'opacity-100' : 'opacity-0',
         )}
       />
@@ -217,7 +217,7 @@ export function InfiniteListFooter({ list, total, noun }: { list: InfiniteList; 
       <button
         type="button"
         onClick={list.showLess}
-        className="text-(--oc-primary) hover:text-(--oc-primary-strong) transition-colors cursor-pointer"
+        className="text-(--oc-primary-text) hover:text-(--oc-primary-strong) transition-colors cursor-pointer"
       >
         Show less
       </button>

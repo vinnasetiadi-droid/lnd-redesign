@@ -110,7 +110,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
       className={cn(
         // Landscape: photo left, details right
         'oc-surface group relative flex gap-4 rounded-(--oc-radius-card) p-2.5 pr-4 transition-shadow duration-200 cursor-pointer',
-        'hover:shadow-[0_1px_2px_rgba(10,25,41,0.04),0_14px_30px_-14px_rgba(10,25,41,0.18)]',
+        'hover:shadow-(--oc-shadow-hover)',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25',
         className,
       )}
@@ -124,7 +124,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
             className={cn('absolute inset-0 size-full transition-transform duration-500 group-hover:scale-[1.03]', isInactive && 'grayscale-[60%]')}
           />
         </div>
-        <span className="absolute bottom-2 left-2 inline-flex h-[22px] items-center whitespace-nowrap rounded-[6px] bg-(--oc-text-ink) px-2 text-[11px] leading-none text-(--oc-white)">
+        <span className="absolute bottom-2 left-2 inline-flex h-[22px] items-center whitespace-nowrap rounded-[6px] bg-(--oc-badge) px-2 text-[11px] leading-none text-(--oc-on-ink)">
           {COURSE_STATUS_META[course.status].label}
         </span>
       </div>
@@ -145,7 +145,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
           {menuOpen && (
             <>
               <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-              <div role="menu" className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-(--oc-radius-card) bg-(--oc-white) p-1 shadow-[0_8px_24px_-6px_rgba(10,25,41,0.18),0_2px_4px_rgba(10,25,41,0.04)]">
+              <div role="menu" className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-(--oc-radius-card) bg-(--oc-raised) p-1 shadow-(--oc-shadow-pop)">
                 <button
                   type="button"
                   role="menuitem"
@@ -187,7 +187,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
         {/* Meta: version, duration, mode */}
         <p className="mt-0.5 truncate text-[12px] leading-[18px] text-(--oc-text-subtle)">
           v{version}
-          {drafts > 0 && <span className="text-(--oc-primary)"> +{drafts} draft</span>}
+          {drafts > 0 && <span className="text-(--oc-primary-text)"> +{drafts} draft</span>}
           {course.duration && <> · {course.duration.toLowerCase()}</>}
           {' · '}{courseMode(course)}
         </p>
@@ -244,8 +244,8 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
 
       {/* Status toggle confirmation, portaled to body */}
       {showStatusConfirm && createPortal(
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(10,25,41,0.5)' }} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
-          <div className="relative w-[460px] rounded-(--oc-radius-card) bg-(--oc-white) p-8 flex flex-col items-center text-center shadow-[0_24px_48px_-12px_rgba(10,25,41,0.18)]" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'var(--oc-overlay)' }} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
+          <div className="relative w-[460px] rounded-(--oc-radius-card) bg-(--oc-raised) p-8 flex flex-col items-center text-center shadow-(--oc-shadow-dialog)" onClick={(e) => e.stopPropagation()}>
             <button onClick={() => setShowStatusConfirm(false)} aria-label="Close" className="absolute top-4 right-4 flex size-8 items-center justify-center rounded-(--oc-radius-chip) text-(--oc-text-muted) transition-colors hover:bg-(--oc-surface) cursor-pointer">
               <X className="size-5" />
             </button>

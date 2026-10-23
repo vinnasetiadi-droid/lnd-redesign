@@ -38,23 +38,34 @@ const HOVER = "hover:bg-(--oc-surface-subtle)";
 // SUB-COMPONENTS
 // ============================================================
 
-/** Dark logo from the asset server; falls back to a wordmark when the server is down */
+/**
+ * Dark logo from the asset server, the white one (a local file) in dark mode;
+ * falls back to a wordmark when the server is down
+ */
 function Logo() {
   const [failed, setFailed] = useState(false);
   if (failed) {
     return (
       <span className="text-[16px] leading-[24px] text-(--oc-text-strong)">
-        Learn<span className="text-(--oc-primary)">X</span>pert
+        Learn<span className="text-(--oc-primary-text)">X</span>pert
       </span>
     );
   }
   return (
-    <img
-      src={IMAGES.icons.black_lx}
-      alt="LearnXpert"
-      className="h-[34px] w-auto object-contain"
-      onError={() => setFailed(true)}
-    />
+    <>
+      <img
+        src={IMAGES.icons.black_lx}
+        alt="LearnXpert"
+        className="oc-only-light h-[34px] w-auto object-contain"
+        onError={() => setFailed(true)}
+      />
+      <img
+        src={IMAGES.icons.white_lx}
+        alt="LearnXpert"
+        className="oc-only-dark h-[34px] w-auto object-contain"
+        onError={() => setFailed(true)}
+      />
+    </>
   );
 }
 

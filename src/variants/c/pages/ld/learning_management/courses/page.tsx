@@ -176,7 +176,7 @@ export default function CoursesPage() {
           <motion.div
             variants={revealItem}
             className="flex items-center gap-4 rounded-(--oc-radius-card) px-5 py-4 ring-1 ring-inset ring-(--oc-primary-100)"
-            style={{ background: 'linear-gradient(100deg, var(--oc-primary-50) 0%, var(--oc-white) 70%)' }}
+            style={{ background: 'linear-gradient(100deg, var(--oc-primary-50) 0%, var(--oc-card) 70%)' }}
           >
             <IconCircle icon={Clock} className="size-9 bg-(--oc-primary) text-(--oc-white)" />
             <div className="min-w-0 flex-1">
@@ -204,7 +204,7 @@ export default function CoursesPage() {
         )}
 
         {/* ── Library ── */}
-        <motion.div ref={libraryRef} variants={revealItem} className="flex flex-col gap-4 rounded-(--oc-radius-card) bg-(--oc-white) p-5 scroll-mt-3">
+        <motion.div ref={libraryRef} variants={revealItem} className="flex flex-col gap-4 rounded-(--oc-radius-card) bg-(--oc-card) p-5 scroll-mt-3">
           {/* Title on the left, status tabs beside it (the counts are the filter); tabs scroll sideways when narrow */}
           <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
             <div className="min-w-0">
@@ -283,7 +283,7 @@ export default function CoursesPage() {
                     'flex size-8 items-center justify-center rounded-(--oc-radius-chip) transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25',
                     // The segmented spec: white box on the grey track
                     viewMode === m
-                      ? 'bg-(--oc-white) text-(--oc-text-strong) shadow-[0_1px_2px_rgba(10,25,41,0.08)]'
+                      ? 'bg-(--oc-thumb) text-(--oc-text-strong) shadow-(--oc-shadow-thumb)'
                       : 'text-(--oc-text-secondary) hover:text-(--oc-text-body)',
                   )}
                 >

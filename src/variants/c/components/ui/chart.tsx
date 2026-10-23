@@ -54,19 +54,19 @@ export interface TooltipRow {
   dashed?: boolean;
 }
 
-/** Tooltip card used by every chart: black with white text, like the value pill on the bars */
+/** Tooltip card used by every chart: black with white text, like the value pill on the bars (raised navy with a hairline in dark) */
 export function ChartTooltipCard({ title, rows }: { title?: ReactNode; rows: TooltipRow[] }) {
   return (
-    <div className="min-w-[168px] rounded-(--oc-radius-control) bg-(--oc-text-ink) px-3.5 py-3 shadow-[0_8px_24px_-6px_rgba(10,25,41,0.35)]">
-      {title && <p className="mb-2 text-[12px] text-(--oc-white)/60">{title}</p>}
+    <div className="min-w-[168px] rounded-(--oc-radius-control) bg-(--oc-tooltip) px-3.5 py-3 shadow-(--oc-shadow-tooltip) ring-1 ring-(--oc-tooltip-ring)">
+      {title && <p className="mb-2 text-[12px] text-(--oc-on-ink)/60">{title}</p>}
       <div className="space-y-1.5">
         {rows.map((row) => (
           <div key={row.label} className="flex items-center justify-between gap-4">
-            <span className="flex items-center gap-2 text-[12px] text-(--oc-white)/75">
+            <span className="flex items-center gap-2 text-[12px] text-(--oc-on-ink)/75">
               <LegendMark color={row.color} line={row.line} dashed={row.dashed} />
               {row.label}
             </span>
-            <span className="text-[13px] text-(--oc-white)">{row.value}</span>
+            <span className="text-[13px] text-(--oc-on-ink)">{row.value}</span>
           </div>
         ))}
       </div>
@@ -103,7 +103,7 @@ export const HATCHED_TRACK = {
 } as const;
 
 /** Progress bar: blue gradient fill on a light track, 3px corners */
-export function GradientProgress({ value, className, from = CHART_BLUE, to = OC_COLORS.primary200 }: {
+export function GradientProgress({ value, className, from = CHART_BLUE, to = OC_COLORS.progressEnd }: {
   /** 0-100 */
   value: number;
   className?: string;
@@ -172,7 +172,8 @@ export function foldBar(ids: FoldIds, isSelected: (index: number) => boolean, co
 
 /**
  * `LabelList content`: a black value pill with white text above the selected
- * bar, with a small pointer (the "1.10 kWh" pill in the reference). At either
+ * bar, with a small pointer (the "1.10 kWh" pill in the reference); in dark a
+ * light pill with navy text, so it still stands out. At either
  * end it lines up with the column's outer edge so it stays inside the chart.
  */
 export function pillLabel(
@@ -197,9 +198,9 @@ export function pillLabel(
     const top = y - 36;
     return (
       <g pointerEvents="none">
-        <rect x={left} y={top} width={w} height={24} rx={6} fill={OC_COLORS.textInk} />
-        <path d={`M${centre - 4},${top + 24} L${centre},${top + 28} L${centre + 4},${top + 24} Z`} fill={OC_COLORS.textInk} />
-        <text x={left + w / 2} y={top + 16} textAnchor="middle" fill={OC_COLORS.white} fontSize={12} fontFamily="General Sans, sans-serif">
+        <rect x={left} y={top} width={w} height={24} rx={6} fill={OC_COLORS.pill} />
+        <path d={`M${centre - 4},${top + 24} L${centre},${top + 28} L${centre + 4},${top + 24} Z`} fill={OC_COLORS.pill} />
+        <text x={left + w / 2} y={top + 16} textAnchor="middle" fill={OC_COLORS.pillText} fontSize={12} fontFamily="General Sans, sans-serif">
           {text}
         </text>
       </g>

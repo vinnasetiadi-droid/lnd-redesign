@@ -3,9 +3,9 @@ import { cn } from '@/lib/utils';
 import type { ActivityItem, ActivityColorScheme } from '../types/dashboard.types';
 
 const COLOR_SCHEMES: Record<ActivityColorScheme, { bg: string; icon: string }> = {
-  blue:   { bg: 'bg-(--oc-primary-100)',    icon: 'text-(--oc-primary)'    },
+  blue:   { bg: 'bg-(--oc-primary-100)',    icon: 'text-(--oc-primary-text)'    },
   green:  { bg: 'bg-(--oc-success-100)', icon: 'text-(--oc-success)' },
-  purple: { bg: 'bg-(--oc-primary-50)',  icon: 'text-(--oc-primary)'  },
+  purple: { bg: 'bg-(--oc-primary-50)',  icon: 'text-(--oc-primary-text)'  },
 };
 
 interface LDDashboardActivityProps {
@@ -20,7 +20,7 @@ export function LDDashboardActivity({ activities, className }: LDDashboardActivi
       <div className="absolute top-0 right-0 w-[350px] h-[350px] bg-gradient-to-br from-(--oc-primary-50)/50 to-(--oc-primary-100)/50 rounded-(--oc-radius-chip) blur-3xl -z-10 translate-x-1/3 -translate-y-1/3 pointer-events-none" />
 
       <div className="flex items-center gap-3 mb-5">
-        <div className="w-12 h-12 rounded-(--oc-radius-control) border border-(--oc-border) bg-white flex items-center justify-center shrink-0">
+        <div className="w-12 h-12 rounded-(--oc-radius-control) border border-(--oc-border) bg-(--oc-card) flex items-center justify-center shrink-0">
           <Activity className="w-6 h-6 text-(--oc-text-body)" strokeWidth={1.75} />
         </div>
         <div className="space-y-0.5">
@@ -29,7 +29,7 @@ export function LDDashboardActivity({ activities, className }: LDDashboardActivi
         </div>
       </div>
 
-      <div className="bg-white rounded-(--oc-radius-card) border border-(--oc-border) p-4">
+      <div className="bg-(--oc-card) rounded-(--oc-radius-card) border border-(--oc-border) p-4">
         <div className="space-y-4">
           {activities.map((activity) => {
             const colors = COLOR_SCHEMES[activity.colorScheme];

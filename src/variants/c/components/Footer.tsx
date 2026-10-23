@@ -9,7 +9,7 @@ export function Footer() {
         <img
           src={imgAjari}
           alt="Ajari"
-          className="h-[19px] w-auto object-contain"
+          className="oc-logo-invert h-[19px] w-auto object-contain"
         />
         <p className="text-[10px] leading-[24px] text-(--oc-text-secondary) whitespace-nowrap">
           © 2026 HR Platform. All rights reserved.

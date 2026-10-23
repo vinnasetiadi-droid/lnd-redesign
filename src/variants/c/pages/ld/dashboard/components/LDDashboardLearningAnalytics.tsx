@@ -206,7 +206,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
                   strokeWidth={2}
                   fill={`url(#${ids.area}-${m.key})`}
                   dot={false}
-                  activeDot={{ r: 4, fill: m.color, stroke: '#fff', strokeWidth: 2 }}
+                  activeDot={{ r: 4, fill: m.color, stroke: OC_COLORS.card, strokeWidth: 2 }}
                   animationDuration={600}
                   animationEasing="ease-out"
                 >

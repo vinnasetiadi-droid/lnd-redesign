@@ -70,7 +70,9 @@ function SegmentGauge({ pct, start }: { pct: number; start: boolean }) {
         const sin = Math.sin(angle);
         const on = i < filled;
         return (
-          <motion.line
+          // A CSS transition, not motion: motion would bake the resolved colour
+          // in, and the segments must follow a switch to dark afterwards
+          <line
             key={i}
             x1={cx + inner * cos}
             y1={cy - inner * sin}
@@ -78,9 +80,10 @@ function SegmentGauge({ pct, start }: { pct: number; start: boolean }) {
             y2={cy - outer * sin}
             strokeWidth={9}
             strokeLinecap="round"
-            initial={{ stroke: OC_COLORS.border }}
-            animate={{ stroke: start && on ? CHART_BLUE : OC_COLORS.border }}
-            transition={{ duration: 0.3, ease: 'easeOut', delay: start && on ? 0.15 + i * 0.08 : 0 }}
+            style={{
+              stroke: start && on ? CHART_BLUE : OC_COLORS.border,
+              transition: `stroke 0.3s ease-out ${start && on ? 0.15 + i * 0.08 : 0}s`,
+            }}
           />
         );
       })}

@@ -140,12 +140,188 @@ html.option-c {
   /* Selected tiles: a light blue tint with a blue hairline */
   --oc-selected-surface: var(--oc-primary-50);
   --oc-selected-border: var(--oc-primary-200);
+
+  /* Roles that dark mode needs apart from the plain colours above. In light
+     each one is the value the page used before, so light looks the same. */
+  --oc-page: var(--oc-surface-muted); /* The page under the sky gradient */
+  --oc-card: var(--oc-white); /* Cards, the sidebar, tiles, inputs */
+  --oc-raised: var(--oc-white); /* Menus, dropdowns, dialogs */
+  --oc-thumb: var(--oc-white); /* The picked box of a segmented control */
+  --oc-primary-text: var(--oc-primary); /* Blue used as text or an icon */
+  --oc-danger-fill: var(--oc-danger); /* Red behind white text, red dots */
+  --oc-attention-fill: var(--oc-attention-text); /* Amber behind white text */
+  --oc-tooltip: var(--oc-text-ink); /* Tooltips */
+  --oc-tooltip-ring: transparent; /* Tooltips' edge (dark only) */
+  --oc-on-ink: var(--oc-white); /* Text on tooltips and the photo badge */
+  --oc-badge: var(--oc-text-ink); /* Status badge on a course photo */
+  --oc-pill: var(--oc-text-ink); /* Value pill above the picked column */
+  --oc-pill-text: var(--oc-white);
+  --oc-overlay: rgba(10,25,41,0.5); /* Behind dialogs */
+  --oc-hover-veil: rgba(0, 0, 0, 0.02);
+  --oc-shadow-hover: 0 1px 2px rgba(10,25,41, 0.04), 0 14px 30px -14px rgba(10,25,41, 0.18);
+  --oc-shadow-pop: 0 8px 24px -6px rgba(10,25,41,0.18), 0 2px 4px rgba(10,25,41,0.04); /* Menus */
+  --oc-shadow-search: 0 0 0 1px var(--oc-border), 0 8px 24px -6px rgba(10,25,41,0.18); /* Search results */
+  --oc-shadow-dialog: 0 24px 48px -12px rgba(10,25,41,0.18);
+  --oc-shadow-tooltip: 0 8px 24px -6px rgba(10,25,41,0.35);
+  --oc-shadow-thumb: 0 1px 2px rgba(10,25,41,0.08);
+  --oc-shadow-label: 0 2px 8px -2px rgba(10,25,41,0.14); /* Funnel stage labels */
+  --oc-label-drop: drop-shadow(0 1px 2px rgba(10,25,41, 0.18)); /* Donut count badges */
+  --oc-btn-primary-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 1px 2px color-mix(in srgb, var(--oc-text-ink) 25%, transparent);
+  --oc-sweep: rgba(255, 255, 255, 0.85); /* The light sweep across NISA lines */
+  --oc-progress-end: var(--oc-primary-200); /* Right end of the blue progress gradient */
+  --oc-mode-self-done: var(--oc-primary-100); /* Completed share of the self-paced bar */
+  /* NISA orb: its pale parts, and the white inner edge that keeps it visible on the blue card */
+  --oc-orb-soft: var(--oc-primary-100);
+  --oc-orb-pale: var(--oc-primary-tint);
+  --oc-orb-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55), inset 0 2px 6px rgba(255, 255, 255, 0.75), inset 0 -2px 8px rgba(255, 255, 255, 0.4);
+  /* Page background, after the sky reference: a light sky blue from the top
+     fading into the cool grey page within 300px, with a soft white haze */
+  --oc-page-background:
+    radial-gradient(60% 20% at 18% 0%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 70%),
+    radial-gradient(45% 18% at 82% 2%, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 70%),
+    linear-gradient(180deg, var(--oc-sky) 0%, color-mix(in srgb, var(--oc-sky) 60%, var(--oc-surface-muted)) 110px, color-mix(in srgb, var(--oc-sky) 25%, var(--oc-surface-muted)) 200px, var(--oc-surface-muted) 300px);
 }
 
-/* The one white surface: sidebar, top bar controls, cards, tiles */
+/*
+ * Option C dark: navy, after the user's dark references (CoinFusion, the
+ * widget board, the AI assistant glow). Still one family: every navy, grey and
+ * blue below is hue 211°. Text is a cool off-white, never pure white; blue is
+ * #2C87E8 for fills and a lighter #5DA3EF where it is text or a thin line;
+ * tints become blue washes over the navy card. Shadows are quiet: a 1px
+ * hairline and a deep shadow, no light glows. Switched on by `theme-dark` on
+ * <html> (src/variants/theme-mode.ts).
+ */
+html.option-c.theme-dark {
+  --oc-primary: #2C87E8;
+  --oc-primary-strong: #8EC0F6; /* Blue text on a wash, link hover */
+  --oc-primary-50: color-mix(in srgb, #2C87E8 12%, #0F1C29); /* Washes over the card */
+  --oc-primary-100: color-mix(in srgb, #2C87E8 20%, #0F1C29);
+  --oc-primary-200: color-mix(in srgb, #2C87E8 42%, #0F1C29); /* Blue hairlines, the quieter series */
+  --oc-primary-300: #8EC0F6;
+  --oc-primary-400: #5DA3EF;
+  --oc-primary-900: #BCDAFB;
+  --oc-primary-tint: color-mix(in srgb, #2C87E8 5%, #0F1C29);
+  --oc-sky: #102A46; /* The deep blue glow at the top of the page */
+  --oc-text-strong: #EAF2FA;
+  --oc-text-heading: #DAE5F1;
+  --oc-text-ink: #F3F7FC;
+  --oc-text-body: #B7C6D7;
+  --oc-text-secondary: #9BADBF;
+  --oc-text-muted: #8596A8;
+  --oc-text-subtle: #637588;
+  --oc-text-ai: #DAE5F1;
+  --oc-border: #1E3043;
+  --oc-border-strong: #24374C;
+  --oc-border-control: #2C4258;
+  --oc-line: #39516A;
+  --oc-surface: #182839;
+  --oc-surface-muted: #152333;
+  --oc-surface-subtle: #13212F;
+  --oc-button-secondary: #182839;
+  --oc-button-secondary-hover: #203246;
+  /* The primary button is the accent blue in dark, a shade deeper so white text keeps 5:1 */
+  --oc-button-primary: #1D6DC3;
+  --oc-button-primary-hover: #2479D6;
+  --oc-white: #FFFFFF; /* Stays white: text on blue fills and the NISA card, SVG masks */
+  /* NISA priority card: the same black-to-blue, a little deeper */
+  --oc-ai-gradient: linear-gradient(100deg, #03203F 0%, #0B3D74 35%, #165398 70%, #1B63B3 100%);
+  --oc-ai-gradient-tall: linear-gradient(168deg, #03203F 0%, #0B3D74 35%, #165398 70%, #1B63B3 100%);
+  --oc-attention-text: #FDB022;
+  --oc-attention-surface: color-mix(in srgb, #F79009 14%, #0F1C29);
+  --oc-attention-bar: #FEC84B;
+  --oc-attention-track: color-mix(in srgb, #F79009 22%, #0F1C29);
+  --oc-warning: #FDB022;
+  --oc-orange: #FB6514;
+  --oc-orange-strong: #FD853A;
+  --oc-orange-surface: color-mix(in srgb, #FB6514 16%, #0F1C29);
+  --oc-success: #32D583;
+  --oc-success-strong: #47CD89;
+  --oc-success-surface: color-mix(in srgb, #12B76A 14%, #0F1C29);
+  --oc-success-100: color-mix(in srgb, #12B76A 24%, #0F1C29);
+  --oc-success-bright: #32D583;
+  --oc-mode-self: var(--oc-primary-300);
+  --oc-danger: #F97066;
+  --oc-danger-strong: #FDA29B;
+  --oc-danger-surface: color-mix(in srgb, #F04438 14%, #0F1C29);
+  --oc-danger-100: color-mix(in srgb, #F04438 22%, #0F1C29);
+  --oc-danger-bright: #F97066;
+  --oc-yellow: color-mix(in srgb, #FFE07A 16%, #0F1C29);
+  --oc-yellow-text: #FFE07A;
+  --oc-brand-linkedin: #71B7FB; /* LinkedIn's own blue for dark backgrounds */
+  --oc-avatar-peach: color-mix(in srgb, #FFB38A 18%, #0F1C29);
+  --oc-avatar-lilac: color-mix(in srgb, #B692F6 18%, #0F1C29);
+  --oc-avatar-pink: color-mix(in srgb, #F17ED0 16%, #0F1C29);
+  --oc-avatar-cyan: color-mix(in srgb, #22CCEE 16%, #0F1C29);
+  --oc-status-draft-bg: #1B2C3E;
+  --oc-status-draft: #637588;
+  --oc-status-review-bg: color-mix(in srgb, #9E77ED 18%, #0F1C29);
+  --oc-status-review: #B692F6;
+  --oc-status-revision-bg: color-mix(in srgb, #F04438 16%, #0F1C29);
+  --oc-status-revision: #F97066;
+  --oc-status-approved-bg: color-mix(in srgb, #17B26A 16%, #0F1C29);
+  --oc-status-approved: #47CD89;
+  --oc-status-active-bg: color-mix(in srgb, #2C87E8 20%, #0F1C29);
+  --oc-status-active: #5DA3EF;
+  --oc-status-inactive-bg: #182839;
+  --oc-status-inactive: #44596F;
+  --oc-hairline: rgba(146, 186, 230, 0.09); /* hue 211 light at 9% */
+  --oc-shadow-card: inset 0 0 0 1px var(--oc-hairline), 0 1px 2px rgba(2, 7, 13, 0.35), 0 8px 22px -12px rgba(2, 7, 13, 0.6);
+  --oc-surface-shadow: var(--oc-shadow-card);
+  --oc-selected-surface: var(--oc-primary-100);
+  --oc-selected-border: var(--oc-primary-200);
+
+  --oc-page: #08121C;
+  --oc-card: #0F1C29;
+  --oc-raised: #172636;
+  --oc-thumb: #24374C;
+  --oc-primary-text: #5DA3EF;
+  --oc-danger-fill: #D92D20;
+  --oc-attention-fill: #B54708;
+  --oc-tooltip: #1E3043;
+  --oc-tooltip-ring: rgba(146, 186, 230, 0.14);
+  --oc-on-ink: #EAF2FA;
+  --oc-badge: rgba(8, 18, 28, 0.86);
+  --oc-pill: #EAF2FA; /* A light pill with navy text, so the picked value stands out */
+  --oc-pill-text: #0A1929;
+  --oc-overlay: rgba(3, 8, 14, 0.72);
+  --oc-hover-veil: rgba(146, 186, 230, 0.04);
+  --oc-shadow-hover: 0 0 0 1px rgba(146, 186, 230, 0.12), 0 1px 2px rgba(2, 7, 13, 0.35), 0 16px 32px -14px rgba(2, 7, 13, 0.7);
+  --oc-shadow-pop: 0 0 0 1px #24374C, 0 12px 32px -8px rgba(2, 7, 13, 0.65);
+  --oc-shadow-search: 0 0 0 1px #24374C, 0 12px 32px -8px rgba(2, 7, 13, 0.65);
+  --oc-shadow-dialog: 0 0 0 1px #24374C, 0 24px 48px -12px rgba(2, 7, 13, 0.75);
+  --oc-shadow-tooltip: 0 8px 24px -6px rgba(2, 7, 13, 0.6);
+  --oc-shadow-thumb: inset 0 0 0 1px rgba(146, 186, 230, 0.06), 0 1px 2px rgba(2, 7, 13, 0.4);
+  --oc-shadow-label: 0 0 0 1px #24374C, 0 2px 8px -2px rgba(2, 7, 13, 0.5);
+  --oc-label-drop: drop-shadow(0 1px 2px rgba(2, 7, 13, 0.5));
+  --oc-btn-primary-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 1px 2px rgba(2, 7, 13, 0.4);
+  --oc-sweep: rgba(142, 192, 246, 0.12);
+  --oc-progress-end: #5DA3EF; /* Brightens to the right, so the fill stays clear of the navy track */
+  --oc-mode-self-done: color-mix(in srgb, #5DA3EF 55%, #0F1C29);
+  --oc-orb-soft: #8EC0F6; /* The orb stays a luminous blue on navy */
+  --oc-orb-pale: #BCDAFB;
+  --oc-orb-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22), inset 0 2px 6px rgba(255, 255, 255, 0.35), inset 0 -2px 8px rgba(255, 255, 255, 0.12);
+  /* A subtle deep-blue glow at the top, fading into the navy page within 300px */
+  --oc-page-background:
+    radial-gradient(60% 20% at 18% 0%, rgba(44, 135, 232, 0.14) 0%, rgba(44, 135, 232, 0) 70%),
+    radial-gradient(45% 18% at 82% 2%, rgba(44, 135, 232, 0.08) 0%, rgba(44, 135, 232, 0) 70%),
+    linear-gradient(180deg, var(--oc-sky) 0%, color-mix(in srgb, var(--oc-sky) 60%, var(--oc-page)) 110px, color-mix(in srgb, var(--oc-sky) 25%, var(--oc-page)) 200px, var(--oc-page) 300px);
+}
+
+/* The one white surface: sidebar, top bar controls, cards, tiles (navy in dark) */
 html.option-c .oc-surface {
-  background: var(--oc-white);
+  background: var(--oc-card);
   box-shadow: var(--oc-surface-shadow);
+}
+
+/* Images that exist in a light and a dark version (the sidebar logo) */
+html.option-c:not(.theme-dark) .oc-only-dark,
+html.option-c.theme-dark .oc-only-light {
+  display: none;
+}
+/* Dark logos with no light version (the footer's Ajari logo): black turns
+   white, the coloured mark keeps its hues */
+html.option-c.theme-dark .oc-logo-invert {
+  filter: invert(1) hue-rotate(180deg);
 }
 
 /* Regular by default, including elements the base styles make heavier */
@@ -164,7 +340,7 @@ html.option-c :where(.font-medium, .font-semibold, .font-bold, .font-extrabold, 
 html.option-c .oc-btn-primary {
   background: var(--oc-button-primary);
   color: var(--oc-white);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 1px 2px color-mix(in srgb, var(--oc-text-ink) 25%, transparent);
+  box-shadow: var(--oc-btn-primary-shadow);
 }
 html.option-c .oc-btn-primary:hover {
   background: var(--oc-button-primary-hover);
@@ -188,7 +364,7 @@ html.option-c .oc-lift {
 }
 html.option-c .oc-lift:hover {
   translate: 0 -1px;
-  box-shadow: 0 1px 2px rgba(10,25,41, 0.04), 0 14px 30px -14px rgba(10,25,41, 0.18);
+  box-shadow: var(--oc-shadow-hover);
 }
 
 /* Buttons give a little under the finger. In the base layer, so a button's own
@@ -212,7 +388,7 @@ html.option-c .oc-sweep::after {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.85) 50%, transparent 70%);
+  background: linear-gradient(100deg, transparent 30%, var(--oc-sweep) 50%, transparent 70%);
   transform: translateX(-100%);
   animation: oc-sweep 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.5s 1 forwards;
 }

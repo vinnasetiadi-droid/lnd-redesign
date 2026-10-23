@@ -181,7 +181,7 @@ export function PendingApprovalSection({
                 {/* Card row */}
                 <button
                   type="button"
-                  className="w-full flex items-center gap-4 p-4 text-left hover:bg-black/[0.02] transition-colors"
+                  className="w-full flex items-center gap-4 p-4 text-left hover:bg-(--oc-hover-veil) transition-colors"
                   onClick={() =>
                     navigate(`${routePrefix}/${course.id}/review`)
                   }
@@ -190,7 +190,7 @@ export function PendingApprovalSection({
                   <div className="flex flex-col items-center shrink-0 w-16">
                     <div
                       className={cn(
-                        'size-10 rounded-(--oc-radius-control) bg-white flex items-center justify-center mb-1',
+                        'size-10 rounded-(--oc-radius-control) bg-(--oc-card) flex items-center justify-center mb-1',
                         urgency.bg
                       )}
                     >
