@@ -2,7 +2,7 @@
 // Learning mode analytics — blended vs self-paced
 //   - Attendance rate: live sessions only, so blended programs only
 //   - Total learning hours: split by mode in one stacked bar
-//   - Completion over time: one line per mode
+//   - Completion over time: one stepped area per mode
 // The tabs pick the program type, so the chart never repeats it.
 // Same period as Program overview (see ../period).
 // ============================================================
@@ -39,6 +39,17 @@ const MODES = [
   { key: 'self',    label: 'Self-paced', color: OC_COLORS.modeSelf },
 ] as const;
 
+/**
+ * Stepped area, after the "AI Search Visibility" reference: each month is a flat
+ * step, with a short slope into the next. Every month gives two points on a
+ * numeric x axis (the step's two ends), so a straight line draws the steps.
+ */
+const STEP_HALF = 0.34;
+interface StepPoint extends MonthlyCompletion { x: number }
+function steppedSeries(data: MonthlyCompletion[]): StepPoint[] {
+  return data.flatMap((d, i) => [{ ...d, x: i - STEP_HALF }, { ...d, x: i + STEP_HALF }]);
+}
+
 /** One line comparing the two modes at the end of the period */
 function completionInsight(data: MonthlyCompletion[]): string {
   const first = data[0];
@@ -62,15 +73,14 @@ function endLabel(label: string, color: string, lastIndex: number) {
   };
 }
 
-function ChartTooltip({ active, payload, label }: {
+function ChartTooltip({ active, payload }: {
   active?: boolean;
-  payload?: Array<{ name: string; value: number; color: string }>;
-  label?: string;
+  payload?: Array<{ name: string; value: number; color: string; payload: StepPoint }>;
 }) {
   if (!active || !payload?.length) return null;
   return (
     <ChartTooltipCard
-      title={label}
+      title={payload[0].payload.month}
       rows={payload.map((entry) => ({ label: entry.name, value: `${entry.value}%`, color: entry.color, line: true }))}
     />
   );
@@ -89,7 +99,8 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
 
   // Same months as Program overview: January up to the current month.
   const data = useMemo(() => completionSeries(scope).slice(0, NOW + 1), [scope]);
-  const lastIndex = data.length - 1;
+  const steps = useMemo(() => steppedSeries(data), [data]);
+  const lastIndex = steps.length - 1;
   const ids = useChartIds('learning-mode');
   const labels = useMemo(
     () => Object.fromEntries(MODES.map((m) => [m.key, endLabel(m.label, m.color, lastIndex)])),
@@ -161,12 +172,21 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
         <h4 className="text-[14px] leading-[18px] text-(--oc-text-strong)">Completion over time</h4>
         <ChartOnView height={180} className="mt-1">
           <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={180}>
-            <AreaChart data={data} margin={{ top: 8, right: 100, bottom: 0, left: -16 }}>
+            <AreaChart data={steps} margin={{ top: 8, right: 100, bottom: 0, left: -16 }}>
               <defs>
-                {MODES.map((m) => <Fragment key={m.key}>{areaGradient(`${ids.area}-${m.key}`, m.color, 0.14)}</Fragment>)}
+                {MODES.map((m) => <Fragment key={m.key}>{areaGradient(`${ids.area}-${m.key}`, m.color, 0.24)}</Fragment>)}
               </defs>
               <CartesianGrid {...GRID_PROPS} />
-              <XAxis dataKey="month" tick={AXIS_TICK} axisLine={false} tickLine={false} />
+              <XAxis
+                dataKey="x"
+                type="number"
+                domain={[-0.5, data.length - 0.5]}
+                ticks={data.map((_, i) => i)}
+                tickFormatter={(i: number) => data[i]?.month ?? ''}
+                tick={AXIS_TICK}
+                axisLine={false}
+                tickLine={false}
+              />
               <YAxis
                 tick={AXIS_TICK}
                 axisLine={false}
@@ -179,7 +199,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
               {MODES.map((m) => (
                 <Area
                   key={m.key}
-                  type="monotone"
+                  type="linear"
                   dataKey={m.key}
                   name={m.label}
                   stroke={m.color}

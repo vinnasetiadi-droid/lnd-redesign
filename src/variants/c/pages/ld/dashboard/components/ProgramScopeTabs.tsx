@@ -4,6 +4,7 @@
 import { motion } from 'motion/react';
 import { Layers, BookOpen, Route } from '@/variants/c/icons';
 import { cn } from '@/lib/utils';
+import { EASE_OUT } from '@/variants/c/motion';
 
 export type ProgramScope = 'all' | 'course' | 'journey';
 
@@ -85,18 +86,24 @@ export function ProgramScopeTabs<K extends string = ProgramScope>({ id, value, o
               stretch ? 'flex-1 justify-center px-2' : 'px-3.5',
               'focus:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/40 focus-visible:ring-offset-1',
               // Active: strong text, medium; inactive: secondary text, regular
-              isActive ? 'font-medium text-(--oc-text-strong)' : 'font-normal text-(--oc-text-secondary) hover:text-(--oc-text-body)',
+              isActive ? 'text-(--oc-text-strong)' : 'text-(--oc-text-secondary) hover:text-(--oc-text-body)',
             )}
           >
             {isActive && (
               <motion.span
                 layoutId={id}
                 className="absolute inset-0 z-[1] rounded-(--oc-radius-chip) bg-(--oc-white) shadow-[0_1px_2px_rgba(10,25,41,0.08)]"
-                transition={{ type: 'spring', stiffness: 500, damping: 40, mass: 0.8 }}
+                // A visible glide: long enough to follow, eased out at the end
+                transition={{ duration: 0.38, ease: EASE_OUT }}
               />
             )}
-            <span className="relative z-[2]">
-              {label}
+            <span className="relative z-[2] flex items-center">
+              {/* The medium label sits over a hidden medium copy, so the tab keeps
+                  one width whether it is picked or not and nothing shifts */}
+              <span className="grid">
+                <span aria-hidden className="invisible col-start-1 row-start-1 font-medium">{label}</span>
+                <span className={cn('col-start-1 row-start-1 text-center', isActive ? 'font-medium' : 'font-normal')}>{label}</span>
+              </span>
               {count !== undefined && <span className="ml-1.5 tabular-nums text-(--oc-text-subtle)">{count}</span>}
             </span>
           </button>
