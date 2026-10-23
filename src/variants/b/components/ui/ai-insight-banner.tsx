@@ -51,7 +51,7 @@ export function AIInsightLine({ text, fullText, className }: { text: string; ful
           className="inline-flex items-center gap-0.5 whitespace-nowrap rounded-(--ob-radius-control) align-baseline text-(--ob-primary) transition-colors hover:text-(--ob-primary-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25 cursor-pointer"
         >
           Ask NISA
-          <ArrowRight size={13} className="self-center" />
+          <ArrowRight size={14} className="self-center" />
         </button>
       </p>
     </div>

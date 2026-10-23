@@ -194,7 +194,7 @@ export function MetricTile({ selected, onClick, label, children, share, icon: Ic
           {Icon && (
             <Icon
               size={16}
-              className={cn('shrink-0 transition-colors duration-300', selected ? 'text-(--ob-primary)' : 'text-(--ob-text-subtle) group-hover:text-(--ob-text-muted)')}
+              className={cn('shrink-0 transition-colors duration-300', selected ? 'text-(--ob-primary)' : 'text-(--ob-text-muted)')}
             />
           )}
           {children}

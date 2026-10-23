@@ -15,7 +15,7 @@ export function Pagination({ page, total, onPage, className }: {
   onPage: (page: number) => void;
   className?: string;
 }) {
-  const arrow = cn(BOX, 'text-(--ob-text-body) ring-(--ob-border) hover:text-(--ob-text-strong) hover:ring-(--ob-border-control) disabled:cursor-not-allowed disabled:opacity-40');
+  const arrow = cn(BOX, 'text-(--ob-text-muted) ring-(--ob-border) hover:text-(--ob-text-strong) hover:ring-(--ob-border-control) disabled:cursor-not-allowed disabled:opacity-40');
   return (
     <div className={cn('flex items-center gap-1.5', className)}>
       <button type="button" aria-label="Previous page" onClick={() => onPage(Math.max(1, page - 1))} disabled={page === 1} className={arrow}>

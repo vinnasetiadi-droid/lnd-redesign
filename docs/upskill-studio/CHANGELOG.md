@@ -262,3 +262,33 @@ Option B only (`src/variants/b/`); Option A unchanged.
   with 6px corners.
 - **Upskill grid:** 4 columns from 1440px, 3 from 1024px, 2 from 768px, so the
   card meta row is never cut off.
+
+## Option B: B10 to B12 (audit fixes) and X1 (round badges)
+
+Option B only, plus the badges in Option D; Options A and C unchanged.
+
+- B10:
+  - Two line levels; the feedback table has no vertical cell lines; the
+    Division benchmark uses the 4 4 dash.
+  - One `--ob-track` for every track and empty bar; neutral avatars.
+  - 8px square legend marks and a 12px photo.
+  - Small Inter 600 units and one stat label style; mono tracking now reaches
+    the text inside numbers.
+  - Blocked by earlier chat choices: buttons stay 14px, and the NISA button
+    stays blue 3D (now 40px tall).
+- B11:
+  - Solid data marks; one `highlightGradient` on the selected Program
+    overview bar.
+  - Dashed grid lines on Program overview.
+  - Tooltips on Program overview, Division bars, funnel stages and the gauge.
+  - Funnel pills with a hairline instead of a shadow; the Self-paced line in
+    primary-300.
+- B12:
+  - Action icons outline and objects filled; icon sizes 14/16/18; muted
+    inline icon greys.
+  - One 11px tracked table header.
+  - Re-measured at 1440 and 1280.
+- X1:
+  - Three round badges (the 5+ stack dropped, as the user asked) in each
+    option's blue scale (Option D too, as the user asked).
+- Also from chat: the 3D primary buttons are lit from the bottom edge only.

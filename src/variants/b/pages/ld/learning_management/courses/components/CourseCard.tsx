@@ -122,7 +122,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
             aria-label="More actions"
             aria-haspopup="menu"
             aria-expanded={menuOpen}
-            className={cn(ON_PHOTO, 'flex size-7 items-center justify-center text-(--ob-text-body) transition-colors hover:text-(--ob-text-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/30 cursor-pointer')}
+            className={cn(ON_PHOTO, 'flex size-7 items-center justify-center text-(--ob-text-muted) transition-colors hover:text-(--ob-text-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/30 cursor-pointer')}
           >
             <MoreHorizontal size={16} />
           </button>

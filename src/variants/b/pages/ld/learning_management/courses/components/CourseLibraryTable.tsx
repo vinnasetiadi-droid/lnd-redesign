@@ -101,7 +101,7 @@ export function RowMenu({ course, onOpen, className }: { course: CourseItem; onO
         onClick={() => setOpen((o) => !o)}
         className="flex size-8 items-center justify-center rounded-(--ob-radius-control) text-(--ob-text-muted) transition-colors hover:bg-(--ob-surface) hover:text-(--ob-text-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25 cursor-pointer"
       >
-        <MoreHorizontal size={18} />
+        <MoreHorizontal size={16} />
       </button>
       <AnimatePresence>
         {open && (
@@ -238,13 +238,14 @@ function SortHeader({ label, value, sort, onSort, align = 'left' }: {
       onClick={() => onSort(value)}
       aria-pressed={active}
       className={cn(
-        'inline-flex items-center gap-1 rounded-(--ob-radius-control) transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25',
+        // Buttons default to 13px in B: the header size is set here so every column matches
+        'inline-flex items-center gap-1 rounded-(--ob-radius-control) text-[11px] leading-[16px] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25',
         align === 'right' && 'justify-self-end',
         active ? 'text-(--ob-text-strong)' : 'hover:text-(--ob-text-body)',
       )}
     >
       {label}
-      <ArrowDown size={12} className={cn('transition-opacity', active ? 'opacity-100' : 'opacity-0')} />
+      <ArrowDown size={14} className={cn('transition-opacity', active ? 'opacity-100' : 'opacity-0')} />
     </button>
   );
 }

@@ -220,7 +220,7 @@ export function LearningProgressFunnel({ programType, className }: { programType
 
       {/* ── Table, columns under the stage lines ───────────── */}
       <div className="text-[13px]">
-        <div className="grid border-b border-(--ob-border-subtle) pb-2.5 text-[12px] text-(--ob-text-muted)" style={columns}>
+        <div className="grid border-b border-(--ob-border-subtle) pb-2.5 ob-tracked text-[11px] leading-[16px] text-(--ob-text-muted)" style={columns}>
           <span />
           {STAGES.map((s) => <span key={s} className="text-center">{s}</span>)}
         </div>

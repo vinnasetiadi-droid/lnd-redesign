@@ -46,7 +46,7 @@ export function LDDashboardProfile({ person, className }: { person: LDProfile; c
       <div className="flex min-w-[220px] flex-col gap-2.5 pl-8 max-md:basis-full max-md:pl-0">
         {contacts.map(({ icon: Icon, text }) => (
           <div key={text} className="flex min-w-0 items-center gap-2.5">
-            <Icon size={18} className="shrink-0 text-(--ob-text-subtle)" />
+            <Icon size={14} className="shrink-0 text-(--ob-text-muted)" />
             <span className="truncate text-[13px] leading-[20px] text-(--ob-text-strong)">{text}</span>
           </div>
         ))}

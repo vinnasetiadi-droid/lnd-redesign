@@ -166,6 +166,10 @@ html.option-b :is([class*="text-[2"], [class*="text-[3"], [class*="text-[4"]) .o
 html.option-b .ob-tracked {
   letter-spacing: 0.04em;
 }
+/* The sort buttons inside a tracked header keep its spacing */
+html.option-b .ob-tracked * {
+  letter-spacing: inherit;
+}
 
 /* ── Home's single frame ─────────────────────────────────────
    Home is one white frame split by hairlines instead of separate cards, so

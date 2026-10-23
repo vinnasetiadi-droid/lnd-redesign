@@ -297,7 +297,7 @@ function Rating({ value }: { value: number }) {
   if (!value) return <span className="text-[13px] text-(--ob-text-subtle)">—</span>;
   return (
     <span className="inline-flex items-center gap-1 text-[13px] text-(--ob-text-strong)">
-      <Star className="size-3.5 fill-(--ob-text-subtle) text-(--ob-text-subtle)" />
+      <Star className="size-3.5 text-(--ob-text-muted)" />
       <span className="ob-num">{value.toFixed(1)}</span>
     </span>
   );
@@ -340,7 +340,7 @@ function ActiveProgramsTable({ programType, programs, noun }: { programType: Pro
       <FadeValue k={programType} className="block w-full">
         <div className="overflow-x-auto">
           <div className="min-w-[560px]">
-            <div className={cn(ACTIVE_GRID, 'border-b border-(--ob-border) px-3 pb-2.5 text-[12px] text-(--ob-text-muted)')}>
+            <div className={cn(ACTIVE_GRID, 'border-b border-(--ob-border-subtle) px-3 pb-2.5 ob-tracked text-[11px] leading-[16px] text-(--ob-text-muted)')}>
               <span>{noun.One}</span>
               <span className="text-right">Enrolled</span>
               <span>Completion</span>
@@ -489,10 +489,10 @@ export default function LearningProgramAnalyticsPage() {
     <button
       type="button"
       onClick={() => handleFbSort(col)}
-      className={cn('inline-flex items-center gap-1 rounded-(--ob-radius-control) transition-colors cursor-pointer', FOCUS, fbSortBy === col ? 'text-(--ob-text-strong)' : 'hover:text-(--ob-text-body)')}
+      className={cn('inline-flex items-center gap-1 rounded-(--ob-radius-control) text-[11px] leading-[16px] transition-colors cursor-pointer', FOCUS, fbSortBy === col ? 'text-(--ob-text-strong)' : 'hover:text-(--ob-text-body)')}
     >
       {label}
-      {fbSortBy === col ? (fbSortDir === 'desc' ? <ChevronDown className="size-3" /> : <ChevronUp className="size-3" />) : <ArrowUpDown className="size-3" />}
+      {fbSortBy === col ? (fbSortDir === 'desc' ? <ChevronDown className="size-3.5" /> : <ChevronUp className="size-3.5" />) : <ArrowUpDown className="size-3.5" />}
     </button>
   );
 
@@ -773,7 +773,8 @@ export default function LearningProgramAnalyticsPage() {
             <div>
               <div className="overflow-x-auto">
                 <div className="min-w-[860px]">
-                  <div className={cn(FEEDBACK_GRID, 'border-b border-(--ob-border-subtle) text-[12px] text-(--ob-text-muted) [&>*]:pb-3')}>
+                  {/* One table header style: 11px muted with 0.04em spacing */}
+                  <div className={cn(FEEDBACK_GRID, 'border-b border-(--ob-border-subtle) ob-tracked text-[11px] leading-[16px] text-(--ob-text-muted) [&>*]:pb-3')}>
                     <span>Trainee</span>
                     <span>Date</span>
                     <span>Feedback</span>
