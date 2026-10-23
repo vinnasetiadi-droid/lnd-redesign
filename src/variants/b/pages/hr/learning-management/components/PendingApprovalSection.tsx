@@ -74,9 +74,9 @@ function getUrgency(daysRemaining: number): {
     return {
       level: 'soon',
       label: `${daysRemaining}d left`,
-      dot: 'bg-amber-500',
-      bg: 'bg-amber-50',
-      text: 'text-amber-700',
+      dot: 'bg-(--ob-attention-bar)',
+      bg: 'bg-(--ob-attention-surface)',
+      text: 'text-(--ob-attention-text)',
     };
   }
   return {
@@ -174,7 +174,7 @@ export function PendingApprovalSection({
                   urgency.level === 'overdue' || urgency.level === 'critical'
                     ? 'bg-[#FEF3F2]/70'
                     : urgency.level === 'urgent'
-                      ? 'bg-[#FFFAEB]'
+                      ? 'bg-(--ob-attention-surface)'
                       : 'bg-[#F7F8FA]'
                 )}
               >

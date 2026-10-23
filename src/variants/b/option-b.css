@@ -75,14 +75,16 @@ html.option-b {
   --ob-button-primary: var(--ob-primary); /* Primary buttons are solid blue, at most one per view */
   --ob-button-primary-hover: var(--ob-primary-strong);
   --ob-white: #FFFFFF;
-  --ob-attention-text: #B54708; /* Amber, only for things that need attention */
-  --ob-attention-surface: #FFFAEB;
-  --ob-attention-bar: #FEC84B;
-  --ob-attention-track: #FEF0C7;
-  --ob-warning: #FDB022;
+  /* Attention: the one warm warning colour, the orange family of the License gauge */
   --ob-orange: #FB6514;
   --ob-orange-strong: #C4320A;
   --ob-orange-surface: #FFEAD5;
+  --ob-orange-50: #FFF6ED; /* Lightest orange tint, for attention backgrounds */
+  --ob-attention-text: var(--ob-orange-strong); /* The darker shade, so orange text stays readable on white */
+  --ob-attention-surface: var(--ob-orange-50);
+  --ob-attention-bar: var(--ob-orange);
+  --ob-attention-track: var(--ob-orange-surface);
+  --ob-warning: var(--ob-attention-bar);
   --ob-success: #039855; /* Positive trends */
   --ob-success-strong: #027A48;
   --ob-success-surface: #ECFDF3;
@@ -94,8 +96,8 @@ html.option-b {
   --ob-danger-surface: #FEF3F2;
   --ob-danger-100: #FEE4E2;
   --ob-danger-bright: #F97066;
-  --ob-yellow: #FFE07A;
-  --ob-yellow-text: #6B4F00;
+  --ob-yellow: var(--ob-attention-track); /* Kept for old call sites: same as attention */
+  --ob-yellow-text: var(--ob-attention-text);
   --ob-avatar-peach: #FFE4D5; /* Avatar pastels */
   --ob-avatar-lilac: #E9D7FE;
   --ob-avatar-pink: #FCE7F6;
@@ -105,6 +107,7 @@ html.option-b {
   --ob-status-draft: #98A2B3;
   --ob-status-review-bg: #F4EBFF;
   --ob-status-review: #9E77ED;
+  --ob-status-review-text: #B54708; /* In review label on the course badge (status colours stay as they were) */
   --ob-status-revision-bg: #FEE4E2;
   --ob-status-revision: #F97066;
   --ob-status-approved-bg: #DCFAE6;

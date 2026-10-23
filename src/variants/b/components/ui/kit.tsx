@@ -78,7 +78,7 @@ export const TABLE = {
   row: 'border-t border-(--ob-border) transition-colors hover:bg-(--ob-surface-subtle)',
 } as const;
 
-/** Soft amber for anything that needs attention (at-risk programs, licenses about to renew unused) */
+/** Orange for anything that needs attention (at-risk programs, licenses about to renew unused): the License gauge's family */
 export const ATTENTION = { text: 'text-(--ob-attention-text)', frame: 'bg-(--ob-attention-surface)', bar: OB_COLORS.attentionBar, track: 'bg-(--ob-attention-track)' } as const;
 
 type ChipTone = 'neutral' | 'blue' | 'yellow' | 'green' | 'red';
@@ -86,7 +86,7 @@ type ChipTone = 'neutral' | 'blue' | 'yellow' | 'green' | 'red';
 const CHIP_TONE: Record<ChipTone, string> = {
   neutral: 'bg-(--ob-surface) text-(--ob-text-body)',
   blue:    'bg-(--ob-primary-50) text-(--ob-primary-strong)',
-  yellow:  'bg-(--ob-yellow) text-(--ob-yellow-text)',
+  yellow:  'bg-(--ob-attention-surface) text-(--ob-attention-text)', // attention, same as ATTENTION
   green:   'bg-(--ob-success-surface) text-(--ob-success-strong)',
   red:     'bg-(--ob-danger-surface) text-(--ob-danger-strong)',
 };

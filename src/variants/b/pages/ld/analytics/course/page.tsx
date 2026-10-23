@@ -642,7 +642,7 @@ export default function LearningProgramAnalyticsPage() {
           </motion.div>
         </div>
 
-        {/* Assigned but not started: the amber chip is the only warning signal */}
+        {/* Assigned but not started: the attention chip is the only warning signal */}
         {SHOW_NOT_STARTED && (
           <Card>
             <CardHeader

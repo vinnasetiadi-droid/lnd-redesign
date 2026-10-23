@@ -295,8 +295,8 @@ export function CourseTable({ courses, onCourseClick = () => {}, className, page
             <button onClick={() => setInactiveConfirmId(null)} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full text-[#717680] hover:bg-[#F5F6F8] transition-colors cursor-pointer">
               <X className="w-5 h-5" />
             </button>
-            <div className="w-14 h-14 rounded-full bg-[#FFFAEB] flex items-center justify-center mb-5">
-              <AlertTriangle className="w-7 h-7 text-[#D97706]" />
+            <div className="w-14 h-14 rounded-full bg-(--ob-attention-surface) flex items-center justify-center mb-5">
+              <AlertTriangle className="w-7 h-7 text-(--ob-attention-text)" />
             </div>
             <h3 className="text-[16px] text-[#181D27]">
               {cIsActive ? 'Set course to inactive?' : 'Set course to active?'}
@@ -304,15 +304,15 @@ export function CourseTable({ courses, onCourseClick = () => {}, className, page
             {cIsActive ? (
               <div className="flex flex-col gap-2 mt-3 text-left w-full">
                 <p className="text-[12px] text-[#535862] leading-[20px] flex items-start gap-2">
-                  <span className="mt-1 w-1.5 h-1.5 rounded-full bg-[#D97706] shrink-0" />
+                  <span className="mt-1 w-1.5 h-1.5 rounded-full bg-(--ob-attention-bar) shrink-0" />
                   Only currently enrolled trainees will retain access.
                 </p>
                 <p className="text-[12px] text-[#535862] leading-[20px] flex items-start gap-2">
-                  <span className="mt-1 w-1.5 h-1.5 rounded-full bg-[#D97706] shrink-0" />
+                  <span className="mt-1 w-1.5 h-1.5 rounded-full bg-(--ob-attention-bar) shrink-0" />
                   New trainees will not be able to view or enroll in this course.
                 </p>
                 <p className="text-[12px] text-[#535862] leading-[20px] flex items-start gap-2">
-                  <span className="mt-1 w-1.5 h-1.5 rounded-full bg-[#D97706] shrink-0" />
+                  <span className="mt-1 w-1.5 h-1.5 rounded-full bg-(--ob-attention-bar) shrink-0" />
                   Other collaborators will be notified of this change.
                 </p>
               </div>
@@ -323,7 +323,7 @@ export function CourseTable({ courses, onCourseClick = () => {}, className, page
             )}
             <div className="flex gap-3 w-full mt-6">
               <button onClick={() => setInactiveConfirmId(null)} className="flex-1 h-10 rounded-full bg-[#F0F1F3] hover:bg-[#E6E8EB] text-[13px] text-[#414651] hover:bg-[#F5F6F8] cursor-pointer transition-colors">Cancel</button>
-              <button onClick={() => setInactiveConfirmId(null)} className={cn('flex-1 h-10 rounded-full text-[13px] text-white hover:brightness-[0.92] cursor-pointer transition-colors', cIsActive ? 'bg-[#D97706]' : 'bg-[#1A73E8]')}>
+              <button onClick={() => setInactiveConfirmId(null)} className={cn('flex-1 h-10 rounded-full text-[13px] text-white hover:brightness-[0.92] cursor-pointer transition-colors', cIsActive ? 'bg-(--ob-attention-bar)' : 'bg-[#1A73E8]')}>
                 {cIsActive ? 'Deactivate' : 'Activate'}
               </button>
             </div>

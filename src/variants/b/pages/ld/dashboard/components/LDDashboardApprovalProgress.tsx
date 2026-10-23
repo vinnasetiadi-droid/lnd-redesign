@@ -10,13 +10,13 @@ interface LDDashboardApprovalProgressProps {
 
 const STATUS_STYLES: Record<CourseApprovalStatus, { bg: string; text: string; dot: string }> = {
   'On Draft':              { bg: 'bg-(--ob-surface)',   text: 'text-(--ob-text-ink)',   dot: 'bg-(--ob-text-subtle)'   },
-  'Waiting for Approval':  { bg: 'bg-(--ob-attention-track)',   text: 'text-(--ob-attention-text)',  dot: 'bg-(--ob-warning)'  },
+  'Waiting for Approval':  { bg: 'bg-(--ob-attention-track)',   text: 'text-(--ob-attention-text)',  dot: 'bg-(--ob-attention-bar)'  },
   'Need Revision':         { bg: 'bg-(--ob-orange-surface)',  text: 'text-(--ob-orange-strong)', dot: 'bg-(--ob-orange)' },
   'Approved':              { bg: 'bg-(--ob-success-100)', text: 'text-(--ob-success-strong)',dot: 'bg-(--ob-success-bright)'},
   'Active':                { bg: 'bg-(--ob-primary-100)',    text: 'text-(--ob-primary-900)',   dot: 'bg-(--ob-primary-400)'   },
   'Inactive':              { bg: 'bg-(--ob-danger-100)',     text: 'text-(--ob-danger-strong)',    dot: 'bg-(--ob-danger-bright)'    },
-  'Under Review':          { bg: 'bg-(--ob-attention-track)',   text: 'text-(--ob-attention-text)',  dot: 'bg-(--ob-warning)'  },
-  'Pending Review':        { bg: 'bg-(--ob-attention-track)',   text: 'text-(--ob-attention-text)',  dot: 'bg-(--ob-warning)'  },
+  'Under Review':          { bg: 'bg-(--ob-attention-track)',   text: 'text-(--ob-attention-text)',  dot: 'bg-(--ob-attention-bar)'  },
+  'Pending Review':        { bg: 'bg-(--ob-attention-track)',   text: 'text-(--ob-attention-text)',  dot: 'bg-(--ob-attention-bar)'  },
 };
 
 const TYPE_STYLES: Record<ProgramApprovalType, { bg: string; text: string; icon: string }> = {

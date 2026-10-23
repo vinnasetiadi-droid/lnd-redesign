@@ -8,7 +8,7 @@ interface LDDashboardCoursesAttentionProps {
   className?: string;
 }
 
-// Same soft amber as the at-risk row in Active programs
+// Same attention orange as the at-risk row in Active programs
 const FLAG_LABEL: Record<AttentionFlag, string> = {
   'low-completion': 'Low completion',
   'low-rating': 'Low rating',

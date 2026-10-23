@@ -680,3 +680,121 @@ document. Fix it with two levels of lines plus a steady spacing rhythm.
    changed. /a/ld/dashboard looks exactly as before and npm run build passes.
    Reply with the files you touched.
 ```
+
+
+## B3: Compact profile, NISA as the one focal point
+
+```
+Project: Vite + React + Tailwind demo of three L&D admin pages. This prompt
+only touches Option B (src/variants/b/). Option A, Option C and everything
+under src/ outside src/variants/b/ must stay unchanged. Preview:
+http://localhost:32106/b/ld/dashboard
+
+Checklist: docs/upskill-studio/checklist.csv, rows B3-01 to B3-05. Work
+through them in order. When a row is finished set Status to "Done", Done on
+to today's date (YYYY-MM-DD) and a one-line Notes entry; if a row can't be
+done set "Blocked" and say why. Keep the CSV valid. Run after B2.
+
+Style only: keep every piece of content (photo, name, job title, company,
+email, location, phone). Colours only through the --ob-* variables in
+src/variants/b/option-b.css.
+
+Why: the top of Home has two heavy elements competing, the big cut-out photo
+on the left and the solid blue NISA card on the right. The demo's story is
+NISA, so the photo becomes small and NISA becomes the one focal point of the
+first screen.
+
+1. In src/variants/b/concepts/ProfileHeroCard.tsx, add a compact variant
+   (a `variant="compact"` prop, or a sibling component in the same folder):
+   - Photo: 64px rounded square (radius 14px) on an --ob-surface background,
+     cropped so the face sits in the frame (object-cover, aligned to the top
+     of the image). Use the existing photo.
+   - Beside the photo: name at 22px semibold (--ob-text-strong), job title
+     at 14px (--ob-text-muted) under it.
+   - Contact details (company, email, location, phone) on one line with
+     their small icons, separated by generous gaps, to the right of the name
+     block on wide screens and under it on narrow ones. They may wrap to a
+     second line but are never truncated.
+   - Target height for the whole profile section: at most 120px at 1440px.
+   Keep the big cut-out version available (the default variant), just not
+   used on Home.
+2. src/variants/b/pages/ld/dashboard/page.tsx: render the compact variant.
+   Remove the PROFILE_HEADROOM offsets, so the profile section and the NISA
+   card in the right column start at the same top edge.
+3. The profile section uses the same section rhythm as the rest of the page
+   (from B2: padding, and the full-width section rule underneath it).
+4. Leave the NISA card exactly as it is (solid blue); it is now the
+   strongest element at the top.
+5. Verify at 1440 and 1280 px wide: contacts fully visible, profile section
+   at most 120px tall, NISA reads as the main focal point, KPIs moved up.
+   /a/ld/dashboard looks exactly as before and npm run build passes. Reply
+   with the files you touched.
+```
+
+
+## B4: Orange attention colour and a sticky right column
+
+```
+Project: Vite + React + Tailwind demo of three L&D admin pages. This prompt
+only touches Option B (src/variants/b/). Option A, Option C and everything
+under src/ outside src/variants/b/ must stay unchanged. Preview:
+http://localhost:32106/b/ld/dashboard
+
+Checklist: docs/upskill-studio/checklist.csv, rows B4-01 to B4-05. Work
+through them in order. When a row is finished set Status to "Done", Done on
+to today's date (YYYY-MM-DD) and a one-line Notes entry; if a row can't be
+done set "Blocked" and say why. Keep the CSV valid.
+
+Style and layout only: do not change any content, label or number. Colours
+only through the --ob-* variables in src/variants/b/option-b.css (OB_COLORS
+in src/variants/b/theme.ts mirrors them).
+
+Part 1: orange is the one attention colour for Option B
+The License utilization gauge uses the orange family (--ob-orange #FB6514,
+--ob-orange-strong, --ob-orange-surface) and that is now the reference
+colour for anything that needs attention. Today other attention items (the
+"36 idle" text, at-risk rows in Active programs, the O'Reilly renewal
+warning, the "needs attention" items) use amber (#B54708, #FEC84B, #FEF0C7,
+#FFFAEB), so the page shows two warm warning colours.
+
+1. In option-b.css, re-point the attention tokens to the orange family:
+   - --ob-attention-bar: var(--ob-orange)
+   - --ob-attention-text: var(--ob-orange-strong) (orange text on white
+     needs the darker shade to stay readable)
+   - --ob-attention-track: var(--ob-orange-surface)
+   - --ob-attention-surface: a lighter tint of the same orange (add it if
+     needed)
+   Mirror the values in OB_COLORS.
+2. Find every other place in src/variants/b/ that uses amber or yellow to
+   mean "needs attention" (--ob-warning, ATTENTION constants in
+   components/ui/kit.tsx, hardcoded amber hex) and point it at the
+   attention tokens. Keep the gauge exactly as it looks now.
+   Course status colours (Draft, In review, Needs revision, Approved,
+   Active, Inactive) are a separate system and stay as they are.
+
+Part 2: sticky right column on Home
+The right column (NISA, Active programs, License utilization) is about 250px
+shorter than the left column, so the bottom right of the page goes empty
+while scrolling to Division completion.
+
+3. In src/variants/b/pages/ld/dashboard/page.tsx, from the lg breakpoint up,
+   make the right column sticky so it always fills its side:
+   - The column scrolls normally until its last section (License
+     utilization) is fully in view, then it holds still while the left
+     column keeps scrolling ("sticky to the bottom").
+   - If the column is shorter than the visible area, it sticks just below
+     the top bar instead.
+   - Implement with position: sticky on an inner wrapper and a top value of
+     min(top bar offset, visible height - column height - bottom gap),
+     recalculated on resize and when the column's height changes
+     (ResizeObserver). The page scrolls inside the layout's scroll
+     container, not the window, so measure against that container.
+   - Every part of the right column must stay reachable by scrolling.
+4. Keep the vertical hairline between the columns running the full page
+   height: leave the border on the full-height grid cell and make only the
+   inner wrapper sticky. Below lg nothing is sticky.
+5. Verify at 1440 and 1280 px wide by scrolling from top to bottom: no empty
+   area at the bottom right, divider unbroken, only one warm warning colour
+   on the page. /a/ld/dashboard looks exactly as before and npm run build
+   passes. Reply with the files you touched.
+```

@@ -108,7 +108,7 @@ export interface CourseItem {
 /** bg: the chip tint in tables; text: the label colour on the white badge over a photo */
 export const COURSE_STATUS_META: Record<CourseStatus, { label: string; bg: string; text: string }> = {
   'on-draft':         { label: 'Draft',          bg: 'var(--ob-status-draft-bg)',    text: 'var(--ob-text-secondary)' },
-  'waiting-approval': { label: 'In review',      bg: 'var(--ob-status-review-bg)',   text: 'var(--ob-attention-text)' },
+  'waiting-approval': { label: 'In review',      bg: 'var(--ob-status-review-bg)',   text: 'var(--ob-status-review-text)' },
   'need-revision':    { label: 'Needs revision', bg: 'var(--ob-status-revision-bg)', text: 'var(--ob-danger)' },
   approved:           { label: 'Approved',       bg: 'var(--ob-status-approved-bg)', text: 'var(--ob-success-strong)' },
   active:             { label: 'Active',         bg: 'var(--ob-status-active-bg)',   text: 'var(--ob-primary-strong)' },

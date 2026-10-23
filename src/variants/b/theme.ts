@@ -101,14 +101,16 @@ export const OB_COLORS = {
   buttonPrimary: '#1A73E8', // = primary
   buttonPrimaryHover: '#1967D2', // = primaryStrong
   white: '#FFFFFF',
-  attentionText: '#B54708', // Amber, only for things that need attention
-  attentionSurface: '#FFFAEB',
-  attentionBar: '#FEC84B',
-  attentionTrack: '#FEF0C7',
-  warning: '#FDB022',
+  // Attention = the orange family (the License gauge); one warm warning colour
+  attentionText: '#C4320A', // = orangeStrong, readable on white
+  attentionSurface: '#FFF6ED', // = orange50
+  attentionBar: '#FB6514', // = orange
+  attentionTrack: '#FFEAD5', // = orangeSurface
+  warning: '#FB6514', // = attentionBar
   orange: '#FB6514',
   orangeStrong: '#C4320A',
   orangeSurface: '#FFEAD5',
+  orange50: '#FFF6ED',
   success: '#039855', // Positive trends
   successStrong: '#027A48',
   successSurface: '#ECFDF3',
@@ -120,8 +122,8 @@ export const OB_COLORS = {
   dangerSurface: '#FEF3F2',
   danger100: '#FEE4E2',
   dangerBright: '#F97066',
-  yellow: '#FFE07A',
-  yellowText: '#6B4F00',
+  yellow: '#FFEAD5', // = attentionTrack
+  yellowText: '#C4320A', // = attentionText
   avatarPeach: '#FFE4D5', // Avatar pastels
   avatarLilac: '#E9D7FE',
   avatarPink: '#FCE7F6',
@@ -131,6 +133,7 @@ export const OB_COLORS = {
   statusDraft: '#98A2B3',
   statusReviewBg: '#F4EBFF',
   statusReview: '#9E77ED',
+  statusReviewText: '#B54708', // In review label on the course badge
   statusRevisionBg: '#FEE4E2',
   statusRevision: '#F97066',
   statusApprovedBg: '#DCFAE6',

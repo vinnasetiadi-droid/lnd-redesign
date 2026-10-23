@@ -55,7 +55,7 @@ export interface ProgramOverview {
   duration?: string;
   startDate?: string;
   endDate?: string;
-  /** Why the program needs attention; shown in amber */
+  /** Why the program needs attention; shown in the attention orange */
   risk?: string;
   /** Kind of problem behind `risk`, when it is one of the attention flags */
   riskFlag?: AttentionFlag;

@@ -10,4 +10,4 @@ Open product questions (decide before U1 if possible):
 2. Is "Approved" different from "Active"? The kit assumes Approved = signed off but not started yet.
 3. Do drafts track section completeness, reviewer comments and seat capacity in the real platform? If not, the card footers fall back to simpler info.
 
-Option B: B1 (one accent colour) and B2 (section rhythm) are standalone style prompts at the end of `prompts.md`. Run B1 first.
+Option B: B1 (one accent colour), B2 (section rhythm), B3 (compact profile) and B4 (orange attention colour, sticky right column) are standalone style prompts at the end of `prompts.md`. Run them in that order.
