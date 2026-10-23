@@ -1,4 +1,3 @@
-import type { CSSProperties } from 'react';
 import { motion } from 'motion/react';
 import { revealContainer, revealItem } from '@/variants/b/motion';
 import { DashboardLayout } from '@/variants/b/layouts/DashboardLayout';
@@ -19,10 +18,11 @@ import { DashboardLicenseUtilization }   from '@/variants/b/pages/hr/dashboard/c
  * All data comes from useDashboard(); all UI lives in components/.
  * Footer is auto-included by DashboardLayout.
  *
- * Visual style after the reference dashboard (hairline-framed white cards on
- * a plain page, small blue KPI icons, green/red change chips, rounded bars);
- * the cards and their content are the same as Option A's Home. The profile
- * card with the photo rising above it is back at the top of the left column.
+ * Visual style after the reference dashboards: a white page with no card
+ * frames, its sections split by hairlines (only NISA keeps a card), KPI and
+ * summary columns split by vertical hairlines, green/red change chips and
+ * rounded bars. The cards and their content are the same as Option A's Home.
+ * The profile with the cut-out photo sits top left.
  *
  * Not rendered here any more (files kept): LDDashboardGreeting (the profile
  * card is back in its place), LDDashboardCoursesAttention (folded
@@ -51,26 +51,30 @@ export default function LDDashboardPage() {
   } = useDashboard();
 
   return (
-    <DashboardLayout>
-      {/* The photo's head rises into the space above the profile card */}
-      <div className="w-full min-w-0 -mt-2">
-        <motion.div
-          className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-3"
-          variants={revealContainer}
-          initial="hidden"
-          animate="visible"
-        >
+    <DashboardLayout whitePage>
+      {/* No frames: the sections sit on the white page, split by hairlines
+          (reference style); only NISA keeps a card. Pulled out to the page
+          edges so the sections' own padding lines up with the top bar. */}
+      <motion.div
+        className="ob-flat relative -mx-6 -mt-6 min-w-0 pt-6"
+        variants={revealContainer}
+        initial="hidden"
+        animate="visible"
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
           {/* ── Left column ── */}
-          <div className="flex flex-col gap-3 min-w-0">
+          <div className="min-w-0">
             <motion.div variants={revealItem}>
-              <ProfileHeroCard person={ldProfile} />
+              <ProfileHeroCard person={ldProfile} className="px-8" />
             </motion.div>
 
-            <motion.div variants={revealItem}>
-              <LDDashboardHeader metrics={metricCards} />
+            <Rule />
+            <motion.div variants={revealItem} className="px-8 py-8">
+              <LDDashboardHeader metrics={metricCards} flat />
             </motion.div>
 
-            <motion.div variants={revealItem} className="ob-lift">
+            <Rule />
+            <motion.div variants={revealItem}>
               <LDDashboardProgramOverview
                 chartData={chartData}
                 insight={chartInsight}
@@ -79,41 +83,50 @@ export default function LDDashboardPage() {
                 journeyData={journeyChartData}
                 journeyInsight={journeyChartInsight}
                 shortInsights={chartShortInsights}
+                className="px-8 py-8"
               />
             </motion.div>
 
-            <motion.div variants={revealItem} className="ob-lift">
-              <LDDashboardLearningAnalytics />
+            <Rule />
+            <motion.div variants={revealItem}>
+              <LDDashboardLearningAnalytics className="px-8 py-8" />
             </motion.div>
 
-            <motion.div variants={revealItem} className="ob-lift">
+            <Rule />
+            <motion.div variants={revealItem}>
               <DashboardDivisionsPerformance
                 divisions={divisions}
                 benchmark={orgCompletion}
                 benchmarkTrend={orgCompletionTrend}
+                className="px-8 py-8"
               />
             </motion.div>
           </div>
 
-          {/* ── Right column: starts level with the profile card, below the photo's headroom ── */}
-          <div
-            className="flex flex-col gap-3 min-w-0 lg:pt-[var(--profile-headroom)]"
-            style={{ '--profile-headroom': `${PROFILE_HEADROOM}px` } as CSSProperties}
-          >
-            <motion.div variants={revealItem} className="ob-lift">
+          {/* ── Right column, split from the left by a hairline ── */}
+          <div className="min-w-0 border-t border-(--ob-border) lg:border-l lg:border-t-0">
+            {/* Level with the profile, below the photo's headroom */}
+            <motion.div variants={revealItem} className="px-6 pb-6" style={{ paddingTop: PROFILE_HEADROOM }}>
               <LDDashboardNissaInsight insights={nisaInsights} />
             </motion.div>
 
-            <motion.div variants={revealItem} className="ob-lift">
-              <LDDashboardActivePrograms programs={programs} />
+            <Rule />
+            <motion.div variants={revealItem}>
+              <LDDashboardActivePrograms programs={programs} className="px-8 py-8" />
             </motion.div>
 
-            <motion.div variants={revealItem} className="ob-lift">
-              <DashboardLicenseUtilization variant="reference" />
+            <Rule />
+            <motion.div variants={revealItem}>
+              <DashboardLicenseUtilization variant="reference" className="px-8 py-8" />
             </motion.div>
           </div>
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
     </DashboardLayout>
   );
+}
+
+/** Hairline between two sections, inset to the content edges */
+function Rule() {
+  return <div className="mx-8 h-px bg-(--ob-border)" aria-hidden />;
 }

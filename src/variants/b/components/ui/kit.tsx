@@ -108,8 +108,8 @@ export function Chip({ children, tone = 'neutral', dot, icon: Icon, className }:
   );
 }
 
-/** Home card frame: white, 18px corners, a hairline border and the faintest shadow (reference style) */
-export const CARD = 'rounded-[18px] bg-(--ob-white) ring-1 ring-(--ob-border) shadow-[0_1px_2px_rgba(16,24,40,0.04)]';
+/** Card frame: white, 18px corners, a hairline border and the faintest shadow. Inside `.ob-flat` (Home's one frame) it drops its frame. */
+export const CARD = 'ob-card rounded-[18px] bg-(--ob-white) ring-1 ring-(--ob-border) shadow-[0_1px_2px_rgba(16,24,40,0.04)]';
 
 /** Change chip beside a number: "▲ 15.5%" on green, "▼ 10.5%" on red */
 export function DeltaChip({ children, positive = true, className }: { children: ReactNode; positive?: boolean; className?: string }) {
@@ -130,11 +130,11 @@ export function DeltaChip({ children, positive = true, className }: { children: 
 }
 
 /**
- * Summary tile that also picks what a chart shows, drawn like the
- * reference's segments: a thin line down the left and a bar along the
- * bottom in the tile's colour, and a soft wash of it when selected.
+ * Summary tile that also picks what a chart shows: a loose column with no
+ * frame, the value with a small icon in the tile's colour, and a bar along
+ * the bottom in that colour (full strength when picked).
  */
-export function MetricTile({ selected, onClick, label, children, color = OB_COLORS.primary, share, className }: {
+export function MetricTile({ selected, onClick, label, children, color = OB_COLORS.primary, share, icon: Icon, className }: {
   selected: boolean;
   onClick: () => void;
   label: ReactNode;
@@ -144,6 +144,8 @@ export function MetricTile({ selected, onClick, label, children, color = OB_COLO
   color?: string;
   /** 0-100: fills that much of the bottom bar on a grey track, like the reference's segments; full when left out */
   share?: number;
+  /** Small icon in the tile's colour before the value */
+  icon?: LucideIcon;
   className?: string;
 }) {
   return (
@@ -152,25 +154,27 @@ export function MetricTile({ selected, onClick, label, children, color = OB_COLO
       role="tab"
       aria-selected={selected}
       onClick={onClick}
-      className={cn('group relative min-w-0 overflow-hidden rounded-t-[10px] text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/30', className)}
+      // No frame: a loose column (the parent splits tiles with vertical hairlines);
+      // a column layout, so the bar sits at the bottom whatever the tile's height
+      // The hairline is set here, not with divide-x on the parent: the button reset would cancel that
+      className={cn('group relative flex min-w-0 flex-col justify-between gap-3 border-(--ob-border) px-6 text-left cursor-pointer first:pl-0 last:pr-0 not-first:border-l focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/30', className)}
     >
-      <span
-        aria-hidden
-        className={cn('pointer-events-none absolute inset-0 transition-opacity duration-300', selected ? 'opacity-100' : 'opacity-0 group-hover:opacity-40')}
-        style={{ background: `linear-gradient(to top, color-mix(in srgb, ${color} 12%, transparent), transparent 80%)` }}
-      />
-      {/* Unselected tiles keep their colour, a little quieter */}
-      <div
-        className="relative border-l-2 px-3.5 pb-3 pt-2.5 transition-colors duration-300"
-        style={{ borderColor: selected ? color : `color-mix(in srgb, ${color} 45%, transparent)` }}
-      >
-        <p className="truncate text-[13px] leading-[18px] text-(--ob-text-secondary)">{label}</p>
-        <div className="mt-1 flex flex-wrap items-center gap-2">{children}</div>
+      <div>
+        <p className={cn('truncate text-[12px] leading-[16px] transition-colors duration-300', selected ? 'text-(--ob-text-strong)' : 'text-(--ob-text-muted) group-hover:text-(--ob-text-body)')}>{label}</p>
+        <div className="mt-1 flex flex-wrap items-center gap-2">
+          {Icon && <Icon size={16} className="shrink-0" style={{ color }} />}
+          {children}
+        </div>
       </div>
-      <span className="relative block h-1 overflow-hidden rounded-full bg-(--ob-surface)">
+      {/* Bar: the colour fades lighter to the right, on a grey track; quieter when not picked */}
+      <span className="relative block h-2 overflow-hidden rounded-[4px] bg-(--ob-surface)">
         <span
-          className="block h-full rounded-full transition-[width,background-color] duration-500"
-          style={{ width: `${Math.max(0, Math.min(100, share ?? 100))}%`, background: selected ? color : `color-mix(in srgb, ${color} 45%, transparent)` }}
+          className="block h-full rounded-[4px] transition-[width,opacity] duration-500"
+          style={{
+            width: `${Math.max(0, Math.min(100, share ?? 100))}%`,
+            background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 65%, white))`,
+            opacity: selected ? 1 : 0.5,
+          }}
         />
       </span>
     </button>
@@ -188,7 +192,7 @@ export function Trend({ children, positive = true, className }: { children: Reac
   );
 }
 
-/** Pill button: light grey secondary, or black primary */
+/** Pill button, reference style: 3D blue primary, white secondary, or a blue tint */
 export function PillButton({ children, icon: Icon, variant = 'secondary', className, ...rest }: {
   children: ReactNode;
   icon?: LucideIcon;
@@ -199,12 +203,9 @@ export function PillButton({ children, icon: Icon, variant = 'secondary', classN
     <button
       type="button"
       className={cn(
-        'inline-flex h-10 items-center justify-center gap-2 rounded-full px-5 text-[13px] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25 focus-visible:ring-offset-1',
-        variant === 'primary'
-          ? 'bg-(--ob-button-primary) text-white hover:bg-(--ob-button-primary-hover)'
-          : variant === 'tint'
-            ? 'bg-(--ob-primary-50) text-(--ob-primary-strong) hover:bg-(--ob-primary-100)'
-            : 'bg-(--ob-button-secondary) text-(--ob-text-strong) hover:bg-(--ob-button-secondary-hover)',
+        // The 3D look (gradient, white lip, hairline, shadow) lives in option-b.css
+        'inline-flex h-10 items-center justify-center gap-2 rounded-full px-5 text-[13px] font-medium transition-[background,box-shadow] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ob-primary)/25 focus-visible:ring-offset-1',
+        variant === 'primary' ? 'ob-btn-primary' : variant === 'tint' ? 'ob-btn-tint' : 'ob-btn-secondary',
         className,
       )}
       {...rest}

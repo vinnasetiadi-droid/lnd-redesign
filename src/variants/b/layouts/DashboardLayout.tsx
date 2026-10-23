@@ -4,6 +4,7 @@ import { Sidebar } from "../components/Sidebar";
 import { Footer } from "../components/Footer";
 import { TopBar } from "../components/TopBar";
 import { useAuthStore } from "@/store/useAuthStore";
+import { cn } from "@/lib/utils";
 import type { SidebarRole } from "../components/config-sidebar";
 import "../option-b.css";
 
@@ -12,6 +13,8 @@ interface DashboardLayoutProps {
   noFooter?: boolean;
   fixedContent?: boolean;
   hideSidebar?: boolean;
+  /** White page instead of the light grey one (Home: sections split by hairlines, no frames) */
+  whitePage?: boolean;
 }
 
 /**
@@ -19,7 +22,7 @@ interface DashboardLayoutProps {
  * full height on the left; on the right a white top bar with a hairline
  * under it, then the page on a plain light background.
  */
-export function DashboardLayout({ children, noFooter = false, fixedContent = false, hideSidebar = false }: DashboardLayoutProps) {
+export function DashboardLayout({ children, noFooter = false, fixedContent = false, hideSidebar = false, whitePage = false }: DashboardLayoutProps) {
   const user = useAuthStore((s) => s.user);
   const role = (user?.role ?? 'ld_team') as SidebarRole;
   // Phones start with the sidebar collapsed so the content keeps its width
@@ -41,7 +44,7 @@ export function DashboardLayout({ children, noFooter = false, fixedContent = fal
         {fixedContent ? (
           <div className="min-h-0 flex-1 overflow-hidden p-6">{children}</div>
         ) : (
-          <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto overflow-x-clip">
+          <div className={cn('flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto overflow-x-clip', whitePage && 'bg-(--ob-white)')}>
             <div className="flex-1 p-6">{children}</div>
             {!noFooter && <Footer />}
           </div>

@@ -129,6 +129,58 @@ html.option-b :where(.font-semibold, h1, h2, h3):not(.font-normal, .font-light, 
   font-weight: 600;
 }
 
+/* ── Home's single frame ─────────────────────────────────────
+   Home is one white frame split by hairlines instead of separate cards, so
+   the cards inside it (.ob-card) drop their own background, border, corners
+   and hover lift. The NISA card keeps its blue card. */
+html.option-b .ob-flat .ob-card {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+html.option-b .ob-flat .ob-lift,
+html.option-b .ob-flat .ob-lift:hover {
+  translate: none;
+  box-shadow: none;
+}
+
+/* ── Buttons, after the reference: a little 3D ─────────────────
+   A soft vertical gradient, a white sheen along the top and a white inner
+   glow along the bottom edge (the "lip"), a hairline and a soft shadow. */
+html.option-b .ob-btn-primary {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ob-primary) 82%, white) 0%, var(--ob-primary) 100%);
+  color: #fff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -2px 2px rgba(255, 255, 255, 0.24),
+    0 0 0 1px color-mix(in srgb, var(--ob-primary-900) 45%, transparent),
+    0 6px 14px -6px color-mix(in srgb, var(--ob-primary) 85%, transparent);
+}
+html.option-b .ob-btn-primary:hover {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ob-primary) 90%, white) 0%, var(--ob-primary-strong) 100%);
+}
+html.option-b .ob-btn-secondary {
+  background: linear-gradient(180deg, var(--ob-white) 0%, var(--ob-surface-subtle) 100%);
+  color: var(--ob-text-strong);
+  box-shadow:
+    inset 0 -2px 1px rgba(16, 24, 40, 0.04),
+    0 0 0 1px var(--ob-border),
+    0 1px 2px rgba(16, 24, 40, 0.06);
+}
+html.option-b .ob-btn-secondary:hover {
+  background: var(--ob-surface-subtle);
+}
+html.option-b .ob-btn-tint {
+  background: var(--ob-primary-50);
+  color: var(--ob-primary-strong);
+  box-shadow:
+    inset 0 -2px 1px rgba(255, 255, 255, 0.7),
+    0 0 0 1px color-mix(in srgb, var(--ob-primary) 14%, transparent);
+}
+html.option-b .ob-btn-tint:hover {
+  background: var(--ob-primary-100);
+}
+
 /* ── Motion ─────────────────────────────────────────────────── */
 
 /* Cards: a 1px lift and a faint blue glow on hover */

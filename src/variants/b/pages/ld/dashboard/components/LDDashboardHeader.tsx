@@ -51,6 +51,8 @@ export function LDDashboardGreeting({ profile, className }: { profile: LDProfile
 
 interface LDDashboardHeaderProps {
   metrics: LDMetricCard[];
+  /** Inside Home's single frame: plain columns split by vertical hairlines, no card frames or icons */
+  flat?: boolean;
   className?: string;
 }
 
@@ -65,7 +67,28 @@ function splitTrend(trend: string): { change: string; compare: string } {
  * right, the number with a green or red change chip, then what it is
  * compared with.
  */
-export function LDDashboardHeader({ metrics, className }: LDDashboardHeaderProps) {
+export function LDDashboardHeader({ metrics, flat, className }: LDDashboardHeaderProps) {
+  if (flat) {
+    return (
+      <div className={cn('grid grid-cols-1 divide-y divide-(--ob-border) md:grid-cols-3 md:divide-x md:divide-y-0', className)}>
+        {metrics.map((card) => {
+          const { change, compare } = splitTrend(card.trend);
+          return (
+            <div key={card.key} className="flex min-w-0 flex-col gap-2.5 px-8 py-1 max-md:py-5 md:first:pl-0 md:last:pr-0" title={card.hint}>
+              <p className="text-[13px] leading-[18px] text-(--ob-text-muted)">{card.title}</p>
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="text-[30px] leading-[36px] tabular-nums text-(--ob-text-strong)"><CountUpText value={String(card.value)} /></h3>
+                <DeltaChip positive={card.trendPositive}>{change}</DeltaChip>
+              </div>
+              <p className="text-[12px] leading-[16px] text-(--ob-text-muted)">
+                {compare}{card.hint && <span className="text-(--ob-text-subtle)"> · {card.hint.toLowerCase()}</span>}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
   return (
     <div className={cn('grid grid-cols-1 md:grid-cols-3 gap-3', className)}>
       {metrics.map((card) => {

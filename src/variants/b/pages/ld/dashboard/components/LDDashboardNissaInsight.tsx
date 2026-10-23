@@ -21,7 +21,7 @@ function InsightRow({ item }: { item: NisaInsight }) {
         <p className="min-w-0 truncate text-[14px] leading-[20px] font-medium text-white">{item.title}</p>
         <button
           type="button"
-          className="inline-flex shrink-0 items-center gap-1 text-[13px] text-white transition-colors hover:text-white/75 cursor-pointer"
+          className="inline-flex shrink-0 items-center gap-1 text-[12px] text-white/85 transition-colors hover:text-white cursor-pointer"
         >
           {item.cta}
           <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -78,13 +78,13 @@ export function LDDashboardNissaInsight({ insights, className }: LDDashboardNiss
           ))}
         </div>
 
-        {/* ── Footer CTA ─────────────────────────────────────── */}
+        {/* ── Footer CTA: the 3D blue button ─────────────────────── */}
         <button
           type="button"
-          className="group flex h-11 items-center justify-between rounded-full bg-(--ob-primary) px-5 text-[13px] text-white shadow-[0_8px_20px_-8px_rgba(26,115,232,0.9)] ring-1 ring-white/20 transition-colors hover:bg-(--ob-primary-strong) cursor-pointer"
+          className="ob-btn-primary group flex h-11 items-center justify-between gap-2 rounded-full px-5 text-[13px] font-medium cursor-pointer"
         >
-          More insights? Just ask NISA
-          <ChevronRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+          <span className="truncate">More insights? Just ask NISA</span>
+          <ChevronRight className="size-4 shrink-0 transition-transform group-hover:translate-x-0.5" />
         </button>
       </div>
     </div>

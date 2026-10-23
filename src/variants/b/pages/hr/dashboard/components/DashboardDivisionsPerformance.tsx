@@ -5,6 +5,7 @@ import { AIInsightLine } from '@/variants/b/components/ui/ai-insight-banner';
 import type { DivisionPerformance } from '../types/dashboard.types';
 import { CARD, CardHeader, DeltaChip, MetricTile } from '@/variants/b/components/ui/kit';
 import { HATCHED_TRACK } from '@/variants/b/components/ui/chart';
+import { AlertTriangle, BarChart2, Trophy, type LucideIcon } from '@/variants/b/icons';
 import { OB_COLORS } from '@/variants/b/theme';
 import { CountUp, GROW } from '@/variants/b/components/ui/count-up';
 
@@ -38,6 +39,7 @@ const GROUP_COLOR: Record<Group, string> = {
   top: OB_COLORS.modeSelf,
   support: OB_COLORS.orange,
 };
+const GROUP_ICON: Record<Group, LucideIcon> = { average: BarChart2, top: Trophy, support: AlertTriangle };
 
 // ── Animation ────────────────────────────────────────────────
 
@@ -130,9 +132,9 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
       />
 
       {/* ── Summary tiles: also pick what the chart highlights ── */}
-      <div className="grid grid-cols-3 gap-2" role="tablist" aria-label="Chart highlight">
+      <div className="grid grid-cols-3" role="tablist" aria-label="Chart highlight">
         {tiles.map((tile) => (
-          <MetricTile key={tile.key} selected={tile.key === group} onClick={() => setGroup(tile.key)} label={tile.label} color={GROUP_COLOR[tile.key]} share={tile.share}>
+          <MetricTile key={tile.key} selected={tile.key === group} onClick={() => setGroup(tile.key)} label={tile.label} color={GROUP_COLOR[tile.key]} share={tile.share} icon={GROUP_ICON[tile.key]}>
             <span className="font-semibold text-[24px] leading-[32px] tabular-nums text-(--ob-text-strong)">{tile.value}</span>
             {tile.key === 'average' ? (
               benchmarkTrend !== undefined && benchmarkTrend !== 0 && (

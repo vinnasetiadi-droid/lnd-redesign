@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { AnimatePresence, motion } from 'motion/react';
 import { EASE_OUT } from '@/variants/b/motion';
-import { BookOpen, Route } from '@/variants/b/icons';
+import { BookOpen } from '@/variants/b/icons';
 import { cn } from '@/lib/utils';
 import type { ProgramOverview } from '../types/dashboard.types';
 import { runningPrograms } from '../data/dashboard.mock';
@@ -122,13 +122,14 @@ function ProgramRow({ program }: { program: ProgramOverview }) {
         ? `Course · ends ${shortDate(program.endsOn)}`
         : `Course · ${program.duration ?? program.mode}`;
 
-  const Icon = isJourney ? Route : BookOpen;
-  // Plain row on a hairline, an icon tile in front (reference table style)
+  // Plain row on a hairline, a short bar in front like the sidebar's active page (amber when at risk)
   return (
-    <div className="flex gap-3 border-b border-(--ob-border) py-3 last:border-b-0">
-      <span className="flex size-9 shrink-0 items-center justify-center rounded-[10px] bg-(--ob-surface) text-(--ob-text-body)">
-        <Icon size={16} />
-      </span>
+    <div className="relative flex border-b border-(--ob-border) py-3 pl-4 last:border-b-0">
+      <span
+        aria-hidden
+        className="absolute left-0 top-[15px] h-5 w-[3px] rounded-full"
+        style={{ background: atRisk ? AMBER.bar : OB_COLORS.primary }}
+      />
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline justify-between gap-3">
           <TruncatedTitle text={program.name} className="min-w-0 flex-1 text-[13px] leading-[20px] text-(--ob-text-strong)" />

@@ -119,7 +119,7 @@ function PageSearch({ role }: { role: SidebarRole }) {
 }
 
 const ROUND_BUTTON =
-  "relative flex size-10 items-center justify-center rounded-full bg-(--ob-white) text-(--ob-text-body) ring-1 ring-(--ob-border) transition-colors hover:bg-(--ob-surface-subtle) hover:text-(--ob-text-strong)";
+  "ob-btn-secondary relative flex size-10 items-center justify-center rounded-full text-(--ob-text-body) transition-colors hover:text-(--ob-text-strong) cursor-pointer";
 
 /**
  * Option B top bar, after the reference: a white frame across the content

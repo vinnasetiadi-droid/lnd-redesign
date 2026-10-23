@@ -145,7 +145,8 @@ export function foldBarDefs(ids: FoldIds, color: string = CHART_BLUE) {
  * the middle of each column, light grey, and blue for the selected one (the
  * reference's "most active day" bars).
  */
-export function foldBar(ids: FoldIds, isSelected: (index: number) => boolean) {
+export function foldBar(ids: FoldIds, isSelected: (index: number) => boolean, color: string = CHART_BLUE) {
+  const glow = `color-mix(in srgb, ${color} 40%, transparent)`;
   return function PillBar(props: { x?: number; y?: number; width?: number; height?: number; index?: number }) {
     const { x = 0, y = 0, width = 0, height = 0, index = -1 } = props;
     if (width <= 0) return <g />;
@@ -163,7 +164,8 @@ export function foldBar(ids: FoldIds, isSelected: (index: number) => boolean) {
           height={h}
           rx={Math.min(barW / 2, h / 2)}
           fill={on ? `url(#${ids.barSelected})` : OB_COLORS.buttonSecondary}
-          style={{ transition: 'fill 300ms ease' }}
+          // The selected bar glows a little in its own colour
+          style={{ transition: 'fill 300ms ease', filter: on ? `drop-shadow(0 6px 10px ${glow})` : undefined }}
         />
       </g>
     );

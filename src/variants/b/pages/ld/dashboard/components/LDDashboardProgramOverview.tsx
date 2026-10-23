@@ -8,6 +8,7 @@ import { AIInsightLine } from '@/variants/b/components/ui/ai-insight-banner';
 import { AXIS_TICK, FOLD_BAR_SHARE, foldBar, foldBarDefs, pillLabel, useChartIds } from '@/variants/b/components/ui/chart';
 import { currentMonthIndex, periodLabel } from '../period';
 import { OB_COLORS } from '@/variants/b/theme';
+import { CheckCircle2, Rocket, Users, type LucideIcon } from '@/variants/b/icons';
 
 interface LDDashboardProgramOverviewProps {
   /** All Program — the course and journey series added together. */
@@ -31,10 +32,10 @@ type Metric = 'participants' | 'launched' | 'completed';
  * programs (tens) are on different scales, so the chart shows one at a time.
  * "New participants" keeps this apart from the total in the KPI row above.
  */
-const METRICS: { key: Metric; label: string; unit: string; color: string }[] = [
-  { key: 'participants', label: 'New participants',   unit: 'participants', color: OB_COLORS.primary },
-  { key: 'launched',     label: 'Programs launched',  unit: 'launched',     color: OB_COLORS.modeSelf },
-  { key: 'completed',    label: 'Programs completed', unit: 'completed',    color: OB_COLORS.orange },
+const METRICS: { key: Metric; label: string; unit: string; color: string; icon: LucideIcon }[] = [
+  { key: 'participants', label: 'New participants',   unit: 'participants', color: OB_COLORS.primary,  icon: Users },
+  { key: 'launched',     label: 'Programs launched',  unit: 'launched',     color: OB_COLORS.modeSelf, icon: Rocket },
+  { key: 'completed',    label: 'Programs completed', unit: 'completed',    color: OB_COLORS.orange,   icon: CheckCircle2 },
 ];
 
 /* ── helpers ─────────────────────────────────────────────────── */
@@ -90,7 +91,7 @@ export function LDDashboardProgramOverview({
   const selected = picked ?? series.length - 1;
 
   const ids = useChartIds('program-overview');
-  const BarShape = useMemo(() => foldBar(ids, (i) => i === selected), [ids, selected]);
+  const BarShape = useMemo(() => foldBar(ids, (i) => i === selected, metricInfo.color), [ids, selected, metricInfo.color]);
   const PillLabel = useMemo(
     () => pillLabel(selected, series.length, (v) => `${v} ${metricInfo.unit}`, FOLD_BAR_SHARE),
     [selected, metricInfo.unit, series.length],
@@ -115,11 +116,11 @@ export function LDDashboardProgramOverview({
       />
 
       {/* ── Summary tiles: also pick the chart's metric ─────── */}
-      <div className="grid grid-cols-3 gap-2" role="tablist" aria-label="Chart metric">
+      <div className="grid grid-cols-3" role="tablist" aria-label="Chart metric">
         {totals.map((m) => {
           const positive = m.trend >= 0;
           return (
-            <MetricTile key={m.key} selected={m.key === metric} onClick={() => setMetric(m.key)} label={m.label} color={m.color}>
+            <MetricTile key={m.key} selected={m.key === metric} onClick={() => setMetric(m.key)} label={m.label} color={m.color} icon={m.icon}>
               <span className="font-semibold text-[24px] leading-[32px] tabular-nums text-(--ob-text-strong)"><FadeValue k={m.total}>{m.total}</FadeValue></span>
               {m.trend !== 0 && (
                 // Totals are year to date; the change compares the last two months

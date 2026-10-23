@@ -50,14 +50,19 @@ function completionInsight(data: MonthlyCompletion[]): string {
   return `${ahead} completes ${Math.abs(gap)} pts higher than ${behind}. ${trend}`;
 }
 
-/** `LabelList content`: names the line at its last point, in its own colour */
+/** `LabelList content`: a dot with a white ring on the last point, then the line's name in its colour */
 function endLabel(label: string, color: string, lastIndex: number) {
   return function EndLabel(props: { x?: number | string; y?: number | string; value?: number | string; index?: number }) {
     if (props.index !== lastIndex) return null;
+    const x = Number(props.x);
+    const y = Number(props.y);
     return (
-      <text x={Number(props.x) + 8} y={Number(props.y) + 4} fill={color} fontSize={12} fontFamily="Inter, sans-serif">
-        {label} {props.value}%
-      </text>
+      <g>
+        <circle cx={x} cy={y} r={5} fill={color} stroke="#fff" strokeWidth={2} style={{ filter: `drop-shadow(0 2px 4px color-mix(in srgb, ${color} 45%, transparent))` }} />
+        <text x={x + 10} y={y + 4} fill={color} fontSize={12} fontFamily="Inter, sans-serif">
+          {label} {props.value}%
+        </text>
+      </g>
     );
   };
 }
@@ -163,7 +168,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
           <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={180}>
             <AreaChart data={data} margin={{ top: 8, right: 100, bottom: 0, left: -16 }}>
               <defs>
-                {MODES.map((m) => <Fragment key={m.key}>{areaGradient(`${ids.area}-${m.key}`, m.color, 0.14)}</Fragment>)}
+                {MODES.map((m) => <Fragment key={m.key}>{areaGradient(`${ids.area}-${m.key}`, m.color, 0.22)}</Fragment>)}
               </defs>
               <CartesianGrid {...GRID_PROPS} />
               <XAxis dataKey="month" tick={AXIS_TICK} axisLine={false} tickLine={false} />
