@@ -12,7 +12,8 @@ import { OB_COLORS } from '@/variants/b/theme';
 /** Small grey circle holding a card's icon (top right of the card) */
 export function IconCircle({ icon: Icon, className }: { icon: LucideIcon; className?: string }) {
   return (
-    <span className={cn('flex size-8 shrink-0 items-center justify-center rounded-full bg-(--ob-surface) text-(--ob-text-ai)', className)}>
+    // The icon is in the accent blue: an icon circle marks something to look at
+    <span className={cn('flex size-8 shrink-0 items-center justify-center rounded-full bg-(--ob-surface) text-(--ob-primary)', className)}>
       <Icon size={16} />
     </span>
   );
