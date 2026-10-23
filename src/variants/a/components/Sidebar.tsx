@@ -1,13 +1,14 @@
 import React, { useState, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router";
+import { AnimatePresence, motion, type Variants } from "motion/react";
 import { cn } from "@/lib/utils";
-import { ChevronDown, LogOut, PanelLeftClose, PanelLeftOpen } from "@/variants/a/icons";
+import { EASE_OUT } from "@/variants/a/motion";
+import { LogOut, Minus, PanelLeftClose, PanelLeftOpen, Plus } from "@/variants/a/icons";
 import { IMAGES } from "@/assets/images";
 import {
   type SidebarRole,
   type SidebarMenuItem,
   getSidebarMenu,
-  buildInitialOpenMenus,
 } from "./config-sidebar";
 import { useAuthStore } from "@/store/useAuthStore";
 
@@ -122,19 +123,49 @@ function SidebarItem({
             {badge}
           </span>
         )}
+        {/* Minus while open, plus while closed; they swap with a quarter turn */}
         {!collapsed && hasSubmenu && (
-          <ChevronDown
-            size={13}
-            strokeWidth={1.75}
-            className={cn("text-[#717680] transition-transform duration-200 shrink-0", isOpen && "rotate-180")}
-          />
+          <span className="relative flex size-[14px] shrink-0 items-center justify-center text-(--oa-text-muted)">
+            <AnimatePresence initial={false} mode="popLayout">
+              <motion.span
+                key={isOpen ? "open" : "closed"}
+                className="flex"
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+                transition={{ duration: 0.2, ease: EASE_OUT }}
+              >
+                {isOpen ? <Minus size={14} strokeWidth={1.75} /> : <Plus size={14} strokeWidth={1.75} />}
+              </motion.span>
+            </AnimatePresence>
+          </span>
         )}
       </button>
 
-      {/* Submenu: indented to line up with the parent label */}
-      {hasSubmenu && isOpen && !collapsed && (
-        <div className="flex flex-col gap-0.5 mt-0.5 mb-1">{children}</div>
-      )}
+      {/* Submenu: a tree line from the parent icon, one rounded branch per page.
+          It slides open; the pages follow one after another. The wrapper starts
+          6px up (inside the parent row's padding) so the clip never cuts the line. */}
+      <AnimatePresence initial={false}>
+        {hasSubmenu && isOpen && !collapsed && (
+          <motion.div
+            key="submenu"
+            className="pointer-events-none overflow-hidden"
+            initial={{ height: 0, marginTop: 0, opacity: 0 }}
+            animate={{ height: "auto", marginTop: -6, opacity: 1 }}
+            exit={{ height: 0, marginTop: 0, opacity: 0 }}
+            transition={{ duration: 0.28, ease: EASE_OUT }}
+          >
+            <motion.div
+              className="mb-1 flex flex-col gap-0.5 pt-2"
+              variants={SUBMENU_LIST}
+              initial="hidden"
+              animate="show"
+            >
+              {children}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -142,21 +173,48 @@ function SidebarItem({
 interface SubmenuItemProps {
   label: string;
   active?: boolean;
+  /** First page: its line starts just under the parent icon */
+  first?: boolean;
+  /** Last page: the line ends in its rounded branch */
+  last?: boolean;
   onClick?: () => void;
 }
 
-function SubmenuItem({ label, active, onClick }: SubmenuItemProps) {
+/** Pages come in one after another, nudged in from the tree line */
+const SUBMENU_LIST: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.04, delayChildren: 0.04 } },
+};
+const SUBMENU_ITEM: Variants = {
+  hidden: { opacity: 0, x: -6 },
+  show: { opacity: 1, x: 0, transition: { duration: 0.25, ease: EASE_OUT } },
+};
+
+// The tree line sits under the parent icon's centre (10px padding + half of 16px)
+const TREE_X = "left-[17px]";
+const TREE_LINE = "pointer-events-none absolute border-(--oa-border-control)";
+
+function SubmenuItem({ label, active, first, last, onClick }: SubmenuItemProps) {
   return (
-    <button
-      type="button"
-      className={cn(
-        "flex items-center h-7 pl-[34px] pr-2 rounded-[8px] cursor-pointer transition-colors text-[12px] leading-[18px] text-left",
-        active ? cn(ACTIVE_PILL, "text-[#181D27]") : "text-[#717680] hover:bg-[#1A73E8]/[0.04] hover:text-[#181D27]",
-      )}
-      onClick={onClick}
-    >
-      {label}
-    </button>
+    <motion.div variants={SUBMENU_ITEM} className="pointer-events-auto relative pl-[30px]">
+      {/* Straight line on to the next page */}
+      {!last && <span aria-hidden className={cn(TREE_LINE, TREE_X, "bottom-0 border-l", first ? "-top-[6px]" : "-top-[2px]")} />}
+      {/* Rounded branch into this page */}
+      <span
+        aria-hidden
+        className={cn(TREE_LINE, TREE_X, "w-[9px] rounded-bl-[8px] border-b border-l", first ? "-top-[6px] h-[22px]" : "-top-[2px] h-[18px]")}
+      />
+      <button
+        type="button"
+        className={cn(
+          "flex h-8 w-full items-center rounded-[8px] px-2.5 text-left text-[13px] leading-[20px] transition-colors cursor-pointer",
+          active ? cn(ACTIVE_PILL, "text-(--oa-text-strong)") : "text-(--oa-text-secondary) hover:bg-[#1A73E8]/[0.04] hover:text-(--oa-text-strong)",
+        )}
+        onClick={onClick}
+      >
+        <span className="truncate">{label}</span>
+      </button>
+    </motion.div>
   );
 }
 
@@ -203,13 +261,8 @@ export function Sidebar({ className, role = "ld_team", isCollapsed = false, onTo
     };
   }, [menuItems]);
 
-  const [openMenus, setOpenMenus] = useState<Record<string, boolean>>(() =>
-    buildInitialOpenMenus(menuItems),
-  );
-
-  const toggleMenu = (key: string) => {
-    setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
+  // Menus the user opened or closed; untouched ones are open only around the current page
+  const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
 
   // Most specific submenu path that matches the current page
   const activeSubPath = (item: SidebarMenuItem): string | undefined =>
@@ -222,6 +275,7 @@ export function Sidebar({ className, role = "ld_team", isCollapsed = false, onTo
     const hasSubmenu = !!(item.submenu && item.submenu.length > 0);
     const active = !!item.path && pathname === item.path;
     const subPath = activeSubPath(item);
+    const isOpen = openMenus[item.key] ?? !!subPath;
     const Icon = item.icon;
 
     return (
@@ -233,8 +287,8 @@ export function Sidebar({ className, role = "ld_team", isCollapsed = false, onTo
         childActive={!!subPath}
         badge={item.badge}
         hasSubmenu={hasSubmenu}
-        isOpen={!!subPath || openMenus[item.key]}
-        onToggle={() => toggleMenu(item.key)}
+        isOpen={isOpen}
+        onToggle={() => setOpenMenus((prev) => ({ ...prev, [item.key]: !isOpen }))}
         onClick={() => {
           // Collapsed parents open their first page
           const target = item.path ?? item.submenu?.[0]?.path;
@@ -243,11 +297,13 @@ export function Sidebar({ className, role = "ld_team", isCollapsed = false, onTo
         collapsed={isCollapsed}
       >
         {hasSubmenu &&
-          item.submenu!.map((sub) => (
+          item.submenu!.map((sub, i, all) => (
             <SubmenuItem
               key={sub.key}
               label={sub.label}
               active={subPath === sub.path}
+              first={i === 0}
+              last={i === all.length - 1}
               onClick={() => navigate(sub.path)}
             />
           ))}
