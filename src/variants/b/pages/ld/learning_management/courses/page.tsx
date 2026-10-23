@@ -181,7 +181,8 @@ export default function CoursesPage() {
         {/* ── Review queue: a light blue band between two rules, only when there is something to review ── */}
         {reviewQueue.length > 0 && (
           <motion.div variants={revealItem} className="flex items-center gap-4 bg-(--ob-primary-tint) px-8 py-5">
-            <IconCircle icon={Clock} className="size-10 bg-(--ob-white) shadow-[0_1px_2px_rgba(16,24,40,0.06)]" />
+            {/* Just the icon, no circle around it */}
+            <Clock size={20} className="shrink-0 text-(--ob-primary)" />
             <div className="min-w-0 flex-1">
               <p className="text-[14px] leading-[20px] text-(--ob-text-strong)">
                 {reviewQueue.length} {reviewQueue.length === 1 ? 'course' : 'courses'} waiting for your review
