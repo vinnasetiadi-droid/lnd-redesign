@@ -183,23 +183,20 @@ html.option-b .ob-flat .ob-lift:hover {
 }
 
 /* ── Buttons, after the reference: a little 3D ─────────────────
-   A soft vertical gradient, a white sheen along the top and a white inner
-   glow along the bottom edge (the "lip"), a hairline and a soft shadow. */
+   A soft vertical gradient and a white glow along the bottom edge only (the
+   "lip"), plus a soft shadow. */
 html.option-b .ob-btn-primary {
   background: linear-gradient(180deg, color-mix(in srgb, var(--ob-primary) 82%, white) 0%, var(--ob-primary) 100%);
   color: #fff;
+  /* Light from the bottom edge only (no ring, no top sheen), and a soft drop shadow */
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    inset 0 -2px 2px rgba(255, 255, 255, 0.24),
-    0 0 0 1px color-mix(in srgb, var(--ob-primary-900) 45%, transparent),
+    inset 0 -3px 4px -1px rgba(255, 255, 255, 0.35),
     0 6px 14px -6px color-mix(in srgb, var(--ob-primary) 85%, transparent);
 }
-/* On the blue NISA section: a white edge so the blue button still reads */
+/* On the blue NISA section: the same bottom light, a deeper shadow */
 html.option-b .ob-btn-primary.ob-on-blue {
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    inset 0 -2px 2px rgba(255, 255, 255, 0.24),
-    0 0 0 1px rgba(255, 255, 255, 0.4),
+    inset 0 -3px 4px -1px rgba(255, 255, 255, 0.35),
     0 6px 14px -6px color-mix(in srgb, var(--ob-primary-900) 70%, transparent);
 }
 html.option-b .ob-btn-primary:hover {
