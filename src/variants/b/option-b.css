@@ -8,7 +8,7 @@
  * - Weights: mostly Regular 400. Semibold 600 for page and card titles and
  *   big numbers (h1-h3 and `font-semibold`), Medium 500 for h4-h6 and
  *   `font-medium`. Nothing bolder.
- * - Letter spacing: -2% on every element
+ * - Letter spacing: 0 on every element (Inter's own spacing)
  *
  * Rules are unlayered and start with `html.option-b`, so they win over Tailwind
  * utilities and over src/styles/theme.css (which sets Poppins on :root, makes
@@ -24,7 +24,7 @@ html.option-b :where(body, .font-sans, button, input, textarea, select) {
 
 html.option-b,
 html.option-b * {
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 /*
