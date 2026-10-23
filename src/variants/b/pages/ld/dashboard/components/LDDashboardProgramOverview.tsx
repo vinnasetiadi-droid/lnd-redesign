@@ -135,7 +135,8 @@ export function LDDashboardProgramOverview({
       </div>
 
       {/* ── Chart: one metric, one highlighted month ────────── */}
-      <div className="w-full min-w-0" style={{ height: '200px' }}>
+      {/* Extra room above, so the tiles and the chart read as two blocks */}
+      <div className="mt-6 w-full min-w-0" style={{ height: '200px' }}>
         <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={200}>
           <BarChart data={series} margin={{ top: 28, right: 8, left: -16, bottom: 0 }} barCategoryGap={0}>
             <defs>{foldBarDefs(ids, metricInfo.color)}</defs>

@@ -148,7 +148,8 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
       </div>
 
       {/* ── Chart: one bar per division, org average as a dashed line ── */}
-      <div ref={chartRef}>
+      {/* Extra room above, so the tiles and the chart read as two blocks */}
+      <div ref={chartRef} className="mt-6">
         <div className="relative pt-4">
           {/* Org average: dashed line over the bar column only */}
           <div className="pointer-events-none absolute top-0 bottom-0 z-[1]" style={BAR_INSET}>
