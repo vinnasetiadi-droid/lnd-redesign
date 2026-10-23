@@ -1,11 +1,13 @@
 // Home's profile section: a small square photo, then a greeting above the name
-// and role, and on the right the four contact details in one column (split
-// off by a light hairline), so the row is filled edge to edge. The "head pops
-// out" card it replaces is kept in src/variants/b/concepts/ProfileHeroCard.tsx.
+// and role with the original L&D achievement badges under them, and on the
+// right the four contact details in one column (split off by a light
+// hairline), so the row is filled edge to edge. The "head pops out" card it
+// replaces is kept in src/variants/b/concepts/ProfileHeroCard.tsx.
 
 import { cn } from '@/lib/utils';
 import { Building2, Mail, MapPin, Phone, type LucideIcon } from '@/variants/b/icons';
 import profilePhoto from '@/variants/b/assets/profile-photo.jpg';
+import { ProfileBadges } from '@/variants/b/components/ui/profile-badges';
 import type { LDProfile } from '../types/dashboard.types';
 
 function greetingFor(hour: number) {
@@ -32,11 +34,12 @@ export function LDDashboardProfile({ person, className }: { person: LDProfile; c
         <img src={profilePhoto} alt={name} className="absolute inset-0 size-full object-cover" />
       </div>
 
-      {/* Greeting (by the time of day), name and role */}
+      {/* Greeting (by the time of day), name, role and the achievement badges */}
       <div className="min-w-0 flex-1">
         <p className="text-[14px] leading-[20px] text-(--ob-text-muted)">{greetingFor(new Date().getHours())}</p>
         <h2 className="mt-0.5 text-[28px] leading-[36px] text-(--ob-text-strong)">{name}</h2>
         <p className="mt-1 text-[16px] leading-[24px] text-(--ob-text-secondary)">{position || role}</p>
+        <ProfileBadges size={40} className="mt-3" />
       </div>
 
       {/* Contact details on the right, one per line, after a light hairline */}

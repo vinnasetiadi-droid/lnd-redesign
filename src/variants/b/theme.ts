@@ -143,3 +143,29 @@ export type OBColor = keyof typeof OB_COLORS;
 export function obVar(token: OBColor): string {
   return `var(--ob-${token.replace(/([a-z])([A-Z0-9])/g, '$1-$2').toLowerCase()})`;
 }
+
+/** One achievement badge: its gradient, drop shadow, white glow size and (for the ones with one) its icon tint */
+export interface ObBadgeTone {
+  from: string;
+  to: string;
+  shadow: string;
+  shadowOpacity: number;
+  glow: number;
+  icon?: string;
+}
+
+/**
+ * The original L&D profile's achievement badges (components/ui/profile-badges),
+ * with the colours they had there: a purple medal, a blue star, a cyan trophy
+ * and a stack of three soft hexagons behind "5+".
+ */
+export const OB_BADGES = {
+  white: '#FFFFFF',
+  ink: '#000000',
+  medal:  { from: '#9F8FFE', to: '#D1B6FC', shadow: '#575FCF', shadowOpacity: 0.175, glow: 23, icon: '#C0A0FA' },
+  star:   { from: '#1056D9', to: '#4DA9FF', shadow: '#1E3799', shadowOpacity: 0.175, glow: 25, icon: '#459DFA' },
+  trophy: { from: '#56B3F2', to: '#50E5FB', shadow: '#1E3799', shadowOpacity: 0.175, glow: 20, icon: '#CDF5FE' },
+  stack3: { from: '#93C5FD', to: '#BFDBFE', shadow: '#6673D9', shadowOpacity: 0.1, glow: 23 },
+  stack2: { from: '#818CF8', to: '#A5B4FC', shadow: '#5959CC', shadowOpacity: 0.12, glow: 23 },
+  stack1: { from: '#7C6BF0', to: '#A78BFA', shadow: '#4D40BF', shadowOpacity: 0.15, glow: 23 },
+} satisfies Record<string, string | ObBadgeTone>;

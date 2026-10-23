@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import { ProfileBadges } from '@/variants/d/components/ui/profile-badges';
 import { BarChart2, BookOpen, CheckCircle2, Users, type LucideIcon } from '@/variants/d/icons';
 import type { LDProfile, LDMetricCard } from '../types/dashboard.types';
 import { IconCircle, Trend } from '@/variants/d/components/ui/kit';
@@ -23,7 +24,7 @@ function greetingFor(hour: number) {
 
 /**
  * Compact greeting above both columns: a small photo, the name, today's date
- * and the org.
+ * and the org, with the achievement badges on the right.
  */
 export function LDDashboardGreeting({ profile, className }: { profile: LDProfile; className?: string }) {
   const now = new Date();
@@ -43,6 +44,8 @@ export function LDDashboardGreeting({ profile, className }: { profile: LDProfile
           {[date.replace(/^(\w+) /, '$1, '), profile.company].filter(Boolean).join(' · ')}
         </p>
       </div>
+      {/* The original L&D achievement badges, at the right end of the row */}
+      <ProfileBadges size={44} className="ml-auto" />
     </div>
   );
 }
