@@ -66,7 +66,7 @@ export function LDDashboardNissaInsight({ insights, className }: LDDashboardNiss
         <div className="flex items-center gap-3">
           <NisaOrb size={40} />
           <div>
-            <h3 className="text-[16px] leading-[24px] text-white">NISA priority insights</h3>
+            <h3 className="text-[18px] leading-[26px] text-white">NISA priority insights</h3>
             <p className="text-[13px] leading-[18px] text-white/70">Smart insights tailored to you</p>
           </div>
         </div>

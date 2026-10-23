@@ -124,7 +124,7 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
     `${shortInsight} ${support.map((d) => d.name).join(', ')} are the three divisions below ${Math.max(...support.map((d) => d.score)) + 1}%; a review with each division lead could show where learners drop off.`;
 
   return (
-    <div className={cn(CARD, 'relative flex flex-col gap-4 p-5', className)}>
+    <div className={cn(CARD, 'relative flex flex-col gap-5 p-5', className)}>
       {/* ── Header ─────────────────────────────────────────── */}
       <CardHeader
         title="Division completion"

@@ -102,7 +102,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
   );
 
   return (
-    <div className={cn(CARD, 'relative flex flex-col gap-3 p-5', className)}>
+    <div className={cn(CARD, 'relative flex flex-col gap-5 p-5', className)}>
       <CardHeader
         title="Learning mode analytics"
         subtitle={`Blended vs self-paced · ${periodLabel(data)}`}

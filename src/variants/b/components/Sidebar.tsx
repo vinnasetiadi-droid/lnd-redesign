@@ -106,7 +106,7 @@ function SidebarItem({
         className={cn(
           "group flex items-center h-9 gap-2.5 rounded-[10px] cursor-pointer select-none transition-colors text-left",
           collapsed ? "justify-center w-9 mx-auto" : "w-full pl-2.5 pr-2",
-          pill ? ACTIVE_PILL : danger ? "text-(--ob-text-body) hover:bg-(--ob-surface-subtle) hover:text-(--ob-danger)" : "text-(--ob-text-body) hover:bg-(--ob-surface-subtle) hover:text-(--ob-text-strong)",
+          pill ? ACTIVE_PILL : danger ? "text-(--ob-text-body) hover:bg-(--ob-primary)/[0.05] hover:text-(--ob-danger)" : "text-(--ob-text-body) hover:bg-(--ob-primary)/[0.05] hover:text-(--ob-text-strong)",
         )}
         onClick={handleClick}
       >
@@ -202,7 +202,7 @@ function SubmenuItem({ label, active, first, last, onClick }: SubmenuItemProps) 
         type="button"
         className={cn(
           "flex h-8 w-full items-center rounded-[8px] px-2.5 text-left text-[13px] leading-[20px] transition-colors cursor-pointer",
-          active ? ACTIVE_PILL : "text-(--ob-text-secondary) hover:bg-(--ob-surface-subtle) hover:text-(--ob-text-strong)",
+          active ? ACTIVE_PILL : "text-(--ob-text-secondary) hover:bg-(--ob-primary)/[0.05] hover:text-(--ob-text-strong)",
         )}
         onClick={onClick}
       >
@@ -308,7 +308,8 @@ export function Sidebar({ className, role = "ld_team", isCollapsed = false, onTo
   return (
     <aside
       className={cn(
-        "h-full flex flex-col border-r border-(--ob-border) bg-(--ob-white) font-sans transition-[width] duration-300 ease-in-out",
+        // A very light blue tint, so the sidebar reads apart from the white page
+        "h-full flex flex-col border-r border-(--ob-border) bg-(--ob-primary-tint) font-sans transition-[width] duration-300 ease-in-out",
         isCollapsed ? "w-[64px]" : "w-[clamp(200px,15vw,224px)]",
         className,
       )}
@@ -326,7 +327,7 @@ export function Sidebar({ className, role = "ld_team", isCollapsed = false, onTo
           type="button"
           onClick={onToggle}
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className="flex items-center justify-center size-8 rounded-[8px] text-(--ob-text-muted) hover:bg-(--ob-surface-subtle) hover:text-(--ob-text-strong) transition-colors"
+          className="flex items-center justify-center size-8 rounded-[8px] text-(--ob-text-muted) hover:bg-(--ob-primary)/[0.05] hover:text-(--ob-text-strong) transition-colors"
         >
           {isCollapsed ? <PanelLeftOpen size={16} strokeWidth={1.5} /> : <PanelLeftClose size={16} strokeWidth={1.5} />}
         </button>

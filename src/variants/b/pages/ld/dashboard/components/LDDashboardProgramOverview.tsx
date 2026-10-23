@@ -107,7 +107,7 @@ export function LDDashboardProgramOverview({
   const fullInsight = activeScope === 'course' ? courseInsight ?? insight : activeScope === 'journey' ? journeyInsight ?? insight : insight;
 
   return (
-    <div className={cn(CARD, 'relative flex flex-col gap-4 p-5', className)}>
+    <div className={cn(CARD, 'relative flex flex-col gap-5 p-5', className)}>
       {/* ── Header: title + period, scope tabs on the right ── */}
       <CardHeader
         title="Program overview"

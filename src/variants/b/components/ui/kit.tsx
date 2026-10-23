@@ -33,8 +33,8 @@ export function CardHeader({ title, subtitle, icon, extra, className }: CardHead
     // Wraps on narrow screens so tabs in `extra` drop below the title instead of overflowing
     <div className={cn('flex flex-wrap items-start justify-between gap-3', className)}>
       <div className="min-w-0">
-        <h3 className="text-[15px] leading-[22px] text-(--ob-text-strong)">{title}</h3>
-        {subtitle && <p className="mt-0.5 text-[12px] leading-[16px] text-(--ob-text-muted)">{subtitle}</p>}
+        <h3 className="text-[18px] leading-[26px] text-(--ob-text-strong)">{title}</h3>
+        {subtitle && <p className="mt-1 text-[13px] leading-[18px] text-(--ob-text-muted)">{subtitle}</p>}
       </div>
       {(extra || icon) && (
         <div className="flex shrink-0 items-center gap-2">
