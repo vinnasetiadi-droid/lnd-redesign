@@ -1,5 +1,6 @@
 // A pill that opens a small menu of options. Shows only its name while on the
-// default option, and "Name: Value" otherwise (e.g. "Owner: You").
+// default option, and "Name: Value" otherwise (e.g. "Owner: You"). With
+// `prefix` it always shows "Prefix Value · count" (the Status menu).
 
 import { useEffect, useId, useRef, useState, type ElementType } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
@@ -10,6 +11,8 @@ import { EASE_OUT } from '@/variants/d/motion';
 export interface ChipOption<V extends string> {
   value: V;
   label: string;
+  /** Shown muted on the right of the option, and after the value with `prefix` */
+  count?: number;
 }
 
 interface FilterChipProps<V extends string> {
@@ -23,6 +26,8 @@ interface FilterChipProps<V extends string> {
   /** Sort chips always show the current option, never "Name: …" */
   showValueOnly?: boolean;
   icon?: ElementType;
+  /** Always show "Prefix Value · count", e.g. "Status All · 11" */
+  prefix?: string;
 }
 
 export function FilterChip<V extends string>({
@@ -33,6 +38,7 @@ export function FilterChip<V extends string>({
   defaultValue = options[0]?.value,
   showValueOnly,
   icon: Icon,
+  prefix,
 }: FilterChipProps<V>) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -67,13 +73,20 @@ export function FilterChip<V extends string>({
         className={cn(
           'inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-[13px] transition-colors cursor-pointer',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--od-primary)/25',
-          active && !showValueOnly
+          active && !showValueOnly && !prefix
             ? 'bg-(--od-primary-50) text-(--od-primary-strong)'
             : 'bg-(--od-surface) text-(--od-text-strong) hover:bg-(--od-border)',
         )}
       >
         {Icon && <Icon size={14} className="text-(--od-text-muted)" />}
-        <span className="whitespace-nowrap">{label}</span>
+        {prefix ? (
+          <span className="whitespace-nowrap">
+            <span className="text-(--od-text-muted)">{prefix}</span> {current?.label}
+            {current?.count !== undefined && <span className="text-(--od-text-subtle)"> · {current.count}</span>}
+          </span>
+        ) : (
+          <span className="whitespace-nowrap">{label}</span>
+        )}
         <ChevronDown size={14} className={cn('text-(--od-text-muted) transition-transform duration-200', open && 'rotate-180')} />
       </button>
 
@@ -106,8 +119,11 @@ export function FilterChip<V extends string>({
                     selected ? 'text-(--od-text-strong)' : 'text-(--od-text-body) hover:bg-(--od-surface)',
                   )}
                 >
-                  {o.label}
-                  {selected && <Check size={14} className="text-(--od-primary)" />}
+                  <span>{o.label}</span>
+                  <span className="flex items-center gap-2">
+                    {o.count !== undefined && <span className="tabular-nums text-(--od-text-subtle)">{o.count}</span>}
+                    <span className="flex w-[14px] justify-center">{selected && <Check size={14} className="text-(--od-primary)" />}</span>
+                  </span>
                 </button>
               );
             })}

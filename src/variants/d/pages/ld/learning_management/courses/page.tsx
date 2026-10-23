@@ -3,8 +3,9 @@
 // Route: /ld/learning-management/courses
 //
 // One primary action (Create course), a one-line review queue that only
-// shows when someone else's course waits for review, status tabs with counts
-// (they are the filter), one row of filters, and the list as the default.
+// shows when someone else's course waits for review, then one toolbar row:
+// search, a Status menu with counts, one Filter pill (Owner, Type, Mode) and
+// the sort, with the filters in use listed under it. The list is the default.
 // ============================================================
 
 import { useMemo, useRef, useState } from 'react';
@@ -29,7 +30,7 @@ import { CourseLibraryTable, courseMode, courseType, ownerName, type CourseRow }
 import { COURSES_MOCK, COURSE_STATUS_META, NOT_LIVE, draftItemsOf, type CourseItem, type CourseStatus } from './data/courses.mock';
 import { IconCircle, PillButton, SearchField } from '@/variants/d/components/ui/kit';
 import { FilterChip } from './components/FilterChip';
-import { ProgramScopeTabs, type ScopeTab } from '@/variants/d/pages/ld/dashboard/components/ProgramScopeTabs';
+import { FilterPanel, FilterTags, type FilterGroup } from './components/FilterPanel';
 import { daysUntil, timeAgo } from '@/variants/d/pages/ld/dashboard/period';
 import { revealContainer, revealItem } from '@/variants/d/motion';
 
@@ -112,9 +113,10 @@ export default function CoursesPage() {
       return [{ key: c.id, shown: c, versions: [c, ...drafts] }];
     });
 
-  const tabs: ScopeTab<StatusFilter>[] = [
-    { key: 'all', label: 'All', count: rowsFor('all').length },
-    ...STATUS_ORDER.map((s) => ({ key: s, label: COURSE_STATUS_META[s].label, count: rowsFor(s).length })),
+  // Status menu: each option with the count it would show
+  const statusOptions: { value: StatusFilter; label: string; count: number }[] = [
+    { value: 'all', label: 'All', count: rowsFor('all').length },
+    ...STATUS_ORDER.map((s) => ({ value: s as StatusFilter, label: COURSE_STATUS_META[s].label, count: rowsFor(s).length })),
   ];
 
   const rows = useMemo(() => {
@@ -138,6 +140,41 @@ export default function CoursesPage() {
     setType('all');
     setMode('all');
     setSearch('');
+    setPage(1);
+  };
+
+  // The groups inside the Filter pill (and its tags)
+  const filterGroups: FilterGroup[] = [
+    {
+      key: 'owner', name: 'Owner', value: owner, onChange: (v) => reset(setOwner)(v as OwnershipFilter),
+      options: [
+        { value: 'all', label: 'Anyone' },
+        { value: 'mine', label: 'You' },
+        { value: 'admin', label: 'Other admins' },
+        { value: 'trainer', label: 'Trainers' },
+      ],
+    },
+    {
+      key: 'type', name: 'Type', value: type, onChange: (v) => reset(setType)(v as TypeFilter),
+      options: [
+        { value: 'all', label: 'All types' },
+        { value: 'Compliance', label: 'Compliance' },
+        { value: 'Skill training', label: 'Skill training' },
+      ],
+    },
+    {
+      key: 'mode', name: 'Mode', value: mode, onChange: (v) => reset(setMode)(v as ModeFilter),
+      options: [
+        { value: 'all', label: 'All modes' },
+        { value: 'Blended', label: 'Blended' },
+        { value: 'Self-paced', label: 'Self-paced' },
+      ],
+    },
+  ];
+  const clearGroups = () => {
+    setOwner('all');
+    setType('all');
+    setMode('all');
     setPage(1);
   };
 
@@ -200,73 +237,13 @@ export default function CoursesPage() {
 
         {/* ── Library ── */}
         <motion.div ref={libraryRef} variants={revealItem} className="flex flex-col gap-4 rounded-[18px] bg-(--od-white) p-5 scroll-mt-3">
-          {/* Title on the left, status tabs beside it (the counts are the filter); tabs scroll sideways when narrow */}
-          <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+          {/* Title and count on the left, the list/grid switch on the right */}
+          <div className="flex items-center justify-between gap-6">
             <div className="min-w-0">
               <h3 className="text-[16px] leading-[24px] text-(--od-text-strong)">Course library</h3>
               <p className="mt-0.5 text-[13px] leading-[18px] text-(--od-text-muted)">{rows.length} {rows.length === 1 ? 'course' : 'courses'}</p>
             </div>
-            <div className="-mx-1 min-w-0 max-w-full overflow-x-auto px-1 [scrollbar-width:none]">
-              <ProgramScopeTabs id="course-status" value={status} onChange={reset(setStatus)} tabs={tabs} />
-            </div>
-          </div>
-
-          {/* One row of filters */}
-          <div className="flex flex-wrap items-center gap-2">
-            <SearchField
-              value={search}
-              onChange={(v) => { setSearch(v); setPage(1); }}
-              placeholder="Search courses"
-              loading={isSearching}
-              className="min-w-[200px] max-w-[320px] flex-1"
-            />
-
-            <FilterChip
-              name="Owner"
-              value={owner}
-              onChange={reset(setOwner)}
-              options={[
-                { value: 'all', label: 'Anyone' },
-                { value: 'mine', label: 'You' },
-                { value: 'admin', label: 'Other admins' },
-                { value: 'trainer', label: 'Trainers' },
-              ]}
-            />
-            <FilterChip
-              name="Type"
-              value={type}
-              onChange={reset(setType)}
-              options={[
-                { value: 'all', label: 'All types' },
-                { value: 'Compliance', label: 'Compliance' },
-                { value: 'Skill training', label: 'Skill training' },
-              ]}
-            />
-            <FilterChip
-              name="Mode"
-              value={mode}
-              onChange={reset(setMode)}
-              options={[
-                { value: 'all', label: 'All modes' },
-                { value: 'Blended', label: 'Blended' },
-                { value: 'Self-paced', label: 'Self-paced' },
-              ]}
-            />
-            <FilterChip
-              name="Sort"
-              showValueOnly
-              icon={ArrowUpDown}
-              value={sort}
-              onChange={reset(setSort)}
-              options={[
-                { value: 'updated', label: 'Last updated' },
-                { value: 'name', label: 'Name A to Z' },
-                { value: 'enrolled', label: 'Most enrolled' },
-              ]}
-            />
-
-            {/* View: list by default, grid to browse */}
-            <div className="ml-auto flex items-center gap-0.5 rounded-full bg-(--od-surface) p-1">
+            <div className="flex items-center gap-0.5 rounded-full bg-(--od-surface) p-1">
               {([['list', List, 'List view'], ['grid', LayoutGrid, 'Grid view']] as const).map(([m, Icon, label]) => (
                 <button
                   key={m}
@@ -286,6 +263,33 @@ export default function CoursesPage() {
               ))}
             </div>
           </div>
+
+          {/* One toolbar row: search, Status (with counts), Filter, sort */}
+          <div className="flex flex-wrap items-center gap-2">
+            <SearchField
+              value={search}
+              onChange={(v) => { setSearch(v); setPage(1); }}
+              placeholder="Search courses"
+              loading={isSearching}
+              className="min-w-[220px] flex-1"
+            />
+            <FilterChip name="Status" prefix="Status" value={status} onChange={reset(setStatus)} options={statusOptions} />
+            <FilterPanel groups={filterGroups} onClear={clearGroups} />
+            <FilterChip
+              name="Sort"
+              showValueOnly
+              icon={ArrowUpDown}
+              value={sort}
+              onChange={reset(setSort)}
+              options={[
+                { value: 'updated', label: 'Last updated' },
+                { value: 'name', label: 'Name A to Z' },
+                { value: 'enrolled', label: 'Most enrolled' },
+              ]}
+            />
+          </div>
+          {/* The filters in use, each removable */}
+          <FilterTags groups={filterGroups} onClear={clearGroups} />
 
           {/* Courses */}
           {rows.length === 0 ? (

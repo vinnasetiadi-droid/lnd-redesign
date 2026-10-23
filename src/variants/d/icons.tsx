@@ -7,7 +7,7 @@ import {
   BookOpen01Icon, Building03Icon, Calendar03Icon, Calendar04Icon, Call02Icon, Cancel01Icon,
   ChartDecreaseIcon, ChartIncreaseIcon, CheckListIcon, CheckmarkCircle02Icon, Tick02Icon, ShieldCheckIcon, Clock01Icon,
   Comment01Icon, ComputerIcon, CrownIcon, DashboardSquare01Icon, Delete02Icon, File01Icon,
-  FileNotFoundIcon, FlashIcon, Folder01Icon, Home01Icon, Key01Icon, Layers01Icon, ListViewIcon,
+  FileNotFoundIcon, FilterHorizontalIcon, FlashIcon, Folder01Icon, Home01Icon, Key01Icon, Layers01Icon, ListViewIcon,
   Loading03Icon, Location01Icon, Logout01Icon, Mail01Icon, MapsIcon, Message01Icon,
   MoreHorizontalIcon, Mortarboard02Icon, Notification01Icon, PlayCircleIcon, RefreshIcon,
   Rocket01Icon, Route01Icon, Search01Icon, SecurityWarningIcon, Settings01Icon, SidebarLeft01Icon,
@@ -118,4 +118,5 @@ export const UserX = icon(UserRemove01Icon, 'UserX');
 export const Users = icon(UserGroupIcon, 'Users');
 export const UsersRound = icon(UserMultipleIcon, 'UsersRound');
 export const X = icon(Cancel01Icon, 'X');
+export const SlidersHorizontal = icon(FilterHorizontalIcon, 'SlidersHorizontal');
 export const Zap = icon(FlashIcon, 'Zap');
