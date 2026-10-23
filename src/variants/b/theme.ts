@@ -156,17 +156,14 @@ export interface ObBadgeTone {
 }
 
 /**
- * The original L&D profile's achievement badges (components/ui/profile-badges),
- * with the colours they had there: a purple medal, a blue star, a cyan trophy
- * and a stack of three soft hexagons behind "5+".
+ * The profile's achievement badges (components/ui/profile-badges): three round
+ * badges in Option B's blue scale, from deep to light, so they read as one
+ * set with the page's accent.
  */
 export const OB_BADGES = {
-  white: '#FFFFFF',
-  ink: '#000000',
-  medal:  { from: '#9F8FFE', to: '#D1B6FC', shadow: '#575FCF', shadowOpacity: 0.175, glow: 23, icon: '#C0A0FA' },
-  star:   { from: '#1056D9', to: '#4DA9FF', shadow: '#1E3799', shadowOpacity: 0.175, glow: 25, icon: '#459DFA' },
-  trophy: { from: '#56B3F2', to: '#50E5FB', shadow: '#1E3799', shadowOpacity: 0.175, glow: 20, icon: '#CDF5FE' },
-  stack3: { from: '#93C5FD', to: '#BFDBFE', shadow: '#6673D9', shadowOpacity: 0.1, glow: 23 },
-  stack2: { from: '#818CF8', to: '#A5B4FC', shadow: '#5959CC', shadowOpacity: 0.12, glow: 23 },
-  stack1: { from: '#7C6BF0', to: '#A78BFA', shadow: '#4D40BF', shadowOpacity: 0.15, glow: 23 },
+  white: OB_COLORS.white,
+  ink: OB_COLORS.textInk,
+  medal:  { from: OB_COLORS.primary900, to: OB_COLORS.primary400, shadow: OB_COLORS.primary900, shadowOpacity: 0.2, glow: 23, icon: OB_COLORS.primary200 },
+  star:   { from: OB_COLORS.primary, to: OB_COLORS.primary300, shadow: OB_COLORS.primary900, shadowOpacity: 0.18, glow: 25, icon: OB_COLORS.primary100 },
+  trophy: { from: OB_COLORS.primary400, to: OB_COLORS.primary100, shadow: OB_COLORS.primary, shadowOpacity: 0.16, glow: 20, icon: OB_COLORS.primary50 },
 } satisfies Record<string, string | ObBadgeTone>;

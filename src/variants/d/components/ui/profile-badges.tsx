@@ -1,7 +1,9 @@
-// Achievement badges from the original L&D profile header (src/pages): three
-// hexagons (medal, star, trophy) and a stack of three with "5+", ported for
-// Option D. Same shapes and gradients; colours come from OD_BADGES in
-// theme.ts, ids are unique per instance and the size is a prop (56px in the
+// Achievement badges from the original L&D profile header (src/pages), as
+// three round badges (medal, star, trophy) for Option D. The original's
+// gradient fill, white glow, white edge highlight, drop shadow and icons are
+// kept; the hexagons became circles and the stack of extra badges was dropped
+// (user's request). Colours come from OD_BADGES in theme.ts (Option D's blue
+// scale), ids are unique per instance and the size is a prop (56px in the
 // original).
 
 import { useId, type ReactNode } from 'react';
@@ -9,17 +11,19 @@ import { cn } from '@/lib/utils';
 import svgPaths from '@/imports/svg-funnql1szj';
 import { OD_BADGES, type OdBadgeTone } from '@/variants/d/theme';
 
-/** The hexagon's drawing space; the visible hexagon is `size` wide, the rest is room for its shadow */
+/** The badge's drawing space; the visible circle is `size` wide, the rest is room for its shadow */
 const VIEWBOX = '0 0 80.4974 84.2872';
 const HEX_INSET = '-10.97% -21.87% -39.54% -21.87%';
+/** The circle in that space: the box the hexagon used to fill (x 12.25 to 68.25, y 6.14 to 62.14) */
+const CIRCLE = { cx: 40.2487, cy: 34.1436, r: 28 };
 
-function Hexagon({ tone, size, glowY = 62.1436, glowOpacity = 0.75, children }: {
+function Badge({ tone, size, glowY = 62.1436, glowOpacity = 0.75, children }: {
   tone: OdBadgeTone;
   size: number;
   /** Where the white glow sits (the star's is a little higher) */
   glowY?: number;
   glowOpacity?: number;
-  /** Extra paths in the hexagon's drawing space (the star, the trophy); `id` prefixes their gradients */
+  /** Extra paths in the badge's drawing space (the star, the trophy); `id` prefixes their gradients */
   children?: (id: string) => ReactNode;
 }) {
   const id = useId().replace(/[^a-zA-Z0-9]/g, '');
@@ -45,9 +49,9 @@ function Hexagon({ tone, size, glowY = 62.1436, glowOpacity = 0.75, children }: 
             </linearGradient>
           </defs>
           <g filter={`url(#${id}-shadow)`}>
-            <path d={svgPaths.p367cf1f0} fill={`url(#${id}-fill)`} />
-            <path d={svgPaths.p367cf1f0} fill={`url(#${id}-glow)`} fillOpacity={glowOpacity} />
-            <path d={svgPaths.p2a5ab800} stroke={`url(#${id}-edge)`} />
+            <circle {...CIRCLE} fill={`url(#${id}-fill)`} />
+            <circle {...CIRCLE} fill={`url(#${id}-glow)`} fillOpacity={glowOpacity} />
+            <circle {...CIRCLE} r={CIRCLE.r - 0.5} stroke={`url(#${id}-edge)`} />
           </g>
           {children?.(id)}
         </svg>
@@ -56,7 +60,7 @@ function Hexagon({ tone, size, glowY = 62.1436, glowOpacity = 0.75, children }: 
   );
 }
 
-/** A white-to-tint gradient for an icon drawn in the hexagon's space */
+/** A white-to-tint gradient for an icon drawn in the badge's space */
 function iconGradient(id: string, to: string, y1: number, y2: number) {
   return (
     <linearGradient id={id} x1="40.2487" x2="40.2487" y1={y1} y2={y2} gradientUnits="userSpaceOnUse">
@@ -66,7 +70,7 @@ function iconGradient(id: string, to: string, y1: number, y2: number) {
   );
 }
 
-/** The medal sits in its own small drawing space in the middle of the hexagon */
+/** The medal sits in its own small drawing space in the middle of the badge */
 function MedalIcon({ size }: { size: number }) {
   const id = useId().replace(/[^a-zA-Z0-9]/g, '');
   return (
@@ -93,51 +97,34 @@ function MedalIcon({ size }: { size: number }) {
   );
 }
 
-/**
- * The profile's achievement badges: medal, star, trophy, then a stack of
- * three with "5+". `size` is one hexagon's width (the original used 56px).
- */
+/** The profile's achievement badges: medal, star and trophy. `size` is one badge's width (the original used 56px). */
 export function ProfileBadges({ size = 56, className }: { size?: number; className?: string }) {
   const k = size / 56;
   return (
     <div className={cn('flex w-fit shrink-0 items-end', className)} aria-label="Achievement badges" role="img">
       <div className="relative shrink-0" style={{ width: size, height: size }}>
-        <Hexagon tone={OD_BADGES.medal} size={size} />
+        <Badge tone={OD_BADGES.medal} size={size} />
         <MedalIcon size={size} />
       </div>
-      <div style={{ marginLeft: -4 * k }}>
-        <Hexagon tone={OD_BADGES.star} size={size} glowY={60.6436}>
+      <div style={{ marginLeft: 4 * k }}>
+        <Badge tone={OD_BADGES.star} size={size} glowY={60.6436}>
           {(id) => (
             <>
               <defs>{iconGradient(`${id}-icon`, OD_BADGES.star.icon, 32.1436, 54.1436)}</defs>
               <path d={svgPaths.p68e2400} fill={`url(#${id}-icon)`} />
             </>
           )}
-        </Hexagon>
+        </Badge>
       </div>
-      <div style={{ marginLeft: -4 * k }}>
-        <Hexagon tone={OD_BADGES.trophy} size={size}>
+      <div style={{ marginLeft: 4 * k }}>
+        <Badge tone={OD_BADGES.trophy} size={size}>
           {(id) => (
             <>
               <defs>{iconGradient(`${id}-icon`, OD_BADGES.trophy.icon, 30.1436, 61.6436)}</defs>
               <path d={svgPaths.p1cba6f80} fill={`url(#${id}-icon)`} />
             </>
           )}
-        </Hexagon>
-      </div>
-      {/* "5+ more": three hexagons stacked, 12px apart at full size */}
-      <div className="relative shrink-0" style={{ width: 78 * k, height: size, marginLeft: -4 * k }}>
-        {[OD_BADGES.stack3, OD_BADGES.stack2, OD_BADGES.stack1].map((tone, i) => (
-          <div key={i} className="absolute top-0" style={{ left: 12 * k * i, zIndex: i }}>
-            <Hexagon tone={tone} size={size} glowOpacity={0.6} />
-          </div>
-        ))}
-        <span
-          className="absolute top-0 z-10 flex items-center justify-center font-medium text-(--od-white) drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)]"
-          style={{ left: 24 * k, width: size, height: size, fontSize: 16 * k }}
-        >
-          5+
-        </span>
+        </Badge>
       </div>
     </div>
   );
