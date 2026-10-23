@@ -9,7 +9,6 @@
 import { useId, useMemo, useRef } from 'react';
 import { motion, useInView } from 'motion/react';
 import { cn } from '@/lib/utils';
-import { TrendingDown } from '@/variants/b/icons';
 import { CardHeader, ATTENTION } from '@/variants/b/components/ui/kit';
 import { LegendMark } from '@/variants/b/components/ui/chart';
 import { EASE_OUT } from '@/variants/b/motion';
@@ -111,11 +110,12 @@ export function LearningProgressFunnel({ programType, className }: { programType
   const columns = { gridTemplateColumns: `${LABEL_COL}fr repeat(${STAGES.length}, 1fr)` };
 
   return (
-    <div className={cn('relative flex flex-col gap-5 rounded-[18px] bg-white p-5', className)}>
+    // No frame: a section on the white page (the page passes its padding)
+    <div className={cn('relative flex flex-col gap-5', className)}>
       <CardHeader
         title="Learning funnel"
         subtitle="From assignment to completion · this quarter"
-        icon={TrendingDown}
+        className="items-center"
         extra={
           <div className="flex items-center gap-4 pr-1">
             {MODES.map((m) => (
@@ -227,12 +227,12 @@ export function LearningProgressFunnel({ programType, className }: { programType
 
       {/* ── Table, columns under the stage lines ───────────── */}
       <div className="text-[13px]">
-        <div className="grid border-b border-(--ob-border) pb-2.5 text-[12px] text-(--ob-text-muted)" style={columns}>
+        <div className="grid border-b border-(--ob-border-subtle) pb-2.5 text-[12px] text-(--ob-text-muted)" style={columns}>
           <span />
           {STAGES.map((s) => <span key={s} className="text-center">{s}</span>)}
         </div>
         {MODES.map((m) => (
-          <div key={m.key} className="grid items-center border-b border-(--ob-border) py-3" style={columns}>
+          <div key={m.key} className="grid items-center border-b border-(--ob-border-subtle) py-3" style={columns}>
             <span className="flex items-center gap-2 text-(--ob-text-body)">
               <LegendMark color={m.color} />
               {m.label}

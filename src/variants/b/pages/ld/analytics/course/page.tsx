@@ -10,16 +10,14 @@ import { useState, type ReactNode } from 'react';
 import { DashboardLayout } from '@/variants/b/layouts/DashboardLayout';
 import { cn } from '@/lib/utils';
 import { ProgramScopeTabs, PROGRAM_TYPE_TABS, FadeValue, type ScopeTab } from '@/variants/b/pages/ld/dashboard/components/ProgramScopeTabs';
-import { ATTENTION, CardHeader, IconCircle, SearchField, TABLE, Trend } from '@/variants/b/components/ui/kit';
+import { ATTENTION, CardHeader, DeltaChip, SearchField } from '@/variants/b/components/ui/kit';
 import { ChartTooltipCard, LegendMark } from '@/variants/b/components/ui/chart';
 import { LearningProgressFunnel } from './components/LearningProgressFunnel';
 import { DashboardLicenseUtilization, type License } from '@/variants/b/pages/hr/dashboard/components/DashboardLicenseUtilization';
 import { revealContainer, revealItem } from '@/variants/b/motion';
 import { OB_COLORS } from '@/variants/b/theme';
 import {
-  BookOpen, CheckCircle2, Star, Users, Trophy, TrendingDown, CalendarClock,
-  ShieldAlert, RefreshCw, GraduationCap, MessageSquareText, ChevronDown, ArrowUpDown, ChevronUp,
-  Layers, Zap, ChevronLeft, ChevronRight, Route,
+  BookOpen, CheckCircle2, Star, Users, GraduationCap, ChevronDown, ArrowUpDown, ChevronUp, ChevronLeft, ChevronRight, Route,
 } from '@/variants/b/icons';
 import { useSimulatedLoading } from '@/hooks/useSimulatedLoading';
 import { PieChart, Pie, Cell, Tooltip } from 'recharts';
@@ -241,12 +239,27 @@ const FOCUS = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:rin
 
 // ── Small shared pieces ──────────────────────────────────────
 
+/** Every section's padding, the same as Home: 40px top, 32px bottom, 32px sides */
+const SECTION = 'px-8 pt-10 pb-8';
+
+/** One section on the white page (no frame), 20px between its header and content */
 function Card({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <motion.div variants={revealItem} className={cn('ob-lift relative flex flex-col gap-4 rounded-[18px] bg-white p-5', className)}>
+    <motion.div variants={revealItem} className={cn('relative flex min-w-0 flex-col gap-5', SECTION, className)}>
       {children}
     </motion.div>
   );
+}
+
+/** Section rule: edge to edge, like Home. Lines inside a section use --ob-border-subtle */
+function Rule() {
+  return <div className="h-px bg-(--ob-border)" aria-hidden />;
+}
+
+/** "+10% vs last quarter" → chip "10%" and "vs last quarter" */
+function splitTrend(trend: string): { change: string; compare: string } {
+  const m = /^[+-]?(\d+(?:\.\d+)?(?:%| pts)?)\s+(.*)$/.exec(trend);
+  return m ? { change: m[1], compare: m[2] } : { change: trend, compare: '' };
 }
 
 function RoundChip({ children, tone = 'neutral' }: { children: ReactNode; tone?: 'neutral' | 'attention' }) {
@@ -347,7 +360,6 @@ function ActiveProgramsTable({ programType, programs, noun }: { programType: Pro
       <CardHeader
         title={<FadeValue k={programType}>Active {noun.many}</FadeValue>}
         subtitle={<FadeValue k={programType}>Currently running {noun.many} with enrollment and completion data</FadeValue>}
-        icon={Zap}
       />
 
       <FadeValue k={programType} className="block w-full">
@@ -416,7 +428,7 @@ function RankedList({ programType, rows, metric }: { programType: ProgramType; r
     <FadeValue k={`${programType}-${metric}`} className="block w-full">
       <div>
         {rows.map((program, idx) => (
-          <div key={`${programType}-${program.id}`} className="flex items-center gap-3 border-b border-(--ob-border) py-2.5 last:border-b-0">
+          <div key={`${programType}-${program.id}`} className="flex items-center gap-3 border-b border-(--ob-border-subtle) py-2.5 last:border-b-0">
             <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-(--ob-surface) text-[12px] tabular-nums text-(--ob-text-body)">
               {idx + 1}
             </span>
@@ -509,10 +521,11 @@ export default function LearningProgramAnalyticsPage() {
   const FEEDBACK_GRID = 'grid grid-cols-[minmax(190px,1.1fr)_104px_minmax(240px,2fr)_76px_88px_80px] items-center gap-4';
 
   return (
-    <DashboardLayout>
-      <motion.div className="w-full min-w-0 space-y-3" variants={revealContainer} initial="hidden" animate="visible">
-        {/* Page header; the Courses / Journeys tab drives every card below */}
-        <motion.div variants={revealItem} className="flex flex-wrap items-end justify-between gap-4">
+    <DashboardLayout whitePage>
+      {/* Home's style: sections on the white page, split by hairlines, no frames */}
+      <motion.div className="ob-flat relative -mx-6 -mt-6 min-w-0" variants={revealContainer} initial="hidden" animate="visible">
+        {/* Page header; the Courses / Journeys tab drives every section below */}
+        <motion.div variants={revealItem} className={cn(SECTION, 'flex flex-wrap items-center justify-between gap-4')}>
           <div>
             <h1 className="text-[24px] leading-[32px] text-(--ob-text-strong)">Learning program analytics</h1>
             <p className="mt-0.5 text-[13px] text-(--ob-text-muted)">
@@ -522,27 +535,37 @@ export default function LearningProgramAnalyticsPage() {
           <ProgramScopeTabs id="learning-program-type" tabs={PROGRAM_TYPE_TABS} value={programType} onChange={setProgramType} />
         </motion.div>
 
-        {/* KPI cards, exactly like Home's */}
-        <motion.div variants={revealItem} className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
-          {kpiCards.map((kpi) => (
-            <div key={kpi.key} className="ob-lift rounded-[18px] bg-white p-4">
-              <div className="mb-2 flex items-start justify-between gap-2">
-                <p className="text-[13px] leading-[18px] text-(--ob-text-secondary)"><FadeValue k={kpi.label}>{kpi.label}</FadeValue></p>
-                <IconCircle icon={kpi.icon} />
-              </div>
-              <p className="text-[24px] leading-[32px] text-(--ob-text-strong)">
-                <FadeValue k={kpi.value}>{kpi.value}</FadeValue>
-                {kpi.unit && <span className="ml-1 text-[13px] text-(--ob-text-muted)"><FadeValue k={kpi.unit}>{kpi.unit}</FadeValue></span>}
-              </p>
-              <Trend positive={kpi.positive} className="mt-1"><FadeValue k={kpi.trend}>{kpi.trend}</FadeValue></Trend>
-            </div>
-          ))}
+        <Rule />
+        {/* KPIs as plain columns, split by light inset hairlines (Home's KPI row) */}
+        <motion.div variants={revealItem} className={SECTION}>
+          <div className="grid grid-cols-2 gap-x-6 gap-y-6 md:grid-cols-3 lg:grid-cols-5 lg:gap-x-0">
+            {kpiCards.map((kpi) => {
+              const { change, compare } = splitTrend(kpi.trend);
+              return (
+                <div
+                  key={kpi.key}
+                  className="relative flex min-w-0 flex-col gap-2.5 lg:px-6 lg:first:pl-0 lg:last:pr-0 lg:not-first:before:absolute lg:not-first:before:bottom-1 lg:not-first:before:left-0 lg:not-first:before:top-1 lg:not-first:before:w-px lg:not-first:before:bg-(--ob-border-subtle)"
+                >
+                  <p className="truncate text-[13px] leading-[18px] text-(--ob-text-muted)"><FadeValue k={kpi.label}>{kpi.label}</FadeValue></p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="flex items-baseline gap-1">
+                      <span className="text-[30px] leading-[36px] font-semibold tabular-nums text-(--ob-text-strong)"><FadeValue k={kpi.value}>{kpi.value}</FadeValue></span>
+                      {kpi.unit && <span className="text-[13px] text-(--ob-text-muted)"><FadeValue k={kpi.unit}>{kpi.unit}</FadeValue></span>}
+                    </p>
+                    <DeltaChip positive={kpi.positive}><FadeValue k={change}>{change}</FadeValue></DeltaChip>
+                  </div>
+                  <p className="text-[12px] leading-[16px] text-(--ob-text-muted)">{compare}</p>
+                </div>
+              );
+            })}
+          </div>
         </motion.div>
 
-        {/* Courses by mode + learning funnel */}
-        <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
+        <Rule />
+        {/* Courses by mode + learning funnel, split by a vertical hairline */}
+        <div className="grid grid-cols-1 lg:grid-cols-3">
           <Card className="lg:col-span-1">
-            <CardHeader title={<FadeValue k={programType}>{noun.One}s by mode</FadeValue>} subtitle="Self-paced vs blended" icon={Layers} />
+            <CardHeader title={<FadeValue k={programType}>{noun.One}s by mode</FadeValue>} subtitle="Self-paced vs blended" />
             <div className="flex flex-col items-center gap-4">
               <div className="relative size-[200px] shrink-0">
                 <PieChart width={200} height={200}>
@@ -579,12 +602,12 @@ export default function LearningProgramAnalyticsPage() {
               </div>
             </div>
             {/* One row per mode: a stacked bar of active, done and inactive */}
-            <div className="border-t border-(--ob-border)">
+            <div className="border-t border-(--ob-border-subtle)">
               {data.modeBreakdown.map((item) => {
                 const total = item.active + item.inactive + item.completed;
                 const pct = (n: number) => Math.round((n / total) * 100);
                 return (
-                  <div key={item.mode} className="border-b border-(--ob-border) py-3 last:border-b-0">
+                  <div key={item.mode} className="border-b border-(--ob-border-subtle) py-3 last:border-b-0">
                     <div className="flex items-baseline justify-between text-[13px]">
                       <span className="text-(--ob-text-body)">{modeLabel(item.mode)}</span>
                       <span className="text-[12px] text-(--ob-text-muted)">
@@ -605,51 +628,50 @@ export default function LearningProgramAnalyticsPage() {
               })}
             </div>
           </Card>
-          <motion.div variants={revealItem} className="ob-lift rounded-[18px] lg:col-span-2">
-            <LearningProgressFunnel programType={programType} className="h-full" />
+          <motion.div variants={revealItem} className="min-w-0 border-t border-(--ob-border) lg:col-span-2 lg:border-l lg:border-t-0">
+            <LearningProgressFunnel programType={programType} className={SECTION} />
           </motion.div>
         </div>
 
         {SHOW_ACTIVE_LIST && <ActiveProgramsTable programType={programType} programs={data.table} noun={noun} />}
 
+        <Rule />
         {/* Top and bottom programs, then licenses */}
-        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
           <Card>
             <CardHeader
               title={<FadeValue k={programType}>Top {noun.many}</FadeValue>}
               subtitle={<FadeValue k={programType}>Top 5 {noun.many} ranked by the selected metric</FadeValue>}
-              icon={Trophy}
             />
             <div className="-mx-1 overflow-x-auto px-1 [scrollbar-width:none]">
               <ProgramScopeTabs id="top-programs-metric" value={popularFilter} onChange={setPopularFilter} tabs={TOP_TABS} />
             </div>
             <RankedList programType={programType} rows={popularSorted} metric={popularFilter} />
           </Card>
-          <Card>
+          <Card className="border-t border-(--ob-border) lg:border-l lg:border-t-0">
             <CardHeader
               title={<FadeValue k={programType}>Bottom {noun.many}</FadeValue>}
               subtitle={<FadeValue k={programType}>Bottom 5 {noun.many} ranked by the selected metric</FadeValue>}
-              icon={TrendingDown}
             />
             <div className="-mx-1 overflow-x-auto px-1 [scrollbar-width:none]">
               <ProgramScopeTabs id="bottom-programs-metric" value={bottomFilter} onChange={setBottomFilter} tabs={BOTTOM_TABS} />
             </div>
             <RankedList programType={programType} rows={bottomSorted} metric={bottomFilter} />
           </Card>
-          <motion.div variants={revealItem} className="ob-lift rounded-[18px] lg:col-span-2 xl:col-span-1">
-            {/* Same card as Home, with this page's licenses */}
-            <DashboardLicenseUtilization licenses={SOURCE_LICENSES} className="h-full" />
+          <motion.div variants={revealItem} className="min-w-0 border-t border-(--ob-border) lg:col-span-2 xl:col-span-1 xl:border-l xl:border-t-0">
+            {/* Same section as Home, with this page's licenses */}
+            <DashboardLicenseUtilization licenses={SOURCE_LICENSES} variant="reference" className={SECTION} />
           </motion.div>
         </div>
 
         {/* Assigned but not started: the attention chip is the only warning signal */}
+        {SHOW_NOT_STARTED && <Rule />}
         {SHOW_NOT_STARTED && (
           <Card>
             <CardHeader
               title={<FadeValue k={programType}>{noun.One}s assigned but not started</FadeValue>}
               subtitle={<FadeValue k={programType}>Assigned {noun.many} with zero progress</FadeValue>}
               extra={<RoundChip tone="attention"><FadeValue k={programType}>{idleCount} {idleCount === 1 ? noun.one : noun.many} idle</FadeValue></RoundChip>}
-              icon={CalendarClock}
             />
             <FadeValue k={programType} className="block w-full">
               <div>
@@ -675,11 +697,12 @@ export default function LearningProgramAnalyticsPage() {
         )}
 
         {/* Last updated and expired certifications (hidden for now) */}
+        {(SHOW_LAST_UPDATED || SHOW_EXPIRED_CERTS) && <Rule />}
         {(SHOW_LAST_UPDATED || SHOW_EXPIRED_CERTS) && (
-          <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+          <div className="grid grid-cols-1 lg:grid-cols-2">
             {SHOW_LAST_UPDATED && (
               <Card>
-                <CardHeader title="Last updated" subtitle="Recent content changes" icon={RefreshCw} />
+                <CardHeader title="Last updated" subtitle="Recent content changes" />
                 <FadeValue k={programType} className="block w-full">
                   <div>
                     {data.lastUpdated.map((item) => (
@@ -702,7 +725,6 @@ export default function LearningProgramAnalyticsPage() {
                   title="Expired certifications"
                   subtitle="Certifications past their validity date"
                   extra={<RoundChip>{EXPIRED_CERTIFICATIONS.length} expired</RoundChip>}
-                  icon={ShieldAlert}
                 />
                 <div>
                   {EXPIRED_CERTIFICATIONS.map((cert) => (
@@ -723,21 +745,22 @@ export default function LearningProgramAnalyticsPage() {
           </div>
         )}
 
+        <Rule />
         {/* Learner feedback: who, about what, said what */}
         <Card>
           <CardHeader
             title="Recent learner feedback"
             subtitle={<FadeValue k={programType}>{filteredFeedback.length} of {data.feedback.length} from {noun.one} participants</FadeValue>}
-            icon={MessageSquareText}
+            className="items-center"
             extra={
               <SearchField value={fbSearch} onChange={setFbSearch} placeholder={`Search ${noun.one} or trainee`} loading={fbIsSearching} className="w-64 sm:w-72" />
             }
           />
           <FadeValue k={programType} className="block w-full">
-            <div className={TABLE.frame}>
+            <div>
               <div className="overflow-x-auto">
                 <div className="min-w-[860px]">
-                  <div className={cn(FEEDBACK_GRID, TABLE.head, 'px-4')}>
+                  <div className={cn(FEEDBACK_GRID, 'border-b border-(--ob-border-subtle) pb-3 text-[12px] text-(--ob-text-muted)')}>
                     <span>Trainee</span>
                     <span>Date</span>
                     <span>Feedback</span>
@@ -746,10 +769,10 @@ export default function LearningProgramAnalyticsPage() {
                     <span className="justify-self-center">{sortHeader('duration', 'Duration')}</span>
                   </div>
                   {filteredFeedback.length === 0 ? (
-                    <p className="border-t border-(--ob-border) py-8 text-center text-[13px] text-(--ob-text-muted)">No feedback matches this search.</p>
+                    <p className="py-8 text-center text-[13px] text-(--ob-text-muted)">No feedback matches this search.</p>
                   ) : (
                     filteredFeedback.map((fb) => (
-                      <div key={`${programType}-${fb.id}`} className={cn(FEEDBACK_GRID, TABLE.row, 'min-h-16 px-4 py-3')}>
+                      <div key={`${programType}-${fb.id}`} className={cn(FEEDBACK_GRID, 'min-h-16 border-b border-(--ob-border-subtle) py-3 transition-colors last:border-b-0 hover:bg-(--ob-surface-subtle)')}>
                         <div className="flex min-w-0 items-center gap-3">
                           <span className="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-(--ob-surface) text-[12px] text-(--ob-text-body)">
                             {initials(fb.name)}
