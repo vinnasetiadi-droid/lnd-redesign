@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useStickyColumnTop } from '@/variants/b/hooks/useStickyColumnTop';
 import { motion } from 'motion/react';
 import { revealContainer, revealItem } from '@/variants/b/motion';
 import { DashboardLayout } from '@/variants/b/layouts/DashboardLayout';
@@ -34,45 +34,6 @@ import { DashboardLicenseUtilization }   from '@/variants/b/pages/hr/dashboard/c
  *
  * Route: /ld/dashboard  (registered in src/routes/AppRoutes.tsx)
  */
-/** Room left under the right column when it sticks to the bottom of the view */
-const STICKY_BOTTOM_GAP = 24;
-
-/** The nearest ancestor that scrolls (the layout's content area, not the window) */
-function scrollParentOf(el: HTMLElement | null): HTMLElement | null {
-  for (let node = el?.parentElement; node; node = node.parentElement) {
-    const { overflowY } = getComputedStyle(node);
-    if (overflowY === 'auto' || overflowY === 'scroll') return node;
-  }
-  return null;
-}
-
-/**
- * Sticky top for a column that should always fill its side: it scrolls with
- * the page until its bottom is in view, then holds ("sticky to the bottom");
- * a column shorter than the view sticks right under the top bar (top 0 of the
- * scroll area). Recomputed when the column or the scroll area changes size.
- */
-function useStickyColumnTop() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [top, setTop] = useState(0);
-  useEffect(() => {
-    const column = ref.current;
-    const scroller = scrollParentOf(column);
-    if (!column || !scroller) return;
-    const update = () => setTop(Math.min(0, scroller.clientHeight - column.offsetHeight - STICKY_BOTTOM_GAP));
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(column);
-    ro.observe(scroller);
-    window.addEventListener('resize', update);
-    return () => {
-      ro.disconnect();
-      window.removeEventListener('resize', update);
-    };
-  }, []);
-  return { ref, top };
-}
-
 export default function LDDashboardPage() {
   const { ref: stickyRef, top: stickyTop } = useStickyColumnTop();
   const {

@@ -15,6 +15,7 @@ import { ChartTooltipCard, LegendMark } from '@/variants/b/components/ui/chart';
 import { LearningProgressFunnel } from './components/LearningProgressFunnel';
 import { DashboardLicenseUtilization, type License } from '@/variants/b/pages/hr/dashboard/components/DashboardLicenseUtilization';
 import { revealContainer, revealItem } from '@/variants/b/motion';
+import { useStickyColumnTop } from '@/variants/b/hooks/useStickyColumnTop';
 import { OB_COLORS } from '@/variants/b/theme';
 import {
   BookOpen, CheckCircle2, Star, Users, GraduationCap, ChevronDown, ArrowUpDown, ChevronUp, ChevronLeft, ChevronRight, Route,
@@ -459,6 +460,8 @@ const BOTTOM_TABS = TOP_TABS;
 type SortKey = 'rating' | 'relevancy' | 'duration';
 
 export default function LearningProgramAnalyticsPage() {
+  const leftSticky = useStickyColumnTop();
+  const rightSticky = useStickyColumnTop();
   const [programType, setProgramType] = useState<ProgramType>('course');
   const noun = PROGRAM_NOUN[programType];
   const data = PROGRAM_DATA[programType];
@@ -562,109 +565,117 @@ export default function LearningProgramAnalyticsPage() {
         </motion.div>
 
         <Rule />
-        {/* Courses by mode + learning funnel, split by a vertical hairline */}
+        {/* Two columns like Home: licenses above courses by mode on the left, the
+            funnel above top and bottom on the right. Both columns are sticky to
+            the bottom on lg, so the shorter one never leaves an empty corner. */}
         <div className="grid grid-cols-1 lg:grid-cols-3">
-          <Card className="lg:col-span-1">
-            <CardHeader title={<FadeValue k={programType}>{noun.One}s by mode</FadeValue>} subtitle="Self-paced vs blended" />
-            <div className="flex flex-col items-center gap-4">
-              <div className="relative size-[200px] shrink-0">
-                <PieChart width={200} height={200}>
-                  <Pie data={data.modePie} cx="50%" cy="50%" innerRadius={74} outerRadius={90} paddingAngle={3} cornerRadius={6} dataKey="value" strokeWidth={0} animationDuration={700}>
-                    {data.modePie.map((entry) => (<Cell key={`program-mode-${entry.name}`} fill={MODE_COLOR[entry.name as ProgramMode]} />))}
-                  </Pie>
-                  <Tooltip
-                    content={({ active, payload }) =>
-                      active && payload?.length ? (
-                        <ChartTooltipCard
-                          rows={[{
-                            label: modeLabel(String(payload[0].name) as ProgramMode),
-                            value: `${payload[0].value} ${payload[0].value === 1 ? noun.one : noun.many}`,
-                            color: MODE_COLOR[String(payload[0].name) as ProgramMode],
-                          }]}
-                        />
-                      ) : null
-                    }
-                  />
-                </PieChart>
-                <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-[28px] leading-[32px] text-(--ob-text-strong)"><FadeValue k={modeTotal}>{modeTotal}</FadeValue></span>
-                  <span className="text-[12px] text-(--ob-text-muted)">Total</span>
-                </div>
-              </div>
-              <div className="flex items-center justify-center gap-4">
-                {data.modePie.map((item) => (
-                  <span key={item.name} className="flex items-center gap-1.5 text-[12px] text-(--ob-text-muted)">
-                    <LegendMark color={MODE_COLOR[item.name as ProgramMode]} />
-                    {modeLabel(item.name as ProgramMode)}
-                    <span className="text-(--ob-text-strong)"><FadeValue k={item.value}>{item.value}</FadeValue></span>
-                  </span>
-                ))}
-              </div>
-            </div>
-            {/* One row per mode: a stacked bar of active, done and inactive */}
-            <div className="border-t border-(--ob-border-subtle)">
-              {data.modeBreakdown.map((item) => {
-                const total = item.active + item.inactive + item.completed;
-                const pct = (n: number) => Math.round((n / total) * 100);
-                return (
-                  <div key={item.mode} className="border-b border-(--ob-border-subtle) py-3 last:border-b-0">
-                    <div className="flex items-baseline justify-between text-[13px]">
-                      <span className="text-(--ob-text-body)">{modeLabel(item.mode)}</span>
-                      <span className="text-[12px] text-(--ob-text-muted)">
-                        <span className="text-(--ob-text-strong)"><FadeValue k={pct(item.active)}>{pct(item.active)}% active</FadeValue></span>
-                        {' · '}{total} total
-                      </span>
+          <div className="min-w-0 lg:col-span-1">
+            <div ref={leftSticky.ref} className="lg:sticky" style={{ top: leftSticky.top }}>
+              <motion.div variants={revealItem}>
+                <DashboardLicenseUtilization licenses={SOURCE_LICENSES} variant="reference" className={SECTION} />
+              </motion.div>
+              <Rule />
+              <Card>
+                <CardHeader title={<FadeValue k={programType}>{noun.One}s by mode</FadeValue>} subtitle="Self-paced vs blended" />
+                <div className="flex flex-col items-center gap-4">
+                  <div className="relative size-[200px] shrink-0">
+                    <PieChart width={200} height={200}>
+                      <Pie data={data.modePie} cx="50%" cy="50%" innerRadius={74} outerRadius={90} paddingAngle={3} cornerRadius={6} dataKey="value" strokeWidth={0} animationDuration={700}>
+                        {data.modePie.map((entry) => (<Cell key={`program-mode-${entry.name}`} fill={MODE_COLOR[entry.name as ProgramMode]} />))}
+                      </Pie>
+                      <Tooltip
+                        content={({ active, payload }) =>
+                          active && payload?.length ? (
+                            <ChartTooltipCard
+                              rows={[{
+                                label: modeLabel(String(payload[0].name) as ProgramMode),
+                                value: `${payload[0].value} ${payload[0].value === 1 ? noun.one : noun.many}`,
+                                color: MODE_COLOR[String(payload[0].name) as ProgramMode],
+                              }]}
+                            />
+                          ) : null
+                        }
+                      />
+                    </PieChart>
+                    <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+                      <span className="text-[28px] leading-[32px] text-(--ob-text-strong)"><FadeValue k={modeTotal}>{modeTotal}</FadeValue></span>
+                      <span className="text-[12px] text-(--ob-text-muted)">Total</span>
                     </div>
-                    <div className="mt-2 flex h-2 w-full gap-0.5 overflow-hidden rounded-full">
-                      <div className="h-full rounded-full transition-[width] duration-500" style={{ width: `${pct(item.active)}%`, background: MODE_COLOR[item.mode] }} />
-                      {item.completed > 0 && <div className="h-full rounded-full transition-[width] duration-500" style={{ width: `${pct(item.completed)}%`, background: MODE_DONE_COLOR[item.mode] }} />}
-                      <div className="h-full flex-1 rounded-full bg-(--ob-border-strong)" />
-                    </div>
-                    <p className="mt-1.5 text-[12px] text-(--ob-text-muted)">
-                      Active {item.active}{item.completed > 0 ? ` · Done ${item.completed}` : ''} · Inactive {item.inactive}
-                    </p>
                   </div>
-                );
-              })}
+                  <div className="flex items-center justify-center gap-4">
+                    {data.modePie.map((item) => (
+                      <span key={item.name} className="flex items-center gap-1.5 text-[12px] text-(--ob-text-muted)">
+                        <LegendMark color={MODE_COLOR[item.name as ProgramMode]} />
+                        {modeLabel(item.name as ProgramMode)}
+                        <span className="text-(--ob-text-strong)"><FadeValue k={item.value}>{item.value}</FadeValue></span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                {/* One row per mode: a stacked bar of active, done and inactive */}
+                <div className="border-t border-(--ob-border-subtle)">
+                  {data.modeBreakdown.map((item) => {
+                    const total = item.active + item.inactive + item.completed;
+                    const pct = (n: number) => Math.round((n / total) * 100);
+                    return (
+                      <div key={item.mode} className="border-b border-(--ob-border-subtle) py-3 last:border-b-0">
+                        <div className="flex items-baseline justify-between text-[13px]">
+                          <span className="text-(--ob-text-body)">{modeLabel(item.mode)}</span>
+                          <span className="text-[12px] text-(--ob-text-muted)">
+                            <span className="text-(--ob-text-strong)"><FadeValue k={pct(item.active)}>{pct(item.active)}% active</FadeValue></span>
+                            {' · '}{total} total
+                          </span>
+                        </div>
+                        <div className="mt-2 flex h-2 w-full gap-0.5 overflow-hidden rounded-full">
+                          <div className="h-full rounded-full transition-[width] duration-500" style={{ width: `${pct(item.active)}%`, background: MODE_COLOR[item.mode] }} />
+                          {item.completed > 0 && <div className="h-full rounded-full transition-[width] duration-500" style={{ width: `${pct(item.completed)}%`, background: MODE_DONE_COLOR[item.mode] }} />}
+                          <div className="h-full flex-1 rounded-full bg-(--ob-border-strong)" />
+                        </div>
+                        <p className="mt-1.5 text-[12px] text-(--ob-text-muted)">
+                          Active {item.active}{item.completed > 0 ? ` · Done ${item.completed}` : ''} · Inactive {item.inactive}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </Card>
             </div>
-          </Card>
-          <motion.div variants={revealItem} className="min-w-0 border-t border-(--ob-border) lg:col-span-2 lg:border-l lg:border-t-0">
-            <LearningProgressFunnel programType={programType} className={SECTION} />
-          </motion.div>
+          </div>
+
+          <div className="min-w-0 border-t border-(--ob-border) lg:col-span-2 lg:border-l lg:border-t-0">
+            <div ref={rightSticky.ref} className="lg:sticky" style={{ top: rightSticky.top }}>
+              <motion.div variants={revealItem}>
+                <LearningProgressFunnel programType={programType} className={SECTION} />
+              </motion.div>
+              <Rule />
+              {/* Top and bottom programs side by side: two lists of the same length */}
+              <div className="grid grid-cols-1 md:grid-cols-2">
+                <Card>
+                  <CardHeader
+                    title={<FadeValue k={programType}>Top {noun.many}</FadeValue>}
+                    subtitle={<FadeValue k={programType}>Top 5 {noun.many} ranked by the selected metric</FadeValue>}
+                  />
+                  <div className="-mx-1 overflow-x-auto px-1 [scrollbar-width:none]">
+                    <ProgramScopeTabs id="top-programs-metric" value={popularFilter} onChange={setPopularFilter} tabs={TOP_TABS} />
+                  </div>
+                  <RankedList programType={programType} rows={popularSorted} metric={popularFilter} />
+                </Card>
+                <Card className="border-t border-(--ob-border) md:border-l md:border-t-0">
+                  <CardHeader
+                    title={<FadeValue k={programType}>Bottom {noun.many}</FadeValue>}
+                    subtitle={<FadeValue k={programType}>Bottom 5 {noun.many} ranked by the selected metric</FadeValue>}
+                  />
+                  <div className="-mx-1 overflow-x-auto px-1 [scrollbar-width:none]">
+                    <ProgramScopeTabs id="bottom-programs-metric" value={bottomFilter} onChange={setBottomFilter} tabs={BOTTOM_TABS} />
+                  </div>
+                  <RankedList programType={programType} rows={bottomSorted} metric={bottomFilter} />
+                </Card>
+              </div>
+            </div>
+          </div>
         </div>
 
         {SHOW_ACTIVE_LIST && <ActiveProgramsTable programType={programType} programs={data.table} noun={noun} />}
-
-        <Rule />
-        {/* Top and bottom programs side by side: two lists of the same length */}
-        <div className="grid grid-cols-1 lg:grid-cols-2">
-          <Card>
-            <CardHeader
-              title={<FadeValue k={programType}>Top {noun.many}</FadeValue>}
-              subtitle={<FadeValue k={programType}>Top 5 {noun.many} ranked by the selected metric</FadeValue>}
-            />
-            <div className="-mx-1 overflow-x-auto px-1 [scrollbar-width:none]">
-              <ProgramScopeTabs id="top-programs-metric" value={popularFilter} onChange={setPopularFilter} tabs={TOP_TABS} />
-            </div>
-            <RankedList programType={programType} rows={popularSorted} metric={popularFilter} />
-          </Card>
-          <Card className="border-t border-(--ob-border) lg:border-l lg:border-t-0">
-            <CardHeader
-              title={<FadeValue k={programType}>Bottom {noun.many}</FadeValue>}
-              subtitle={<FadeValue k={programType}>Bottom 5 {noun.many} ranked by the selected metric</FadeValue>}
-            />
-            <div className="-mx-1 overflow-x-auto px-1 [scrollbar-width:none]">
-              <ProgramScopeTabs id="bottom-programs-metric" value={bottomFilter} onChange={setBottomFilter} tabs={BOTTOM_TABS} />
-            </div>
-            <RankedList programType={programType} rows={bottomSorted} metric={bottomFilter} />
-          </Card>
-        </div>
-
-        <Rule />
-        {/* Licenses get their own row, wide: gauge left, licenses right, so no column runs long */}
-        <motion.div variants={revealItem}>
-          <DashboardLicenseUtilization licenses={SOURCE_LICENSES} variant="reference" wide className={SECTION} />
-        </motion.div>
 
         {/* Assigned but not started: the attention chip is the only warning signal */}
         {SHOW_NOT_STARTED && <Rule />}
