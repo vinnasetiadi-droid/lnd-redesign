@@ -325,7 +325,7 @@ function ModeBadge(props: { cx?: number; cy?: number; midAngle?: number; innerRa
   return (
     <g pointerEvents="none" style={{ filter: 'drop-shadow(0 1px 2px rgba(10,25,41, 0.18))' }}>
       <rect x={x - w / 2} y={y - 11} width={w} height={22} rx={8} fill={OC_COLORS.white} />
-      <text x={x} y={y + 4} textAnchor="middle" fontSize={12} fill={OC_COLORS.textStrong} fontFamily="Nacelle, sans-serif">
+      <text x={x} y={y + 4} textAnchor="middle" fontSize={12} fill={OC_COLORS.textStrong} fontFamily="General Sans, sans-serif">
         {value}
       </text>
     </g>

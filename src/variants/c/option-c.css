@@ -1,44 +1,29 @@
-/* Nacelle (SIL Open Font License, assets/fonts/Nacelle-OFL.txt): Regular for
-   text, SemiBold for titles and numbers (medium uses it too: there is no 500) */
-@font-face {
-  font-family: 'Nacelle';
-  src: url('./assets/fonts/Nacelle-Regular.otf') format('opentype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Nacelle';
-  src: url('./assets/fonts/Nacelle-SemiBold.otf') format('opentype');
-  font-weight: 500 700;
-  font-style: normal;
-  font-display: swap;
-}
+@import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap');
 
 /*
  * Option C typography. Scoped to <html class="option-c">, which AppRoutes sets
  * while Option C is open, so the other options keep their own setup.
  *
- * - Font: Nacelle
- * - Weights: Regular 400 for text; SemiBold 600 for headings, big numbers and
- *   `font-medium` / `font-semibold`. Nothing bolder.
- * - Letter spacing: -1% on every element
+ * - Font: General Sans (Fontshare, free)
+ * - Weights: Regular 400 for text, Medium 500 for `font-medium` and h4-h6,
+ *   Semibold 600 for h1-h3, big numbers and `font-semibold`. Nothing bolder.
+ * - Letter spacing: -2% on every element
  *
  * Rules are unlayered and start with `html.option-c`, so they win over Tailwind
  * utilities and over src/styles/theme.css (which sets Poppins on :root, makes
  * buttons 600 and font-medium 600).
  */
 html.option-c {
-  --font-sans: 'Nacelle', sans-serif;
+  --font-sans: 'General Sans', sans-serif;
 }
 
 html.option-c :where(body, .font-sans, button, input, textarea, select) {
-  font-family: 'Nacelle', sans-serif;
+  font-family: 'General Sans', sans-serif;
 }
 
 html.option-c,
 html.option-c * {
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 /*
@@ -166,8 +151,11 @@ html.option-c :where(button, b, strong, th, label) {
   font-weight: 400;
 }
 
-/* Headings, big numbers and the medium/semibold classes use Nacelle SemiBold */
-html.option-c :where(.font-medium, .font-semibold, h1, h2, h3, h4, h5, h6):not(.font-normal, .font-light) {
+/* Medium for `font-medium` and the small headings; Semibold for titles and big numbers */
+html.option-c :where(.font-medium, h4, h5, h6):not(.font-normal, .font-light) {
+  font-weight: 500;
+}
+html.option-c :where(.font-semibold, h1, h2, h3):not(.font-normal, .font-light, .font-medium) {
   font-weight: 600;
 }
 

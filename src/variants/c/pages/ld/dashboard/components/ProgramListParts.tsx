@@ -71,7 +71,7 @@ export function TruncatedTitle({ text, className }: { text: string; className?: 
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.15, ease: 'easeOut' }}
           className="fixed z-[100] max-w-[320px] px-3 py-1.5 rounded-(--oc-radius-control) bg-(--oc-text-ink) text-white text-[12px] leading-[18px] shadow-lg pointer-events-none"
-          style={{ left: anchor.left, top: anchor.top - 8, transform: 'translateY(-100%)', fontFamily: "'Nacelle', sans-serif" }}
+          style={{ left: anchor.left, top: anchor.top - 8, transform: 'translateY(-100%)', fontFamily: "'General Sans', sans-serif" }}
         >
           {text}
           <span className="absolute -bottom-1 left-4 w-2 h-2 bg-(--oc-text-ink) rotate-45" aria-hidden />

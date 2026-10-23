@@ -193,7 +193,7 @@ export function pillLabel(
       <g pointerEvents="none">
         <rect x={left} y={top} width={w} height={24} rx={6} fill={OC_COLORS.textInk} />
         <path d={`M${centre - 4},${top + 24} L${centre},${top + 28} L${centre + 4},${top + 24} Z`} fill={OC_COLORS.textInk} />
-        <text x={left + w / 2} y={top + 16} textAnchor="middle" fill={OC_COLORS.white} fontSize={12} fontFamily="Nacelle, sans-serif">
+        <text x={left + w / 2} y={top + 16} textAnchor="middle" fill={OC_COLORS.white} fontSize={12} fontFamily="General Sans, sans-serif">
           {text}
         </text>
       </g>
