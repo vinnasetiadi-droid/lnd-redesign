@@ -3,6 +3,7 @@ import { AppLayout } from "./AppLayout";
 import LandingPage from "../pages/landing/page";
 import { PAGES, VARIANTS, type Variant } from "../variants/variants";
 import { VariantSwitcher } from "../variants/VariantSwitcher";
+import { DARK_OPTIONS, applyThemeMode, readThemeMode } from '@/variants/theme-mode';
 
 /**
  * Landing page at "/", then three design options (/a, /b, /c), each with the same
@@ -44,5 +45,7 @@ const activeVariant = VARIANTS.find((v) => v.key === firstSegment);
 
 // Lets an option scope page-wide styles (fonts, portals) with e.g. `.option-a`
 if (activeVariant) document.documentElement.classList.add(`option-${activeVariant.key}`);
+// Light or dark (shared by the options that have a dark version), before the first render
+if (activeVariant && DARK_OPTIONS.has(activeVariant.key)) applyThemeMode(readThemeMode());
 
 export const router = activeVariant ? variantRouter(activeVariant) : landingRouter();
