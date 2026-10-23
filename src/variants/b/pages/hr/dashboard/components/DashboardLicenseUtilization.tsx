@@ -4,7 +4,7 @@ import { KeyRound } from '@/variants/b/icons';
 import { cn } from '@/lib/utils';
 import { AIInsightLine } from '@/variants/b/components/ui/ai-insight-banner';
 import { ATTENTION, CARD, CardHeader, NumText } from '@/variants/b/components/ui/kit';
-import { CHART_BLUE } from '@/variants/b/components/ui/chart';
+import { CHART_BLUE, ChartTooltipCard } from '@/variants/b/components/ui/chart';
 import { CountUp, GROW } from '@/variants/b/components/ui/count-up';
 import { daysFromNow, daysUntil } from '@/variants/b/pages/ld/dashboard/period';
 import { OB_COLORS } from '@/variants/b/theme';
@@ -190,7 +190,10 @@ export function DashboardLicenseUtilization({ licenses = LICENSES, variant = 'de
       <div className={cn(wide && 'lg:grid lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)] lg:items-center lg:gap-12')}>
       {/* ── Gauge with the total in the middle ─────────────── */}
       <div ref={ref} className="flex flex-col items-center">
-        <div className="relative flex w-full justify-center">
+        <div className="group relative flex w-full justify-center">
+          <div className="pointer-events-none absolute z-30 hidden group-hover:block right-0 top-0">
+            <ChartTooltipCard rows={[{ label: 'Seats used', value: `${used} of ${total}`, color: gaugeColor }, { label: 'Idle', value: idle, color: OB_COLORS.track }]} />
+          </div>
           {reference ? <TickGauge pct={pct} start={inView} color={gaugeColor} /> : <SegmentGauge pct={pct} start={inView} color={gaugeColor} />}
           <p className={cn('absolute text-(--ob-text-strong)', reference ? 'top-[38%] text-[30px] leading-[36px] font-semibold' : 'bottom-0 text-[24px] leading-[28px]')}>
             <span className="ob-num"><CountUp value={pct} start={inView} /></span>

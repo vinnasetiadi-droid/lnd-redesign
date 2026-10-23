@@ -10,7 +10,7 @@ import { useId, useMemo, useRef } from 'react';
 import { motion, useInView } from 'motion/react';
 import { cn } from '@/lib/utils';
 import { CardHeader, ATTENTION, NumText } from '@/variants/b/components/ui/kit';
-import { LegendMark } from '@/variants/b/components/ui/chart';
+import { ChartTooltipCard, LegendMark } from '@/variants/b/components/ui/chart';
 import { EASE_OUT } from '@/variants/b/motion';
 import { OB_COLORS } from '@/variants/b/theme';
 
@@ -170,18 +170,7 @@ export function LearningProgressFunnel({ programType, className }: { programType
               <stop offset="0" stopColor={OB_COLORS.white} stopOpacity="0" />
               <stop offset={String(stageX(0) / 100)} stopColor={OB_COLORS.white} stopOpacity="1" />
             </linearGradient>
-            {/* Each band deepens a little towards the later stages */}
-            <linearGradient id={`${id}-blended`} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={W} y2="0">
-              <stop offset="0" stopColor={OB_COLORS.primary300} />
-              <stop offset={String(stageX(0) / 100)} stopColor={OB_COLORS.primary400} />
-              <stop offset="1" stopColor={OB_COLORS.primary} />
-            </linearGradient>
-            <linearGradient id={`${id}-self`} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={W} y2="0">
-              <stop offset="0" stopColor={OB_COLORS.primary50} />
-              <stop offset={String(stageX(0) / 100)} stopColor={OB_COLORS.primary100} />
-              <stop offset="1" stopColor={OB_COLORS.modeSelf} />
-            </linearGradient>
-            <mask id={`${id}-mask`}>
+                        <mask id={`${id}-mask`}>
               <rect width={W} height={H} fill={`url(#${id}-fade)`} />
             </mask>
             {/* Draws in from left to right the first time it is seen */}
@@ -196,9 +185,9 @@ export function LearningProgressFunnel({ programType, className }: { programType
             </clipPath>
           </defs>
           <g mask={`url(#${id}-mask)`} clipPath={`url(#${id}-reveal)`}>
-            <motion.path d={paths.selfTop} fill={`url(#${id}-self)`} animate={{ d: paths.selfTop }} transition={{ duration: 0.5, ease: EASE_OUT }} />
-            <motion.path d={paths.selfBottom} fill={`url(#${id}-self)`} animate={{ d: paths.selfBottom }} transition={{ duration: 0.5, ease: EASE_OUT }} />
-            <motion.path d={paths.blended} fill={`url(#${id}-blended)`} fillOpacity={0.92} animate={{ d: paths.blended }} transition={{ duration: 0.5, ease: EASE_OUT }} />
+            <motion.path d={paths.selfTop} fill={OB_COLORS.modeSelf} animate={{ d: paths.selfTop }} transition={{ duration: 0.5, ease: EASE_OUT }} />
+            <motion.path d={paths.selfBottom} fill={OB_COLORS.modeSelf} animate={{ d: paths.selfBottom }} transition={{ duration: 0.5, ease: EASE_OUT }} />
+            <motion.path d={paths.blended} fill={OB_COLORS.primary} animate={{ d: paths.blended }} transition={{ duration: 0.5, ease: EASE_OUT }} />
           </g>
         </svg>
 
@@ -208,19 +197,22 @@ export function LearningProgressFunnel({ programType, className }: { programType
           return (
             <motion.div
               key={stage}
-              className="absolute inset-y-0 flex -translate-x-1/2 flex-col items-center"
+              className="group absolute inset-y-0 flex -translate-x-1/2 flex-col items-center"
               style={{ left: `${stageX(i)}%` }}
               initial={{ opacity: 0 }}
               animate={{ opacity: inView ? 1 : 0 }}
               transition={{ duration: 0.3, delay: 0.25 + i * 0.15 }}
             >
-              <span className="ob-num whitespace-nowrap rounded-(--ob-radius-control) bg-(--ob-white) px-3 py-1 text-[13px] text-(--ob-text-strong) shadow-[0_2px_8px_-2px_rgba(16,24,40,0.14)]">
+              <span className="ob-num whitespace-nowrap rounded-(--ob-radius-control) bg-(--ob-white) px-3 py-1 text-[13px] text-(--ob-text-strong) ring-1 ring-(--ob-border)">
                 {totals[i]}
               </span>
               <span className="w-0.5 flex-1 bg-(--ob-white)" />
-              <span className="whitespace-nowrap rounded-(--ob-radius-control) bg-(--ob-white) px-3 py-1 text-[12px] text-(--ob-text-muted) shadow-[0_2px_8px_-2px_rgba(16,24,40,0.14)]">
+              <span className="whitespace-nowrap rounded-(--ob-radius-control) bg-(--ob-white) px-3 py-1 text-[12px] text-(--ob-text-muted) ring-1 ring-(--ob-border)">
                 {i === 0 ? 'All assigned' : <NumText>{`${kept}% kept`}</NumText>}
               </span>
+              <div className="pointer-events-none absolute z-30 hidden group-hover:block left-1/2 top-10 -translate-x-1/2">
+                <ChartTooltipCard title={stage} rows={MODES.map((m) => ({ label: m.label, value: data[m.key][i], color: m.color }))} />
+              </div>
             </motion.div>
           );
         })}

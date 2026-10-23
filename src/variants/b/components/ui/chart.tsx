@@ -5,10 +5,10 @@ import { OB_COLORS, OB_NUM_FONT } from '@/variants/b/theme';
 import { NumText } from './kit';
 
 /**
- * Option B chart styling, after the clean references: folded gradient bars with
- * thin diagonal stripes, thin lines without dots (dashed for comparison series),
- * soft area fills, dashed horizontal grid only, white tooltip cards, and
- * gradient progress bars on a hatched track.
+ * Option B chart styling. Rules: solid data marks (one gradient only, on the
+ * single highlighted mark: highlightGradient); dashed 4 4 grid lines at the
+ * axis ticks (GRID_PROPS); ChartTooltipCard on hover; plain 12px data labels;
+ * one legend mark (LegendMark). Thin lines without dots, soft area fills.
  *
  * Recharts only renders plain SVG children (like <defs>) inside a chart, so the
  * defs here are functions that return elements, not components.
@@ -111,13 +111,13 @@ export const TRACK = {
   backgroundColor: OB_COLORS.track,
 } as const;
 
-/** Progress bar: blue gradient fill on a light track, 4px tall with 2px corners */
-export function GradientProgress({ value, className, from = CHART_BLUE, to = OB_COLORS.primary200 }: {
+/** Progress bar: a solid blue fill on the track, 4px tall with 2px corners (the name is from when it had a gradient) */
+export function GradientProgress({ value, className, from = CHART_BLUE }: {
   /** 0-100 */
   value: number;
   className?: string;
+  /** The fill colour */
   from?: string;
-  to?: string;
 }) {
   return (
     <div
@@ -126,7 +126,7 @@ export function GradientProgress({ value, className, from = CHART_BLUE, to = OB_
     >
       <div
         className="h-full rounded-[2px] transition-[width] duration-500"
-        style={{ width: `${Math.max(0, Math.min(100, value))}%`, backgroundImage: `linear-gradient(90deg, ${from}, ${to})` }}
+        style={{ width: `${Math.max(0, Math.min(100, value))}%`, background: from }}
       />
     </div>
   );
@@ -140,14 +140,24 @@ export const FOLD_BAR_SHARE = 1;
 
 type FoldIds = Pick<ReturnType<typeof useChartIds>, 'barGradient' | 'barSelected' | 'fold' | 'column' | 'stripes'>;
 
-/** <defs> for the column bars; call inside <defs>. `color` is the selected bar's */
-export function foldBarDefs(ids: FoldIds, color: string = CHART_BLUE) {
+/**
+ * The one gradient in Option B's charts, for the single highlighted mark: the
+ * full colour where the value starts (the base of a column, the left end of a
+ * bar) and lighter at the far end. Every other data mark is solid.
+ */
+export function highlightGradient(id: string, color: string = CHART_BLUE, direction: 'up' | 'right' = 'up') {
+  const [x1, y1, x2, y2] = direction === 'up' ? [0, 1, 0, 0] : [0, 0, 1, 0];
   return (
-    <linearGradient id={ids.barSelected} x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id={id} x1={x1} y1={y1} x2={x2} y2={y2}>
       <stop offset="0%" stopColor={color} />
       <stop offset="100%" stopColor={color} stopOpacity={0.6} />
     </linearGradient>
   );
+}
+
+/** <defs> for the column bars; call inside <defs>. `color` is the selected bar's */
+export function foldBarDefs(ids: FoldIds, color: string = CHART_BLUE) {
+  return highlightGradient(ids.barSelected, color);
 }
 
 /**

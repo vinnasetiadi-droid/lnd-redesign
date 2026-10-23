@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { Bar, BarChart, LabelList, ResponsiveContainer, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import type { ChartDataPoint } from '../types/dashboard.types';
 import { ProgramScopeTabs, FadeValue, type ProgramScope } from './ProgramScopeTabs';
 import { CARD, CardHeader, DeltaChip, MetricTile } from '@/variants/b/components/ui/kit';
 import { AIInsightLine } from '@/variants/b/components/ui/ai-insight-banner';
-import { AXIS_TICK, FOLD_BAR_SHARE, NUM_TICK, foldBar, foldBarDefs, pillLabel, useChartIds } from '@/variants/b/components/ui/chart';
+import { AXIS_TICK, ChartTooltipCard, FOLD_BAR_SHARE, GRID_PROPS, NUM_TICK, foldBar, foldBarDefs, pillLabel, useChartIds } from '@/variants/b/components/ui/chart';
 import { currentMonthIndex, periodLabel } from '../period';
 import { OB_COLORS } from '@/variants/b/theme';
 import { CheckCircle2, Rocket, Users, type LucideIcon } from '@/variants/b/icons';
@@ -142,6 +142,18 @@ export function LDDashboardProgramOverview({
         <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={200}>
           <BarChart data={series} margin={{ top: 28, right: 8, left: -16, bottom: 0 }} barCategoryGap={0}>
             <defs>{foldBarDefs(ids)}</defs>
+            <CartesianGrid {...GRID_PROPS} />
+            <Tooltip
+              cursor={false}
+              content={({ active, payload, label }) =>
+                active && payload?.length ? (
+                  <ChartTooltipCard
+                    title={label}
+                    rows={[{ label: metricInfo.label, value: `${payload[0].value} ${metricInfo.unit}`, color: OB_COLORS.primary }]}
+                  />
+                ) : null
+              }
+            />
             <XAxis
               dataKey="month"
               axisLine={false}

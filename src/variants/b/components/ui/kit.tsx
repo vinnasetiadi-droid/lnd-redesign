@@ -200,14 +200,11 @@ export function MetricTile({ selected, onClick, label, children, share, icon: Ic
           {children}
         </div>
       </div>
-      {/* Bar on a grey track, 4px tall with 2px corners: the blue gradient when picked, plain grey otherwise (one accent) */}
+      {/* Bar on the track, 4px tall with 2px corners: solid blue when picked, grey otherwise (one accent) */}
       <span className="relative block h-1 overflow-hidden rounded-[2px] bg-(--ob-track)">
         <span
-          className={cn('block h-full rounded-[2px] transition-[width,background-color] duration-500', !selected && 'bg-(--ob-border-control)')}
-          style={{
-            width: `${Math.max(0, Math.min(100, share ?? 100))}%`,
-            backgroundImage: selected ? `linear-gradient(90deg, ${OB_COLORS.primary}, color-mix(in srgb, ${OB_COLORS.primary} 65%, white))` : undefined,
-          }}
+          className={cn('block h-full rounded-[2px] transition-[width,background-color] duration-500', selected ? 'bg-(--ob-primary)' : 'bg-(--ob-border-control)')}
+          style={{ width: `${Math.max(0, Math.min(100, share ?? 100))}%` }}
         />
       </span>
     </button>

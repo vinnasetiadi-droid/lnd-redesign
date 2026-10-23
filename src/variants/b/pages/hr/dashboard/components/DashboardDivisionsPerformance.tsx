@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { AIInsightLine } from '@/variants/b/components/ui/ai-insight-banner';
 import type { DivisionPerformance } from '../types/dashboard.types';
 import { CARD, CardHeader, DeltaChip, MetricTile, NumText } from '@/variants/b/components/ui/kit';
-import { TRACK } from '@/variants/b/components/ui/chart';
+import { ChartTooltipCard, TRACK } from '@/variants/b/components/ui/chart';
 import { AlertTriangle, BarChart2, Trophy, type LucideIcon } from '@/variants/b/icons';
 import { OB_COLORS } from '@/variants/b/theme';
 import { CountUp, GROW } from '@/variants/b/components/ui/count-up';
@@ -46,8 +46,6 @@ const VALUE_COL = 40;
 /** Insets that line the benchmark line and the axis up with the bar column */
 const BAR_INSET = { left: NAME_COL + 12, right: VALUE_COL + 12 };
 
-/** Highlighted bars: the blue gradient (blue is the one accent) */
-const BAR_GRADIENT = `linear-gradient(90deg, color-mix(in srgb, ${OB_COLORS.primary} 55%, white), ${OB_COLORS.primary})`;
 
 function DivisionBar({ name, score, index, highlighted, start }: {
   name: string;
@@ -59,14 +57,15 @@ function DivisionBar({ name, score, index, highlighted, start }: {
   const delay = index * STAGGER;
   return (
     // Static class: Tailwind cannot see column widths built at runtime (NAME_COL, VALUE_COL)
-    <div className="grid grid-cols-[150px_minmax(0,1fr)_40px] items-center gap-3">
+    <div className="group grid grid-cols-[150px_minmax(0,1fr)_40px] items-center gap-3">
       <span
         className={cn('truncate text-[12px] leading-[20px] transition-colors duration-300', highlighted ? 'text-(--ob-text-body)' : 'text-(--ob-text-subtle)')}
         title={name}
       >
         {name}
       </span>
-      {/* 4px tall with 2px corners, like every bar in B */}
+      {/* 4px tall with 2px corners, like every bar in B; the tooltip shows on hover */}
+      <div className="relative">
       <div className="h-1 w-full overflow-hidden rounded-[2px]" style={TRACK}>
         <motion.div
           className="relative h-full overflow-hidden rounded-[2px] bg-(--ob-border-control)"
@@ -74,12 +73,13 @@ function DivisionBar({ name, score, index, highlighted, start }: {
           animate={{ width: start ? `${score}%` : 0 }}
           transition={{ ...GROW, delay }}
         >
-          {/* The blue fades out to plain grey when this division is not highlighted */}
-          <span
-            className={cn('absolute inset-0 transition-opacity duration-300', highlighted ? 'opacity-100' : 'opacity-0')}
-            style={{ backgroundImage: BAR_GRADIENT }}
-          />
+          {/* Solid blue when highlighted, fading to plain grey otherwise */}
+          <span className={cn('absolute inset-0 bg-(--ob-primary) transition-opacity duration-300', highlighted ? 'opacity-100' : 'opacity-0')} />
         </motion.div>
+      </div>
+      <div className="pointer-events-none absolute z-30 hidden group-hover:block bottom-3" style={{ left: `min(${score}%, calc(100% - 168px))` }}>
+        <ChartTooltipCard title={name} rows={[{ label: 'Completion', value: `${score}%`, color: highlighted ? OB_COLORS.primary : OB_COLORS.borderControl }]} />
+      </div>
       </div>
       <span className="ob-num text-right text-[12px] leading-[20px] text-(--ob-text-body)">
         <CountUp value={score} start={start} delay={delay} />%

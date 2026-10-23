@@ -35,10 +35,12 @@ function completionSeries(scope: ProgramScope): MonthlyCompletion[] {
 // ── Config ───────────────────────────────────────────────────
 
 // One blue: blended the deep blue, self-paced the pale one (as on Analytics).
-// `label` is the end label's text colour: pale blue is too light for text.
+// `line` draws the line (the pale tint is too light for a 2px line, so
+// self-paced uses primary-300 and keeps the tint for its area and bar);
+// `text` is the end label's colour.
 const MODES = [
-  { key: 'blended', label: 'Blended',    color: OB_COLORS.primary,  text: OB_COLORS.primary },
-  { key: 'self',    label: 'Self-paced', color: OB_COLORS.modeSelf, text: OB_COLORS.textMuted },
+  { key: 'blended', label: 'Blended',    color: OB_COLORS.primary,  line: OB_COLORS.primary,    text: OB_COLORS.primary },
+  { key: 'self',    label: 'Self-paced', color: OB_COLORS.modeSelf, line: OB_COLORS.primary300, text: OB_COLORS.textMuted },
 ] as const;
 
 /** One line comparing the two modes at the end of the period */
@@ -99,7 +101,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
   const lastIndex = data.length - 1;
   const ids = useChartIds('learning-mode');
   const labels = useMemo(
-    () => Object.fromEntries(MODES.map((m) => [m.key, endLabel(m.label, m.color, m.text, lastIndex)])),
+    () => Object.fromEntries(MODES.map((m) => [m.key, endLabel(m.label, m.line, m.text, lastIndex)])),
     [lastIndex],
   );
 
@@ -192,11 +194,11 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
                   type="monotone"
                   dataKey={m.key}
                   name={m.label}
-                  stroke={m.color}
+                  stroke={m.line}
                   strokeWidth={2}
                   fill={`url(#${ids.area}-${m.key})`}
                   dot={false}
-                  activeDot={{ r: 4, fill: m.color, stroke: OB_COLORS.white, strokeWidth: 2 }}
+                  activeDot={{ r: 4, fill: m.line, stroke: OB_COLORS.white, strokeWidth: 2 }}
                   animationDuration={600}
                   animationEasing="ease-out"
                 >
