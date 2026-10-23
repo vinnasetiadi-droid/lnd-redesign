@@ -74,7 +74,7 @@ const COURSE_MODE_BREAKDOWN = [
 ];
 
 const COURSE_MODE_PIE = [
-  { name: 'Self Learning',    value: 28, color: OB_COLORS.primary200 },
+  { name: 'Self Learning',    value: 28, color: OB_COLORS.modeSelf },
   { name: 'Blended Learning', value: 36, color: OB_COLORS.primary },
 ];
 
@@ -137,7 +137,7 @@ const JOURNEY_MODE_BREAKDOWN = [
 ];
 
 const JOURNEY_MODE_PIE = [
-  { name: 'Self Learning',    value: 7,  color: OB_COLORS.primary200 },
+  { name: 'Self Learning',    value: 7,  color: OB_COLORS.modeSelf },
   { name: 'Blended Learning', value: 11, color: OB_COLORS.primary },
 ];
 
@@ -212,8 +212,12 @@ const modeLabel = (m: ProgramMode) => (m === 'Self Learning' ? 'Self-paced' : 'B
 const typeLabel = (t: string) => (t === 'Skill Training' ? 'Skill training' : t);
 
 /** Blended is the deep blue, self-paced the pale one (as in the learning funnel) */
-const MODE_COLOR: Record<ProgramMode, string> = { 'Blended Learning': OB_COLORS.primary, 'Self Learning': OB_COLORS.primary200 };
-const MODE_DONE_COLOR: Record<ProgramMode, string> = { 'Blended Learning': OB_COLORS.primary300, 'Self Learning': OB_COLORS.primary100 };
+// The mode colours of Home's Learning mode analytics: blended blue, self-paced green
+const MODE_COLOR: Record<ProgramMode, string> = { 'Blended Learning': OB_COLORS.primary, 'Self Learning': OB_COLORS.modeSelf };
+const MODE_DONE_COLOR: Record<ProgramMode, string> = {
+  'Blended Learning': OB_COLORS.primary300,
+  'Self Learning': `color-mix(in srgb, ${OB_COLORS.modeSelf} 45%, white)`,
+};
 
 const metaLine = (p: { category?: string; type: string; mode: ProgramMode; duration?: string; startDate?: string; endDate?: string }) =>
   [p.category, typeLabel(p.type), modeLabel(p.mode), programSchedule(p)].filter(Boolean).join(' · ');
@@ -579,9 +583,24 @@ export default function LearningProgramAnalyticsPage() {
               <Card>
                 <CardHeader title={<FadeValue k={programType}>{noun.One}s by mode</FadeValue>} subtitle="Self-paced vs blended" />
                 <div className="flex flex-col items-center gap-4">
-                  <div className="relative size-[200px] shrink-0">
-                    <PieChart width={200} height={200}>
-                      <Pie data={data.modePie} cx="50%" cy="50%" innerRadius={74} outerRadius={90} paddingAngle={3} cornerRadius={6} dataKey="value" strokeWidth={0} animationDuration={700}>
+                  {/* Reference donut: a thick ring from the top, clockwise, in blocky segments
+                      with small rounded corners and thin gaps */}
+                  <div className="relative size-[220px] shrink-0">
+                    <PieChart width={220} height={220}>
+                      <Pie
+                        data={data.modePie}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={66}
+                        outerRadius={100}
+                        startAngle={90}
+                        endAngle={-270}
+                        paddingAngle={2.5}
+                        cornerRadius={7}
+                        dataKey="value"
+                        strokeWidth={0}
+                        animationDuration={800}
+                      >
                         {data.modePie.map((entry) => (<Cell key={`program-mode-${entry.name}`} fill={MODE_COLOR[entry.name as ProgramMode]} />))}
                       </Pie>
                       <Tooltip
@@ -599,8 +618,8 @@ export default function LearningProgramAnalyticsPage() {
                       />
                     </PieChart>
                     <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="text-[28px] leading-[32px] text-(--ob-text-strong)"><FadeValue k={modeTotal}>{modeTotal}</FadeValue></span>
-                      <span className="text-[12px] text-(--ob-text-muted)">Total</span>
+                      <span className="text-[32px] leading-[38px] font-semibold tabular-nums text-(--ob-text-strong)"><FadeValue k={modeTotal}>{modeTotal}</FadeValue></span>
+                      <span className="text-[13px] text-(--ob-text-muted)">Total</span>
                     </div>
                   </div>
                   <div className="flex items-center justify-center gap-4">
