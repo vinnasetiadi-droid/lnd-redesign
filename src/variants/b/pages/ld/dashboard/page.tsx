@@ -20,7 +20,7 @@ import { DashboardLicenseUtilization }   from '@/variants/b/pages/hr/dashboard/c
  * Footer is auto-included by DashboardLayout.
  *
  * Visual style after the reference dashboards: a white page with no card
- * frames, its sections split by hairlines (only NISA keeps a card), KPI and
+ * frames, its sections split by hairlines (NISA is a solid blue section), KPI and
  * summary columns split by vertical hairlines, green/red change chips and
  * rounded bars. The cards and their content are the same as Option A's Home.
  * The profile sits top left: a small square photo as tall as its details.
@@ -56,7 +56,7 @@ export default function LDDashboardPage() {
   return (
     <DashboardLayout whitePage>
       {/* No frames: the sections sit on the white page, split by hairlines
-          (reference style); only NISA keeps a card. Pulled out to the page
+          (reference style); NISA's section is solid blue. Pulled out to the page
           edges so the sections' own padding lines up with the top bar. */}
       <motion.div
         className="ob-flat relative -mx-6 -mt-6 min-w-0"
@@ -110,9 +110,10 @@ export default function LDDashboardPage() {
               this full-height cell; only the inner wrapper is sticky (lg and up). ── */}
           <div className="min-w-0 border-t border-(--ob-border) lg:border-l lg:border-t-0">
             <div ref={stickyRef} className="lg:sticky" style={{ top: stickyTop }}>
-            {/* Level with the profile: the same 40px top as the sections */}
-            <motion.div variants={revealItem} className="px-6 pb-6 pt-10">
-              <LDDashboardNissaInsight insights={nisaInsights} />
+            {/* NISA: one solid blue section, edge to edge in its column (no card
+                frame), with the same padding as the other sections */}
+            <motion.div variants={revealItem}>
+              <LDDashboardNissaInsight insights={nisaInsights} className={SECTION} />
             </motion.div>
 
             <Rule />

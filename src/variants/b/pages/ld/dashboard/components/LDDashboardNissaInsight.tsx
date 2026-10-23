@@ -40,14 +40,16 @@ function InsightRow({ item }: { item: NisaInsight }) {
 /* ------------------------------------------------------------------ */
 
 /**
- * Option B AI card, solid blue like the reference's promo card: a deep blue
+ * Option B AI section, solid blue like the reference's promo card: a deep blue
  * gradient, a faint dot pattern in the top corner, white text, and a bright
- * blue button at the bottom.
+ * blue button at the bottom. No frame: the blue fills its whole slot edge to
+ * edge, split from the next section by the page's hairline (the page passes
+ * the section padding).
  */
 export function LDDashboardNissaInsight({ insights, className }: LDDashboardNissaInsightProps) {
   return (
     <div
-      className={cn('relative w-full overflow-hidden rounded-[18px] p-5', className)}
+      className={cn('relative w-full overflow-hidden', className)}
       style={{ background: 'linear-gradient(160deg, var(--ob-primary) 0%, var(--ob-primary-900) 100%)' }}
     >
       {/* Dot pattern, fading out from the top right corner */}
@@ -81,7 +83,7 @@ export function LDDashboardNissaInsight({ insights, className }: LDDashboardNiss
         {/* ── Footer CTA: the 3D blue button ─────────────────────── */}
         <button
           type="button"
-          className="ob-btn-primary group flex h-11 items-center justify-between gap-2 rounded-full px-5 text-[13px] font-medium cursor-pointer"
+          className="ob-btn-primary group flex h-11 items-center justify-between gap-2 rounded-(--ob-radius-button) px-5 text-[13px] font-medium cursor-pointer"
         >
           <span className="truncate">More insights? Just ask NISA</span>
           <ChevronRight className="size-4 shrink-0 transition-transform group-hover:translate-x-0.5" />
