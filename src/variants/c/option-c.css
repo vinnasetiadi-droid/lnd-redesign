@@ -1,29 +1,44 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap');
+/* Nacelle (SIL Open Font License, assets/fonts/Nacelle-OFL.txt): Regular for
+   text, SemiBold for titles and numbers (medium uses it too: there is no 500) */
+@font-face {
+  font-family: 'Nacelle';
+  src: url('./assets/fonts/Nacelle-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Nacelle';
+  src: url('./assets/fonts/Nacelle-SemiBold.otf') format('opentype');
+  font-weight: 500 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 /*
  * Option C typography. Scoped to <html class="option-c">, which AppRoutes sets
- * while Option C is open, so options B and C keep the original Poppins setup.
+ * while Option C is open, so the other options keep their own setup.
  *
- * - Font: DM Sans
- * - Weights: mostly Regular 400. Medium 500 only for headings (h1-h4, which
- *   also hold the big KPI numbers) and the `font-medium` class. Nothing bolder.
- * - Letter spacing: -2% on every element
+ * - Font: Nacelle
+ * - Weights: Regular 400 for text; SemiBold 600 for headings, big numbers and
+ *   `font-medium` / `font-semibold`. Nothing bolder.
+ * - Letter spacing: -1% on every element
  *
  * Rules are unlayered and start with `html.option-c`, so they win over Tailwind
  * utilities and over src/styles/theme.css (which sets Poppins on :root, makes
  * buttons 600 and font-medium 600).
  */
 html.option-c {
-  --font-sans: 'DM Sans', sans-serif;
+  --font-sans: 'Nacelle', sans-serif;
 }
 
 html.option-c :where(body, .font-sans, button, input, textarea, select) {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Nacelle', sans-serif;
 }
 
 html.option-c,
 html.option-c * {
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
 /*
@@ -42,37 +57,47 @@ html.option-c * {
 /*
  * Design tokens. Defined once here, scoped to Option C; theme.ts (OC_COLORS)
  * mirrors these values for code that needs a plain string (SVG, recharts).
+ *
+ * Option C: sky blue (as bright as the NISA blob) as the one accent on cool
+ * greys, black buttons, a black-to-blue gradient for the NISA priority card
+ * only, and corners that are half square, half round everywhere (only avatars,
+ * dots and the orb stay circles).
  */
 html.option-c {
-  --oc-primary: #1A73E8; /* The one accent: buttons, selected states, chart highlight */
-  --oc-primary-strong: #1967D2; /* Blue text on a blue tint, link hover */
-  --oc-primary-50: #E8F0FE; /* Lightest blue tint (pills, chips) */
-  --oc-primary-100: #D2E3FC;
-  --oc-primary-200: #AECBFA;
-  --oc-primary-300: #8AB4F8;
-  --oc-primary-400: #669DF6;
-  --oc-primary-900: #174EA6;
-  --oc-primary-tint: #F5F9FE; /* AI insight row background */
-  --oc-text-strong: #181D27; /* Titles and values */
-  --oc-text-heading: #252B37;
-  --oc-text-ink: #0A0D12; /* Tooltip background */
-  --oc-text-body: #414651; /* Body text */
-  --oc-text-secondary: #535862; /* Labels */
-  --oc-text-muted: #717680; /* Secondary text */
-  --oc-text-subtle: #A4A7AE; /* Axis ticks, hints */
-  --oc-text-ai: #282828; /* Text on the NISA card */
-  --oc-border: #EDEEF1; /* Card dividers, tile outlines */
-  --oc-border-strong: #E4E6EA; /* Progress tracks */
-  --oc-border-control: #D0D5DD;
-  --oc-line: #D5D7DA; /* Chart cursor */
-  --oc-surface: #F5F6F8; /* Segmented controls, icon circles */
-  --oc-surface-muted: #F7F8FA; /* Row frames */
-  --oc-surface-subtle: #F9FAFB; /* Hover */
-  --oc-button-secondary: #F0F1F3;
-  --oc-button-secondary-hover: #E6E8EB;
-  --oc-button-primary: var(--oc-primary); /* Primary buttons are solid blue, at most one per view */
-  --oc-button-primary-hover: var(--oc-primary-strong);
+  --oc-primary: #2D86E8; /* Sky blue: selected states, chart highlight, links */
+  --oc-primary-strong: #1F6CC4; /* Blue text on a tint, link hover */
+  --oc-primary-50: #EDF5FE; /* Lightest tint (chips, selected rows) */
+  --oc-primary-100: #DAEBFD;
+  --oc-primary-200: #B7D6FA;
+  --oc-primary-300: #88BBF5;
+  --oc-primary-400: #5BA1EF;
+  --oc-primary-900: #123E73;
+  --oc-primary-tint: #F4F9FE;
+  --oc-sky: #C2DCF6; /* The light sky blue at the top of the page */
+  /* Text in dark blues, not black, so every colour on the page belongs together */
+  --oc-text-strong: #13223A; /* Titles and values: dark navy */
+  --oc-text-heading: #1A2B45;
+  --oc-text-ink: #0C1729; /* Near-black navy: primary buttons, tooltips, the value pill */
+  --oc-text-body: #34455F; /* Body text */
+  --oc-text-secondary: #4A5B75; /* Labels */
+  --oc-text-muted: #66778F; /* Secondary text */
+  --oc-text-subtle: #9AA8BC; /* Axis ticks, hints */
+  --oc-text-ai: #1A2B45;
+  --oc-border: #E6E9EF; /* Card outlines, dividers */
+  --oc-border-strong: #DDE2E9; /* Progress tracks */
+  --oc-border-control: #CDD3DC;
+  --oc-line: #D3D9E1; /* Chart cursor */
+  --oc-surface: #F1F3F7; /* Segmented controls, icon boxes, card header bands */
+  --oc-surface-muted: #F5F7FA; /* Row frames */
+  --oc-surface-subtle: #F8F9FB; /* Hover */
+  --oc-button-secondary: #FFFFFF; /* Secondary buttons: white with a hairline */
+  --oc-button-secondary-hover: #F5F7FA;
+  --oc-button-primary: var(--oc-text-ink); /* Primary buttons are black, at most one per view */
+  --oc-button-primary-hover: #1B2C47;
   --oc-white: #FFFFFF;
+  /* NISA priority card only: black into blue, a soft glow on the right */
+  --oc-ai-gradient: radial-gradient(55% 140% at 100% 50%, color-mix(in srgb, var(--oc-primary-300) 55%, transparent) 0%, transparent 70%), linear-gradient(100deg, var(--oc-text-ink) 0%, #0F1D36 38%, #163A68 72%, var(--oc-primary) 100%);
+  --oc-ai-gradient-tall: radial-gradient(90% 60% at 100% 0%, color-mix(in srgb, var(--oc-primary-300) 45%, transparent) 0%, transparent 70%), linear-gradient(160deg, var(--oc-text-ink) 0%, #0F1D36 42%, #163A68 78%, var(--oc-primary) 100%);
   --oc-attention-text: #B54708; /* Amber, only for things that need attention */
   --oc-attention-surface: #FFFAEB;
   --oc-attention-bar: #FEC84B;
@@ -86,7 +111,7 @@ html.option-c {
   --oc-success-surface: #ECFDF3;
   --oc-success-100: #D1FADF;
   --oc-success-bright: #32D583;
-  --oc-mode-self: #34A853; /* Self-paced series */
+  --oc-mode-self: var(--oc-primary-300); /* Self-paced series: the light blue */
   --oc-danger: #D92D20; /* Negative trends */
   --oc-danger-strong: #B42318;
   --oc-danger-surface: #FEF3F2;
@@ -94,6 +119,7 @@ html.option-c {
   --oc-danger-bright: #F97066;
   --oc-yellow: #FFE07A;
   --oc-yellow-text: #6B4F00;
+  --oc-brand-linkedin: #0A66C2; /* LinkedIn's own blue, on the LinkedIn creator mark */
   --oc-avatar-peach: #FFE4D5; /* Avatar pastels */
   --oc-avatar-lilac: #E9D7FE;
   --oc-avatar-pink: #FCE7F6;
@@ -107,10 +133,15 @@ html.option-c {
   --oc-status-revision: #F97066;
   --oc-status-approved-bg: #DCFAE6;
   --oc-status-approved: #17B26A;
-  --oc-status-active-bg: #DCE8FC;
-  --oc-status-active: #1A73E8;
+  --oc-status-active-bg: #DAEBFD;
+  --oc-status-active: #2D86E8;
   --oc-status-inactive-bg: #F2F4F7;
   --oc-status-inactive: #D0D5DD;
+  /* Corners: half square, half round */
+  --oc-radius-card: 14px; /* Cards, the sidebar, dialogs, the NISA card */
+  --oc-radius-control: 10px; /* Buttons, inputs, segmented tabs, menus */
+  --oc-radius-chip: 8px; /* Chips, tags, badges, menu items, small icon boxes */
+  --oc-radius-bar: 3px; /* Progress bars and chart bars */
 }
 
 /* Regular by default, including elements the base styles make heavier */
@@ -118,21 +149,42 @@ html.option-c :where(button, b, strong, th, label) {
   font-weight: 400;
 }
 
-html.option-c :where(.font-medium, h1, h2, h3, h4, h5, h6):not(.font-normal, .font-light) {
-  font-weight: 500;
+/* Headings, big numbers and the medium/semibold classes use Nacelle SemiBold */
+html.option-c :where(.font-medium, .font-semibold, h1, h2, h3, h4, h5, h6):not(.font-normal, .font-light) {
+  font-weight: 600;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────
+   Black primary with a faint light edge on top; white secondary with a
+   hairline and a soft shadow. */
+html.option-c .oc-btn-primary {
+  background: var(--oc-button-primary);
+  color: var(--oc-white);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 1px 2px color-mix(in srgb, var(--oc-text-ink) 25%, transparent);
+}
+html.option-c .oc-btn-primary:hover {
+  background: var(--oc-button-primary-hover);
+}
+html.option-c .oc-btn-secondary {
+  background: var(--oc-button-secondary);
+  color: var(--oc-text-strong);
+  box-shadow: 0 0 0 1px var(--oc-border), 0 1px 2px rgba(14, 19, 28, 0.05);
+}
+html.option-c .oc-btn-secondary:hover {
+  background: var(--oc-button-secondary-hover);
 }
 
 /* ── Motion ─────────────────────────────────────────────────── */
 
 /* Cards: a 1px lift and a faint blue glow on hover */
 html.option-c .oc-lift {
-  border-radius: 18px;
+  border-radius: var(--oc-radius-card);
   /* translate, not transform: motion leaves an inline transform after the reveal */
   transition: translate 300ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 html.option-c .oc-lift:hover {
   translate: 0 -1px;
-  box-shadow: 0 14px 32px -18px rgba(26, 115, 232, 0.28);
+  box-shadow: 0 14px 32px -18px color-mix(in srgb, var(--oc-primary) 40%, transparent);
 }
 
 /* Buttons give a little under the finger. In the base layer, so a button's own

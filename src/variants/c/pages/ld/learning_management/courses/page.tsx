@@ -172,8 +172,13 @@ export default function CoursesPage() {
 
         {/* ── Review queue: one line, only when there is something to review ── */}
         {reviewQueue.length > 0 && (
-          <motion.div variants={revealItem} className="flex items-center gap-4 rounded-[18px] bg-(--oc-primary)/[0.07] px-5 py-4">
-            <IconCircle icon={Clock} className="bg-(--oc-white)" />
+          // After the "What's new" banner: a light blue gradient, a solid blue icon box and a white button
+          <motion.div
+            variants={revealItem}
+            className="flex items-center gap-4 rounded-(--oc-radius-card) px-5 py-4 ring-1 ring-inset ring-(--oc-primary-100)"
+            style={{ background: 'linear-gradient(100deg, var(--oc-primary-50) 0%, var(--oc-white) 70%)' }}
+          >
+            <IconCircle icon={Clock} className="size-9 bg-(--oc-primary) text-(--oc-white)" />
             <div className="min-w-0 flex-1">
               <p className="text-[14px] leading-[20px] text-(--oc-text-strong)">
                 {reviewQueue.length} {reviewQueue.length === 1 ? 'course' : 'courses'} waiting for your review
@@ -191,15 +196,15 @@ export default function CoursesPage() {
             </div>
             {/* One course: open it. Several: show them all in the In review tab */}
             {reviewQueue.length === 1 ? (
-              <PillButton className="bg-(--oc-white) hover:bg-(--oc-white)/80" onClick={() => openCourse(reviewQueue[0].id)}>Review</PillButton>
+              <PillButton onClick={() => openCourse(reviewQueue[0].id)}>Review</PillButton>
             ) : (
-              <PillButton className="bg-(--oc-white) hover:bg-(--oc-white)/80" onClick={openReviewTab}>Review all</PillButton>
+              <PillButton onClick={openReviewTab}>Review all</PillButton>
             )}
           </motion.div>
         )}
 
         {/* ── Library ── */}
-        <motion.div ref={libraryRef} variants={revealItem} className="flex flex-col gap-4 rounded-[18px] bg-(--oc-white) p-5 scroll-mt-3">
+        <motion.div ref={libraryRef} variants={revealItem} className="flex flex-col gap-4 rounded-(--oc-radius-card) bg-(--oc-white) p-5 scroll-mt-3">
           {/* Title on the left, status tabs beside it (the counts are the filter); tabs scroll sideways when narrow */}
           <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
             <div className="min-w-0">
@@ -266,7 +271,7 @@ export default function CoursesPage() {
             />
 
             {/* View: list by default, grid to browse */}
-            <div className="ml-auto flex items-center gap-0.5 rounded-full bg-(--oc-surface) p-1">
+            <div className="ml-auto flex items-center gap-0.5 rounded-(--oc-radius-control) bg-(--oc-surface) p-1">
               {([['list', List, 'List view'], ['grid', LayoutGrid, 'Grid view']] as const).map(([m, Icon, label]) => (
                 <button
                   key={m}
@@ -275,7 +280,7 @@ export default function CoursesPage() {
                   aria-pressed={viewMode === m}
                   onClick={() => setViewMode(m)}
                   className={cn(
-                    'flex size-8 items-center justify-center rounded-full transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25',
+                    'flex size-8 items-center justify-center rounded-(--oc-radius-chip) transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25',
                     viewMode === m
                       ? 'bg-(--oc-white) text-(--oc-text-strong) shadow-[0_1px_2px_rgba(16,24,40,0.08),0_1px_3px_rgba(16,24,40,0.06)]'
                       : 'text-(--oc-text-muted) hover:text-(--oc-text-body)',
@@ -320,7 +325,7 @@ export default function CoursesPage() {
                     aria-label="Previous page"
                     onClick={() => setPage(Math.max(1, current - 1))}
                     disabled={current === 1}
-                    className="flex size-8 items-center justify-center rounded-full text-(--oc-text-body) transition-colors hover:bg-(--oc-surface) disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25"
+                    className="flex size-8 items-center justify-center rounded-(--oc-radius-chip) text-(--oc-text-body) transition-colors hover:bg-(--oc-surface) disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25"
                   >
                     <ChevronLeft className="size-4" />
                   </button>
@@ -331,7 +336,7 @@ export default function CoursesPage() {
                       onClick={() => setPage(p)}
                       aria-current={p === current ? 'page' : undefined}
                       className={cn(
-                        'flex size-8 items-center justify-center rounded-full text-[12px] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25',
+                        'flex size-8 items-center justify-center rounded-(--oc-radius-chip) text-[12px] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25',
                         // Tint, not a solid fill: Create course is the only solid button on the page
                         p === current ? 'bg-(--oc-primary-50) text-(--oc-primary-strong)' : 'text-(--oc-text-secondary) hover:bg-(--oc-surface)',
                       )}
@@ -344,7 +349,7 @@ export default function CoursesPage() {
                     aria-label="Next page"
                     onClick={() => setPage(Math.min(totalPages, current + 1))}
                     disabled={current === totalPages}
-                    className="flex size-8 items-center justify-center rounded-full text-(--oc-text-body) transition-colors hover:bg-(--oc-surface) disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25"
+                    className="flex size-8 items-center justify-center rounded-(--oc-radius-chip) text-(--oc-text-body) transition-colors hover:bg-(--oc-surface) disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25"
                   >
                     <ChevronRight className="size-4" />
                   </button>

@@ -23,7 +23,7 @@ export function LDDashboardRecentCourses({ courses, className }: LDDashboardRece
   const list = useInfiniteList(courses, { initial: 4, step: 4 });
 
   return (
-    <div className={cn('relative bg-white rounded-[18px] p-5 overflow-hidden', className)}>
+    <div className={cn('relative rounded-(--oc-radius-card) bg-(--oc-white) ring-1 ring-(--oc-border) p-5 overflow-hidden', className)}>
       <CardHeader
         title="Recent programs"
         subtitle="Newly launched or recently updated courses and journeys"
@@ -42,7 +42,7 @@ export function LDDashboardRecentCourses({ courses, className }: LDDashboardRece
             formatPublished(item.date),
           ].filter(Boolean).join(' · ');
           return (
-            <div key={item.id} className="rounded-[14px] bg-(--oc-surface-muted) p-3.5">
+            <div key={item.id} className="rounded-(--oc-radius-card) bg-(--oc-surface-muted) p-3.5">
               <div className="flex items-baseline justify-between gap-3">
                 <TruncatedTitle text={item.name} className="min-w-0 flex-1 text-[13px] leading-[20px] text-(--oc-text-strong)" />
                 <span className={cn('shrink-0 text-[12px]', status.className)}>{status.label}</span>

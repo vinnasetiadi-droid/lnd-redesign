@@ -68,7 +68,8 @@ interface ProgramScopeTabsProps<K extends string> {
 export function ProgramScopeTabs<K extends string = ProgramScope>({ id, value, onChange, tabs, stretch, className }: ProgramScopeTabsProps<K>) {
   const options = (tabs ?? SCOPE_TABS) as ScopeTab<K>[];
   return (
-    <div className={cn('flex items-center gap-0.5 p-1 rounded-full bg-(--oc-surface)', stretch ? 'w-full' : 'w-fit', className)}>
+    // Segmented control with half-round corners: a grey track, the active tab a white box
+    <div className={cn('flex items-center gap-0.5 p-1 rounded-(--oc-radius-control) bg-(--oc-surface)', stretch ? 'w-full' : 'w-fit', className)}>
       {options.map(({ key, label, count }) => {
         const isActive = value === key;
         return (
@@ -80,7 +81,7 @@ export function ProgramScopeTabs<K extends string = ProgramScope>({ id, value, o
             className={cn(
               // No z-index here: the pill (z-[1]) must paint over the grey
               // background of whichever tab it is sliding across.
-              'relative flex items-center gap-1.5 py-1.5 rounded-full text-[13px] whitespace-nowrap transition-colors duration-200 cursor-pointer',
+              'relative flex items-center gap-1.5 py-1.5 rounded-(--oc-radius-chip) text-[13px] whitespace-nowrap transition-colors duration-200 cursor-pointer',
               stretch ? 'flex-1 justify-center px-2' : 'px-3.5',
               'focus:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/40 focus-visible:ring-offset-1',
               isActive ? 'text-(--oc-text-strong)' : 'text-(--oc-text-muted) hover:text-(--oc-text-body)',
@@ -89,7 +90,7 @@ export function ProgramScopeTabs<K extends string = ProgramScope>({ id, value, o
             {isActive && (
               <motion.span
                 layoutId={id}
-                className="absolute inset-0 z-[1] rounded-full bg-white shadow-[0_1px_2px_rgba(16,24,40,0.08),0_1px_3px_rgba(16,24,40,0.06)]"
+                className="absolute inset-0 z-[1] rounded-(--oc-radius-chip) bg-(--oc-white) shadow-[0_0_0_1px_var(--oc-border),0_1px_2px_rgba(14,19,28,0.08)]"
                 transition={{ type: 'spring', stiffness: 500, damping: 40, mass: 0.8 }}
               />
             )}

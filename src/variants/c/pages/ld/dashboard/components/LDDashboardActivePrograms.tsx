@@ -80,11 +80,11 @@ function ProgramProgress({ program }: { program: ProgramOverview }) {
     return (
       <div className="flex gap-1">
         {Array.from({ length: total }, (_, i) => (
-          <span key={i} className="h-1.5 flex-1 overflow-hidden rounded-full bg-(--oc-border-strong)">
+          <span key={i} className="h-1.5 flex-1 overflow-hidden rounded-(--oc-radius-bar) bg-(--oc-border-strong)">
             {/* Finished modules fill in one after another */}
             {i < done && (
               <motion.span
-                className="block h-full origin-left rounded-full bg-(--oc-primary)"
+                className="block h-full origin-left rounded-(--oc-radius-chip) bg-(--oc-primary)"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ duration: 0.4, ease: EASE_OUT, delay: 0.15 + i * 0.08 }}
@@ -96,9 +96,9 @@ function ProgramProgress({ program }: { program: ProgramOverview }) {
     );
   }
   return (
-    <div className={cn('h-1.5 w-full overflow-hidden rounded-full', program.risk ? AMBER.track : 'bg-(--oc-border-strong)')}>
+    <div className={cn('h-1.5 w-full overflow-hidden rounded-(--oc-radius-bar)', program.risk ? AMBER.track : 'bg-(--oc-border-strong)')}>
       <motion.div
-        className="h-full rounded-full"
+        className="h-full rounded-(--oc-radius-bar)"
         style={{ background: program.risk ? AMBER.bar : OC_COLORS.primary }}
         initial={{ width: 0 }}
         animate={{ width: `${program.completionRate}%` }}
@@ -123,7 +123,7 @@ function ProgramRow({ program }: { program: ProgramOverview }) {
         : `Course · ${program.duration ?? program.mode}`;
 
   return (
-    <div className={cn('rounded-[14px] p-3.5', atRisk ? AMBER.frame : 'bg-(--oc-surface-muted)')}>
+    <div className={cn('rounded-(--oc-radius-card) p-3.5', atRisk ? AMBER.frame : 'bg-(--oc-surface-muted)')}>
       <div className="flex items-baseline justify-between gap-3">
         <TruncatedTitle text={program.name} className="min-w-0 flex-1 text-[13px] leading-[20px] text-(--oc-text-strong)" />
         <span className={cn('shrink-0 text-[13px] tabular-nums', atRisk ? AMBER.text : 'text-(--oc-text-body)')}>{value}</span>
@@ -161,7 +161,7 @@ export function LDDashboardActivePrograms({ programs, className }: LDDashboardAc
   }, [active, filter]);
 
   return (
-    <div className={cn('relative bg-white rounded-[18px] p-5', className)}>
+    <div className={cn('relative rounded-(--oc-radius-card) bg-(--oc-white) ring-1 ring-(--oc-border) p-5', className)}>
       <CardHeader
         title="Active programs"
         subtitle={`${active.length} running${atRiskCount ? ` · ${atRiskCount} ${atRiskCount === 1 ? 'needs' : 'need'} attention` : ''}`}

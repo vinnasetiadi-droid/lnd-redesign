@@ -89,7 +89,7 @@ export function LDDashboardTraineesGrowth({ className }: LDDashboardTraineesGrow
   ];
 
   return (
-    <div className={cn('relative flex flex-col gap-5 rounded-[18px] bg-white p-5', className)}>
+    <div className={cn('relative flex flex-col gap-5 rounded-(--oc-radius-card) bg-(--oc-white) ring-1 ring-(--oc-border) p-5', className)}>
       {/* Header: title + period, scope tabs on the right */}
       <CardHeader
         title="Trainees growth trend"
@@ -100,7 +100,7 @@ export function LDDashboardTraineesGrowth({ className }: LDDashboardTraineesGrow
       {/* Summary tiles, same as Program overview */}
       <div className="grid grid-cols-3 gap-3">
         {STATS.map((stat) => (
-          <div key={stat.key} className="rounded-[14px] border border-(--oc-border) p-4">
+          <div key={stat.key} className="rounded-(--oc-radius-card) border border-(--oc-border) p-4">
             <p className="text-[13px] leading-[18px] text-(--oc-text-secondary)">{stat.label}</p>
             <div className="mt-1.5 flex items-baseline gap-2">
               <span className="text-[24px] leading-[32px] text-(--oc-text-strong)"><FadeValue k={`${scope}-${stat.value}`}>{stat.value}</FadeValue></span>

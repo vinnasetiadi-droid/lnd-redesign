@@ -1,68 +1,51 @@
 /**
- * Option C palette: one blue, #1A73E8, on neutral greys (Finora-style white
- * cards). The design tokens live in option-c.css as CSS variables; OC_COLORS
- * below is their documented mirror, plus the shared gradients.
+ * Option C palette: sky blue (#2D86E8, as bright as the NISA blob) as the one
+ * accent on cool greys, black buttons and a black-to-blue gradient for the
+ * NISA priority card. The design tokens live in
+ * option-c.css as CSS variables; OC_COLORS below is their documented mirror,
+ * plus the shared gradients.
  */
 export const OC = {
   primary: {
-    50: '#E8F0FE',
-    100: '#D2E3FC',
-    200: '#AECBFA',
-    300: '#8AB4F8',
-    400: '#669DF6',
-    500: '#4285F4',
-    600: '#1A73E8', // main
-    700: '#1967D2',
-    800: '#185ABC',
-    900: '#174EA6',
+    50: '#EDF5FE',
+    100: '#DAEBFD',
+    200: '#B7D6FA',
+    300: '#88BBF5',
+    400: '#5BA1EF',
+    500: '#2D86E8', // main
+    700: '#1F6CC4',
+    900: '#123E73',
   },
   neutral: {
-    surface: '#F5F6F8',
-    subtle: '#F9FAFB',
-    border: '#EDEEF1',
-    borderStrong: '#E4E6EA',
+    surface: '#F1F3F7',
+    subtle: '#F8F9FB',
+    border: '#E6E9EF',
+    borderStrong: '#DDE2E9',
   },
-  text: { strong: '#181D27', body: '#414651', muted: '#717680' },
+  text: { strong: '#13223A', body: '#34455F', muted: '#66778F' },
 } as const;
 
 /**
- * Page background: near-white with #1A73E8 glows at 11% (the "Opacity 11%"
- * swatch), so the blue stays a hint behind the white cards.
+ * Page background, after the sky reference: a light sky blue from the top
+ * (--oc-sky) fading into the cool grey page, with a soft white haze.
  */
 export const OC_BACKGROUND = [
-  'radial-gradient(55% 60% at 0% 0%, rgba(26, 115, 232, 0.11) 0%, rgba(26, 115, 232, 0) 70%)',
-  'radial-gradient(50% 55% at 100% 100%, rgba(26, 115, 232, 0.09) 0%, rgba(26, 115, 232, 0) 70%)',
-  'radial-gradient(40% 45% at 100% 0%, rgba(26, 115, 232, 0.05) 0%, rgba(26, 115, 232, 0) 70%)',
-  '#F7F9FC',
+  'radial-gradient(60% 34% at 18% 0%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 70%)',
+  'radial-gradient(45% 30% at 82% 4%, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 70%)',
+  'linear-gradient(180deg, var(--oc-sky) 0%, color-mix(in srgb, var(--oc-sky) 70%, var(--oc-surface-muted)) 200px, color-mix(in srgb, var(--oc-sky) 30%, var(--oc-surface-muted)) 380px, var(--oc-surface-muted) 560px)',
 ].join(', ');
 
-/** Faint diagonal sheen over the background. Plain gradient: a blur filter here stops the content from painting. */
-export const OC_SHEEN =
-  'linear-gradient(115deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.55) 48%, rgba(255, 255, 255, 0) 66%)';
+/** Kept for the background component: no sheen in Option C */
+export const OC_SHEEN = 'none';
 
-/**
- * AI frame gradient from the #1A73E8 swatches: white at the top left, through
- * 11% and 57%, to the full colour at the bottom right.
- */
-export const OC_AI_GRADIENT = [
-  'radial-gradient(110% 110% at 0% 0%, #FFFFFF 0%, rgba(255, 255, 255, 0.85) 25%, rgba(255, 255, 255, 0) 60%)',
-  'radial-gradient(95% 95% at 100% 100%, #1A73E8 0%, rgba(26, 115, 232, 0.57) 45%, rgba(26, 115, 232, 0.11) 85%)',
-  '#E8F0FE',
-].join(', ');
+/** NISA (AI), wide: black into blue from left to right (the "recovering" banner) */
+export const OC_AI_GRADIENT = 'var(--oc-ai-gradient)';
 
-/** Solid blue for the NISA card (white text on top): soft light at the top left */
-export const OC_AI_SOLID = [
-  'radial-gradient(120% 80% at 0% 0%, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 55%)',
-  'linear-gradient(160deg, #2F80F0 0%, #1A73E8 45%, #1764D0 100%)',
-].join(', ');
+/** NISA priority card: black at the top left into blue at the bottom right */
+export const OC_AI_SOLID = 'var(--oc-ai-gradient-tall)';
 
-/** Mostly white with a soft blue glow on the right (NISA card, dark text on top) */
-export const OC_AI_SOFT = [
-  'radial-gradient(85% 65% at 100% 0%, rgba(26, 115, 232, 0.16) 0%, rgba(26, 115, 232, 0) 70%)',
-  'radial-gradient(75% 55% at 100% 100%, rgba(26, 115, 232, 0.12) 0%, rgba(26, 115, 232, 0) 70%)',
-  'radial-gradient(60% 40% at 0% 100%, rgba(138, 180, 248, 0.10) 0%, rgba(138, 180, 248, 0) 70%)',
-  '#FFFFFF',
-].join(', ');
+/** Same as OC_AI_SOLID; kept for the old call sites */
+export const OC_AI_SOFT = OC_AI_SOLID;
 
 /**
  * Mirror of the CSS design tokens in option-c.css (html.option-c --oc-*).
@@ -71,34 +54,35 @@ export const OC_AI_SOFT = [
  * Keep both lists in step.
  */
 export const OC_COLORS = {
-  primary: '#1A73E8', // The one accent: buttons, selected states, chart highlight
-  primaryStrong: '#1967D2', // Blue text on a blue tint, link hover
-  primary50: '#E8F0FE', // Lightest blue tint (pills, chips)
-  primary100: '#D2E3FC',
-  primary200: '#AECBFA',
-  primary300: '#8AB4F8',
-  primary400: '#669DF6',
-  primary900: '#174EA6',
-  primaryTint: '#F5F9FE', // AI insight row background
-  textStrong: '#181D27', // Titles and values
-  textHeading: '#252B37',
-  textInk: '#0A0D12', // Tooltip background
-  textBody: '#414651', // Body text
-  textSecondary: '#535862', // Labels
-  textMuted: '#717680', // Secondary text
-  textSubtle: '#A4A7AE', // Axis ticks, hints
-  textAi: '#282828', // Text on the NISA card
-  border: '#EDEEF1', // Card dividers, tile outlines
-  borderStrong: '#E4E6EA', // Progress tracks
-  borderControl: '#D0D5DD',
-  line: '#D5D7DA', // Chart cursor
-  surface: '#F5F6F8', // Segmented controls, icon circles
-  surfaceMuted: '#F7F8FA', // Row frames
-  surfaceSubtle: '#F9FAFB', // Hover
-  buttonSecondary: '#F0F1F3',
-  buttonSecondaryHover: '#E6E8EB',
-  buttonPrimary: '#1A73E8', // = primary
-  buttonPrimaryHover: '#1967D2', // = primaryStrong
+  primary: '#2D86E8', // Sky blue: selected states, chart highlight, links
+  primaryStrong: '#1F6CC4', // Blue text on a tint, link hover
+  primary50: '#EDF5FE', // Lightest tint (chips, selected rows)
+  primary100: '#DAEBFD',
+  primary200: '#B7D6FA',
+  primary300: '#88BBF5',
+  primary400: '#5BA1EF',
+  primary900: '#123E73',
+  primaryTint: '#F4F9FE',
+  sky: '#C2DCF6', // The light sky blue at the top of the page
+  textStrong: '#13223A', // Titles and values: dark navy
+  textHeading: '#1A2B45',
+  textInk: '#0C1729', // Near-black navy: primary buttons, tooltips, the value pill
+  textBody: '#34455F', // Body text
+  textSecondary: '#4A5B75', // Labels
+  textMuted: '#66778F', // Secondary text
+  textSubtle: '#9AA8BC', // Axis ticks, hints
+  textAi: '#1A2B45',
+  border: '#E6E9EF', // Card outlines, dividers
+  borderStrong: '#DDE2E9', // Progress tracks
+  borderControl: '#CDD3DC',
+  line: '#D3D9E1', // Chart cursor
+  surface: '#F1F3F7', // Segmented controls, icon boxes, card header bands
+  surfaceMuted: '#F5F7FA', // Row frames
+  surfaceSubtle: '#F8F9FB', // Hover
+  buttonSecondary: '#FFFFFF', // White with a hairline
+  buttonSecondaryHover: '#F5F7FA',
+  buttonPrimary: '#0C1729', // = textInk: primary buttons are near-black navy
+  buttonPrimaryHover: '#1B2C47',
   white: '#FFFFFF',
   attentionText: '#B54708', // Amber, only for things that need attention
   attentionSurface: '#FFFAEB',
@@ -113,7 +97,7 @@ export const OC_COLORS = {
   successSurface: '#ECFDF3',
   success100: '#D1FADF',
   successBright: '#32D583',
-  modeSelf: '#34A853', // Self-paced series
+  modeSelf: '#88BBF5', // Self-paced series: = primary300, the light blue
   danger: '#D92D20', // Negative trends
   dangerStrong: '#B42318',
   dangerSurface: '#FEF3F2',
@@ -121,6 +105,7 @@ export const OC_COLORS = {
   dangerBright: '#F97066',
   yellow: '#FFE07A',
   yellowText: '#6B4F00',
+  brandLinkedin: '#0A66C2', // LinkedIn's own blue, on the LinkedIn creator mark
   avatarPeach: '#FFE4D5', // Avatar pastels
   avatarLilac: '#E9D7FE',
   avatarPink: '#FCE7F6',
@@ -134,8 +119,8 @@ export const OC_COLORS = {
   statusRevision: '#F97066',
   statusApprovedBg: '#DCFAE6',
   statusApproved: '#17B26A',
-  statusActiveBg: '#DCE8FC',
-  statusActive: '#1A73E8',
+  statusActiveBg: '#DAEBFD',
+  statusActive: '#2D86E8',
   statusInactiveBg: '#F2F4F7',
   statusInactive: '#D0D5DD',
 } as const;

@@ -13,9 +13,12 @@ import {
 import { useAuthStore } from "@/store/useAuthStore";
 
 /**
- * Option C sidebar, shaped like ref 1 (Finora): transparent over the page
- * background, menu split into groups by thin dividers, a bottom group pinned
- * to the bottom, regular-weight labels and a white pill for the active page.
+ * Option C sidebar, after the "Database Operations Center" reference: a
+ * floating glass panel (12px from the window edges, half-round corners,
+ * half-transparent white with a light blur, a white edge and a soft shadow)
+ * over the sky gradient. Menu split
+ * into groups by thin dividers, a bottom group pinned to the bottom, Option
+ * A's icons, and a light grey box for the active page.
  */
 
 /** Menu groups, top to bottom, by item key. Items not listed join the last group. */
@@ -26,8 +29,10 @@ const MENU_GROUPS: string[][] = [
 /** Pinned to the bottom of the sidebar */
 const BOTTOM_KEYS = new Set(["settings"]);
 
-/** Active page: a light blue tint, no white frame */
-const ACTIVE_PILL = "bg-[#1A73E8]/[0.07]";
+/** Active page: a white box with a hairline, on the glass */
+const ACTIVE_PILL = "bg-(--oc-white)/80 shadow-[0_0_0_1px_var(--oc-border),0_1px_2px_rgba(14,19,28,0.05)]";
+/** Hover on the other items */
+const HOVER = "hover:bg-(--oc-white)/60";
 
 // ============================================================
 // SUB-COMPONENTS
@@ -38,8 +43,8 @@ function Logo() {
   const [failed, setFailed] = useState(false);
   if (failed) {
     return (
-      <span className="text-[16px] leading-[24px] text-[#181D27]">
-        Learn<span className="text-[#1A73E8]">X</span>pert
+      <span className="text-[16px] leading-[24px] text-(--oc-text-strong)">
+        Learn<span className="text-(--oc-primary)">X</span>pert
       </span>
     );
   }
@@ -101,16 +106,16 @@ function SidebarItem({
         type="button"
         title={collapsed ? label : undefined}
         className={cn(
-          "group flex items-center h-8 gap-2 rounded-[8px] cursor-pointer select-none transition-colors text-left",
-          collapsed ? "justify-center w-8 mx-auto" : "w-full pl-2.5 pr-2",
-          pill ? cn(ACTIVE_PILL, "text-[#181D27]") : danger ? "text-[#535862] hover:bg-[#1A73E8]/[0.04] hover:text-[#D92D20]" : "text-[#535862] hover:bg-[#1A73E8]/[0.04] hover:text-[#181D27]",
+          "group flex items-center h-9 gap-2.5 rounded-(--oc-radius-control) cursor-pointer select-none transition-colors text-left",
+          collapsed ? "justify-center w-9 mx-auto" : "w-full pl-2.5 pr-2",
+          pill ? cn(ACTIVE_PILL, "text-(--oc-text-strong)") : danger ? cn("text-(--oc-text-secondary) hover:text-(--oc-danger)", HOVER) : cn("text-(--oc-text-secondary) hover:text-(--oc-text-strong)", HOVER),
         )}
         onClick={handleClick}
       >
         <span
           className={cn(
             "shrink-0 flex items-center justify-center transition-[color,translate] duration-200 group-hover:translate-x-[2px]",
-            active || childActive ? "text-[#181D27]" : danger ? "text-[#717680] group-hover:text-[#D92D20]" : "text-[#717680] group-hover:text-[#414651]",
+            active || childActive ? "text-(--oc-text-strong)" : danger ? "text-(--oc-text-muted) group-hover:text-(--oc-danger)" : "text-(--oc-text-muted) group-hover:text-(--oc-text-body)",
           )}
         >
           {icon}
@@ -119,7 +124,7 @@ function SidebarItem({
           <span className="flex-1 text-[13px] leading-[20px] truncate">{label}</span>
         )}
         {!collapsed && badge !== undefined && (
-          <span className="bg-[#1A73E8] text-white text-[11px] rounded-full h-[18px] min-w-[18px] px-1.5 flex items-center justify-center">
+          <span className="bg-(--oc-primary) text-(--oc-white) text-[11px] rounded-(--oc-radius-chip) h-[18px] min-w-[18px] px-1.5 flex items-center justify-center">
             {badge}
           </span>
         )}
@@ -207,8 +212,8 @@ function SubmenuItem({ label, active, first, last, onClick }: SubmenuItemProps) 
       <button
         type="button"
         className={cn(
-          "flex h-8 w-full items-center rounded-[8px] px-2.5 text-left text-[13px] leading-[20px] transition-colors cursor-pointer",
-          active ? cn(ACTIVE_PILL, "text-(--oc-text-strong)") : "text-(--oc-text-secondary) hover:bg-[#1A73E8]/[0.04] hover:text-(--oc-text-strong)",
+          "flex h-8 w-full items-center rounded-(--oc-radius-chip) px-2.5 text-left text-[13px] leading-[20px] transition-colors cursor-pointer",
+          active ? cn(ACTIVE_PILL, "text-(--oc-text-strong)") : cn("text-(--oc-text-secondary) hover:text-(--oc-text-strong)", HOVER),
         )}
         onClick={onClick}
       >
@@ -219,7 +224,7 @@ function SubmenuItem({ label, active, first, last, onClick }: SubmenuItemProps) 
 }
 
 function Divider({ collapsed }: { collapsed?: boolean }) {
-  return <div className={cn("h-px bg-[#EDEEF1] my-3", collapsed ? "mx-3" : "mx-1")} />;
+  return <div className={cn("h-px bg-(--oc-border) my-3", collapsed ? "mx-2" : "mx-1")} />;
 }
 
 // ============================================================
@@ -314,16 +319,19 @@ export function Sidebar({ className, role = "ld_team", isCollapsed = false, onTo
   return (
     <aside
       className={cn(
+        // Floating glass panel, kept light: half-transparent white, a medium
+        // blur (12px), a white edge and a soft shadow, half-round corners
         "h-full flex flex-col font-sans transition-[width] duration-300 ease-in-out",
-        isCollapsed ? "w-[56px]" : "w-[clamp(184px,14vw,208px)]",
+        "rounded-(--oc-radius-card) bg-(--oc-white)/55 backdrop-blur-md shadow-[inset_0_0_0_1px_rgba(255,255,255,0.7),0_0_0_1px_color-mix(in_srgb,var(--oc-border)_70%,transparent),0_12px_32px_-18px_rgba(14,19,28,0.16)]",
+        isCollapsed ? "w-[60px]" : "w-[clamp(196px,15vw,220px)]",
         className,
       )}
     >
       {/* Logo + collapse */}
       <div
         className={cn(
-          "flex items-center h-[56px] shrink-0",
-          isCollapsed ? "justify-center px-3" : "justify-between pl-5 pr-3",
+          "flex items-center h-[60px] shrink-0",
+          isCollapsed ? "justify-center px-3" : "justify-between pl-4 pr-3",
         )}
       >
         {!isCollapsed && <Logo />}
@@ -331,7 +339,7 @@ export function Sidebar({ className, role = "ld_team", isCollapsed = false, onTo
           type="button"
           onClick={onToggle}
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className="flex items-center justify-center size-7 rounded-[8px] text-[#717680] hover:text-[#181D27] transition-colors"
+          className="flex items-center justify-center size-7 rounded-(--oc-radius-chip) text-(--oc-text-muted) hover:bg-(--oc-surface) hover:text-(--oc-text-strong) transition-colors"
         >
           {isCollapsed ? <PanelLeftOpen size={16} strokeWidth={1.5} /> : <PanelLeftClose size={16} strokeWidth={1.5} />}
         </button>

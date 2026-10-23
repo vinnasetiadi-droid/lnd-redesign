@@ -2,7 +2,8 @@ import { motion } from 'motion/react';
 import { revealContainer, revealItem } from '@/variants/c/motion';
 import { DashboardLayout } from '@/variants/c/layouts/DashboardLayout';
 import { useDashboard } from './hooks/useDashboard';
-import { LDDashboardGreeting, LDDashboardHeader } from './components/LDDashboardHeader';
+import { LDDashboardHeader } from './components/LDDashboardHeader';
+import { ProfileHeroCard } from '@/variants/c/concepts/ProfileHeroCard';
 import { LDDashboardProgramOverview } from './components/LDDashboardProgramOverview';
 import { LDDashboardActivePrograms }  from './components/LDDashboardActivePrograms';
 import { LDDashboardNissaInsight }     from './components/LDDashboardNissaInsight';
@@ -16,6 +17,11 @@ import { DashboardLicenseUtilization }   from '@/variants/c/pages/hr/dashboard/c
  * Orchestrator only — no inline business logic.
  * All data comes from useDashboard(); all UI lives in components/.
  * Footer is auto-included by DashboardLayout.
+ *
+ * Option C: the profile card whose cut-out head rises above its top edge
+ * (concepts/ProfileHeroCard) leads the left column; the right column starts
+ * level with the card, below the head's headroom. LDDashboardGreeting is kept
+ * in LDDashboardHeader.tsx but not rendered.
  *
  * Not rendered here any more (files kept): LDDashboardCoursesAttention (folded
  * into Active programs' "Needs attention" tab), LDDashboardTraineesGrowth (its
@@ -45,11 +51,6 @@ export default function LDDashboardPage() {
   return (
     <DashboardLayout>
       <div className="w-full min-w-0">
-        {/* Greeting: full width, above both columns */}
-        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <LDDashboardGreeting profile={ldProfile} className="mb-3" />
-        </motion.div>
-
         <motion.div
           className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-3"
           variants={revealContainer}
@@ -58,6 +59,11 @@ export default function LDDashboardPage() {
         >
           {/* ── Left column ── */}
           <div className="flex flex-col gap-3 min-w-0">
+            {/* Profile: the head rises into the headroom above the card */}
+            <motion.div variants={revealItem}>
+              <ProfileHeroCard person={ldProfile} />
+            </motion.div>
+
             <motion.div variants={revealItem}>
               <LDDashboardHeader metrics={metricCards} />
             </motion.div>
@@ -87,8 +93,9 @@ export default function LDDashboardPage() {
             </motion.div>
           </div>
 
-          {/* ── Right column: starts level with the KPI row ── */}
-          <div className="flex flex-col gap-3 min-w-0">
+          {/* ── Right column: starts level with the profile card, below the head's headroom ── */}
+          {/* lg:pt-[28px] = PROFILE_HEADROOM (a literal, so Tailwind can see it) */}
+          <div className="flex flex-col gap-3 min-w-0 lg:pt-[28px]">
             <motion.div variants={revealItem} className="oc-lift">
               <LDDashboardNissaInsight insights={nisaInsights} />
             </motion.div>

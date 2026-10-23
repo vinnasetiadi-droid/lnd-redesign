@@ -61,9 +61,9 @@ function DivisionBar({ name, score, index, highlighted, start }: {
       >
         {name}
       </span>
-      <div className="h-2.5 w-full overflow-hidden rounded-full" style={HATCHED_TRACK}>
+      <div className="h-2.5 w-full overflow-hidden rounded-(--oc-radius-bar)" style={HATCHED_TRACK}>
         <motion.div
-          className="relative h-full overflow-hidden rounded-full bg-(--oc-border-strong)"
+          className="relative h-full overflow-hidden rounded-(--oc-radius-chip) bg-(--oc-border-strong)"
           initial={{ width: 0 }}
           animate={{ width: start ? `${score}%` : 0 }}
           transition={{ ...GROW, delay }}
@@ -114,7 +114,7 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
     `${shortInsight} ${support.map((d) => d.name).join(', ')} are the three divisions below ${Math.max(...support.map((d) => d.score)) + 1}%; a review with each division lead could show where learners drop off.`;
 
   return (
-    <div className={cn('relative flex flex-col gap-4 bg-white rounded-[18px] p-5', className)}>
+    <div className={cn('relative flex flex-col gap-4 rounded-(--oc-radius-card) bg-(--oc-white) ring-1 ring-(--oc-border) p-5', className)}>
       {/* ── Header ─────────────────────────────────────────── */}
       <CardHeader
         title="Division completion"
@@ -134,7 +134,7 @@ export function DashboardDivisionsPerformance({ divisions, benchmark, benchmarkT
               aria-selected={isSelected}
               onClick={() => setGroup(tile.key)}
               className={cn(
-                'rounded-[14px] border p-4 text-left transition-colors cursor-pointer',
+                'rounded-(--oc-radius-card) border p-4 text-left transition-colors cursor-pointer',
                 isSelected ? 'border-transparent bg-(--oc-primary)/[0.07]' : 'border-(--oc-border) hover:bg-(--oc-surface-subtle)',
               )}
             >

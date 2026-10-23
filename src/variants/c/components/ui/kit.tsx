@@ -1,18 +1,19 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import { Children, type ButtonHTMLAttributes, type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { ArrowDownRight, ArrowUpRight, Loader2, Search, type LucideIcon } from '@/variants/c/icons';
 import { OC_COLORS } from '@/variants/c/theme';
 
 /**
- * Option C building blocks, shaped after the "Dashboard Overview" reference:
- * pill buttons and chips, plain green/red trend text, and a small grey icon
- * circle on the right of each card title.
+ * Option C building blocks, after the user's references: half-round corners
+ * everywhere (--oc-radius-*), black primary and white hairline secondary
+ * buttons, plain green/red trend text, and a small grey icon box on the right
+ * of each card title.
  */
 
-/** Small grey circle holding a card's icon (top right of the card) */
+/** Small grey box holding a card's icon (top right of the card), 8px corners */
 export function IconCircle({ icon: Icon, className }: { icon: LucideIcon; className?: string }) {
   return (
-    <span className={cn('flex size-8 shrink-0 items-center justify-center rounded-full bg-(--oc-surface) text-(--oc-text-ai)', className)}>
+    <span className={cn('flex size-8 shrink-0 items-center justify-center rounded-(--oc-radius-chip) bg-(--oc-surface) text-(--oc-text-ai)', className)}>
       <Icon size={16} />
     </span>
   );
@@ -46,7 +47,7 @@ export function CardHeader({ title, subtitle, icon, extra, className }: CardHead
   );
 }
 
-/** The one search pill for tables and card lists: 40px tall like the pill buttons */
+/** The one search field for tables and card lists: white with a hairline, 40px tall like the buttons */
 export function SearchField({ value, onChange, placeholder, loading, className }: {
   value: string;
   onChange: (value: string) => void;
@@ -64,7 +65,7 @@ export function SearchField({ value, onChange, placeholder, loading, className }
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-10 w-full rounded-full bg-(--oc-surface) pl-11 pr-10 text-[13px] text-(--oc-text-strong) outline-none transition-colors placeholder:text-(--oc-text-subtle) focus:bg-(--oc-white) focus:ring-2 focus:ring-(--oc-primary)/25"
+        className="h-10 w-full rounded-(--oc-radius-control) bg-(--oc-white) pl-11 pr-10 text-[13px] text-(--oc-text-strong) outline-none ring-1 ring-inset ring-(--oc-border) transition-shadow placeholder:text-(--oc-text-subtle) focus:ring-2 focus:ring-(--oc-primary)/40"
       />
       {loading && <Loader2 className="absolute right-4 top-1/2 size-4 -translate-y-1/2 animate-spin text-(--oc-primary)" />}
     </div>
@@ -73,7 +74,7 @@ export function SearchField({ value, onChange, placeholder, loading, className }
 
 /** Framed table: a grey header row, then hairline rows (list tables share it) */
 export const TABLE = {
-  frame: 'overflow-hidden rounded-[14px] border border-(--oc-border)',
+  frame: 'overflow-hidden rounded-(--oc-radius-card) border border-(--oc-border)',
   head: 'min-h-11 bg-(--oc-surface-muted) text-[13px] text-(--oc-text-secondary)',
   row: 'border-t border-(--oc-border) transition-colors hover:bg-(--oc-surface-subtle)',
 } as const;
@@ -91,7 +92,7 @@ const CHIP_TONE: Record<ChipTone, string> = {
   red:     'bg-(--oc-danger-surface) text-(--oc-danger-strong)',
 };
 
-/** Chip shaped like the reference's legend chips (30px tall, 14px side padding, 10px corners); `dot` adds a leading colour dot */
+/** Chip shaped like the reference's legend chips (30px tall, 14px side padding, 8px corners); `dot` adds a leading colour dot */
 export function Chip({ children, tone = 'neutral', dot, icon: Icon, className }: {
   children: ReactNode;
   tone?: ChipTone;
@@ -100,7 +101,7 @@ export function Chip({ children, tone = 'neutral', dot, icon: Icon, className }:
   className?: string;
 }) {
   return (
-    <span className={cn('inline-flex h-[30px] shrink-0 items-center gap-2 rounded-[10px] px-3.5 text-[12px] leading-none', CHIP_TONE[tone], className)}>
+    <span className={cn('inline-flex h-[30px] shrink-0 items-center gap-2 rounded-(--oc-radius-chip) px-3.5 text-[12px] leading-none', CHIP_TONE[tone], className)}>
       {dot && <span className="size-[7px] rounded-full" style={{ background: dot }} />}
       {Icon && <Icon size={13} />}
       {children}
@@ -108,18 +109,36 @@ export function Chip({ children, tone = 'neutral', dot, icon: Icon, className }:
   );
 }
 
-/** Plain trend text: "↗ 12.5%" in green, "↘" in red, no background */
+/** "+13% vs last month" → change "+13%" and comparison "vs last month" */
+const TREND_SPLIT = /^([+\-−]?\d[\d.,]*(?:%| pts)?)\s+(vs\b.*)$/;
+
+/**
+ * Trend after the references: the change in a small tinted chip with an arrow
+ * (green up, red down, 8px corners), then what it is compared with in muted
+ * text. Plain text children are split automatically ("+13% vs last month").
+ */
 export function Trend({ children, positive = true, className }: { children: ReactNode; positive?: boolean; className?: string }) {
   const Arrow = positive ? ArrowUpRight : ArrowDownRight;
+  const parts = Children.toArray(children);
+  const text = parts.every((c) => typeof c === 'string' || typeof c === 'number') ? parts.join('') : null;
+  const m = text ? TREND_SPLIT.exec(text) : null;
   return (
-    <span className={cn('inline-flex items-center gap-0.5 text-[12px]', positive ? 'text-(--oc-success)' : 'text-(--oc-danger)', className)}>
-      <Arrow size={14} />
-      {children}
+    <span className={cn('inline-flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[12px]', className)}>
+      <span
+        className={cn(
+          'inline-flex h-6 items-center gap-0.5 rounded-(--oc-radius-chip) px-1.5 tabular-nums',
+          positive ? 'bg-(--oc-success-surface) text-(--oc-success-strong)' : 'bg-(--oc-danger-surface) text-(--oc-danger-strong)',
+        )}
+      >
+        <Arrow size={13} />
+        {m ? m[1] : children}
+      </span>
+      {m?.[2] && <span className="text-(--oc-text-muted)">{m[2]}</span>}
     </span>
   );
 }
 
-/** Pill button: light grey secondary, or black primary */
+/** Button with half-round corners: black primary, white secondary with a hairline, or a light blue tint */
 export function PillButton({ children, icon: Icon, variant = 'secondary', className, ...rest }: {
   children: ReactNode;
   icon?: LucideIcon;
@@ -130,12 +149,12 @@ export function PillButton({ children, icon: Icon, variant = 'secondary', classN
     <button
       type="button"
       className={cn(
-        'inline-flex h-10 items-center justify-center gap-2 rounded-full px-5 text-[13px] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25 focus-visible:ring-offset-1',
+        'inline-flex h-10 items-center justify-center gap-2 rounded-(--oc-radius-control) px-5 text-[13px] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25 focus-visible:ring-offset-1',
         variant === 'primary'
-          ? 'bg-(--oc-button-primary) text-white hover:bg-(--oc-button-primary-hover)'
+          ? 'oc-btn-primary'
           : variant === 'tint'
             ? 'bg-(--oc-primary-50) text-(--oc-primary-strong) hover:bg-(--oc-primary-100)'
-            : 'bg-(--oc-button-secondary) text-(--oc-text-strong) hover:bg-(--oc-button-secondary-hover)',
+            : 'oc-btn-secondary',
         className,
       )}
       {...rest}

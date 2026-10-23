@@ -59,17 +59,18 @@ export function LDDashboardHeader({ metrics, className }: LDDashboardHeaderProps
   return (
     <div className={cn('grid grid-cols-1 md:grid-cols-3 gap-3', className)}>
       {metrics.map((card) => (
-        <div key={card.key} className="oc-lift rounded-[18px] bg-white p-4">
-          <div className="flex items-start justify-between gap-2 mb-2">
-            {/* Title, plus a one-line hint when the number needs it; together as tall as the icon circle */}
-            <div className="min-w-0" title={card.hint}>
-              <p className="text-[13px] leading-[18px] text-(--oc-text-secondary)">{card.title}</p>
-              {card.hint && <p className="text-[11px] leading-[14px] text-(--oc-text-subtle)">{card.hint}</p>}
-            </div>
-            <IconCircle icon={METRIC_ICON[card.key] ?? BarChart2} />
+        // After the references' metric cards: the title in a light grey band, then the number and its change chip
+        <div key={card.key} className="oc-lift overflow-hidden rounded-(--oc-radius-card) bg-(--oc-white) ring-1 ring-(--oc-border)">
+          <div className="flex items-center justify-between gap-2 border-b border-(--oc-border) bg-(--oc-surface-muted) px-4 py-2.5">
+            {/* Title only, so the three bands stay the same height; the hint sits under the number */}
+            <p className="min-w-0 truncate text-[13px] leading-[18px] text-(--oc-text-strong)" title={card.hint}>{card.title}</p>
+            <IconCircle icon={METRIC_ICON[card.key] ?? BarChart2} className="size-7 bg-(--oc-white) ring-1 ring-(--oc-border)" />
           </div>
-          <h3 className="text-[24px] leading-[32px] text-(--oc-text-strong)"><CountUpText value={String(card.value)} /></h3>
-          <Trend positive={card.trendPositive} className="mt-1">{card.trend}</Trend>
+          <div className="px-4 pb-4 pt-3">
+            <h3 className="text-[24px] leading-[32px] text-(--oc-text-strong)"><CountUpText value={String(card.value)} /></h3>
+            <Trend positive={card.trendPositive} className="mt-1.5">{card.trend}</Trend>
+            {card.hint && <p className="mt-1 text-[11px] leading-[14px] text-(--oc-text-subtle)">{card.hint}</p>}
+          </div>
         </div>
       ))}
     </div>

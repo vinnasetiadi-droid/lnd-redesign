@@ -55,7 +55,7 @@ function endLabel(label: string, color: string, lastIndex: number) {
   return function EndLabel(props: { x?: number | string; y?: number | string; value?: number | string; index?: number }) {
     if (props.index !== lastIndex) return null;
     return (
-      <text x={Number(props.x) + 8} y={Number(props.y) + 4} fill={color} fontSize={12} fontFamily="DM Sans, sans-serif">
+      <text x={Number(props.x) + 8} y={Number(props.y) + 4} fill={color} fontSize={12} fontFamily="Nacelle, sans-serif">
         {label} {props.value}%
       </text>
     );
@@ -97,7 +97,7 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
   );
 
   return (
-    <div className={cn('relative flex flex-col gap-3 bg-white rounded-[18px] p-5', className)}>
+    <div className={cn('relative flex flex-col gap-3 rounded-(--oc-radius-card) bg-(--oc-white) ring-1 ring-(--oc-border) p-5', className)}>
       <CardHeader
         title="Learning mode analytics"
         subtitle={`Blended vs self-paced · ${periodLabel(data)}`}
@@ -117,9 +117,9 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
               <span className="text-[13px] text-(--oc-text-muted)">%</span>
             </span>
             {attendance.trend !== 0 && (
-              <Trend positive={attendance.trend > 0}>
-                <FadeValue k={`${scope}-trend`}>{attendance.trend > 0 ? '+' : ''}{attendance.trend} pts</FadeValue>
-              </Trend>
+              <FadeValue k={`${scope}-trend`}>
+                <Trend positive={attendance.trend > 0}>{`${attendance.trend > 0 ? '+' : ''}${attendance.trend} pts`}</Trend>
+              </FadeValue>
             )}
           </div>
           <GradientProgress value={attendance.rate} className="mt-1.5 h-2" />
@@ -139,10 +139,10 @@ export function LDDashboardLearningAnalytics({ className }: { className?: string
           </div>
           <div className="mt-1.5 flex h-2 w-full gap-1">
             <div
-              className="h-full rounded-full transition-[width] duration-500 ease-out"
+              className="h-full rounded-(--oc-radius-bar) transition-[width] duration-500 ease-out"
               style={{ width: `${blendedShare}%`, background: MODES[0].color }}
             />
-            <div className="h-full flex-1 rounded-full" style={{ background: MODES[1].color }} />
+            <div className="h-full flex-1 rounded-(--oc-radius-bar)" style={{ background: MODES[1].color }} />
           </div>
           <div className="mt-1 flex items-center justify-between gap-3 text-[12px] leading-[16px] text-(--oc-text-muted)">
             {MODES.map((m) => (

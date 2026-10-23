@@ -243,7 +243,7 @@ const FOCUS = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:rin
 
 function Card({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <motion.div variants={revealItem} className={cn('oc-lift relative flex flex-col gap-4 rounded-[18px] bg-white p-5', className)}>
+    <motion.div variants={revealItem} className={cn('oc-lift relative flex flex-col gap-4 rounded-(--oc-radius-card) bg-(--oc-white) ring-1 ring-(--oc-border) p-5', className)}>
       {children}
     </motion.div>
   );
@@ -252,7 +252,7 @@ function Card({ children, className }: { children: ReactNode; className?: string
 function RoundChip({ children, tone = 'neutral' }: { children: ReactNode; tone?: 'neutral' | 'attention' }) {
   return (
     <span className={cn(
-      'inline-flex h-[30px] shrink-0 items-center whitespace-nowrap rounded-full px-3.5 text-[12px] leading-none',
+      'inline-flex h-[30px] shrink-0 items-center whitespace-nowrap rounded-(--oc-radius-chip) px-3.5 text-[12px] leading-none',
       tone === 'attention' ? 'bg-(--oc-attention-surface) text-(--oc-attention-text)' : 'bg-(--oc-surface) text-(--oc-text-body)',
     )}>
       {children}
@@ -270,8 +270,8 @@ function Avatar({ name }: { name: string }) {
 
 function ThinBar({ value, className }: { value: number; className?: string }) {
   return (
-    <div className={cn('h-1.5 overflow-hidden rounded-full bg-(--oc-border-strong)', className)}>
-      <div className="h-full rounded-full bg-(--oc-primary) transition-[width] duration-500" style={{ width: `${Math.max(0, Math.min(100, value))}%` }} />
+    <div className={cn('h-1.5 overflow-hidden rounded-(--oc-radius-bar) bg-(--oc-border-strong)', className)}>
+      <div className="h-full rounded-(--oc-radius-bar) bg-(--oc-primary) transition-[width] duration-500" style={{ width: `${Math.max(0, Math.min(100, value))}%` }} />
     </div>
   );
 }
@@ -287,7 +287,7 @@ function Rating({ value }: { value: number }) {
 }
 
 function Pagination({ page, total, onPage }: { page: number; total: number; onPage: (p: number) => void }) {
-  const arrow = cn('flex size-8 items-center justify-center rounded-full text-(--oc-text-body) transition-colors hover:bg-(--oc-surface) disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer', FOCUS);
+  const arrow = cn('flex size-8 items-center justify-center rounded-(--oc-radius-chip) text-(--oc-text-body) transition-colors hover:bg-(--oc-surface) disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer', FOCUS);
   return (
     <div className="flex items-center gap-1">
       <button type="button" aria-label="Previous page" onClick={() => onPage(Math.max(1, page - 1))} disabled={page === 1} className={arrow}>
@@ -300,7 +300,7 @@ function Pagination({ page, total, onPage }: { page: number; total: number; onPa
           onClick={() => onPage(p)}
           aria-current={p === page ? 'page' : undefined}
           className={cn(
-            'flex size-8 items-center justify-center rounded-full text-[12px] transition-colors cursor-pointer',
+            'flex size-8 items-center justify-center rounded-(--oc-radius-chip) text-[12px] transition-colors cursor-pointer',
             FOCUS,
             p === page ? 'bg-(--oc-primary-50) text-(--oc-primary-strong)' : 'text-(--oc-text-secondary) hover:bg-(--oc-surface)',
           )}
@@ -312,6 +312,23 @@ function Pagination({ page, total, onPage }: { page: number; total: number; onPa
         <ChevronRight className="size-4" />
       </button>
     </div>
+  );
+}
+
+/** Pie `label`: the segment's count on a small white badge in the middle of the ring */
+function ModeBadge(props: { cx?: number; cy?: number; midAngle?: number; innerRadius?: number; outerRadius?: number; value?: number }) {
+  const { cx = 0, cy = 0, midAngle = 0, innerRadius = 0, outerRadius = 0, value } = props;
+  const r = (innerRadius + outerRadius) / 2;
+  const x = cx + r * Math.cos((-midAngle * Math.PI) / 180);
+  const y = cy + r * Math.sin((-midAngle * Math.PI) / 180);
+  const w = String(value).length * 7 + 14;
+  return (
+    <g pointerEvents="none" style={{ filter: 'drop-shadow(0 1px 2px rgba(14, 19, 28, 0.18))' }}>
+      <rect x={x - w / 2} y={y - 11} width={w} height={22} rx={8} fill={OC_COLORS.white} />
+      <text x={x} y={y + 4} textAnchor="middle" fontSize={12} fill={OC_COLORS.textStrong} fontFamily="Nacelle, sans-serif">
+        {value}
+      </text>
+    </g>
   );
 }
 
@@ -353,7 +370,7 @@ function ActiveProgramsTable({ programType, programs, noun }: { programType: Pro
       <FadeValue k={programType} className="block w-full">
         <div className="overflow-x-auto">
           <div className="min-w-[560px]">
-            <div className={cn(ACTIVE_GRID, 'border-b border-(--oc-border) px-3 pb-2.5 text-[12px] text-(--oc-text-muted)')}>
+            <div className={cn(ACTIVE_GRID, 'rounded-(--oc-radius-control) bg-(--oc-surface-muted) px-3 py-2.5 text-[12px] text-(--oc-text-secondary)')}>
               <span>{noun.One}</span>
               <span className="text-right">Enrolled</span>
               <span>Completion</span>
@@ -417,7 +434,7 @@ function RankedList({ programType, rows, metric }: { programType: ProgramType; r
       <div>
         {rows.map((program, idx) => (
           <div key={`${programType}-${program.id}`} className="flex items-center gap-3 border-b border-(--oc-border) py-2.5 last:border-b-0">
-            <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-(--oc-surface) text-[12px] tabular-nums text-(--oc-text-body)">
+            <span className="flex size-6 shrink-0 items-center justify-center rounded-(--oc-radius-chip) bg-(--oc-surface) text-[12px] tabular-nums text-(--oc-text-body)">
               {idx + 1}
             </span>
             <div className="min-w-0 flex-1">
@@ -498,7 +515,7 @@ export default function LearningProgramAnalyticsPage() {
     <button
       type="button"
       onClick={() => handleFbSort(col)}
-      className={cn('inline-flex items-center gap-1 rounded-full transition-colors cursor-pointer', FOCUS, fbSortBy === col ? 'text-(--oc-text-strong)' : 'hover:text-(--oc-text-body)')}
+      className={cn('inline-flex items-center gap-1 rounded-(--oc-radius-chip) transition-colors cursor-pointer', FOCUS, fbSortBy === col ? 'text-(--oc-text-strong)' : 'hover:text-(--oc-text-body)')}
     >
       {label}
       {fbSortBy === col ? (fbSortDir === 'desc' ? <ChevronDown className="size-3" /> : <ChevronUp className="size-3" />) : <ArrowUpDown className="size-3" />}
@@ -525,16 +542,19 @@ export default function LearningProgramAnalyticsPage() {
         {/* KPI cards, exactly like Home's */}
         <motion.div variants={revealItem} className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {kpiCards.map((kpi) => (
-            <div key={kpi.key} className="oc-lift rounded-[18px] bg-white p-4">
-              <div className="mb-2 flex items-start justify-between gap-2">
-                <p className="text-[13px] leading-[18px] text-(--oc-text-secondary)"><FadeValue k={kpi.label}>{kpi.label}</FadeValue></p>
-                <IconCircle icon={kpi.icon} />
+            // Home's metric cards: the title in a light grey band, then the number and its change chip
+            <div key={kpi.key} className="oc-lift overflow-hidden rounded-(--oc-radius-card) bg-(--oc-white) ring-1 ring-(--oc-border)">
+              <div className="flex items-center justify-between gap-2 border-b border-(--oc-border) bg-(--oc-surface-muted) px-4 py-2.5">
+                <p className="min-w-0 truncate text-[13px] leading-[18px] text-(--oc-text-strong)"><FadeValue k={kpi.label}>{kpi.label}</FadeValue></p>
+                <IconCircle icon={kpi.icon} className="size-7 bg-(--oc-white) ring-1 ring-(--oc-border)" />
               </div>
-              <p className="text-[24px] leading-[32px] text-(--oc-text-strong)">
-                <FadeValue k={kpi.value}>{kpi.value}</FadeValue>
-                {kpi.unit && <span className="ml-1 text-[13px] text-(--oc-text-muted)"><FadeValue k={kpi.unit}>{kpi.unit}</FadeValue></span>}
-              </p>
-              <Trend positive={kpi.positive} className="mt-1"><FadeValue k={kpi.trend}>{kpi.trend}</FadeValue></Trend>
+              <div className="px-4 pb-4 pt-3">
+                <p className="text-[24px] leading-[32px] font-medium text-(--oc-text-strong)">
+                  <FadeValue k={kpi.value}>{kpi.value}</FadeValue>
+                  {kpi.unit && <span className="ml-1 text-[13px] font-normal text-(--oc-text-muted)"><FadeValue k={kpi.unit}>{kpi.unit}</FadeValue></span>}
+                </p>
+                <FadeValue k={kpi.trend} className="mt-1.5"><Trend positive={kpi.positive}>{kpi.trend}</Trend></FadeValue>
+              </div>
             </div>
           ))}
         </motion.div>
@@ -546,7 +566,24 @@ export default function LearningProgramAnalyticsPage() {
             <div className="flex flex-col items-center gap-4">
               <div className="relative size-[200px] shrink-0">
                 <PieChart width={200} height={200}>
-                  <Pie data={data.modePie} cx="50%" cy="50%" innerRadius={74} outerRadius={90} paddingAngle={3} cornerRadius={6} dataKey="value" strokeWidth={0} animationDuration={700}>
+                  {/* After the Learning progress reference: a thick ring in rounded
+                      blocks with gaps, each with its count on a small white badge */}
+                  <Pie
+                    data={data.modePie}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={94}
+                    startAngle={90}
+                    endAngle={-270}
+                    paddingAngle={4}
+                    cornerRadius={10}
+                    dataKey="value"
+                    strokeWidth={0}
+                    animationDuration={700}
+                    labelLine={false}
+                    label={ModeBadge}
+                  >
                     {data.modePie.map((entry) => (<Cell key={`program-mode-${entry.name}`} fill={MODE_COLOR[entry.name as ProgramMode]} />))}
                   </Pie>
                   <Tooltip
@@ -592,10 +629,10 @@ export default function LearningProgramAnalyticsPage() {
                         {' · '}{total} total
                       </span>
                     </div>
-                    <div className="mt-2 flex h-2 w-full gap-0.5 overflow-hidden rounded-full">
-                      <div className="h-full rounded-full transition-[width] duration-500" style={{ width: `${pct(item.active)}%`, background: MODE_COLOR[item.mode] }} />
-                      {item.completed > 0 && <div className="h-full rounded-full transition-[width] duration-500" style={{ width: `${pct(item.completed)}%`, background: MODE_DONE_COLOR[item.mode] }} />}
-                      <div className="h-full flex-1 rounded-full bg-(--oc-border-strong)" />
+                    <div className="mt-2 flex h-2 w-full gap-0.5 overflow-hidden rounded-(--oc-radius-bar)">
+                      <div className="h-full rounded-(--oc-radius-bar) transition-[width] duration-500" style={{ width: `${pct(item.active)}%`, background: MODE_COLOR[item.mode] }} />
+                      {item.completed > 0 && <div className="h-full rounded-(--oc-radius-bar) transition-[width] duration-500" style={{ width: `${pct(item.completed)}%`, background: MODE_DONE_COLOR[item.mode] }} />}
+                      <div className="h-full flex-1 rounded-(--oc-radius-bar) bg-(--oc-border-strong)" />
                     </div>
                     <p className="mt-1.5 text-[12px] text-(--oc-text-muted)">
                       Active {item.active}{item.completed > 0 ? ` · Done ${item.completed}` : ''} · Inactive {item.inactive}
@@ -605,7 +642,7 @@ export default function LearningProgramAnalyticsPage() {
               })}
             </div>
           </Card>
-          <motion.div variants={revealItem} className="oc-lift rounded-[18px] lg:col-span-2">
+          <motion.div variants={revealItem} className="oc-lift rounded-(--oc-radius-card) lg:col-span-2">
             <LearningProgressFunnel programType={programType} className="h-full" />
           </motion.div>
         </div>
@@ -636,7 +673,7 @@ export default function LearningProgramAnalyticsPage() {
             </div>
             <RankedList programType={programType} rows={bottomSorted} metric={bottomFilter} />
           </Card>
-          <motion.div variants={revealItem} className="oc-lift rounded-[18px] lg:col-span-2 xl:col-span-1">
+          <motion.div variants={revealItem} className="oc-lift rounded-(--oc-radius-card) lg:col-span-2 xl:col-span-1">
             {/* Same card as Home, with this page's licenses */}
             <DashboardLicenseUtilization licenses={SOURCE_LICENSES} className="h-full" />
           </motion.div>
@@ -751,7 +788,7 @@ export default function LearningProgramAnalyticsPage() {
                     filteredFeedback.map((fb) => (
                       <div key={`${programType}-${fb.id}`} className={cn(FEEDBACK_GRID, TABLE.row, 'min-h-16 px-4 py-3')}>
                         <div className="flex min-w-0 items-center gap-3">
-                          <span className="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-(--oc-surface) text-[12px] text-(--oc-text-body)">
+                          <span className="flex size-10 shrink-0 items-center justify-center rounded-(--oc-radius-control) bg-(--oc-surface) text-[12px] text-(--oc-text-body)">
                             {initials(fb.name)}
                           </span>
                           <div className="min-w-0">
@@ -762,7 +799,7 @@ export default function LearningProgramAnalyticsPage() {
                         <span className="whitespace-nowrap text-[13px] text-(--oc-text-body)">{stamp(fb.submittedDate)}</span>
                         <p className="line-clamp-2 text-[13px] leading-[20px] text-(--oc-text-body)" title={fb.feedback}>{fb.feedback}</p>
                         {[fb.rating, fb.relevancy, fb.duration].map((score, i) => (
-                          <span key={i} className="flex h-[30px] min-w-12 items-center justify-center justify-self-center rounded-full bg-(--oc-surface) px-3 text-[13px] tabular-nums text-(--oc-text-strong)">
+                          <span key={i} className="flex h-[30px] min-w-12 items-center justify-center justify-self-center rounded-(--oc-radius-chip) bg-(--oc-surface) px-3 text-[13px] tabular-nums text-(--oc-text-strong)">
                             {score.toFixed(1)}
                           </span>
                         ))}

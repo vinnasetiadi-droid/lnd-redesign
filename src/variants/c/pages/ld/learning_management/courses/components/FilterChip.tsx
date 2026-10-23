@@ -65,11 +65,12 @@ export function FilterChip<V extends string>({
         aria-controls={menuId}
         onClick={() => setOpen((o) => !o)}
         className={cn(
-          'inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-[13px] transition-colors cursor-pointer',
+          'inline-flex h-10 items-center gap-1.5 rounded-(--oc-radius-control) px-4 text-[13px] transition-colors cursor-pointer',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25',
+          // White with a hairline (the references' "Filters" boxes); blue tint while it filters
           active && !showValueOnly
-            ? 'bg-(--oc-primary-50) text-(--oc-primary-strong)'
-            : 'bg-(--oc-surface) text-(--oc-text-strong) hover:bg-(--oc-border)',
+            ? 'bg-(--oc-primary-50) text-(--oc-primary-strong) ring-1 ring-inset ring-(--oc-primary-200)'
+            : 'oc-btn-secondary',
         )}
       >
         {Icon && <Icon size={14} className="text-(--oc-text-muted)" />}
@@ -86,7 +87,7 @@ export function FilterChip<V extends string>({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.98 }}
             transition={{ duration: 0.15, ease: EASE_OUT }}
-            className="absolute left-0 top-full z-30 mt-1 min-w-[180px] rounded-[14px] bg-(--oc-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]"
+            className="absolute left-0 top-full z-30 mt-1 min-w-[180px] rounded-(--oc-radius-card) bg-(--oc-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]"
           >
             {options.map((o) => {
               const selected = o.value === value;
@@ -101,7 +102,7 @@ export function FilterChip<V extends string>({
                     setOpen(false);
                   }}
                   className={cn(
-                    'flex w-full items-center justify-between gap-3 rounded-[10px] px-3 py-2 text-left text-[13px] transition-colors cursor-pointer',
+                    'flex w-full items-center justify-between gap-3 rounded-(--oc-radius-control) px-3 py-2 text-left text-[13px] transition-colors cursor-pointer',
                     'focus-visible:outline-none focus-visible:bg-(--oc-surface)',
                     selected ? 'text-(--oc-text-strong)' : 'text-(--oc-text-body) hover:bg-(--oc-surface)',
                   )}

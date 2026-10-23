@@ -4,10 +4,11 @@ import { cn } from '@/lib/utils';
 import { OC_COLORS } from '@/variants/c/theme';
 
 /**
- * Option C chart styling, after the clean references: folded gradient bars with
- * thin diagonal stripes, thin lines without dots (dashed for comparison series),
- * soft area fills, dashed horizontal grid only, white tooltip cards, and
- * gradient progress bars on a hatched track.
+ * Option C chart styling, after the user's references (Daily consumption,
+ * Monthly recurring revenue): slim bars in a pale blue with one solid blue
+ * highlight and a black value pill above it, thin lines over a soft blue area
+ * fill, faint solid horizontal grid lines, white tooltip cards, and plain
+ * progress bars with 3px corners.
  *
  * Recharts only renders plain SVG children (like <defs>) inside a chart, so the
  * defs here are functions that return elements, not components.
@@ -18,8 +19,8 @@ export const CHART_BLUE = OC_COLORS.primary;
 /** Axis tick text */
 export const AXIS_TICK = { fill: OC_COLORS.textSubtle, fontSize: 11 };
 
-/** Spread onto <CartesianGrid /> */
-export const GRID_PROPS = { strokeDasharray: '4 4', stroke: OC_COLORS.border, vertical: false } as const;
+/** Spread onto <CartesianGrid />: faint solid horizontal lines only */
+export const GRID_PROPS = { stroke: OC_COLORS.border, vertical: false } as const;
 
 /** Unique SVG ids, since several charts share the page */
 export function useChartIds(prefix: string) {
@@ -53,19 +54,19 @@ export interface TooltipRow {
   dashed?: boolean;
 }
 
-/** White tooltip card used by every chart */
+/** Tooltip card used by every chart: black with white text, like the value pill on the bars */
 export function ChartTooltipCard({ title, rows }: { title?: ReactNode; rows: TooltipRow[] }) {
   return (
-    <div className="min-w-[168px] rounded-[12px] bg-white px-3.5 py-3 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]">
-      {title && <p className="mb-2 text-[12px] text-(--oc-text-muted)">{title}</p>}
+    <div className="min-w-[168px] rounded-(--oc-radius-control) bg-(--oc-text-ink) px-3.5 py-3 shadow-[0_8px_24px_-6px_rgba(14,19,28,0.35)]">
+      {title && <p className="mb-2 text-[12px] text-(--oc-white)/60">{title}</p>}
       <div className="space-y-1.5">
         {rows.map((row) => (
           <div key={row.label} className="flex items-center justify-between gap-4">
-            <span className="flex items-center gap-2 text-[12px] text-(--oc-text-secondary)">
+            <span className="flex items-center gap-2 text-[12px] text-(--oc-white)/75">
               <LegendMark color={row.color} line={row.line} dashed={row.dashed} />
               {row.label}
             </span>
-            <span className="text-[13px] text-(--oc-text-strong)">{row.value}</span>
+            <span className="text-[13px] text-(--oc-white)">{row.value}</span>
           </div>
         ))}
       </div>
@@ -96,13 +97,12 @@ export function ChartLegend({ items, className }: { items: TooltipRow[] | Omit<T
   );
 }
 
-/** Light hatched track behind progress fills */
+/** Plain light track behind progress fills (the name is from when it was hatched) */
 export const HATCHED_TRACK = {
   backgroundColor: OC_COLORS.surface,
-  backgroundImage: `repeating-linear-gradient(135deg, ${OC_COLORS.borderStrong} 0 1px, transparent 1px 6px)`,
 } as const;
 
-/** Progress bar: blue gradient fill on a light hatched track */
+/** Progress bar: blue gradient fill on a light track, 3px corners */
 export function GradientProgress({ value, className, from = CHART_BLUE, to = OC_COLORS.primary200 }: {
   /** 0-100 */
   value: number;
@@ -112,106 +112,68 @@ export function GradientProgress({ value, className, from = CHART_BLUE, to = OC_
 }) {
   return (
     <div
-      className={cn('h-2.5 w-full overflow-hidden rounded-full', className)}
+      className={cn('h-2.5 w-full overflow-hidden rounded-(--oc-radius-bar)', className)}
       style={HATCHED_TRACK}
     >
       <div
-        className="h-full rounded-full transition-[width] duration-500"
+        className="h-full rounded-(--oc-radius-bar) transition-[width] duration-500"
         style={{ width: `${Math.max(0, Math.min(100, value))}%`, backgroundImage: `linear-gradient(90deg, ${from}, ${to})` }}
       />
     </div>
   );
 }
 
-/** Share of each column the folded bar fills; the rest is its folded side */
-export const FOLD_BAR_SHARE = 0.82;
+/** The slim bars sit in the middle of their column, so labels centre on the whole column */
+export const FOLD_BAR_SHARE = 1;
 
 type FoldIds = Pick<ReturnType<typeof useChartIds>, 'barGradient' | 'barSelected' | 'fold' | 'column' | 'stripes'>;
 
-/** <defs> for the folded gradient bars; call inside <defs> */
+/** <defs> for the slim bars; call inside <defs> */
 export function foldBarDefs(ids: FoldIds) {
   return (
-    <>
-      {/* Bar: strong blue at the top, almost white at the base */}
-      <linearGradient id={ids.barGradient} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor={CHART_BLUE} stopOpacity={0.95} />
-        <stop offset="100%" stopColor={CHART_BLUE} stopOpacity={0.06} />
-      </linearGradient>
-      {/* Selected bar: solid, no stripes */}
-      <linearGradient id={ids.barSelected} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor={CHART_BLUE} stopOpacity={1} />
-        <stop offset="100%" stopColor={OC_COLORS.primary300} stopOpacity={0.55} />
-      </linearGradient>
-      {/* The lighter side that folds down to the next column */}
-      <linearGradient id={ids.fold} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor={OC_COLORS.primary300} stopOpacity={0.8} />
-        <stop offset="100%" stopColor={OC_COLORS.primary100} stopOpacity={0.08} />
-      </linearGradient>
-      {/* Glow behind the selected column */}
-      <linearGradient id={ids.column} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor={OC_COLORS.primary100} stopOpacity={0.9} />
-        <stop offset="100%" stopColor={OC_COLORS.primary50} stopOpacity={0} />
-      </linearGradient>
-      <pattern id={ids.stripes} width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-        <line x1="0" y1="0" x2="0" y2="9" stroke={OC_COLORS.white} strokeWidth="1.5" strokeOpacity="0.75" />
-      </pattern>
-    </>
+    <linearGradient id={ids.barSelected} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stopColor={CHART_BLUE} />
+      <stop offset="100%" stopColor={OC_COLORS.primary400} />
+    </linearGradient>
   );
 }
 
 /**
- * Bar `shape` for a chart with barCategoryGap={0}: each column holds a
- * gradient bar with white stripes and a lighter side folding down to the next
- * column, split from it by a thin line. The selected column gets a solid bar
- * and a glow from the top.
+ * Bar `shape` for a chart with barCategoryGap={0}, after the Daily consumption
+ * reference: a slim bar in the middle of each column with 4px top corners and
+ * a square base, pale blue, and solid blue for the selected one. The whole
+ * column is clickable.
  */
 export function foldBar(ids: FoldIds, isSelected: (index: number) => boolean) {
-  return function FoldBar(props: {
-    x?: number;
-    y?: number;
-    width?: number;
-    height?: number;
-    index?: number;
-    background?: { x: number; y: number; width: number; height: number };
-  }) {
-    const { x = 0, y = 0, width = 0, height = 0, index = -1, background } = props;
+  return function SlimBar(props: { x?: number; y?: number; width?: number; height?: number; index?: number }) {
+    const { x = 0, y = 0, width = 0, height = 0, index = -1 } = props;
     if (width <= 0) return <g />;
     const on = isSelected(index);
-    const base = y + height;
-    const top = background?.y ?? y;
-    const bottom = background ? background.y + background.height : base;
-    const barW = Math.max(2, width * FOLD_BAR_SHARE);
-    const fold = width - barW;
+    const barW = Math.min(22, Math.max(6, width * 0.42));
+    const h = Math.max(height, 4);
+    const left = x + (width - barW) / 2;
+    const top = y + height - h;
+    const r = Math.min(4, barW / 2, h);
+    const d = `M${left},${top + h} V${top + r} Q${left},${top} ${left + r},${top} H${left + barW - r} Q${left + barW},${top} ${left + barW},${top + r} V${top + h} Z`;
     return (
       <g style={{ cursor: 'pointer' }}>
-        {on && <rect x={x} y={top} width={width} height={bottom - top} fill={`url(#${ids.column})`} />}
-        {index > 0 && <line x1={x} x2={x} y1={top} y2={bottom} stroke={OC_COLORS.border} />}
-        {height > 0 && (
-          <>
-            <polygon
-              points={`${x + barW},${y} ${x + width},${y + Math.min(height, fold * 1.8)} ${x + width},${base} ${x + barW},${base}`}
-              fill={`url(#${ids.fold})`}
-            />
-            <rect x={x} y={y} width={barW} height={height} fill={`url(#${on ? ids.barSelected : ids.barGradient})`} />
-            {!on && <rect x={x} y={y} width={barW} height={height} fill={`url(#${ids.stripes})`} />}
-            <rect x={x} y={y} width={barW} height={1.5} fill={CHART_BLUE} />
-          </>
-        )}
+        <rect x={x} y={top} width={width} height={h} fill="transparent" />
+        <path d={d} fill={on ? `url(#${ids.barSelected})` : OC_COLORS.primary100} style={{ transition: 'fill 300ms ease' }} />
       </g>
     );
   };
 }
 
 /**
- * `LabelList content`: a quiet value pill above the selected bar (34px tall,
- * 13px text, light blue tint). At either end it lines up with the bar's outer
- * edge so it stays inside the chart.
+ * `LabelList content`: a black value pill with white text above the selected
+ * bar, with a small pointer (the "1.10 kWh" pill in the reference). At either
+ * end it lines up with the column's outer edge so it stays inside the chart.
  */
 export function pillLabel(
   selected: number,
   count: number,
   format: (value: number | string) => string,
-  /** Share of the column the bar fills (foldBar: 0.82), to centre the pill on the bar */
+  /** Share of the column to centre on (the slim bars sit in the middle, so 1) */
   barShare = 1,
 ) {
   return function PillLabel(props: { x?: number | string; y?: number | string; width?: number | string; value?: number | string; index?: number }) {
@@ -220,15 +182,18 @@ export function pillLabel(
     const y = Number(props.y ?? 0);
     const width = Number(props.width ?? 0);
     const text = format(props.value ?? '');
-    const w = text.length * 6.8 + 20;
+    const w = text.length * 6.6 + 18;
+    const centre = x + (width * barShare) / 2;
     const left =
-      props.index === count - 1 ? x + width - w
-      : props.index === 0 ? x
-      : x + (width * barShare) / 2 - w / 2;
+      props.index === count - 1 ? Math.min(centre - w / 2, x + width - w)
+      : props.index === 0 ? Math.max(centre - w / 2, x)
+      : centre - w / 2;
+    const top = y - 36;
     return (
       <g pointerEvents="none">
-        <rect x={left} y={y - 44} width={w} height={34} rx={17} fill={OC_COLORS.primary50} />
-        <text x={left + w / 2} y={y - 22.5} textAnchor="middle" fill={OC_COLORS.primaryStrong} fontSize={13} fontFamily="DM Sans, sans-serif">
+        <rect x={left} y={top} width={w} height={24} rx={6} fill={OC_COLORS.textInk} />
+        <path d={`M${centre - 4},${top + 24} L${centre},${top + 28} L${centre + 4},${top + 24} Z`} fill={OC_COLORS.textInk} />
+        <text x={left + w / 2} y={top + 16} textAnchor="middle" fill={OC_COLORS.white} fontSize={12} fontFamily="Nacelle, sans-serif">
           {text}
         </text>
       </g>

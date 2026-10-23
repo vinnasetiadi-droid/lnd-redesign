@@ -87,7 +87,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
   const drafts = course.draftOf ? 0 : draftItemsOf(course).length;
   const version = liveVersionOf(course);
   const f = footerOf(course, me);
-  const menuItem = 'w-full flex items-center gap-2 rounded-[10px] px-3 py-2 text-[13px] transition-colors focus-visible:outline-none focus-visible:bg-(--oc-surface)';
+  const menuItem = 'w-full flex items-center gap-2 rounded-(--oc-radius-control) px-3 py-2 text-[13px] transition-colors focus-visible:outline-none focus-visible:bg-(--oc-surface)';
 
   return (
     <div
@@ -97,7 +97,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
       onKeyDown={(e) => e.key === 'Enter' && e.target === e.currentTarget && onClick?.()}
       className={cn(
         // Portrait 3:4; grows only if its content needs more room
-        'group flex aspect-[3/4] flex-col rounded-[14px] bg-(--oc-white) p-3 ring-1 ring-(--oc-border) transition-shadow duration-200 cursor-pointer',
+        'group flex aspect-[3/4] flex-col rounded-(--oc-radius-card) bg-(--oc-white) p-3 ring-1 ring-(--oc-border) transition-shadow duration-200 cursor-pointer',
         'hover:shadow-[0_12px_32px_-16px_rgba(16,24,40,0.18)]',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--oc-primary)/25',
         className,
@@ -106,7 +106,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
       {/* Photo, inset and rounded; glass status badge top left, menu top right.
           The overlays sit outside the clipped photo so the menu can open below it. */}
       <div className="relative shrink-0">
-        <div className="relative aspect-[16/10] overflow-hidden rounded-[10px] bg-(--oc-surface)">
+        <div className="relative aspect-[16/10] overflow-hidden rounded-(--oc-radius-control) bg-(--oc-surface)">
           <CourseCover
             course={course}
             size="lg"
@@ -132,7 +132,7 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
             {menuOpen && (
               <>
                 <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-                <div role="menu" className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-[14px] bg-(--oc-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]">
+                <div role="menu" className="absolute right-0 top-full z-20 mt-1 min-w-[170px] rounded-(--oc-radius-card) bg-(--oc-white) p-1 shadow-[0_8px_24px_-6px_rgba(16,24,40,0.18),0_2px_4px_rgba(16,24,40,0.04)]">
                   <button
                     type="button"
                     role="menuitem"
@@ -217,8 +217,8 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
           {/* Progress slot: the thin blue bar on active courses, empty otherwise */}
           <div className="mt-1 h-1">
             {f.progress !== undefined && (
-              <div className="h-full overflow-hidden rounded-full bg-(--oc-border-strong)">
-                <div className="h-full rounded-full bg-(--oc-primary)" style={{ width: `${Math.min(100, f.progress)}%` }} />
+              <div className="h-full overflow-hidden rounded-(--oc-radius-chip) bg-(--oc-border-strong)">
+                <div className="h-full rounded-(--oc-radius-bar) bg-(--oc-primary)" style={{ width: `${Math.min(100, f.progress)}%` }} />
               </div>
             )}
           </div>
@@ -242,11 +242,11 @@ export function CourseCard({ course, me, className, onClick }: CourseCardProps) 
       {/* Status toggle confirmation, portaled to body */}
       {showStatusConfirm && createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(16,24,40,0.5)' }} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
-          <div className="relative w-[460px] rounded-[20px] bg-(--oc-white) p-8 flex flex-col items-center text-center shadow-[0_24px_48px_-12px_rgba(16,24,40,0.18)]" onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => setShowStatusConfirm(false)} aria-label="Close" className="absolute top-4 right-4 flex size-8 items-center justify-center rounded-full text-(--oc-text-muted) transition-colors hover:bg-(--oc-surface) cursor-pointer">
+          <div className="relative w-[460px] rounded-(--oc-radius-card) bg-(--oc-white) p-8 flex flex-col items-center text-center shadow-[0_24px_48px_-12px_rgba(16,24,40,0.18)]" onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setShowStatusConfirm(false)} aria-label="Close" className="absolute top-4 right-4 flex size-8 items-center justify-center rounded-(--oc-radius-chip) text-(--oc-text-muted) transition-colors hover:bg-(--oc-surface) cursor-pointer">
               <X className="size-5" />
             </button>
-            <div className="mb-5 flex size-14 items-center justify-center rounded-full bg-(--oc-attention-surface)">
+            <div className="mb-5 flex size-14 items-center justify-center rounded-(--oc-radius-control) bg-(--oc-attention-surface)">
               <AlertTriangle className="size-7 text-(--oc-attention-text)" />
             </div>
             <h3 className="text-[16px] text-(--oc-text-strong)">

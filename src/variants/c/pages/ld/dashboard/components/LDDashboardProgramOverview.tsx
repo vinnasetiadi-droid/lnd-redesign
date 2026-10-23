@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { Bar, BarChart, LabelList, ResponsiveContainer, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, LabelList, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import type { ChartDataPoint } from '../types/dashboard.types';
 import { ProgramScopeTabs, FadeValue, type ProgramScope } from './ProgramScopeTabs';
 import { CardHeader, Trend } from '@/variants/c/components/ui/kit';
 import { AIInsightLine } from '@/variants/c/components/ui/ai-insight-banner';
-import { AXIS_TICK, FOLD_BAR_SHARE, foldBar, foldBarDefs, pillLabel, useChartIds } from '@/variants/c/components/ui/chart';
+import { AXIS_TICK, FOLD_BAR_SHARE, GRID_PROPS, foldBar, foldBarDefs, pillLabel, useChartIds } from '@/variants/c/components/ui/chart';
 import { currentMonthIndex, periodLabel } from '../period';
 import { OC_COLORS } from '@/variants/c/theme';
 
@@ -106,7 +106,7 @@ export function LDDashboardProgramOverview({
   const fullInsight = activeScope === 'course' ? courseInsight ?? insight : activeScope === 'journey' ? journeyInsight ?? insight : insight;
 
   return (
-    <div className={cn('relative flex flex-col gap-4 bg-white rounded-[18px] p-5', className)}>
+    <div className={cn('relative flex flex-col gap-4 rounded-(--oc-radius-card) bg-(--oc-white) ring-1 ring-(--oc-border) p-5', className)}>
       {/* ── Header: title + period, scope tabs on the right ── */}
       <CardHeader
         title="Program overview"
@@ -127,19 +127,19 @@ export function LDDashboardProgramOverview({
               aria-selected={isSelected}
               onClick={() => setMetric(m.key)}
               className={cn(
-                'rounded-[14px] border p-4 text-left transition-colors cursor-pointer',
-                // Selected: the sidebar's active tint, no outline
-                isSelected ? 'border-transparent bg-(--oc-primary)/[0.07]' : 'border-(--oc-border) hover:bg-(--oc-surface-subtle)',
+                'rounded-(--oc-radius-control) border p-4 text-left transition-colors cursor-pointer',
+                // Selected: a light blue box with a blue hairline
+                isSelected ? 'border-(--oc-primary-200) bg-(--oc-primary-50)' : 'border-(--oc-border) hover:bg-(--oc-surface-subtle)',
               )}
             >
               <p className="text-[13px] leading-[18px] text-(--oc-text-secondary)">{m.label}</p>
               <div className="mt-1.5 flex items-baseline gap-2">
                 <span className="text-[24px] leading-[32px] text-(--oc-text-strong)"><FadeValue k={m.total}>{m.total}</FadeValue></span>
                 {m.trend !== 0 && (
-                  <Trend positive={positive}>
-                    {/* Totals are year to date; the trend compares the last two months */}
-                    <FadeValue k={m.trend}>{positive ? '+' : ''}{m.trend}% vs {prevMonth}</FadeValue>
-                  </Trend>
+                  // Totals are year to date; the trend compares the last two months
+                  <FadeValue k={m.trend}>
+                    <Trend positive={positive}>{`${positive ? '+' : ''}${m.trend}% vs ${prevMonth}`}</Trend>
+                  </FadeValue>
                 )}
               </div>
             </button>
@@ -150,8 +150,9 @@ export function LDDashboardProgramOverview({
       {/* ── Chart: one metric, one highlighted month ────────── */}
       <div className="w-full min-w-0" style={{ height: '200px' }}>
         <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={200}>
-          <BarChart data={series} margin={{ top: 52, right: 8, left: -16, bottom: 0 }} barCategoryGap={0}>
+          <BarChart data={series} margin={{ top: 40, right: 8, left: -16, bottom: 0 }} barCategoryGap={0}>
             <defs>{foldBarDefs(ids)}</defs>
+            <CartesianGrid {...GRID_PROPS} />
             <XAxis
               dataKey="month"
               axisLine={false}

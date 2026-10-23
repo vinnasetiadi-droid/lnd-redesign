@@ -118,7 +118,7 @@ export function DashboardLicenseUtilization({ licenses = LICENSES, className }: 
     : `${idle} seats are idle across ${rows.length} licenses. Assign them before the next renewal.`;
 
   return (
-    <div className={cn('relative flex flex-col gap-3 bg-white rounded-[18px] p-5', className)}>
+    <div className={cn('relative flex flex-col gap-3 rounded-(--oc-radius-card) bg-(--oc-white) ring-1 ring-(--oc-border) p-5', className)}>
       <CardHeader
         title="License utilization"
         subtitle="Purchased seats actively used by trainees"
@@ -143,7 +143,7 @@ export function DashboardLicenseUtilization({ licenses = LICENSES, className }: 
       <div className="divide-y divide-(--oc-border) border-t border-(--oc-border)">
         {rows.map((l, i) => (
           <div key={l.name} className="flex gap-3 py-2.5">
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-(--oc-surface) text-[11px] text-(--oc-text-body)">
+            <span className="flex size-8 shrink-0 items-center justify-center rounded-(--oc-radius-chip) bg-(--oc-surface) text-[11px] text-(--oc-text-body)">
               {l.initials}
             </span>
             <div className="min-w-0 flex-1">
@@ -159,9 +159,9 @@ export function DashboardLicenseUtilization({ licenses = LICENSES, className }: 
                   {l.renewsOn ? `Renews ${shortDate(l.renewsOn)}` : l.renewsOn === null ? 'No renewal' : ''}
                 </span>
               </div>
-              <div className={cn('mt-1 h-1.5 w-full overflow-hidden rounded-full', l.needsAction ? ATTENTION.track : 'bg-(--oc-border-strong)')}>
+              <div className={cn('mt-1 h-1.5 w-full overflow-hidden rounded-(--oc-radius-bar)', l.needsAction ? ATTENTION.track : 'bg-(--oc-border-strong)')}>
                 <motion.div
-                  className="h-full rounded-full"
+                  className="h-full rounded-(--oc-radius-bar)"
                   style={{ background: l.needsAction ? ATTENTION.bar : CHART_BLUE }}
                   initial={{ width: 0 }}
                   animate={{ width: inView ? `${l.pct}%` : 0 }}

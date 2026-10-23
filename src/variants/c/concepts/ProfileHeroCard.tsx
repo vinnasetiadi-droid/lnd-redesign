@@ -1,8 +1,7 @@
 // ============================================================
-// Concept, not rendered anywhere: the profile card whose cut-out photo rises
-// above the card's top edge (the "head pops out" look). It was Home's header
-// in Option C before the greeting row replaced it; kept for other options.
-// See ./README.md for how to place it.
+// The profile card whose cut-out photo rises above the card's top edge (the
+// "head pops out" look). Option C's Home renders it at the top of the left
+// column. See ./README.md for how to place it.
 // ============================================================
 
 import { Building2, Mail, MapPin, Phone, type LucideIcon } from '@/variants/c/icons';
@@ -45,14 +44,14 @@ export function ProfileHeroCard({ person, photo = profileCutout, className }: Pr
   return (
     // The padding is the headroom the head rises into
     <div className={className} style={{ paddingTop: PROFILE_HEADROOM }}>
-      <div className="relative min-h-[176px] rounded-[18px] bg-white">
+      <div className="relative min-h-[176px] rounded-(--oc-radius-card) bg-(--oc-white) ring-1 ring-(--oc-border)">
         {/* Photo: as tall as the card plus the headroom, sitting on the card's bottom edge */}
         <div
           className="absolute left-0 bottom-0"
           style={{
             width: PROFILE_PHOTO_WIDTH,
             top: -PROFILE_HEADROOM,
-            clipPath: 'inset(0 0 0 0 round 0 0 0 18px)',
+            clipPath: 'inset(0 0 0 0 round 0 0 0 var(--oc-radius-card))',
           }}
         >
           <img src={photo} alt={name} className="block size-full object-cover object-bottom" />

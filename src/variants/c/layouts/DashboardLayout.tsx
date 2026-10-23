@@ -16,8 +16,9 @@ interface DashboardLayoutProps {
 }
 
 /**
- * Option C shell: the sidebar sits flush on the left edge over the same
- * iridescent background as the content (ref 1), instead of a floating card.
+ * Option C shell: a floating sidebar panel 12px from the window edges, over
+ * the sky gradient that fades down from the top of the page; the top bar and
+ * the content sit beside it.
  */
 export function DashboardLayout({ children, noFooter = false, fixedContent = false, hideSidebar = false }: DashboardLayoutProps) {
   const user = useAuthStore((s) => s.user);
@@ -29,7 +30,7 @@ export function DashboardLayout({ children, noFooter = false, fixedContent = fal
 
   return (
     <MotionConfig reducedMotion="user">
-    <div className="flex h-screen w-full font-sans overflow-hidden relative text-[#181D27]">
+    <div className="flex h-screen w-full font-sans overflow-hidden relative text-(--oc-text-strong)">
       {/* Background Layer */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <ResponsiveBackground />
@@ -37,7 +38,7 @@ export function DashboardLayout({ children, noFooter = false, fixedContent = fal
 
       {/* Sidebar */}
       {!hideSidebar && (
-        <div className="flex-shrink-0 h-full relative z-10">
+        <div className="flex-shrink-0 h-full relative z-10 p-3 pr-0">
           <Sidebar className="h-full" role={role} isCollapsed={isSidebarCollapsed} onToggle={toggleSidebar} />
         </div>
       )}
@@ -46,7 +47,7 @@ export function DashboardLayout({ children, noFooter = false, fixedContent = fal
       <main className="flex-1 min-w-0 flex flex-col min-h-0 overflow-hidden relative z-10">
         <div className={
           fixedContent
-            ? 'flex-1 min-h-0 overflow-hidden pl-0 pr-4 pt-3 pb-4'
+            ? 'flex-1 min-h-0 overflow-hidden px-5 pt-3 pb-4'
             : 'flex-1 min-w-0 overflow-y-auto overflow-x-clip flex flex-col'
         }>
           {fixedContent ? (
@@ -56,7 +57,7 @@ export function DashboardLayout({ children, noFooter = false, fixedContent = fal
             </div>
           ) : (
             <>
-              <div className="pl-0 pr-4 pt-3 pb-4 flex-1">
+              <div className="px-5 pt-3 pb-4 flex-1">
                 <TopBar />
                 <div className="mt-3">{children}</div>
               </div>

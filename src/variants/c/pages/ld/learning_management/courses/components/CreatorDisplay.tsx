@@ -41,12 +41,12 @@ export function CreatorDisplay({
         isLI ? (
           <span
             className={cn('shrink-0 flex items-center justify-center', iconSize)}
-            style={{ color: '#0A66C2' }}
+            style={{ color: 'var(--oc-brand-linkedin)' }}
           >
             <LinkedInLogo className="w-full h-full" />
           </span>
         ) : (
-          <User className={cn('text-[#A4A7AE] shrink-0', iconSize)} />
+          <User className={cn('text-(--oc-text-subtle) shrink-0', iconSize)} />
         )
       )}
       <span className="truncate">{creator}</span>

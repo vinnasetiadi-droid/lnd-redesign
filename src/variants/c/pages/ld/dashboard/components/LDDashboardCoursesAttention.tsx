@@ -17,7 +17,7 @@ const FLAG_LABEL: Record<AttentionFlag, string> = {
 
 export function LDDashboardCoursesAttention({ courses, className }: LDDashboardCoursesAttentionProps) {
   return (
-    <div className={cn('relative bg-white rounded-[18px] p-5', className)}>
+    <div className={cn('relative rounded-(--oc-radius-card) bg-(--oc-white) ring-1 ring-(--oc-border) p-5', className)}>
       <CardHeader
         title="Programs needing attention"
         subtitle="Flagged due to low completion, low rating, or high drop-off"
@@ -27,7 +27,7 @@ export function LDDashboardCoursesAttention({ courses, className }: LDDashboardC
       {/* Same row frames as Active programs */}
       <div className="mt-4 flex flex-col gap-2">
         {courses.map((course) => (
-          <div key={course.id} className="rounded-[14px] bg-(--oc-surface-muted) p-3.5">
+          <div key={course.id} className="rounded-(--oc-radius-card) bg-(--oc-surface-muted) p-3.5">
             <div className="flex items-baseline justify-between gap-3">
               <p className="min-w-0 flex-1 truncate text-[13px] leading-[20px] text-(--oc-text-strong)" title={course.name}>
                 {course.name}
