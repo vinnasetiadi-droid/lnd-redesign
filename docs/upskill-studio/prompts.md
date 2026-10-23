@@ -798,3 +798,214 @@ while scrolling to Division completion.
    on the page. /a/ld/dashboard looks exactly as before and npm run build
    passes. Reply with the files you touched.
 ```
+
+
+---
+
+# Option B: own identity (B5 to B8)
+
+
+## B5: Option B foundations (shape, numbers, colour system)
+
+```
+Project: Vite + React + Tailwind demo of three L&D admin pages. This prompt
+only touches Option B (src/variants/b/). Option A, Option C and everything
+under src/ outside src/variants/b/ must stay unchanged. Pages:
+/b/ld/dashboard, /b/ld/analytics/course, /b/ld/learning-management/courses
+
+Checklist: docs/upskill-studio/checklist.csv, rows B5-01 to B5-06. Work through them
+in order. When a row is finished set Status to "Done", Done on to today's
+date (YYYY-MM-DD) and a one-line Notes entry; if a row can't be done set
+"Blocked" and say why. Keep the CSV valid.
+
+Style only: do not change any content, label, number or section. Colours
+only through the --ob-* variables in src/variants/b/option-b.css (mirrored in
+src/variants/b/theme.ts).
+
+Goal of B5 to B8: Option B must look clearly different from Option A while
+being one consistent style across its three pages. Today B is "Option A
+without cards": 21 files are identical to A and the shared components (pill
+tabs, filled status pills, the tinted insight row, pill filters and
+pagination) look exactly like A. Option B's own language is: frameless
+sections split by hairlines, Inter for text with Geist Mono for numbers,
+squarer shapes, underline tabs, outlined status tags, a left-rule NISA
+insight line, blue as the one accent and orange only for attention.
+
+1. Shape tokens in option-b.css: --ob-radius-control: 6px (chips, tags,
+   inputs, filter buttons, pagination, tabs' focus ring), --ob-radius-button:
+   8px (the 3D buttons keep their gradient and shadow, only the corner
+   changes), --ob-radius-card: 12px (NISA card, dialogs, menus). Replace
+   pill shapes (rounded-full and large radii) on controls with these. Keep
+   round only for avatars and pure circles (icon circles, orbs).
+2. Numbers: load Geist Mono (Google Fonts, weights 400 and 500) in
+   option-b.css and add a .ob-num class (font-family Geist Mono,
+   font-variant-numeric: tabular-nums, letter-spacing -0.02em at 20px and up,
+   0 below). Apply it to every data number on the three pages: KPI and tile
+   values, chart value labels and axis ticks, the gauge percentage, funnel
+   pills and table, table number columns (enrolled, scores, dates can stay
+   Inter), list percentages and counts, "+14" avatar counts. Units and
+   words next to numbers stay Inter.
+3. Progress bars everywhere in B: 4px tall with 2px corners (not fully
+   round): Active programs, license rows, MetricTile bars, completion bars,
+   attendance and hours bars.
+4. One mode colour system: point --ob-mode-self (and OB_COLORS.modeSelf) at
+   a pale primary tint (the same pale blue the Analytics donut and funnel
+   already use). Home's Learning mode analytics (lines, hours bar, legend)
+   follows automatically or is updated to it. Green is used only for
+   positive trend pills.
+5. Orange means attention only: the license gauge fills orange when usage is
+   below the card's low-usage threshold and blue otherwise (Home's 20% stays
+   orange, Analytics' 76% becomes blue).
+6. Replace the remaining hardcoded hex with --ob-* tokens in:
+   CourseTable.tsx, PendingApprovalSection.tsx, DeleteVersionDialog.tsx,
+   NisaOrb.tsx, OwnershipTabs.tsx, Footer.tsx, CreatorDisplay.tsx,
+   category-icon.tsx, Sidebar.tsx, CourseFilterTabs.tsx. In theme.ts rename
+   the `OA` export to `OB_PALETTE` and update its imports.
+```
+
+
+## B6: Option B components (tabs, status tags, insight line, controls)
+
+```
+Project: Vite + React + Tailwind demo of three L&D admin pages. This prompt
+only touches Option B (src/variants/b/). Option A, Option C and everything
+under src/ outside src/variants/b/ must stay unchanged. Pages:
+/b/ld/dashboard, /b/ld/analytics/course, /b/ld/learning-management/courses
+
+Checklist: docs/upskill-studio/checklist.csv, rows B6-01 to B6-05. Work through them
+in order. When a row is finished set Status to "Done", Done on to today's
+date (YYYY-MM-DD) and a one-line Notes entry; if a row can't be done set
+"Blocked" and say why. Keep the CSV valid.
+
+Style only: do not change any content, label, number or section. Colours
+only through the --ob-* variables in src/variants/b/option-b.css (mirrored in
+src/variants/b/theme.ts).
+
+Goal of B5 to B8: Option B must look clearly different from Option A while
+being one consistent style across its three pages. Today B is "Option A
+without cards": 21 files are identical to A and the shared components (pill
+tabs, filled status pills, the tinted insight row, pill filters and
+pagination) look exactly like A. Option B's own language is: frameless
+sections split by hairlines, Inter for text with Geist Mono for numbers,
+squarer shapes, underline tabs, outlined status tags, a left-rule NISA
+insight line, blue as the one accent and orange only for attention.
+
+These components exist as copies in src/variants/b but are still identical to
+Option A. Restyle the B copies (never import from src/variants/a):
+
+1. Tabs (ProgramScopeTabs and every other tab set in B: Home scope tabs,
+   Analytics Courses / Journeys, Top and Bottom metric tabs, Active programs
+   filter, Upskill status tabs): underline tabs. Plain text labels 13px,
+   --ob-text-muted, active label --ob-text-strong with a 2px --ob-primary
+   underline that slides between tabs (reuse the existing motion), a
+   hairline (--ob-border) along the bottom of the tab row, no pill
+   background. Counts in Upskill status tabs use .ob-num in
+   --ob-text-subtle.
+2. Status tags (CourseStatus and COURSE_STATUS_META in B, used by the table
+   and the cards): outlined tag, white background, 1px border in the status
+   tint, label in the status colour, 11 to 12px medium, 22px tall, 6px
+   radius, no fill and no dot. Colours (add --ob-status-* tokens if needed):
+   Active blue, In review violet, Needs revision orange (B's attention
+   colour, not red), Approved green, Draft and Inactive grey. On card photos
+   use the same tag with a very soft shadow so it reads on any image.
+3. NISA insight line (AIInsightLine in B): no tinted box and no orb. A 2px
+   --ob-primary rule on the left, a small "NISA" label (10 to 11px, medium,
+   slight letter spacing, --ob-primary-strong), the sentence in
+   --ob-text-strong at 13px that may wrap to 2 lines, and "Ask NISA" as a
+   link at the end of the sentence. Keep the full text on hover where the
+   component already supports it.
+4. Filter chips (FilterChip, Owner / Type / Mode / Sort), the search field,
+   pagination and the list / grid toggle: --ob-radius-control, hairline
+   border, white background, no fill. Active or selected state: 1px
+   --ob-primary border and --ob-primary-strong text (no tinted fill).
+5. After this prompt the normalised diff against Option A must show
+   ProgramScopeTabs, AIInsightLine, CourseStatus, FilterChip, the pagination
+   component and CourseFilterTabs as changed files.
+```
+
+
+## B7: Page fixes for Upskill and Analytics (Option B)
+
+```
+Project: Vite + React + Tailwind demo of three L&D admin pages. This prompt
+only touches Option B (src/variants/b/). Option A, Option C and everything
+under src/ outside src/variants/b/ must stay unchanged. Pages:
+/b/ld/dashboard, /b/ld/analytics/course, /b/ld/learning-management/courses
+
+Checklist: docs/upskill-studio/checklist.csv, rows B7-01 to B7-05. Work through them
+in order. When a row is finished set Status to "Done", Done on to today's
+date (YYYY-MM-DD) and a one-line Notes entry; if a row can't be done set
+"Blocked" and say why. Keep the CSV valid.
+
+Style only: do not change any content, label, number or section. Colours
+only through the --ob-* variables in src/variants/b/option-b.css (mirrored in
+src/variants/b/theme.ts).
+
+Goal of B5 to B8: Option B must look clearly different from Option A while
+being one consistent style across its three pages. Today B is "Option A
+without cards": 21 files are identical to A and the shared components (pill
+tabs, filled status pills, the tinted insight row, pill filters and
+pagination) look exactly like A. Option B's own language is: frameless
+sections split by hairlines, Inter for text with Geist Mono for numbers,
+squarer shapes, underline tabs, outlined status tags, a left-rule NISA
+insight line, blue as the one accent and orange only for attention.
+
+Upskill Studio (/b/ld/learning-management/courses):
+1. Review strip: remove the blue band and blue icon. Make it a hairline
+   section with a 2px orange (--ob-attention-bar) rule on the left, because
+   it is waiting on the current user: "1 course waiting for your review" in
+   --ob-text-strong, the meta line muted, and the existing 3D secondary
+   "Review" button on the right.
+2. Course table: the "waiting for another admin" subline is --ob-text-muted,
+   not link blue. Column headers 11px, --ob-text-muted, letter-spacing
+   0.04em.
+
+Analytics (/b/ld/analytics/course):
+3. KPI row: value, unit and trend sit on one line for every KPI; "88 per
+   course" no longer pushes its trend to a second line (shorten spacing or
+   put the unit under the value consistently for all five).
+4. Top and Bottom courses: course names wrap to 2 lines instead of being
+   cut off; the metadata line sits under the name in muted 12px.
+5. Recent learner feedback: low scores in --ob-attention-text, all other
+   scores neutral (one attention colour, no red). Courses by mode: make the
+   donut ring thinner (about 10px) with small gaps between segments, to
+   match the thin tick gauge.
+```
+
+
+## B8: Option B QA against Option A
+
+```
+Project: Vite + React + Tailwind demo of three L&D admin pages. This prompt
+only touches Option B (src/variants/b/). Option A, Option C and everything
+under src/ outside src/variants/b/ must stay unchanged. Pages:
+/b/ld/dashboard, /b/ld/analytics/course, /b/ld/learning-management/courses
+
+Checklist: docs/upskill-studio/checklist.csv, rows B8-01 to B8-02. Work through them
+in order. When a row is finished set Status to "Done", Done on to today's
+date (YYYY-MM-DD) and a one-line Notes entry; if a row can't be done set
+"Blocked" and say why. Keep the CSV valid.
+
+Style only: do not change any content, label, number or section. Colours
+only through the --ob-* variables in src/variants/b/option-b.css (mirrored in
+src/variants/b/theme.ts).
+
+Goal of B5 to B8: Option B must look clearly different from Option A while
+being one consistent style across its three pages. Today B is "Option A
+without cards": 21 files are identical to A and the shared components (pill
+tabs, filled status pills, the tinted insight row, pill filters and
+pagination) look exactly like A. Option B's own language is: frameless
+sections split by hairlines, Inter for text with Geist Mono for numbers,
+squarer shapes, underline tabs, outlined status tags, a left-rule NISA
+insight line, blue as the one accent and orange only for attention.
+
+1. Open each page in Option A and Option B at 1440 and 1280 px wide and
+   compare: tabs (underline vs pill), status (outlined vs filled), insight
+   line (left rule vs tinted row), numbers (Geist Mono vs DM Sans), control
+   shapes (6px vs pill), bars (2px corners vs round). Note any spot where B
+   still looks like A and fix it in B.
+2. grep src/variants/b: no import from src/variants/a, no hex in
+   components, no rounded-full on controls (avatars excepted). No content
+   changed. /a/... pages look exactly as before. npm run build passes.
+   Reply with a short list of what now differs from A on each page.
+```
