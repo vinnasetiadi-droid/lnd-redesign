@@ -74,15 +74,14 @@ export function SearchField({ value, onChange, placeholder, loading, className }
 
 /**
  * Selectable summary tile (Program overview, Division completion): white with
- * the cards' hairline and shadow; selected = light blue tint with a blue
- * hairline. The one "selected tile" style; segmented controls use white on grey.
+ * the cards' soft shadow and no outline; selected = a light blue tint. The one "selected tile" style; segmented controls use white on grey.
  */
 export function tileClass(selected: boolean) {
   return cn(
     'rounded-(--oc-radius-control) border p-4 text-left transition-colors cursor-pointer',
     selected
-      ? 'border-(--oc-selected-border) bg-(--oc-selected-surface)'
-      : 'border-(--oc-border) bg-(--oc-white) shadow-(--oc-shadow-card) hover:bg-(--oc-surface-subtle)',
+      ? 'border-transparent bg-(--oc-selected-surface)'
+      : 'border-transparent bg-(--oc-white) shadow-(--oc-shadow-card) hover:bg-(--oc-surface-subtle)',
   );
 }
 
@@ -137,7 +136,7 @@ export function Trend({ children, positive = true, className }: { children: Reac
   const text = parts.every((c) => typeof c === 'string' || typeof c === 'number') ? parts.join('') : null;
   const m = text ? TREND_SPLIT.exec(text) : null;
   return (
-    <span className={cn('inline-flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[12px]', className)}>
+    <span className={cn('inline-flex items-center gap-x-1.5 whitespace-nowrap text-[12px]', className)}>
       <span
         className={cn(
           'inline-flex h-6 items-center gap-0.5 rounded-(--oc-radius-chip) px-1.5 tabular-nums',
