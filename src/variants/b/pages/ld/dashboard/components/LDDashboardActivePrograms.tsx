@@ -122,14 +122,9 @@ function ProgramRow({ program }: { program: ProgramOverview }) {
         ? `Course · ends ${shortDate(program.endsOn)}`
         : `Course · ${program.duration ?? program.mode}`;
 
-  // Plain row on a hairline, a short bar in front like the sidebar's active page (amber when at risk)
+  // Plain row, no lines: the rows are split by space alone
   return (
-    <div className="relative flex border-b border-(--ob-border) py-3 pl-4 last:border-b-0">
-      <span
-        aria-hidden
-        className="absolute left-0 top-[15px] h-5 w-[3px] rounded-full"
-        style={{ background: atRisk ? AMBER.bar : OB_COLORS.primary }}
-      />
+    <div className="flex py-3">
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline justify-between gap-3">
           <TruncatedTitle text={program.name} className="min-w-0 flex-1 text-[13px] leading-[20px] text-(--ob-text-strong)" />
