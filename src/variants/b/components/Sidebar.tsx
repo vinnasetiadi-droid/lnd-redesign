@@ -324,7 +324,7 @@ export function Sidebar({ className, role = "ld_team", isCollapsed = false, onTo
       className={cn(
         // A very light blue tint, so the sidebar reads apart from the white page
         "h-full flex flex-col border-r border-(--ob-border) bg-(--ob-primary-tint) font-sans transition-[width] duration-300 ease-in-out",
-        isCollapsed ? "w-[64px]" : "w-[clamp(200px,15vw,224px)]",
+        isCollapsed ? "w-[60px]" : "w-[clamp(176px,12.5vw,188px)]",
         className,
       )}
     >
